@@ -1,14 +1,11 @@
 <?php
 	
-	if(is_file('../main.inc.php'))$dir = '../';
-	else  if(is_file('../../../main.inc.php'))$dir = '../../../';
-	else $dir = '../../';
+if(is_file(__DIR__.'/../main.inc.php'))$dir = __DIR__.'/../';
+else  if(is_file(__DIR__.'/../../../main.inc.php'))$dir = __DIR__.'/../../../';
+else $dir = __DIR__.'/../../';
 
 
-	if(!defined('INC_FROM_DOLIBARR') && defined('INC_FROM_EXTERNAL_SCRIPT')  ) {
-	    include(__DIR__."/main.inc.php");
-	}
-	elseif(!defined('INC_FROM_DOLIBARR') && defined('INC_FROM_CRON_SCRIPT') ) {
+	if(!defined('INC_FROM_DOLIBARR') && defined('INC_FROM_CRON_SCRIPT') ) {
 		include($dir."master.inc.php");
 	}
 	elseif(!defined('INC_FROM_DOLIBARR')) {

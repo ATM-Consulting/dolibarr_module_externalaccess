@@ -103,7 +103,12 @@ print '<table class="noborder" width="100%">';
 _print_input_form_part('EACCESS_ROOT_URL');
 _print_input_form_part('EACCESS_TITLE');
 _print_input_form_part('EACCESS_GOBACK_URL');
-_print_input_form_part('EACCESS_PRIMARY_COLOR');
+
+
+_print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'));
+
+
+_print_on_off('EACCESS_ACTIVATE_INVOICES');
 
 print '</table>';
 
