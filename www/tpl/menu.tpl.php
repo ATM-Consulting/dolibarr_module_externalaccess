@@ -8,7 +8,7 @@ if (empty($conf) || ! is_object($conf))
 <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top" id="mainNav">
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="<?php print !empty($conf->global->EACCESS_GOBACK_URL)?$conf->global->EACCESS_GOBACK_URL:'#page-top';  ?>"><?php print !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;  ?></a>
+        <a class="navbar-brand js-scroll-trigger" href="<?php print $context->getRootUrl();  ?>"><?php print !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;  ?></a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
@@ -16,12 +16,22 @@ if (empty($conf) || ! is_object($conf))
           <ul class="navbar-nav ml-auto">
 
             <?php 
-            /*
-            if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES))
-            {
-                $active = $context->menuIsActive('invoices')?'active':'';
-                print '<li class="nav-item  '.$active.'"><a href="'.$context->rootUrl.'" class="nav-link" >'. $langs->trans('Invoices').'</a></li>';
-            }*/
+            
+            $parameters=array(
+                'controller' => $context->controller
+            );
+            $reshook=$hookmanager->executeHooks('PrintTopMenu',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
+            if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+            
+            if(empty($reshook) && !empty($hookmanager->resArray)){
+                foreach ($hookmanager->resArray as $item){
+                    $active = $context->menuIsActive($item['name'])?'active':'';
+                    print '<li class="nav-item  '.$active.'"><a href="'.$item['url'].'" class="nav-link" >'. $item['name'].'</a></li>';
+                }
+            }
+            
+            
+           
             ?>
             
             <?php if($context->userIsLog()){ ?>

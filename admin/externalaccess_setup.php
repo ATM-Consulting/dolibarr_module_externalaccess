@@ -110,6 +110,13 @@ _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'
 
 _print_on_off('EACCESS_ACTIVATE_INVOICES');
 
+/*_print_on_off('EACCESS_ACTIVATE_PROPALES');
+_print_on_off('EACCESS_ACTIVATE_COMMANDES');
+_print_on_off('EACCESS_ACTIVATE_EXPEDITIONS');
+_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
+
+*/
+
 print '</table>';
 
 llxFooter();

@@ -40,6 +40,12 @@ Reopen=Rouvrir
 ToClone=Cloner
 Delete=Supprimer
 
+# MENU
+WiewInvoices=Factures
+WiewInvoicesDesc=Retrouvez facilement toutes vos factures
+EALINKNAME_invoices=Factures
+
+
 
 ForgotThePassword=Mot de passe oublié ?
 Rememberme=Se souvenir de moi.

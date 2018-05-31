@@ -17,6 +17,9 @@ class Context {
    public $meta_title;
    public $meta_desc;
    
+   public $controller;
+   public $action;
+   
    public $menu_active = array();
    
  
@@ -34,6 +37,13 @@ class Context {
        $this->user =& $user;
        
        $this->getRootUrl();
+       
+       $this->controller = GETPOST('controller', 'aZ09'); // for sécurity, limited to 'aZ09'
+       $this->action = GETPOST('action', 'aZ09');// for sécurity, limited to 'aZ09'
+       
+       if(empty($this->controller)){
+           $this->controller = 'default';
+       }
    }
  
    /**
@@ -54,11 +64,12 @@ class Context {
    
    
    
-   public function getRootUrl()
+   public function getRootUrl($controller = '')
    {
+       
        if(!empty($this->conf->global->EACCESS_ROOT_URL))
        {
-           $this->rootUrl = $conf->global->EACCESS_ROOT_URL;
+           $this->rootUrl = $this->conf->global->EACCESS_ROOT_URL;
            if(substr($url, -1))
            {
                $this->rootUrl .= '/';
@@ -71,7 +82,7 @@ class Context {
        
        
        
-       return $this->rootUrl;
+       return $this->rootUrl.(!empty($controller)?'?controller='.$controller : '');
    }
    
    
@@ -93,6 +104,7 @@ class Context {
    }
    
    
+
 }
  
 ?>
