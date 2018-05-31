@@ -45,6 +45,10 @@ WiewInvoices=Factures
 WiewInvoicesDesc=Retrouvez facilement toutes vos factures
 EALINKNAME_invoices=Factures
 
+# PAGE TITLE
+WELCOME=Bienvenue
+WelcomeDesc=Bienvenue sur votre portail client
+
 
 
 ForgotThePassword=Mot de passe oublié ?
