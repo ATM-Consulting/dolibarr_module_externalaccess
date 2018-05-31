@@ -67,23 +67,13 @@ class Actionsexternalaccess
 		if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 		{
 		    $context = Context::getInstance();
-		    
-		    
-		    if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
-		    {
-		        $context->menu_active[] = 'invoices';
-		    }
-		    elseif($context->controller == 'invoices')
-		    {
-		        
-		    }
-		   
-		    
+		      
 		    
 		    if($context->controller == 'invoices')
 		    {
 		        $context->title = $langs->trans('WiewInvoices');
 		        $context->desc = $langs->trans('WiewInvoicesDesc');
+		        $context->menu_active[] = 'invoices';
 		    }
 		    else
 		    {
@@ -154,7 +144,7 @@ class Actionsexternalaccess
 	        }
 	        elseif($context->controller == 'invoices')
 	        {
-	            
+	            $this->print_invoiceList();
 	        }
 	    }
 	    
@@ -171,7 +161,7 @@ class Actionsexternalaccess
         <div class="row">
         
           <div class="col-lg-3 col-md-4 ">
-			<?php  include __DIR__ .'/tpl/menu.left.tpl.php'; ?>
+			<?php  include $context->tplDir .'/tpl/menu.left.tpl.php'; ?>
           </div>
           <div class="col-lg-9 col-md-8">
 <?php 

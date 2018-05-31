@@ -20,6 +20,8 @@ class Context {
    public $controller;
    public $action;
    
+   public $tplDir = __DIR__.'/../';
+   
    public $menu_active = array();
    
  
