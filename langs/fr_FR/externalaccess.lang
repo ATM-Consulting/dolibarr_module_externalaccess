@@ -8,6 +8,12 @@ externalaccessAbout = A propos du module externalaccess
 
 externalaccess=externalaccess
 
+# DROITS
+external_access_invoices=Peux consulter les factures
+external_access_propals=Peux consulter les devis
+external_access_orders=Peux consulter les commandes
+
+
 # MENU
 TopMenuexternalaccess=externalaccess
 
@@ -45,12 +51,52 @@ WiewInvoices=Factures
 WiewInvoicesDesc=Retrouvez facilement toutes vos factures
 EALINKNAME_invoices=Factures
 
+WiewPropals=Devis
+WiewPropalsDesc=Retrouvez facilement toutes vos devis
+EALINKNAME_propals=Devis
+
 # PAGE TITLE
 WELCOME=Bienvenue
 WelcomeDesc=Bienvenue sur votre portail client
+
+# SETUP PAGE
+EACCESS_ROOT_URL=Url d'access public (si vous utilisez un virtual host)
+EACCESS_TITLE=Titre de l'access extérieur (visible sur le menu du haut)
+EACCESS_GOBACK_URL=Url de retour utilisée lors du clic sur un lien de retour (ex: le menu du haut utilise cette url lorsque vous cliquez sur le titre) 
+EACCESS_PRIMARY_COLOR=Coleur principal du thème (Si modification, Vous devez vider le cache de votre navigateur pour voir les modifications)
+EACCESS_PHONE=Téléphone de contact
+EACCESS_EMAIL=Email de contact
+EACCESS_ACTIVATE_MODULES=Modules accessibles
+EACCESS_ACTIVATE_INVOICES=Téléchargement des Factures
+EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
+EACCESS_ACTIVATE_PROPALS=Téléchargement des Devis
+EACCESS_ACTIVATE_ORDERS=Téléchargement des Commandes
+
+
+# INDEX
+Quotations=Devis
+QuotationsDesc=
+Orders=Commandes
+OrdersDesc=
+Invoices=Factures
+InvoicesDesc=
+MySpace=Consulter mon espace client
 
 
 
 ForgotThePassword=Mot de passe oublié ?
 Rememberme=Se souvenir de moi.
 SignIn=Connexion
+
+
+
+# FOOTER
+GetInTouch=Restons en contact
+GetInTouchDesc=Prêt à commencer votre prochain projet avec nous? C'est génial! Appelez-nous ou envoyez-nous un courriel et nous vous répondrons dans les plus brefs délais!
+
+
+
+
+
+
+

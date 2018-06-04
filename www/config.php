@@ -154,9 +154,12 @@ require __DIR__.'/../lib/externalaccess.lib.php';
 
 require __DIR__.'/class/context.class.php';
 
-if(is_file('../main.inc.php'))$dir = '../';
-else  if(is_file('../../../main.inc.php'))$dir = '../../../';
-else $dir = '../../';
+
+// on cherche le main.inc de dolibarr pas celui de ce module
+if(is_file(__DIR__.'/../main.inc.php'))$dir = __DIR__.'/../';
+else  if(is_file(__DIR__.'/../../../main.inc.php'))$dir = __DIR__.'/../../../';
+else $dir = __DIR__.'/../../';
+
 include(__DIR__."/main.inc.php");
 
 $context = Context::getInstance();

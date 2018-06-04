@@ -32,7 +32,7 @@ $parameters=array(
 $reshook=$hookmanager->executeHooks('PrintPageView',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
 if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
 
-if(!empty($reshook)){
+if(empty($reshook)){
     
     
     

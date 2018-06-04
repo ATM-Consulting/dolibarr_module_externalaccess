@@ -4,6 +4,9 @@ if (empty($conf) || ! is_object($conf))
     print "Error, template page can't be called as URL";
     exit;
 }
+global $langs;
+
+include __DIR__ .'/get_in_touch.tpl.php';
 
 // Google Analytics (need Google module)
 if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID))
@@ -37,7 +40,7 @@ if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID)
     <script src="<?php print $context->getRootUrl(); ?>vendor/data-tables/datatables.min.js"></script>
 
     <!-- Custom scripts for this template -->
-    <script src="<?php print $context->getRootUrl(); ?>js/creative.min.js"></script>
+    <script src="<?php print $context->getRootUrl(); ?>js/creative.js"></script>
 
   </body>
 

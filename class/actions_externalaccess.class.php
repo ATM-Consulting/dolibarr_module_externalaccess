@@ -75,15 +75,57 @@ class Actionsexternalaccess
 		        $context->desc = $langs->trans('WiewInvoicesDesc');
 		        $context->menu_active[] = 'invoices';
 		    }
-		    else
+		    elseif($context->controller == 'orders')
+		    {
+		        $context->title = $langs->trans('WiewOrders');
+		        $context->desc = $langs->trans('WiewOrdersDesc');
+		        $context->menu_active[] = 'orders';
+		    }
+		    elseif($context->controller == 'propals')
+		    {
+	            $context->title = $langs->trans('WiewPropals');
+	            $context->desc = $langs->trans('WiewPropalsDesc');
+	            $context->menu_active[] = 'propals';
+		    }
+		    elseif($context->controller == 'default')
 		    {
 		        $context->title = $langs->trans('Welcome');
 		        $context->desc = $langs->trans('WelcomeDesc');
-		       
+		        //$context->topMenu->shrink = 1; // no transparency menu
+		        $context->doNotDisplayHeaderBar=1;// hide default header
 		    }
 		}
 		
 	}
+	
+	/**
+	 * Overloading the interface function : replacing the parent's function with the one below
+	 *
+	 * @param   array()         $parameters     Hook metadatas (context, etc...)
+	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
+	 * @param   string          &$action        Current action (if set). Generally create or edit or null
+	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
+	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
+	 */
+	public function interface($parameters, &$object, &$action, $hookmanager)
+	{
+	    $error = 0; // Error counter
+	    global $langs, $db, $conf;
+	    
+	    if (in_array('externalaccessinterface', explode(':', $parameters['context'])))
+	    {
+	        if($action === 'downloadInvoice')
+	        {
+	            $this->_downloadInvoice();
+	        }
+	        elseif ($action === 'downloadPropal')
+	        {
+	            $this->_downloadPropal();
+	        }
+	        
+	    }
+	}
+	
 	
 	/**
 	 * Overloading the PrintTopMenu function : replacing the parent's function with the one below
@@ -103,7 +145,14 @@ class Actionsexternalaccess
 	    {
 	        $context = Context::getInstance();
 	     
-	        
+	        if($context->conf->global->EACCESS_ACTIVATE_PROPALS && !empty($context->user->rights->externalaccess->view_propals))
+	        {
+	            $this->results[] = array(
+	                'id' => 'propals',
+	                'url' => $context->getRootUrl('propals'),
+	                'name' => $langs->trans('EALINKNAME_propals'),
+	            );
+	        }
 	        
 	        if($context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
 	        {
@@ -113,6 +162,7 @@ class Actionsexternalaccess
 	                'name' => $langs->trans('EALINKNAME_invoices'),
 	            );
 	        }
+	        
 	        
 	        
 	    }
@@ -137,91 +187,95 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        
 	        if($context->controller == 'default')
 	        {
-	            
+	            include $context->tplPath .'/headbar_full.tpl.php';
+	            include $context->tplPath .'/services.tpl.php';
 	        }
 	        elseif($context->controller == 'invoices')
 	        {
-	            $this->print_invoiceList();
+	            if($context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
+	            {
+	                $this->print_invoiceList($context->user->societe_id);
+	            }
+	        }
+	        elseif($context->controller == 'propals')
+	        {
+	            if($context->conf->global->EACCESS_ACTIVATE_PROPALS && !empty($context->user->rights->externalaccess->view_propals))
+	            {
+	                $this->print_propalList($context->user->societe_id);
+	            }
 	        }
 	    }
 	    
 	}
 	
-	public function print_invoiceList()
+	public function print_invoiceList($socId = 0)
 	{
-	    global $langs;
+	    global $langs,$db;
 	    $context = Context::getInstance();
-	    ?>
-
-<section id="section-invoice">
-      <div class="container">
-        <div class="row">
-        
-          <div class="col-lg-3 col-md-4 ">
-			<?php  include $context->tplDir .'/tpl/menu.left.tpl.php'; ?>
-          </div>
-          <div class="col-lg-9 col-md-8">
-<?php 
-
-$sql = 'SELECT rowid ';
-$sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
-$sql.= ' WHERE fk_soc = '. intval($context->user->societe_id);
-$sql.= ' AND fk_statut > 1';
-$sql.= ' ORDER BY f.datef DESC';
-
-$tableItems = $context->dbTool->executeS($sql);
-
-if(!empty($tableItems))
-{
-    
-    print '<table>';
-    
-    print '<thead>';
-    
-    print '<tr>';
-    print ' <th>'.$langs->trans('Ref').'</th>';
-    print ' <th>'.$langs->trans('Date').'</th>';
-    print ' <th></th>';
-    print '</tr>';
-    
-    print '<thead>';
-    
-    print '<tbody>';
-    foreach ($tableItems as $item)
-    {
-        $facture = new Facture($context->db);
-        $facture->fetch($item->rowid);
-        
-        print '<tr>';
-        print ' <td>'.$facture->ref.'</td>';
-        print ' <td>'.$facture->datef.'</td>';
-        print ' <td></td>';
-        print '</tr>';
-        
-    }
-    print '</tbody>';
-    
-    print '</table>';
-}
-else {
-    print '<div class="info clearboth" >';
-    print  $langs->trans('Nothing');
-    print '</div>';
-}
-
-?>
-          </div>
-          
-    </div>
-  </div>
-</section>
-
-
-<?php 
 	    
+	    print '<section id="section-invoice"><div class="container">';
+	    print_invoiceList($socId);
+	    print '</div></section>';
 	}
 	
+	public function print_propalList($socId = 0)
+	{
+	    global $langs,$db;
+	    $context = Context::getInstance();
+	    
+	    print '<section id="section-invoice"><div class="container">';
+	    print_propalList($socId);
+	    print '</div></section>';
+	}
+	
+	
+	private function _downloadInvoice(){
+	    
+	    global $langs, $db, $conf;
+	    
+	    $context = Context::getInstance();
+	    $id = GETPOST('id','int');
+	    $forceDownload = GETPOST('forcedownload','int');
+	    if(!empty($context->user->societe_id) && $context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
+	    {
+	        dol_include_once('compta/facture/class/facture.class.php');
+	        $facture = new Facture($db);
+	        if($facture->fetch($id)>0)
+	        {
+	            if($facture->statut==Facture::STATUS_VALIDATED && $facture->socid==$context->user->societe_id)
+	            {
+	                $filename = DOL_DATA_ROOT.'/'.$facture->last_main_doc;
+	                
+	                downloadFile($filename, $forceDownload);
+	            }
+	        }
+	    }
+	
+	}
+	
+	private function _downloadPropal(){
+	    
+	    global $langs, $db, $conf;
+	    
+	    $context = Context::getInstance();
+	    $id = GETPOST('id','int');
+	    $forceDownload = GETPOST('forcedownload','int');
+	    if(!empty($context->user->societe_id) && $context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
+	    {
+	        dol_include_once('comm/propal/class/propal.class.php');
+	        $object = new Propal($db);
+	        if($object->fetch($id)>0)
+	        {
+	            if($object->statut==Propal::STATUS_VALIDATED && $object->socid==$context->user->societe_id)
+	            {
+	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+	                
+	                downloadFile($filename, $forceDownload);
+	            }
+	        }
+	    }
+	    
+	}
 }

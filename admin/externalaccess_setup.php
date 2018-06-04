@@ -103,19 +103,21 @@ print '<table class="noborder" width="100%">';
 _print_input_form_part('EACCESS_ROOT_URL');
 _print_input_form_part('EACCESS_TITLE');
 _print_input_form_part('EACCESS_GOBACK_URL');
+_print_input_form_part('EACCESS_PHONE');
+_print_input_form_part('EACCESS_EMAIL');
 
 
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'));
 
+_print_title('EACCESS_ACTIVATE_MODULES');
+_print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
 
-_print_on_off('EACCESS_ACTIVATE_INVOICES');
+_print_on_off('EACCESS_ACTIVATE_PROPALS',false, 'EACCESS_need_some_rights');
+_print_on_off('EACCESS_ACTIVATE_ORDERS',false, 'EACCESS_need_some_rights');
+//_print_on_off('EACCESS_ACTIVATE_EXPEDITIONS');
+//_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
-/*_print_on_off('EACCESS_ACTIVATE_PROPALES');
-_print_on_off('EACCESS_ACTIVATE_COMMANDES');
-_print_on_off('EACCESS_ACTIVATE_EXPEDITIONS');
-_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
-*/
 
 print '</table>';
 

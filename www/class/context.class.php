@@ -40,6 +40,10 @@ class Context {
        
        $this->getRootUrl();
        
+       $this->topMenu = new stdClass();
+       
+       $this->tplPath = realpath ( __DIR__ .'/../tpl');
+       
        $this->controller = GETPOST('controller', 'aZ09'); // for sécurity, limited to 'aZ09'
        $this->action = GETPOST('action', 'aZ09');// for sécurity, limited to 'aZ09'
        

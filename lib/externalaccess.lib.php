@@ -58,3 +58,178 @@ function externalaccessAdminPrepareHead()
     
     return $head;
 }
+
+function downloadFile($filename, $forceDownload = 0)
+{
+    if(file_exists($filename))
+    {
+        
+        $finfo = finfo_open(FILEINFO_MIME_TYPE);
+        $mime = finfo_file($finfo, $filename);
+        if($mime == 'application/pdf' && empty($forceDownload))
+        {
+            header('Content-type: application/pdf');
+            header('Content-Disposition: inline; filename="' . basename($filename) . '"');
+            header('Content-Transfer-Encoding: binary');
+            header('Accept-Ranges: bytes');
+            header('Content-Length: ' . filesize($filename));
+            echo file_get_contents($filename);
+            exit();
+        }
+        else {
+            
+            header("Content-Description: File Transfer");
+            header("Content-Type: application/octet-stream");
+            header("Content-Disposition: attachment; filename='" . basename($filename) . "'");
+            
+            readfile ($filename);
+            exit();
+        }
+        
+    }
+    else
+    {
+        print $langs->trans('FileNotExists').$filename;
+    }
+}
+
+function print_invoiceList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('compta/facture/class/facture.class.php');
+    
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY f.datef DESC';
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        
+        
+        
+        
+        print '<table class="table table-striped" >';
+        
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '<thead>';
+        
+        print '<tbody>';
+        foreach ($tableItems as $item)
+        {
+            $facture = new Facture($db);
+            $facture->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$facture->id;
+            print '<tr>';
+            print ' <td><a href="'.$dowloadUrl.'" target="_blank" >'.$facture->ref.'</a></td>';
+            print ' <td>'.dol_print_date($facture->date).'</td>';
+            print ' <td class="text-right" >'.price($facture->multicurrency_total_ttc)  .' '.$facture->multicurrency_code.'</td>';
+            
+            
+            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
+            
+            
+            print '</tr>';
+            
+        }
+        print '</tbody>';
+        
+        print '</table>';
+    }
+    else {
+        print '<div class="info clearboth" >';
+        print  $langs->trans('Nothing');
+        print '</div>';
+    }
+
+
+	    
+}
+	
+
+
+function print_propalList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('comm/propal/class/propal.class.php');
+    
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY p.datep DESC';
+
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        
+        
+        
+        
+        print '<table class="table table-striped" >';
+        
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '<thead>';
+        
+        print '<tbody>';
+        foreach ($tableItems as $item)
+        {
+            $object = new Propal($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+            print '<tr>';
+            print ' <td><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
+            print ' <td>'.dol_print_date($object->date).'</td>';
+            print ' <td class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            
+            
+            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
+            
+            
+            print '</tr>';
+            
+        }
+        print '</tbody>';
+        
+        print '</table>';
+    }
+    else {
+        print '<div class="info clearboth" >';
+        print  $langs->trans('Nothing');
+        print '</div>';
+    }
+    
+    
+    
+}
+
+
+	
