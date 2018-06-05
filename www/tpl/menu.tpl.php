@@ -25,8 +25,8 @@ if (empty($context) || ! is_object($context))
             
             if(empty($reshook) && !empty($hookmanager->resArray)){
                 foreach ($hookmanager->resArray as $item){
-                    $active = $context->menuIsActive($item['name'])?'active':'';
-                    print '<li class="nav-item  '.$active.'"><a href="'.$item['url'].'" class="nav-link" >'. $item['name'].'</a></li>';
+                    $active = $context->menuIsActive($item['id'])?'active':'';
+                    print '<li class="nav-item"><a href="'.$item['url'].'" class="nav-link '.$active.'" >'. $item['name'].'</a></li>';
                 }
             }
             ?>

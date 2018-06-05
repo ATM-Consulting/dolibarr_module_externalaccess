@@ -76,7 +76,7 @@ EACCESS_ACTIVATE_INVOICES=Téléchargement des Factures
 EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
 EACCESS_ACTIVATE_PROPALS=Téléchargement des Devis
 EACCESS_ACTIVATE_ORDERS=Téléchargement des Commandes
-
+EACCESS_HEADER_IMG=Url de l'image de fond
 
 # INDEX
 Quotations=Devis

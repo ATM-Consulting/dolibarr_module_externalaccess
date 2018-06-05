@@ -108,6 +108,7 @@ _print_input_form_part('EACCESS_EMAIL');
 
 
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'));
+_print_input_form_part('EACCESS_HEADER_IMG');
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');

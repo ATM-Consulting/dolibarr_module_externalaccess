@@ -33,6 +33,9 @@ session_cache_limiter(FALSE);
 
 require_once __DIR__ . '/../../config.default.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
+dol_include_once('/externalaccess/class/color_tools.class.php');
+
+
 
 // Load user to have $user->conf loaded (not done into main because of NOLOGIN constant defined)
 if (empty($user->id) && ! empty($_SESSION['dol_login'])) $user->fetch('',$_SESSION['dol_login'],'',1);
@@ -45,6 +48,9 @@ if (empty($dolibarr_nocache)) header('Cache-Control: max-age=3600, public, must-
 else header('Cache-Control: no-cache');
 
 $primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
+$primaryColorHover = ColorTools::adjustBrightness($primaryColor,-30);
+$headerImg = !empty($conf->global->EACCESS_HEADER_IMG)?$conf->global->EACCESS_HEADER_IMG:'../img/header_2.jpg';
+
 
 
 ?>
@@ -55,7 +61,7 @@ html {
 }
 
 body {
-  font-family: 'Merriweather', 'Helvetica Neue', Arial, sans-serif;
+  font-family:  'Helvetica Neue', Arial, sans-serif;
   font-size: 0.9rem;
 }
 
@@ -191,15 +197,26 @@ img::-moz-selection {
   }
   #mainNav .navbar-nav > li.nav-item > a.nav-link,
   #mainNav .navbar-nav > li.nav-item > a.nav-link:focus {
-    color: rgba(255, 255, 255, 0.7);
+    color: rgba(255, 255, 255, 0.8);
   }
   #mainNav .navbar-nav > li.nav-item > a.nav-link:hover,
   #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
     color: #fff;
   }
+  
+  
+  #mainNav.navbar-light {
+   
+    border-bottom: 0px solid rgba(0, 0, 0, 0);
+	background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
+	background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
+	background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
+
+  }
+  
   #mainNav.navbar-shrink {
     border-bottom: 1px solid rgba(33, 37, 41, 0.1);
-    background-color: #fff;
+    background: #fff;
   }
   #mainNav.navbar-shrink .navbar-brand {
     color: <?php print $primaryColor; ?>;
@@ -222,7 +239,7 @@ header.commonhead {
   padding-top: 5rem;
   padding-bottom: calc(5rem - 56px);
   min-height: 100px;
-  background-image: url("../img/header.jpg");
+  background-image: url("<?php print $headerImg; ?>");
   background-position: center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -233,7 +250,7 @@ header.commonhead {
 header.masthead {
   padding-top: 10rem;
   padding-bottom: calc(10rem - 56px);
-  background-image: url("../img/header.jpg");
+  background-image: url("<?php print $headerImg; ?>");
   background-position: center center;
   -webkit-background-size: cover;
   -moz-background-size: cover;
@@ -368,7 +385,7 @@ header.masthead p {
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
   color: #fff;
-  background-color: #ee4b28 !important;
+  background-color: <?php echo $primaryColorHover ?> !important;
 }
 
 .btn-primary:active, .btn-primary:focus {

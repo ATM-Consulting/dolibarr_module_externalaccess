@@ -74,6 +74,7 @@ class Actionsexternalaccess
 		        $context->title = $langs->trans('WiewInvoices');
 		        $context->desc = $langs->trans('WiewInvoicesDesc');
 		        $context->menu_active[] = 'invoices';
+		        
 		    }
 		    elseif($context->controller == 'orders')
 		    {
