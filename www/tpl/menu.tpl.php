@@ -26,14 +26,30 @@ if (empty($context) || ! is_object($context))
             if(empty($reshook) && !empty($hookmanager->resArray)){
                 foreach ($hookmanager->resArray as $item){
                     $active = $context->menuIsActive($item['id'])?'active':'';
-                    print '<li class="nav-item"><a href="'.$item['url'].'" class="nav-link '.$active.'" >'. $item['name'].'</a></li>';
+                    
+                    if(!empty($item['overrride'])){
+                        print $item['overrride'];
+                    }
+                    else {
+                        print '<li class="nav-item"><a href="'.$item['url'].'" class="nav-link '.$active.'" >'. $item['name'].'</a></li>';
+                    }
+                    
                 }
             }
             ?>
             
             <?php if($context->userIsLog()){ ?>
-            <li class="nav-item">
-              <a class="nav-link js-scroll-trigger" href="<?php print $context->getRootUrl().'logout.php'; ?>"><i class="fa fa-sign-out"></i> <?php print $langs->trans('Logout'); ?></a>
+            <li class="nav-item dropdown">
+          		<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false"><i class="fa fa-user"></i> <?php print $langs->trans('Logout'); ?> <span class="caret"></span></a>
+                  <ul class="dropdown-menu">
+                    <!-- <li class="dropdown-item" ><a href="#">Action</a></li>
+                    <li class="dropdown-item" ><a href="#">Another action</a></li>
+                    <li class="dropdown-item" ><a href="#">Something else here</a></li>
+                    <li role="separator" class="divider"></li>-->
+                    <li class="dropdown-item"><a href="#"><i class="fa fa-user"></i> <?php print $langs->trans('PersoanalInformations'); ?></a></li> 
+                    <li role="separator" class="dropdown-divider"></li>
+                    <li class="dropdown-item" ><a href="<?php print $context->getRootUrl().'logout.php'; ?>"><i class="fa fa-sign-out"></i> <?php print $langs->trans('Logout'); ?></a></li>
+                  </ul>
             </li>
             <?php } ?>
 

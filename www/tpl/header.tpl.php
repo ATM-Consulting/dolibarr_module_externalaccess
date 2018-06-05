@@ -18,7 +18,7 @@ if (empty($conf) || ! is_object($conf))
     <title><?php echo $context->meta_title?$context->title:$context->meta_title; ?></title>
 
     <!-- Bootstrap core CSS -->
-    <link href="<?php ?>vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+    <link href="<?php ?>vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
 
     <!-- Custom fonts for this template -->
     <link href="vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -33,6 +33,12 @@ if (empty($conf) || ! is_object($conf))
     
     <link rel="stylesheet" type="text/css" href="<?php print $context->getRootUrl(); ?>vendor/data-tables/datatables.min.css"/>
  
+ <?php 
+    if (! empty($conf->global->MAIN_FAVICON_URL)){
+        $favicon=$conf->global->MAIN_FAVICON_URL;
+        print '<link rel="icon" type="image/png" href="'.$favicon.'">';
+    }
+ ?>
 
 
   </head>

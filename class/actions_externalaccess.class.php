@@ -74,7 +74,6 @@ class Actionsexternalaccess
 		        $context->title = $langs->trans('WiewInvoices');
 		        $context->desc = $langs->trans('WiewInvoicesDesc');
 		        $context->menu_active[] = 'invoices';
-		        
 		    }
 		    elseif($context->controller == 'orders')
 		    {
@@ -144,13 +143,13 @@ class Actionsexternalaccess
 	public function PrintTopMenu($parameters, &$object, &$action, $hookmanager)
 	{
 	    $error = 0; // Error counter
-	    global $langs;
+	    global $langs, $conf, $user;
 	    
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
 	        
-	        if($context->conf->global->EACCESS_ACTIVATE_PROPALS && !empty($context->user->rights->externalaccess->view_propals))
+	        if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
 	        {
 	            $this->results[] = array(
 	                'id' => 'propals',
@@ -159,7 +158,7 @@ class Actionsexternalaccess
 	            );
 	        }
 	        
-	        if($context->conf->global->EACCESS_ACTIVATE_ORDERS && !empty($context->user->rights->externalaccess->view_orders))
+	        if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	        {
 	            $this->results[] = array(
 	                'id' => 'orders',
@@ -168,7 +167,7 @@ class Actionsexternalaccess
 	            );
 	        }
 	        
-	        if($context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
+	        if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	        {
 	            $this->results[] = array(
 	                'id' => 'invoices',
@@ -196,6 +195,7 @@ class Actionsexternalaccess
 	 */
 	public function PrintPageView($parameters, &$object, &$action, $hookmanager)
 	{
+	    global $conf, $user;
 	    $error = 0; // Error counter
 	    
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
@@ -209,25 +209,25 @@ class Actionsexternalaccess
 	        }
 	        elseif($context->controller == 'invoices')
 	        {
-	            if($context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
+	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	            {
-	                $this->print_invoiceList($context->user->societe_id);
+	                $this->print_invoiceList($user->societe_id);
 	            }
 	            return 1;
 	        }
 	        elseif($context->controller == 'orders')
 	        {
-	            if($context->conf->global->EACCESS_ACTIVATE_ORDERS && !empty($context->user->rights->externalaccess->view_orders))
+	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	            {
-	                $this->print_orderList($context->user->societe_id);
+	                $this->print_orderList($user->societe_id);
 	            }
 	            return 1;
 	        }
 	        elseif($context->controller == 'propals')
 	        {
-	            if($context->conf->global->EACCESS_ACTIVATE_PROPALS && !empty($context->user->rights->externalaccess->view_propals))
+	            if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
 	            {
-	                $this->print_propalList($context->user->societe_id);
+	                $this->print_propalList($user->societe_id);
 	            }
 	            return 1;
 	        }
@@ -268,18 +268,18 @@ class Actionsexternalaccess
 	
 	private function _downloadInvoice(){
 	    
-	    global $langs, $db, $conf;
+	    global $langs, $db, $conf, $user;
 	    
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($context->user->societe_id) && $context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
+	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	    {
 	        dol_include_once('compta/facture/class/facture.class.php');
 	        $facture = new Facture($db);
 	        if($facture->fetch($id)>0)
 	        {
-	            if($facture->statut==Facture::STATUS_VALIDATED && $facture->socid==$context->user->societe_id)
+	            if($facture->statut==Facture::STATUS_VALIDATED && $facture->socid==$user->societe_id)
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$facture->last_main_doc;
 	                
@@ -292,18 +292,18 @@ class Actionsexternalaccess
 	
 	private function _downloadPropal(){
 	    
-	    global $langs, $db, $conf;
+	    global $langs, $db, $conf, $user;
 	    
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($context->user->societe_id) && $context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices))
+	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	    {
 	        dol_include_once('comm/propal/class/propal.class.php');
 	        $object = new Propal($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut==Propal::STATUS_VALIDATED && $object->socid==$context->user->societe_id)
+	            if($object->statut==Propal::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                
@@ -318,18 +318,18 @@ class Actionsexternalaccess
 	
 	private function _downloadCommande(){
 	    
-	    global $langs, $db, $conf;
+	    global $langs, $db, $conf, $user;
 	    
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($context->user->societe_id) && $context->conf->global->EACCESS_ACTIVATE_ORDERS && !empty($context->user->rights->externalaccess->view_orders))
+	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	    {
 	        dol_include_once('commande/class/commande.class.php');
 	        $object = new Commande($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut==Commande::STATUS_VALIDATED && $object->socid==$context->user->societe_id)
+	            if($object->statut==Commande::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                

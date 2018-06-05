@@ -35,8 +35,7 @@ class Context {
        global $db, $conf, $user;
        
        $this->dbTool = new ExternalDbTool($db) ;
-       $this->conf =& $conf;
-       $this->user =& $user;
+       
        
        $this->getRootUrl();
        
@@ -94,7 +93,7 @@ class Context {
    
    public function userIsLog()
    {
-       
+       // apparement dolibarr se sert de ça pour savoir si l'internaute est log
        if(!empty($_SESSION["dol_login"])){
            return true;
        }

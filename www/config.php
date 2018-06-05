@@ -26,27 +26,6 @@ function dol_loginfunction($langs,$conf,$mysoc)
     
     $dol_url_root = DOL_URL_ROOT;
     
-    // Title
-    $appli=constant('DOL_APPLICATION_TITLE');
-    $title=$appli.' '.constant('DOL_VERSION');
-    if (! empty($conf->global->MAIN_APPLICATION_TITLE)) $title=$conf->global->MAIN_APPLICATION_TITLE;
-    $titletruedolibarrversion=constant('DOL_VERSION');	// $title used by login template after the @ to inform of true Dolibarr version
-    
-  
-    // Select templates dir
-    if (! empty($conf->modules_parts['tpl']))	// Using this feature slow down application
-    {
-        $dirtpls=array_merge($conf->modules_parts['tpl'],array('/core/tpl/'));
-        foreach($dirtpls as $reldir)
-        {
-            $tmp=dol_buildpath($reldir.'login.tpl.php');
-            if (file_exists($tmp)) { $template_dir=preg_replace('/login\.tpl\.php$/','',$tmp); break; }
-        }
-    }
-    else
-    {
-        $template_dir = DOL_DOCUMENT_ROOT."/core/tpl/";
-    }
     
     // Set cookie for timeout management
     $prefix=dol_getprefix('');
@@ -96,35 +75,6 @@ function dol_loginfunction($langs,$conf,$mysoc)
         $captcha_refresh=img_picto($langs->trans("Refresh"),'refresh','id="captcha_refresh_img"');
     }
     
-    // Extra link
-    $forgetpasslink=0;
-    $helpcenterlink=0;
-    if (empty($conf->global->MAIN_SECURITY_DISABLEFORGETPASSLINK) || empty($conf->global->MAIN_HELPCENTER_DISABLELINK))
-    {
-        if (empty($conf->global->MAIN_SECURITY_DISABLEFORGETPASSLINK))
-        {
-            $forgetpasslink=1;
-        }
-        
-        if (empty($conf->global->MAIN_HELPCENTER_DISABLELINK))
-        {
-            $helpcenterlink=1;
-        }
-    }
-    
-    // Home message
-    $main_home='';
-    if (! empty($conf->global->MAIN_HOME))
-    {
-        $substitutionarray=getCommonSubstitutionArray($langs);
-        complete_substitutions_array($substitutionarray, $langs);
-        $texttoshow = make_substitutions($conf->global->MAIN_HOME, $substitutionarray, $langs);
-        
-        $main_home=dol_htmlcleanlastbr($texttoshow);
-    }
-    
-    // Google AD
-    $main_google_ad_client = ((! empty($conf->global->MAIN_GOOGLE_AD_CLIENT) && ! empty($conf->global->MAIN_GOOGLE_AD_SLOT))?1:0);
     
     // Set jquery theme
     $dol_loginmesg = (! empty($_SESSION["dol_loginmesg"])?$_SESSION["dol_loginmesg"]:'');
