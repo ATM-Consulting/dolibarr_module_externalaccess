@@ -75,7 +75,7 @@ function dol_loginfunction($langs,$conf,$mysoc)
     
     
     // Include login page template
-    include __DIR__.'/tpl/login.tpl.php';
+    include __DIR__.'/../tpl/login.tpl.php';
     
     
 }
