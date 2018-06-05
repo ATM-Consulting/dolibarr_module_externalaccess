@@ -232,4 +232,71 @@ function print_propalList($socId = 0)
 }
 
 
+function print_orderList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('commande/class/commande.class.php');
+    
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY c.date_commande DESC';
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        
+        
+        
+        
+        print '<table class="table table-striped" >';
+        
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '<thead>';
+        
+        print '<tbody>';
+        foreach ($tableItems as $item)
+        {
+            $object = new Commande($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
+            print '<tr>';
+            print ' <td><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
+            print ' <td>'.dol_print_date($object->date).'</td>';
+            print ' <td class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            
+            
+            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
+            
+            
+            print '</tr>';
+            
+        }
+        print '</tbody>';
+        
+        print '</table>';
+    }
+    else {
+        print '<div class="info clearboth" >';
+        print  $langs->trans('Nothing');
+        print '</div>';
+    }
+    
+    
+    
+}
 	

@@ -122,6 +122,10 @@ class Actionsexternalaccess
 	        {
 	            $this->_downloadPropal();
 	        }
+	        elseif ($action === 'downloadCommande')
+	        {
+	            $this->_downloadCommande();
+	        }
 	        
 	    }
 	}
@@ -144,13 +148,22 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	     
+	        
 	        if($context->conf->global->EACCESS_ACTIVATE_PROPALS && !empty($context->user->rights->externalaccess->view_propals))
 	        {
 	            $this->results[] = array(
 	                'id' => 'propals',
 	                'url' => $context->getRootUrl('propals'),
 	                'name' => $langs->trans('EALINKNAME_propals'),
+	            );
+	        }
+	        
+	        if($context->conf->global->EACCESS_ACTIVATE_ORDERS && !empty($context->user->rights->externalaccess->view_orders))
+	        {
+	            $this->results[] = array(
+	                'id' => 'orders',
+	                'url' => $context->getRootUrl('orders'),
+	                'name' => $langs->trans('EALINKNAME_orders'),
 	            );
 	        }
 	        
@@ -199,6 +212,13 @@ class Actionsexternalaccess
 	                $this->print_invoiceList($context->user->societe_id);
 	            }
 	        }
+	        elseif($context->controller == 'orders')
+	        {
+	            if($context->conf->global->EACCESS_ACTIVATE_ORDERS && !empty($context->user->rights->externalaccess->view_orders))
+	            {
+	                $this->print_orderList($context->user->societe_id);
+	            }
+	        }
 	        elseif($context->controller == 'propals')
 	        {
 	            if($context->conf->global->EACCESS_ACTIVATE_PROPALS && !empty($context->user->rights->externalaccess->view_propals))
@@ -217,6 +237,16 @@ class Actionsexternalaccess
 	    
 	    print '<section id="section-invoice"><div class="container">';
 	    print_invoiceList($socId);
+	    print '</div></section>';
+	}
+	
+	public function print_orderList($socId = 0)
+	{
+	    global $langs,$db;
+	    $context = Context::getInstance();
+	    
+	    print '<section id="section-invoice"><div class="container">';
+	    print_orderList($socId);
 	    print '</div></section>';
 	}
 	
@@ -269,6 +299,32 @@ class Actionsexternalaccess
 	        if($object->fetch($id)>0)
 	        {
 	            if($object->statut==Propal::STATUS_VALIDATED && $object->socid==$context->user->societe_id)
+	            {
+	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+	                
+	                downloadFile($filename, $forceDownload);
+	            }
+	        }
+	    }
+	    
+	}
+	
+	
+	
+	private function _downloadCommande(){
+	    
+	    global $langs, $db, $conf;
+	    
+	    $context = Context::getInstance();
+	    $id = GETPOST('id','int');
+	    $forceDownload = GETPOST('forcedownload','int');
+	    if(!empty($context->user->societe_id) && $context->conf->global->EACCESS_ACTIVATE_ORDERS && !empty($context->user->rights->externalaccess->view_orders))
+	    {
+	        dol_include_once('commande/class/commande.class.php');
+	        $object = new Commande($db);
+	        if($object->fetch($id)>0)
+	        {
+	            if($object->statut==Commande::STATUS_VALIDATED && $object->socid==$context->user->societe_id)
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                

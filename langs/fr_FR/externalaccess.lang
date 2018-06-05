@@ -55,6 +55,11 @@ WiewPropals=Devis
 WiewPropalsDesc=Retrouvez facilement toutes vos devis
 EALINKNAME_propals=Devis
 
+WiewOrders=Commandes
+WiewOrdersDesc=Retrouvez facilement toutes vos commandes
+EALINKNAME_orders=Commandes
+
+
 # PAGE TITLE
 WELCOME=Bienvenue
 WelcomeDesc=Bienvenue sur votre portail client
@@ -92,7 +97,7 @@ SignIn=Connexion
 
 # FOOTER
 GetInTouch=Restons en contact
-GetInTouchDesc=Prêt à commencer votre prochain projet avec nous? C'est génial! Appelez-nous ou envoyez-nous un courriel et nous vous répondrons dans les plus brefs délais!
+GetInTouchDesc=Prêt à commencer votre prochain projet avec nous? Appelez-nous ou envoyez-nous un courriel et nous vous répondrons dans les plus brefs délais!
 
 
 

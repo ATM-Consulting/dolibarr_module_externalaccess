@@ -17,11 +17,13 @@ if (empty($conf) || ! is_object($conf))
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<?php echo $langs->trans("Password"); ?>" required>
                  
                  
+                <!-- 
                 <div id="remember" class="checkbox">
                     <label>
                         <input type="checkbox" value="remember-me"> <?php print $langs->trans('Rememberme'); ?>
                     </label>
                 </div>
+                 -->
                 
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
             
