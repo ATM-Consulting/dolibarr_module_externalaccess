@@ -152,8 +152,8 @@ function print_invoiceList($socId = 0)
         print '</table>';
     }
     else {
-        print '<div class="info clearboth" >';
-        print  $langs->trans('Nothing');
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
         print '</div>';
     }
 
@@ -222,8 +222,8 @@ function print_propalList($socId = 0)
         print '</table>';
     }
     else {
-        print '<div class="info clearboth" >';
-        print  $langs->trans('Nothing');
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
         print '</div>';
     }
     
@@ -291,8 +291,8 @@ function print_orderList($socId = 0)
         print '</table>';
     }
     else {
-        print '<div class="info clearboth" >';
-        print  $langs->trans('Nothing');
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
         print '</div>';
     }
     
