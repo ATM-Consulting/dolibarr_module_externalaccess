@@ -83,7 +83,7 @@ class Context {
        }
        else 
        {
-           $this->rootUrl = dol_buildpath('/externalaccess/',2);
+           $this->rootUrl = dol_buildpath('/externalaccess/www/',2);
        }
        
        
