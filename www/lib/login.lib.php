@@ -79,3 +79,34 @@ function dol_loginfunction($langs,$conf,$mysoc)
     
     
 }
+
+
+/**
+ *  Show HTTP header
+ *
+ *  @param  string  $contenttype    Content type. For example, 'text/html'
+ *  @param	int		$forcenocache	Force disabling of cache for the page
+ *  @return	void
+ */
+function top_httphead($contenttype='text/html', $forcenocache=0)
+{
+    global $conf;
+    
+    if ($contenttype == 'text/html' ) header("Content-Type: text/html; charset=".$conf->file->character_set_client);
+    else header("Content-Type: ".$contenttype);
+    // Security options
+    header("X-Content-Type-Options: nosniff");  // With the nosniff option, if the server says the content is text/html, the browser will render it as text/html (note that most browsers now force this option to on)
+    header("X-Frame-Options: SAMEORIGIN");      // Frames allowed only if on same domain (stop some XSS attacks)
+    if (! empty($conf->global->MAIN_HTTP_CONTENT_SECURITY_POLICY))
+    {
+        // For example, to restrict script, object, frames or img to some domains
+        // script-src https://api.google.com https://anotherhost.com; object-src https://youtube.com; child-src https://youtube.com; img-src: https://static.example.com
+        // For example, to restrict everything to one domain, except object, ...
+        // default-src https://cdn.example.net; object-src 'none'
+        header("Content-Security-Policy: ".$conf->global->MAIN_HTTP_CONTENT_SECURITY_POLICY);
+    }
+    if ($forcenocache)
+    {
+        header("Cache-Control: no-cache, no-store, must-revalidate, max-age=0");
+    }
+}

@@ -398,7 +398,7 @@ header.masthead p {
  * Card component
  */
 .card {
-    background-color: #F7F7F7;
+    background-color: #ffffff;
     /* just in case there no content*/
     padding: 20px 25px 30px;
     margin: 0 auto 25px;

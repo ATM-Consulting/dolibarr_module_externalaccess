@@ -8,10 +8,25 @@ if (empty($conf) || ! is_object($conf))
 <div class="container">
 	<div class="row  ">
         <div class="card card-container col-lg-6  ">
+<?php            
+        if ( (! empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_small))
+            || (! empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo))
+            )
+		{
+		    $urllogo=$context->getRootUrl().'/script/script.php?action=getlogo';
+			print '<div class="text-center"><img alt="" src="'.$urllogo.'" id="img_logo" /></div>';
+		}
+		else
+		{
+		    //print '<img id="profile-img" class="profile-img-card" src="'.$context->rootUrl.'img/avatar.png" />';
+		    $name = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+		    print '<h4>'.$name.'</h4>';
+		}
+?>
             
-            <img id="profile-img" class="profile-img-card" src="<?php print $context->rootUrl ?>img/avatar.png" />
+            
             <p id="profile-name" class="profile-name-card"></p>
-			<form class="form-signin" id="login" name="login" method="post" action="<?php echo $php_self; ?>">
+			<form class="form-signin" id="login" name="login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text"  name="username" id="inputUsername" class="form-control" placeholder="<?php echo $langs->trans("Login"); ?>" required autofocus>
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<?php echo $langs->trans("Password"); ?>" required>
@@ -54,26 +69,21 @@ if (empty($conf) || ! is_object($conf))
                 	// TODO: provide accessible captcha variants
                 ?>
                 	<!-- Captcha -->
-                	<tr>
-                	<td class="nowrap none center">
-                
-                	<table class="login_table_securitycode centpercent"><tr>
-                	<td>
+                	
                 	<span class="span-icon-security">
                 	<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="flat input-icon-security" type="text" size="12" maxlength="5" name="code" tabindex="3" />
                 	</span>
-                	</td>
-                	<td><img src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" /></td>
-                	<td><a href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a></td>
-                	</tr></table>
-                
-                	</td></tr>
+                	<img src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
+                	<a href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
+                	
                 <?php } */ ?>            
             
             </form><!-- /form -->
-            <a href="#" class="forgot-password">
+            <?php if ($mode == 'dolibarr' || ! $disabled) { ?>
+            <a href="#forgottenpassword" class="forgot-password">
                 <?php print $langs->trans('ForgotThePassword'); ?>
             </a>
+        	<?php } ?>
         </div><!-- /card-container -->
    </div>
 </div><!-- /container -->

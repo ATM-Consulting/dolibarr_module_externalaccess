@@ -91,10 +91,11 @@ MySpace=Consulter mon espace client
 
 
 ForgotThePassword=Mot de passe oublié ?
+ForgotPassword=Mot de passe oublié ?
 Rememberme=Se souvenir de moi.
 SignIn=Connexion
-
-
+YouCanResetYourPasswordHere=Vous pouvez le renouveller ici
+Renew=Renouveller
 
 # FOOTER
 GetInTouch=Restons en contact
