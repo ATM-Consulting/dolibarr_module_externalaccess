@@ -27,7 +27,7 @@ include __DIR__ .'/tpl/header.tpl.php';
 
 
 $parameters=array(
-    'controller' => $context->controller
+    'controller' => $context->controller, // $context->controller is get by $context->construct()
 );
 $reshook=$hookmanager->executeHooks('PrintPageView',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
 if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
