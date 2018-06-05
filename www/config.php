@@ -164,9 +164,3 @@ include(__DIR__."/main.inc.php");
 
 $context = Context::getInstance();
 
-if(false){
-    // Little hack for my IDE to display this singleton methode
-    $context = new Context();
-}
-
-

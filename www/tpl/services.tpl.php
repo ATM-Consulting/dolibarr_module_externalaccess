@@ -20,28 +20,34 @@ global $langs;
       </div> 
       <div class="container">
         <div class="row">
-          <div class="col-lg-3 col-md-6 text-center">
-            <div class="service-box mt-5 mx-auto">
-              <i class="fa fa-4x fa-pencil text-primary mb-3 sr-icons"></i>
-              <h3 class="mb-3"><?php  print $langs->trans('Quotations') ?></h3>
-              <p class="text-muted mb-0"><?php  print $langs->trans('QuotationsDesc') ?></p>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 text-center">
-            <div class="service-box mt-5 mx-auto">
-              <i class="fa fa-4x fa-file-text-o text-primary mb-3 sr-icons"></i>
-              <h3 class="mb-3"><?php  print $langs->trans('Orders') ?></h3>
-              <p class="text-muted mb-0"><?php  print $langs->trans('OrdersDesc') ?></p>
-            </div>
-          </div>
-          <div class="col-lg-3 col-md-6 text-center">
-            <div class="service-box mt-5 mx-auto">
-              <i class="fa fa-4x fa-file-text text-primary mb-3 sr-icons"></i>
-              <h3 class="mb-3"><?php  print $langs->trans('Invoices') ?></h3>
-              <p class="text-muted mb-0"><?php  print $langs->trans('InvoicesDesc') ?></p>
-            </div>
-          </div>
-          
+
+<?php
+$parameters=array(
+    'item' =>& $context->controller
+);
+$reshook=$hookmanager->executeHooks('PrintServices',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+
+if(empty($reshook)){ 
+
+    if($context->conf->global->EACCESS_ACTIVATE_PROPALS && !empty($context->user->rights->externalaccess->view_propals)){
+        $link = $context->getRootUrl('propals');
+        printService($langs->trans('Quotations'),'fa-pencil',$link); // desc : $langs->trans('QuotationsDesc')
+    }
+    
+    if($context->conf->global->EACCESS_ACTIVATE_ORDERS && !empty($context->user->rights->externalaccess->view_orders)){
+        $link = $context->getRootUrl('orders');
+        printService($langs->trans('Orders'),'fa-file-text-o',$link); // desc : $langs->trans('OrdersDesc')
+    }
+    
+    if($context->conf->global->EACCESS_ACTIVATE_INVOICES && !empty($context->user->rights->externalaccess->view_invoices)){
+        $link = $context->getRootUrl('invoices');
+        printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
+    }
+    
+    
+}
+?>        
         </div>
       </div>
     </section>
