@@ -204,6 +204,7 @@ class Actionsexternalaccess
 	        {
 	            include $context->tplPath .'/headbar_full.tpl.php';
 	            include $context->tplPath .'/services.tpl.php';
+	            return 1;
 	        }
 	        elseif($context->controller == 'invoices')
 	        {
@@ -211,6 +212,7 @@ class Actionsexternalaccess
 	            {
 	                $this->print_invoiceList($context->user->societe_id);
 	            }
+	            return 1;
 	        }
 	        elseif($context->controller == 'orders')
 	        {
@@ -218,6 +220,7 @@ class Actionsexternalaccess
 	            {
 	                $this->print_orderList($context->user->societe_id);
 	            }
+	            return 1;
 	        }
 	        elseif($context->controller == 'propals')
 	        {
@@ -225,6 +228,7 @@ class Actionsexternalaccess
 	            {
 	                $this->print_propalList($context->user->societe_id);
 	            }
+	            return 1;
 	        }
 	    }
 	    

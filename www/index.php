@@ -34,7 +34,7 @@ if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->e
 
 if(empty($reshook)){
     
-    
+    include __DIR__ .'/tpl/404.tpl.php';
     
 }
 
