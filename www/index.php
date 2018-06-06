@@ -39,5 +39,4 @@ if(empty($reshook)){
 }
 
 
-
 include __DIR__ .'/tpl/footer.tpl.php';

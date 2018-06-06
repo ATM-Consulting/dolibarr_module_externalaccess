@@ -315,4 +315,133 @@ function printService($label='',$icon='',$link='',$desc='')
     
     print $res;
 }
+
+function printNav($Tmenu)
+{
+    $context = Context::getInstance();
+    
+    $menu = '';
+    
+    $itemDefault=array(
+        'active' => false,
+        'separator' => false,
+    );
+    
+    foreach ($Tmenu as $item){
+        
+        $item = array_replace($itemDefault, $item); // applique les valeurs par default
+        
+        
+        if($context->menuIsActive($item['id'])){
+            $item['active'] = true;
+        }
+        
+        
+        if(!empty($item['overrride'])){
+            $menu.= $item['overrride'];
+        }
+        elseif(!empty($item['children'])) 
+        {
+            
+            $menuChildren='';
+            $haveChildActive=false;
+            
+            foreach($item['children'] as $child){
+                
+                $item = array_replace($itemDefault, $item); // applique les valeurs par default
+                
+                if(!empty($child['separator'])){
+                    $menuChildren.='<li role="separator" class="divider"></li>';
+                }
+                
+                if($context->menuIsActive($child['id'])){
+                    $child['active'] = true;
+                    $haveChildActive=true;
+                }
+                
+                
+                $menuChildren.='<li class="dropdown-item" ><a href="'.$child['url'].'" class="'.($child['active']?'active':'').'" ">'. $child['name'].'</a></li>';
+                
+            }
+            
+            $active ='';
+            if($haveChildActive || $item['active']){
+                $active = 'active';
+            }
+            
+            $menu.= '<li class="nav-item dropdown">';
+            $menu.= '<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'. $item['name'].' <span class="caret"></span></a>';
+            $menu.= '<ul class="dropdown-menu">'.$menuChildren.'</ul>';
+            $menu.= '</li>';
+            
+        }
+        else {
+            $menu.= '<li class="nav-item"><a href="'.$item['url'].'" class="nav-link '.($item['active']?'active':'').'" >'. $item['name'].'</a></li>';
+        }
+        
+    }
+    
+    return $menu;
+}
+
+function printSection($content = '', $id = '', $class = '')
+{
+    print '<section id="'. $id .'" class="'. $class .'" ><div class="container">';
+    print $content;
+    print '</div></section>';
+}
+
+
+function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlentities = true, $param = array())
+{
+    $value = dol_htmlentities($value);
+    
+    $TdefaultParam = array(
+        'type' => 'text',
+        'class' => '',
+        'valid' => 0, // is-valid: 1  is-invalid: -1
+        'feedback' => '',
+    );
+    
+    $param = array_replace($TdefaultParam, $param);
+    
+    
+    print '<div class="form-group row">';
+    print '<label for="staticEmail" class="col-sm-2 col-form-label">'.$label;
+    if(!empty($param['required']) && $mode!='readonly'){ print '*'; }
+    print '</label>';
+    
+    print '<div class="col-sm-10">';
+    
+    $class = 'form-control'.($mode=='readonly'?'-plaintext':'').' '.$param['class'];
+    
+    $feedbackClass='';
+    if($param['valid']>0){
+        $class .= ' is-valid';
+        $feedbackClass='valid-feedback';
+    }
+    elseif($param['valid']<0){
+        $class .= ' is-invalid';
+        $feedbackClass='invalid-feedback';
+    }
+    
+    $readonly = ($mode=='readonly'?'readonly':'');
+    
+    print '<input id="'.$name.'" name="'.$name.'" type="'.$param['type'].'" '.$readonly.' class="'.$class.'"  value="'.$value.'" ';
+    if(!empty($param['required'])){
+        print ' required ';
+    }
+    print ' >';
+    
+    if(!empty($param['help'])){
+        print '<small class="text-muted">'.$param['help'].'</small>';
+    }
+    
+    if(!empty($param['feedback'])){
+        print '<div class="'.$feedbackClass.'">'.$param['error'].'</div>';
+    }
+    
+    print '</div>';
+    print '</div>';
+}
 	

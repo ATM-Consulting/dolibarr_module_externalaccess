@@ -94,6 +94,12 @@ class Actionsexternalaccess
 		        //$context->topMenu->shrink = 1; // no transparency menu
 		        $context->doNotDisplayHeaderBar=1;// hide default header
 		    }
+		    elseif($context->controller == 'personalinformations')
+		    {
+		        global $user;
+		        $context->title = $user->lastname .' '. $user->firstname;
+		        $context->desc = $langs->trans('UserInfosDesc');
+		    }
 		}
 		
 	}
@@ -130,57 +136,7 @@ class Actionsexternalaccess
 	    }
 	}
 	
-	
-	/**
-	 * Overloading the PrintTopMenu function : replacing the parent's function with the one below
-	 *
-	 * @param   array()         $parameters     Hook metadatas (context, etc...)
-	 * @param   CommonObject    &$object        The object to process (an invoice if you are in invoice module, a propale in propale's module, etc...)
-	 * @param   string          &$action        Current action (if set). Generally create or edit or null
-	 * @param   HookManager     $hookmanager    Hook manager propagated to allow calling another hook
-	 * @return  int                             < 0 on error, 0 on success, 1 to replace standard code
-	 */
-	public function PrintTopMenu($parameters, &$object, &$action, $hookmanager)
-	{
-	    $error = 0; // Error counter
-	    global $langs, $conf, $user;
-	    
-	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
-	    {
-	        $context = Context::getInstance();
-	        
-	        if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
-	        {
-	            $this->results[] = array(
-	                'id' => 'propals',
-	                'url' => $context->getRootUrl('propals'),
-	                'name' => $langs->trans('EALINKNAME_propals'),
-	            );
-	        }
-	        
-	        if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
-	        {
-	            $this->results[] = array(
-	                'id' => 'orders',
-	                'url' => $context->getRootUrl('orders'),
-	                'name' => $langs->trans('EALINKNAME_orders'),
-	            );
-	        }
-	        
-	        if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
-	        {
-	            $this->results[] = array(
-	                'id' => 'invoices',
-	                'url' => $context->getRootUrl('invoices'),
-	                'name' => $langs->trans('EALINKNAME_invoices'),
-	            );
-	        }
-	        
-	        
-	        
-	    }
-	    
-	}
+
 	
 	
 	
@@ -231,15 +187,20 @@ class Actionsexternalaccess
 	            }
 	            return 1;
 	        }
+	        elseif($context->controller == 'personalinformations')
+	        {
+	            if($context->userIslog())
+	            {
+	                $this->print_personalinformations();
+	            }
+	            return 1;
+	        }
 	    }
 	    
 	}
 	
 	public function print_invoiceList($socId = 0)
 	{
-	    global $langs,$db;
-	    $context = Context::getInstance();
-	    
 	    print '<section id="section-invoice"><div class="container">';
 	    print_invoiceList($socId);
 	    print '</div></section>';
@@ -247,9 +208,6 @@ class Actionsexternalaccess
 	
 	public function print_orderList($socId = 0)
 	{
-	    global $langs,$db;
-	    $context = Context::getInstance();
-	    
 	    print '<section id="section-invoice"><div class="container">';
 	    print_orderList($socId);
 	    print '</div></section>';
@@ -257,14 +215,18 @@ class Actionsexternalaccess
 	
 	public function print_propalList($socId = 0)
 	{
-	    global $langs,$db;
-	    $context = Context::getInstance();
-	    
 	    print '<section id="section-invoice"><div class="container">';
 	    print_propalList($socId);
 	    print '</div></section>';
 	}
 	
+	public function print_personalinformations()
+	{
+	    global $langs,$db,$user;
+	    $context = Context::getInstance();
+	    
+	    include $context->tplPath.'/userinfos.tpl.php';
+	}
 	
 	private function _downloadInvoice(){
 	    

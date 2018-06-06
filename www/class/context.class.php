@@ -71,10 +71,10 @@ class Context {
    
    public function getRootUrl($controller = '')
    {
-       
-       if(!empty($this->conf->global->EACCESS_ROOT_URL))
+       global $conf;
+       if(!empty($conf->global->EACCESS_ROOT_URL))
        {
-           $this->rootUrl = $this->conf->global->EACCESS_ROOT_URL;
+           $this->rootUrl = $conf->global->EACCESS_ROOT_URL;
            if(substr($url, -1))
            {
                $this->rootUrl .= '/';

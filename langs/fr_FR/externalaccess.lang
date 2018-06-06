@@ -59,7 +59,7 @@ WiewOrders=Commandes
 WiewOrdersDesc=Retrouvez facilement toutes vos commandes
 EALINKNAME_orders=Commandes
 
-PersoanalInformations=Informations personnelles
+PersonalInformations=Informations personnelles
 
 # PAGE TITLE
 WELCOME=Bienvenue
@@ -101,6 +101,13 @@ Renew=Renouveller
 GetInTouch=Restons en contact
 GetInTouchDesc=Prêt à commencer votre prochain projet avec nous? Appelez-nous ou envoyez-nous un courriel et nous vous répondrons dans les plus brefs délais!
 
+# UserInfos
+UserInfosDesc=Vos informations personnelles
+firstname=Prénom
+lastname=Nom
+address=Adresse
+addresszip=Code postal
+town=Ville
 
 # 404 tpl 
 SorryThereIsNothingHere=Désolé il n'y a rien ici

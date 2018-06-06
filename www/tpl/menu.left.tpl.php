@@ -7,15 +7,15 @@ if (empty($context) || ! is_object($context))
 ?>
 <!-- Navigation left -->
 
-<div class="list-group">
+<ul class="nav flex-column">
 <?php 
 
 if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES))
 {
     $active = $context->menuIsActive('invoices')?'active':'';
-    print '<a href="'.$context->rootUrl.'" class="list-group-item '.$active.'">'. $langs->trans('Invoices').'</a>';
+    print ' <li class="nav-item"><a href="'.$context->rootUrl.'" class="nav-link '.$active.'">'. $langs->trans('Invoices').'</a></li>';
 }
 
 ?>
-</div>
+</ul>
 
