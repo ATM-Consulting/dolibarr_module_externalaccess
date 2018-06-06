@@ -49,7 +49,7 @@ else header('Cache-Control: no-cache');
 
 $primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
 $primaryColorHover = ColorTools::adjustBrightness($primaryColor,-30);
-$headerImg = !empty($conf->global->EACCESS_HEADER_IMG)?$conf->global->EACCESS_HEADER_IMG:'../img/header_2.jpg';
+$headerImg = !empty($conf->global->EACCESS_HEADER_IMG)?$conf->global->EACCESS_HEADER_IMG:'../img/header_02.jpg';
 
 
 
