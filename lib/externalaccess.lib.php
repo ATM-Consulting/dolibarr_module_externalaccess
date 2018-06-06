@@ -303,7 +303,7 @@ function print_orderList($socId = 0)
 
 function printService($label='',$icon='',$link='',$desc='')
 {
-    $res = '<div class="col-lg-3 col-md-6 text-center">';
+    $res = '<div class="col-lg-3 col-sm-6 text-center">';
     $res.= '<div class="service-box mt-5 mx-auto">';
     $res.= !empty($link)?'<a href="'.$link.'" >':'';
     $res.= '<i class="fa fa-4x '.$icon.' text-primary mb-3 sr-icons"></i>';
