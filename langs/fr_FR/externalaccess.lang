@@ -35,6 +35,7 @@ Noexternalaccess=(vide)
 # CARD
 Newexternalaccess=Création externalaccess
 externalaccessCard=Fiche externalaccess
+ErrorDetected=Erreur(s) détectée(s), veuillez vérifier le formulaire
 
 # CARD TPL
 Save=Enregistrer
@@ -104,11 +105,13 @@ GetInTouchDesc=Prêt à commencer votre prochain projet avec nous? Appelez-nous 
 # UserInfos
 MyPersonalInfos=Mes infos
 UserInfosDesc=Vos informations personnelles
+YourPersonnalInformations=Vos informations personnelles
 firstname=Prénom
 lastname=Nom
 address=Adresse
 addresszip=Code postal
 town=Ville
+exa_Edit=Modifier
 
 # 404 tpl 
 SorryThereIsNothingHere=Désolé il n'y a rien ici

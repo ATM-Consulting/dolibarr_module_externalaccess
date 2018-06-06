@@ -99,6 +99,24 @@ class Actionsexternalaccess
 		        global $user;
 		        $context->title = $user->lastname .' '. $user->firstname;
 		        $context->desc = $langs->trans('UserInfosDesc');
+		        //$context->doNotDisplayHeaderBar=1;// hide default header
+		        
+		        if($context->action == 'save'){
+		            // TODO: need to check all send informations to prevent and verbose errors
+		            $user->firstname = GETPOST('firstname');
+		            $user->lastname = GETPOST('lastname');
+		            $user->address = GETPOST('address');
+		            $user->zip = GETPOST('addresszip');
+		            $user->town = GETPOST('town');
+		            
+		            if($user->update($user)>0)
+		            {
+		                header('Location: '.$context->getRootUrl('personalinformations').'&action=saved');
+		            }
+		            else {
+		                $context->action == 'saveError';
+		            }
+		        }
 		    }
 		}
 		
