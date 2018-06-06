@@ -32,13 +32,13 @@ if (empty($conf) || ! is_object($conf))
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<?php echo $langs->trans("Password"); ?>" required>
                  
                  
-                <?php /*if($conf->global->MAIN_SECURITY_DISABLEFORGETPASSLINK){ ?>
+                <?php /* ?>
                 <div id="remember" class="checkbox">
                     <label>
                         <a href="" ><?php print $langs->trans('ForgetPassword'); ?></a>
                     </label>
                 </div>
-                <?php }*/ ?>
+                <?php */ ?>
                 
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
             
@@ -79,11 +79,11 @@ if (empty($conf) || ! is_object($conf))
                 <?php } */ ?>            
             
             </form><!-- /form -->
-            <?php if ($mode == 'dolibarr' || ! $disabled) { ?>
+            <?php /*if(!$conf->global->MAIN_SECURITY_DISABLEFORGETPASSLINK){ ?>
             <a href="#forgottenpassword" class="forgot-password">
                 <?php print $langs->trans('ForgotThePassword'); ?>
             </a>
-        	<?php } ?>
+        	<?php }*/ ?>
         </div><!-- /card-container -->
    </div>
 </div><!-- /container -->
