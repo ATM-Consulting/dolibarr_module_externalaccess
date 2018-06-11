@@ -77,7 +77,7 @@ if(!empty($conf->global->EACCESS_GOBACK_URL)){
         'id' => 'gobackurl',
         'rank' => 90,
         'url' => $conf->global->EACCESS_GOBACK_URL,
-        'name' => $langs->trans('EALINKNAME_gobackurl'),
+        'name' => '<i class="fa fa-external-link"></i> '.$langs->trans('EALINKNAME_gobackurl'),
     );
 }
 
