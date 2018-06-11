@@ -108,6 +108,9 @@ class Actionsexternalaccess
 		            $user->address = GETPOST('address');
 		            $user->zip = GETPOST('addresszip');
 		            $user->town = GETPOST('town');
+		            $user->user_mobile = GETPOST('user_mobile');
+		            $user->office_phone = GETPOST('office_phone');
+		            $user->office_fax = GETPOST('office_fax');
 		            
 		            if($user->update($user)>0)
 		            {

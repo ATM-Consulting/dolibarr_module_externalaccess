@@ -1,11 +1,11 @@
 ModuleName = Portail client / Accès externe
-ModuleDesc = externalaccess Description
+ModuleDesc = Créer un portail client pour votre Dolibarr
 BackToModuleList=Retour à la liste des modules
 
 ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>Vous pouvez retrouver la documentation sur notre <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>Pour toute question technique ou retour, contactez-nous sur <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>Pour toute question commerciale, contactez-nous sur <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> ou au +33 9 77 19 50 70<br><br>Retrouvez nos autres modules sur <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
 
-externalaccessSetup = Configuration du module externalaccess
-externalaccessAbout = A propos du module externalaccess
+externalaccessSetup = Configuration du module portail client
+externalaccessAbout = A propos du module portail client
 
 externalaccess=Portail client
 
@@ -13,7 +13,7 @@ externalaccess=Portail client
 external_access_invoices=Peux consulter les factures
 external_access_propals=Peux consulter les devis
 external_access_orders=Peux consulter les commandes
-
+external_access_userinfos_edit=Peux modifier ces informations personnelles
 
 # MENU
 TopMenuexternalaccess=externalaccess
@@ -123,6 +123,10 @@ address=Adresse
 addresszip=Code postal
 town=Ville
 exa_Edit=Modifier
+User_mobile=Téléphone mobile
+Office_phone=Téléphone bureau
+Office_fax=Fax
+Saved=Sauvegardé
 
 # 404 tpl 
 SorryThereIsNothingHere=Désolé il n'y a rien ici

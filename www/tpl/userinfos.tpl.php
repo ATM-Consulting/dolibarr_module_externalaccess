@@ -21,11 +21,11 @@ if($context->action=='saveError'){
 }
 
 $mode = 'readonly';
-if($context->action == 'edit' || $context->action == 'saveError'){
+if($user->rights->externalaccess->edit_user_personal_infos  && ($context->action == 'edit' || $context->action == 'saveError')){
     $mode = 'edit';
 }
 
-if($mode=='readonly'){
+if($user->rights->externalaccess->edit_user_personal_infos && $mode=='readonly'){
     print '<a class="btn btn-primary pull-right" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
 }
 print '<h5 class="card-title">'.$langs->trans('YourPersonnalInformations').'</h5>';
@@ -55,6 +55,26 @@ stdFormHelper('addresszip' , $langs->trans('addresszip'), $user->zip, $mode, 1, 
 // town
 $param = array('valid'=>0, 'feedback' => '');
 stdFormHelper('town' , $langs->trans('town'), $user->town, $mode, 1, $param);
+
+// email
+$param = array('valid'=>0, 'feedback' => '');
+stdFormHelper('email' , $langs->trans('email'), $user->email, $mode, 1, $param);
+
+// User_mobile
+$param = array('valid'=>0, 'feedback' => '');
+stdFormHelper('user_mobile' , $langs->trans('User_mobile'), $user->user_mobile, $mode, 1, $param);
+
+// office_phone
+$param = array('valid'=>0, 'feedback' => '');
+stdFormHelper('office_phone' , $langs->trans('Office_phone'), $user->office_phone, $mode, 1, $param);
+
+// office_fax
+$param = array('valid'=>0, 'feedback' => '');
+stdFormHelper('office_fax' , $langs->trans('Office_fax'), $user->office_fax, $mode, 1, $param);
+
+
+//var_dump($user);
+
 
 if($mode=='edit'){
     
