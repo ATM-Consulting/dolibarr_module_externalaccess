@@ -177,7 +177,7 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
     $JSON = array();
     
     
-    $sql = 'SELECT count(*) ';
+    $sql = 'SELECT rowid ';
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
@@ -195,7 +195,7 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
             
             $JSON['data'][] = array(
-                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',

@@ -14,8 +14,5 @@ if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->e
 
 if (!empty($reshook))
 {
-    if($action === 'getlogo')
-    {
-        
-    }
+    
 }

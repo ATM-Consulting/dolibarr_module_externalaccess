@@ -63,7 +63,7 @@ EALINKNAME_orders=Commandes
 PersonalInformations=Informations personnelles
 
 # PAGE TITLE
-WELCOME=Bienvenue
+Welcome=Bienvenue
 WelcomeDesc=Bienvenue sur votre portail client
 
 # SETUP PAGE
