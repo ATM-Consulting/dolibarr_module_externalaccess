@@ -67,18 +67,26 @@ Welcome=Bienvenue
 WelcomeDesc=Bienvenue sur votre portail client
 
 # SETUP PAGE
-EACCESS_ROOT_URL=Url d'access public (si vous utilisez un virtual host)
-EACCESS_TITLE=Titre de l'access extérieur (visible sur le menu du haut)
-EACCESS_GOBACK_URL=Url de retour utilisée lors du clic sur un lien de retour (ex: le menu du haut utilise cette url lorsque vous cliquez sur le titre) 
-EACCESS_PRIMARY_COLOR=Couleur principal du thème (Si modification, Vous devez vider le cache de votre navigateur pour voir les modifications)
+EACCESS_ROOT_URL=Url d'accès  public
+EACCESS_ROOT_URL_HELP=Si vous utilisez un virtual host
+EACCESS_TITLE=Titre de l'accès extérieur
+EACCESS_TITLE_HELP=Visible sur le menu du haut
+EACCESS_GOBACK_URL=Url du lien de retour
+EACCESS_GOBACK_URL_HELP=Si l'URL est renseignée, celà ajoute un lien "retour vers le site" dans le menu du haut
+EACCESS_PRIMARY_COLOR=Couleur principale du thème
+EACCESS_PRIMARY_COLOR_HELP=Sur les pages du portail client, pensez à appuyez sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
 EACCESS_PHONE=Téléphone de contact
 EACCESS_EMAIL=Email de contact
+EACCESS_EMAIL_HELP=Cet adresse email est visible dans le pied de page
 EACCESS_ACTIVATE_MODULES=Modules accessibles
 EACCESS_ACTIVATE_INVOICES=Téléchargement des Factures
 EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
 EACCESS_ACTIVATE_PROPALS=Téléchargement des Devis
 EACCESS_ACTIVATE_ORDERS=Téléchargement des Commandes
 EACCESS_HEADER_IMG=Url de l'image de fond
+EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyez sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
+AccessToCustomerGate=Consulter le portail client
+
 
 # INDEX
 Quotations=Devis

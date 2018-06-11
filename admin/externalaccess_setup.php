@@ -100,15 +100,21 @@ $form=new Form($db);
 $var=false;
 print '<table class="noborder" width="100%">';
 
-_print_input_form_part('EACCESS_ROOT_URL');
-_print_input_form_part('EACCESS_TITLE');
-_print_input_form_part('EACCESS_GOBACK_URL');
+dol_include_once('externalaccess/www/class/context.class.php');
+$context = Context::getInstance();
+//$context = new Context();
+_print_input_form_part('EACCESS_ROOT_URL',false,'',array('placeholder'=>'http://'),'input','EACCESS_ROOT_URL_HELP');
+print '<tr>';
+print '<td colspan="3" ><a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a></td>'."\n";
+print '</tr>';
+_print_input_form_part('EACCESS_TITLE',false,'',array(),'input','EACCESS_TITLE_HELP');
+_print_input_form_part('EACCESS_GOBACK_URL',false,'',array(),'input','EACCESS_GOBACK_URL_HELP');
 _print_input_form_part('EACCESS_PHONE');
-_print_input_form_part('EACCESS_EMAIL');
+_print_input_form_part('EACCESS_EMAIL',false,'',array(),'input','EACCESS_EMAIL_HELP');
 
 
-_print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'));
-_print_input_form_part('EACCESS_HEADER_IMG');
+_print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
+_print_input_form_part('EACCESS_HEADER_IMG',false,'',array('placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -143,7 +149,7 @@ function _print_on_off($confkey, $title = false, $desc ='')
     $var=!$var;
     
     print '<tr '.$bc[$var].'>';
-    print '<td>'.$langs->trans($title?$title:$confkey);
+    print '<td>'.($title?$title:$langs->trans($confkey));
     if(!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
@@ -159,10 +165,12 @@ function _print_on_off($confkey, $title = false, $desc ='')
     print '</td></tr>';
 }
 
-function _print_input_form_part($confkey, $title = false, $desc ='', $metas = array(), $type='input')
+function _print_input_form_part($confkey, $title = false, $desc ='', $metas = array(), $type='input', $help = false)
 {
-    global $var, $bc, $langs, $conf;
+    global $var, $bc, $langs, $conf, $db;
     $var=!$var;
+    
+    $form=new Form($db);
     
     $defaultMetas = array(
         'name' => $confkey
@@ -182,11 +190,20 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     }
     
     print '<tr '.$bc[$var].'>';
-    print '<td>'.$langs->trans($title?$title:$confkey);
+    print '<td>';
+    
+    if(!empty($help)){
+        print $form->textwithtooltip( ($title?$title:$langs->trans($confkey)) , $langs->trans($help),2,1,img_help(1,''));
+    }
+    else {
+        print $title?$title:$langs->trans($confkey);
+    }
+    
     if(!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
     }
+    
     print '</td>';
     print '<td align="center" width="20">&nbsp;</td>';
     print '<td align="right" width="300">';
@@ -200,7 +217,7 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
         print '<input '.$metascompil.'  />';
     }
     
-    print '<input type="submit" class="button" value="'.$langs->trans("Modify").'">';
+    print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
     print '</form>';
     print '</td></tr>';
 }
