@@ -1,4 +1,4 @@
-ModuleName = externalaccess
+ModuleName = Portail client / Accès externe
 ModuleDesc = externalaccess Description
 
 ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>Vous pouvez retrouver la documentation sur notre <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>Pour toute question technique ou retour, contactez-nous sur <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>Pour toute question commerciale, contactez-nous sur <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> ou au +33 9 77 19 50 70<br><br>Retrouvez nos autres modules sur <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
@@ -6,7 +6,7 @@ ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.
 externalaccessSetup = Configuration du module externalaccess
 externalaccessAbout = A propos du module externalaccess
 
-externalaccess=externalaccess
+externalaccess=Portail client
 
 # DROITS
 external_access_invoices=Peux consulter les factures
@@ -70,7 +70,7 @@ WelcomeDesc=Bienvenue sur votre portail client
 EACCESS_ROOT_URL=Url d'access public (si vous utilisez un virtual host)
 EACCESS_TITLE=Titre de l'access extérieur (visible sur le menu du haut)
 EACCESS_GOBACK_URL=Url de retour utilisée lors du clic sur un lien de retour (ex: le menu du haut utilise cette url lorsque vous cliquez sur le titre) 
-EACCESS_PRIMARY_COLOR=Coleur principal du thème (Si modification, Vous devez vider le cache de votre navigateur pour voir les modifications)
+EACCESS_PRIMARY_COLOR=Couleur principal du thème (Si modification, Vous devez vider le cache de votre navigateur pour voir les modifications)
 EACCESS_PHONE=Téléphone de contact
 EACCESS_EMAIL=Email de contact
 EACCESS_ACTIVATE_MODULES=Modules accessibles
@@ -118,5 +118,6 @@ SorryThereIsNothingHere=Désolé il n'y a rien ici
 
 EACCESS_Nothing=Actuellement il n'y a rien ici, patience, vos documents seront disponibles prochainement
 
+Amount_HT=Montant HT
 
 

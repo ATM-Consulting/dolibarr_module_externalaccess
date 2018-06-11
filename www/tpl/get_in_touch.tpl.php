@@ -21,7 +21,7 @@ global $langs;
         <div class="row">
           <div class="col-lg-4 ml-auto text-center">
             <i class="fa fa-phone fa-3x mb-3 sr-contact"></i>
-            <p><?php print $conf->global->EACCESS_PHONE; ?></p>
+            <p><a href="tel:<?php print preg_replace("/[^0-9\+]/", "", $conf->global->EACCESS_PHONE); ?>"><?php print $conf->global->EACCESS_PHONE; ?></a></p>
           </div>
           <div class="col-lg-4 mr-auto text-center">
             <i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i>

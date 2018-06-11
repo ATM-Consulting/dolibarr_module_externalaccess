@@ -93,7 +93,125 @@ function downloadFile($filename, $forceDownload = 0)
     }
 }
 
+
 function print_invoiceList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('compta/facture/class/facture.class.php');
+    
+    $sql = 'SELECT COUNT(*) ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY f.datef DESC';
+    
+    $countItems = $context->dbTool->getvalue($sql);
+    
+    if(!empty($countItems))
+    {
+        print '<table id="ajax-order-list" class="table table-striped" >';
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        //print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '<thead>';
+        print '</table>';
+        
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
+        ?>
+<script type="text/javascript" >
+ $(document).ready(function(){
+     $("#ajax-order-list").DataTable({
+         "language": {
+             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+         },
+         "ajax": '<?php print $jsonUrl; ?>',
+    	 "columns": [
+             { "data": "ref" },
+             { "data": "date" },
+             { "data": "price" },
+             //{ "data": "statut" },
+             { "data": "link" }
+         ],
+
+         columnDefs: [{
+             orderable: false,
+             "aTargets": [-1]
+         }, {
+             "bSearchable": false,
+             "aTargets": [-1, -2]
+         }]
+         
+     });
+ });
+</script>
+<?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+}
+
+
+
+function json_invoiceList($socId = 0, $limit=25, $offset=0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $langs->load('factures');
+    
+    
+    dol_include_once('compta/facture/class/facture.class.php');
+    
+    $JSON = array();
+    
+    
+    $sql = 'SELECT count(*) ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        foreach ($tableItems as $item)
+        {
+            
+            $object = new Facture($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
+            
+            $JSON['data'][] = array(
+                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'date' => dol_print_date($object->date),
+                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
+                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                //'statut' => $object->getLibStatut(0),
+            );
+            
+            
+        }
+        
+    }
+    
+    return json_encode($JSON);
+}
+
+function print_invoiceTable($socId = 0)
 {
     global $langs,$db;
     $context = Context::getInstance();
@@ -162,8 +280,7 @@ function print_invoiceList($socId = 0)
 }
 	
 
-
-function print_propalList($socId = 0)
+function print_propalTable($socId = 0)
 {
     global $langs,$db;
     $context = Context::getInstance();
@@ -193,7 +310,7 @@ function print_propalList($socId = 0)
         print '<tr>';
         print ' <th>'.$langs->trans('Ref').'</th>';
         print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
@@ -231,8 +348,242 @@ function print_propalList($socId = 0)
     
 }
 
+function print_propalList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('comm/propal/class/propal.class.php');
+    
+    $sql = 'SELECT COUNT(*) ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY p.datep DESC';
+    
+    $countItems = $context->dbTool->getvalue($sql);
+    
+    if(!empty($countItems))
+    {
+        print '<table id="ajax-order-list" class="table table-striped" >';
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '<thead>';
+        print '</table>';
+        
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getPropalsList';
+        ?>
+<script type="text/javascript" >
+ $(document).ready(function(){
+     $("#ajax-order-list").DataTable({
+         "language": {
+             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+         },
+         "ajax": '<?php print $jsonUrl; ?>',
+    	 "columns": [
+             { "data": "ref" },
+             { "data": "date" },
+             { "data": "price" },
+             { "data": "statut" },
+             { "data": "link" }
+         ],
+
+         columnDefs: [{
+             orderable: false,
+             "aTargets": [-1]
+         }, {
+             "bSearchable": false,
+             "aTargets": [-1, -2]
+         }]
+         
+     });
+ });
+</script>
+<?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+}
 
 function print_orderList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $sql = 'SELECT COUNT(*) ';    
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY c.date_commande DESC';
+    
+    $countItems = $context->dbTool->getvalue($sql);
+    
+    if(!empty($countItems))
+    {
+        print '<table id="ajax-order-list" class="table table-striped" >';
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '<thead>';
+        print '</table>';
+        
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getOrdersList';
+?>
+<script type="text/javascript" >
+ $(document).ready(function(){
+     $("#ajax-order-list").DataTable({
+         "language": {
+             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+         },
+         "ajax": '<?php print $jsonUrl; ?>',
+    	 "columns": [
+             { "data": "ref" },
+             { "data": "date" },
+             { "data": "price" },
+             { "data": "statut" },
+             { "data": "link" }
+         ],
+
+         columnDefs: [{
+             orderable: false,
+             "aTargets": [-1]
+         }, {
+             "bSearchable": false,
+             "aTargets": [-1, -2]
+         }]
+         
+     });
+ });
+</script>
+<?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+}
+
+
+
+
+
+
+function json_orderList($socId = 0, $limit=25, $offset=0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $langs->load('orders');
+    
+    dol_include_once('commande/class/commande.class.php');
+    
+    $JSON = array();
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY c.date_commande DESC';
+    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        foreach ($tableItems as $item)
+        {
+            
+            $object = new Commande($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
+            
+            $JSON['data'][] = array(
+                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'date' => dol_print_date($object->date),
+                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
+                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'statut' => $object->getLibStatut(0),
+            );
+           
+            
+        }
+       
+    }
+    
+    return json_encode($JSON);
+}
+
+
+function json_propalList($socId = 0, $limit=25, $offset=0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $langs->load('orders');
+    
+    dol_include_once('comm/propal/class/propal.class.php');
+    
+    $JSON = array();
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY p.datep DESC';
+    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        foreach ($tableItems as $item)
+        {
+            
+            $object = new Propal($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+            
+            $JSON['data'][] = array(
+                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'date' => dol_print_date($object->date),
+                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
+                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'statut' => $object->getLibStatut(0),
+            );
+            
+            
+        }
+        
+    }
+    
+    return json_encode($JSON);
+}
+
+
+function print_orderListTable($socId = 0)
 {
     global $langs,$db;
     $context = Context::getInstance();
@@ -262,7 +613,7 @@ function print_orderList($socId = 0)
         print '<tr>';
         print ' <th>'.$langs->trans('Ref').'</th>';
         print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         

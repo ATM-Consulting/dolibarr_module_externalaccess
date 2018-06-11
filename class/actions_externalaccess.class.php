@@ -134,7 +134,7 @@ class Actionsexternalaccess
 	public function interface($parameters, &$object, &$action, $hookmanager)
 	{
 	    $error = 0; // Error counter
-	    global $langs, $db, $conf;
+	    global $langs, $db, $conf, $user;
 	    
 	    if (in_array('externalaccessinterface', explode(':', $parameters['context'])))
 	    {
@@ -149,6 +149,30 @@ class Actionsexternalaccess
 	        elseif ($action === 'downloadCommande')
 	        {
 	            $this->_downloadCommande();
+	        }
+	        elseif ($action === 'getOrdersList')
+	        {
+	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	            {
+	                print json_orderList($user->societe_id,99999, GETPOST('offset','int'));
+	                exit();
+	            }
+	        }
+	        elseif ($action === 'getPropalsList')
+	        {
+	            if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+	            {
+	                print json_propalList($user->societe_id,99999, GETPOST('offset','int'));
+	                exit();
+	            }
+	        }
+	        elseif ($action === 'getInvoicesList')
+	        {
+	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+	            {
+	                print json_invoiceList($user->societe_id,99999, GETPOST('offset','int'));
+	                exit();
+	            }
 	        }
 	        
 	    }
@@ -169,7 +193,7 @@ class Actionsexternalaccess
 	 */
 	public function PrintPageView($parameters, &$object, &$action, $hookmanager)
 	{
-	    global $conf, $user;
+	    global $conf, $user, $langs;
 	    $error = 0; // Error counter
 	    
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))

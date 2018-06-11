@@ -29,18 +29,6 @@ if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID)
 }
 ?>
 
-    <!-- Bootstrap core JavaScript -->
-    <script src="<?php print $context->getRootUrl(); ?>vendor/jquery/jquery.min.js"></script>
-    <script src="<?php print $context->getRootUrl(); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
-
-    <!-- Plugin JavaScript -->
-    <script src="<?php print $context->getRootUrl(); ?>vendor/jquery-easing/jquery.easing.min.js"></script>
-    <script src="<?php print $context->getRootUrl(); ?>vendor/scrollreveal/scrollreveal.min.js"></script>
-    <script src="<?php print $context->getRootUrl(); ?>vendor/magnific-popup/jquery.magnific-popup.min.js"></script>
-    <script src="<?php print $context->getRootUrl(); ?>vendor/data-tables/datatables.min.js"></script>
-
-    <!-- Custom scripts for this template -->
-    <script src="<?php print $context->getRootUrl(); ?>js/creative.js"></script>
 
   </body>
 
