@@ -11,38 +11,42 @@ global $conf,$user;
 
 $Tmenu=array();
 
-if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
-{
-    $Tmenu['propals'] = array(
-        'id' => 'propals',
-        'rank' => 10,
-        'url' => $context->getRootUrl('propals'),
-        'name' => $langs->trans('EALINKNAME_propals'),
-    );
-}
-
-if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
-{
-    $Tmenu['orders'] = array(
-        'id' => 'orders',
-        'rank' => 20,
-        'url' => $context->getRootUrl('orders'),
-        'name' => $langs->trans('EALINKNAME_orders'),
-    );
-}
-
-if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
-{
-    $Tmenu['invoices'] = array(
-        'id' => 'invoices',
-        'rank' => 30,
-        'url' => $context->getRootUrl('invoices'),
-        'name' => $langs->trans('EALINKNAME_invoices'),
-    );
-}
 
 if($context->userIsLog())
 {
+    
+    if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+    {
+        $Tmenu['propals'] = array(
+            'id' => 'propals',
+            'rank' => 10,
+            'url' => $context->getRootUrl('propals'),
+            'name' => $langs->trans('EALINKNAME_propals'),
+        );
+    }
+    
+    if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+    {
+        $Tmenu['orders'] = array(
+            'id' => 'orders',
+            'rank' => 20,
+            'url' => $context->getRootUrl('orders'),
+            'name' => $langs->trans('EALINKNAME_orders'),
+        );
+    }
+    
+    if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+    {
+        $Tmenu['invoices'] = array(
+            'id' => 'invoices',
+            'rank' => 30,
+            'url' => $context->getRootUrl('invoices'),
+            'name' => $langs->trans('EALINKNAME_invoices'),
+        );
+    }
+    
+    
+    
     $Tmenu['user'] = array(
         'id' => 'user',
         'rank' => 100,
@@ -68,9 +72,35 @@ if($context->userIsLog())
 }
 
 
+if(!empty($conf->global->EACCESS_GOBACK_URL)){
+    $Tmenu['invoices'] = array(
+        'id' => 'gobackurl',
+        'rank' => 30,
+        'url' => $conf->global->EACCESS_GOBACK_URL,
+        'name' => $langs->trans('EALINKNAME_gobackurl'),
+    );
+}
 
 
 
+
+$parameters=array(
+    'controller' => $context->controller,
+    'Tmenu' =>& $Tmenu,
+);
+$reshook=$hookmanager->executeHooks('PrintTopMenu',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+
+if(empty($reshook)){
+    if(!empty($hookmanager->resArray)){
+        $Tmenu = array_replace($Tmenu,$hookmanager->resArray);
+    }
+    
+    if(!empty($Tmenu)){
+        
+        
+    // Sorting
+    uasort ( $Tmenu,'menuSortInv');
 ?>
 <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top <?php print !empty($context->topMenu->shrink)?'navbar-shrink':''; ?>" id="mainNav" <?php print !empty($context->topMenu->shrink)?'data-defaultshrink="1"':''; ?> >
@@ -81,29 +111,14 @@ if($context->userIsLog())
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-
             <?php 
-            
-            $parameters=array(
-                'controller' => $context->controller,
-                'Tmenu' =>& $Tmenu,
-            );
-            $reshook=$hookmanager->executeHooks('PrintTopMenu',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
-            if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
-            
-            if(empty($reshook)){
-                
-                if(!empty($hookmanager->resArray)){
-                    $Tmenu = array_replace($Tmenu,$hookmanager->resArray);
-                }
                 print printNav($Tmenu);
-            }
             ?>
-            
-            
-
-            
           </ul>
         </div>
       </div>
     </nav>
+    
+<?php 
+    }
+}    

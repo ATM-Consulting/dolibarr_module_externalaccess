@@ -48,6 +48,8 @@ ToClone=Cloner
 Delete=Supprimer
 
 # MENU
+EALINKNAME_gobackurl=Retour au site
+
 WiewInvoices=Factures
 WiewInvoicesDesc=Retrouvez facilement toutes vos factures
 EALINKNAME_invoices=Factures

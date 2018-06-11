@@ -25,7 +25,11 @@ $context = Context::getInstance();
 $context->doNotDisplayHeaderBar = 1;
 $context->doNotDisplayMenu = 1;
 
-include __DIR__ .'/../tpl/header.tpl.php';
+include __DIR__ .'/header.tpl.php';
+
+
+
+include __DIR__ . '/menu.tpl.php';
 
 ?>
 

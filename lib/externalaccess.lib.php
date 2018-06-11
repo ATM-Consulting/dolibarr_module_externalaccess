@@ -795,4 +795,48 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
     print '</div>';
     print '</div>';
 }
+
+/**
+ *   	uasort callback function to Sort menu fields
+ *
+ *   	@param	array			$a    			PDF lines array fields configs
+ *   	@param	array			$b    			PDF lines array fields configs
+ *      @return	int								Return compare result
+ *      
+ *      // Sorting
+ *      uasort ( $this->cols, array( $this, 'menuSort' ) );
+ *      
+ */
+function menuSortInv($a, $b) {
+    
+    if(empty($a['rank'])){ $a['rank'] = 0; }
+    if(empty($b['rank'])){ $b['rank'] = 0; }
+    if ($a['rank'] == $b['rank']) {
+        return 0;
+    }
+    return ($a['rank'] < $b['rank']) ? -1 : 1;
+    
+}
+
+/**
+ *   	uasort callback function to Sort menu fields
+ *
+ *   	@param	array			$a    			PDF lines array fields configs
+ *   	@param	array			$b    			PDF lines array fields configs
+ *      @return	int								Return compare result
+ *
+ *      // Sorting
+ *      uasort ( $this->cols, array( $this, 'menuSort' ) );
+ *
+ */
+function menuSort($a, $b) {
+    
+    if(empty($a['rank'])){ $a['rank'] = 0; }
+    if(empty($b['rank'])){ $b['rank'] = 0; }
+    if ($a['rank'] == $b['rank']) {
+        return 0;
+    }
+    return ($a['rank'] > $b['rank']) ? -1 : 1;
+    
+}
 	
