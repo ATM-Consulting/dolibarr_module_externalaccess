@@ -39,7 +39,7 @@ if($context->userIsLog())
     {
         $Tmenu['invoices'] = array(
             'id' => 'invoices',
-            'rank' => 30,
+            'rank' => 40,
             'url' => $context->getRootUrl('invoices'),
             'name' => $langs->trans('EALINKNAME_invoices'),
         );
@@ -73,9 +73,9 @@ if($context->userIsLog())
 
 
 if(!empty($conf->global->EACCESS_GOBACK_URL)){
-    $Tmenu['invoices'] = array(
+    $Tmenu['gobackurl'] = array(
         'id' => 'gobackurl',
-        'rank' => 30,
+        'rank' => 90,
         'url' => $conf->global->EACCESS_GOBACK_URL,
         'name' => $langs->trans('EALINKNAME_gobackurl'),
     );
