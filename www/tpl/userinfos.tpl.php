@@ -35,6 +35,15 @@ print '<form method="post" action="'.$context->getRootUrl('personalinformations'
 //print '<div class="card" >';
 //
 
+if(!empty($user->socid)){
+    $userSoc = new Societe($db);
+    
+    if($userSoc->fetch($user->socid) > 0){
+        // Societe
+        stdFormHelper('societe', $langs->trans('Company'), $userSoc->name, 'readonly', 1);
+    }
+}
+
 //print '<div class="card-body" >';
 // Firstname
 $param = array('required'=> true, 'valid'=>0, 'feedback' => '');
