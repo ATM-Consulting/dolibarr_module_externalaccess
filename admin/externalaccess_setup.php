@@ -125,6 +125,9 @@ _print_on_off('EACCESS_ACTIVATE_ORDERS',false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
 
+_print_input_form_part('EACCESS_LOGIN_EXTRA_HTML',false,'',array(),'textarea');
+
+
 
 print '</table>';
 

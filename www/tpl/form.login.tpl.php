@@ -86,4 +86,16 @@ if (empty($conf) || ! is_object($conf))
         	<?php }*/ ?>
         </div><!-- /card-container -->
    </div>
+
+<?php 
+if(!empty($conf->global->EACCESS_LOGIN_EXTRA_HTML)){
+    print '<div class="row  "><div class="card card-container col-lg-6 ">';
+    print $conf->global->EACCESS_LOGIN_EXTRA_HTML;
+    print '</div></div>';
+    
+}
+
+
+?>
+   
 </div><!-- /container -->
