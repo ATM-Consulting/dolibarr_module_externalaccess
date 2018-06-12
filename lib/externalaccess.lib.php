@@ -111,7 +111,7 @@ function print_invoiceList($socId = 0)
     
     if(!empty($countItems))
     {
-        print '<table id="ajax-order-list" class="table table-striped" >';
+        print '<table id="ajax-invoice-list" class="table table-striped" >';
         print '<thead>';
         
         print '<tr>';
@@ -129,11 +129,13 @@ function print_invoiceList($socId = 0)
         ?>
 <script type="text/javascript" >
  $(document).ready(function(){
-     $("#ajax-order-list").DataTable({
+     $("#ajax-invoice-list").DataTable({
          "language": {
              "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
          },
          "ajax": '<?php print $jsonUrl; ?>',
+
+         responsive: true,
     	 "columns": [
              { "data": "ref" },
              { "data": "date" },
@@ -365,7 +367,7 @@ function print_propalList($socId = 0)
     
     if(!empty($countItems))
     {
-        print '<table id="ajax-order-list" class="table table-striped" >';
+        print '<table id="ajax-propal-list" class="table table-striped" >';
         print '<thead>';
         
         print '<tr>';
@@ -384,11 +386,13 @@ function print_propalList($socId = 0)
         ?>
 <script type="text/javascript" >
  $(document).ready(function(){
-     $("#ajax-order-list").DataTable({
+     $("#ajax-propal-list").DataTable({
          "language": {
              "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
          },
          "ajax": '<?php print $jsonUrl; ?>',
+
+         responsive: true,
     	 "columns": [
              { "data": "ref" },
              { "data": "date" },
@@ -506,6 +510,8 @@ function print_orderList($socId = 0)
          "language": {
              "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
          },
+
+         responsive: true,
          "ajax": '<?php print $jsonUrl; ?>',
     	 "columns": [
              { "data": "ref" },
