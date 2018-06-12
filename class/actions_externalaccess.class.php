@@ -286,7 +286,7 @@ class Actionsexternalaccess
 	        $facture = new Facture($db);
 	        if($facture->fetch($id)>0)
 	        {
-	            if($facture->statut==Facture::STATUS_VALIDATED && $facture->socid==$user->societe_id)
+	            if($facture->statut>=Facture::STATUS_VALIDATED && $facture->socid==$user->societe_id)
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$facture->last_main_doc;
 	                
@@ -310,7 +310,7 @@ class Actionsexternalaccess
 	        $object = new Propal($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut==Propal::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            if($object->statut>=Propal::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                
@@ -336,7 +336,7 @@ class Actionsexternalaccess
 	        $object = new Commande($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut==Commande::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            if($object->statut>=Commande::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                
