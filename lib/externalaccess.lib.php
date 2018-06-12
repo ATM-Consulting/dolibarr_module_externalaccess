@@ -63,27 +63,33 @@ function downloadFile($filename, $forceDownload = 0)
 {
     if(file_exists($filename))
     {
-        
-        $finfo = finfo_open(FILEINFO_MIME_TYPE);
-        $mime = finfo_file($finfo, $filename);
-        if($mime == 'application/pdf' && empty($forceDownload))
+        if(is_readable($filename))
         {
-            header('Content-type: application/pdf');
-            header('Content-Disposition: inline; filename="' . basename($filename) . '"');
-            header('Content-Transfer-Encoding: binary');
-            header('Accept-Ranges: bytes');
-            header('Content-Length: ' . filesize($filename));
-            echo file_get_contents($filename);
-            exit();
+            $finfo = finfo_open(FILEINFO_MIME_TYPE);
+            $mime = finfo_file($finfo, $filename);
+            if($mime == 'application/pdf' && empty($forceDownload))
+            {
+                header('Content-type: application/pdf');
+                header('Content-Disposition: inline; filename="' . basename($filename) . '"');
+                header('Content-Transfer-Encoding: binary');
+                header('Accept-Ranges: bytes');
+                header('Content-Length: ' . filesize($filename));
+                echo file_get_contents($filename);
+                exit();
+            }
+            else {
+                
+                header("Content-Description: File Transfer");
+                header("Content-Type: application/octet-stream");
+                header("Content-Disposition: attachment; filename='" . basename($filename) . "'");
+                
+                readfile ($filename);
+                exit();
+            }
         }
-        else {
-            
-            header("Content-Description: File Transfer");
-            header("Content-Type: application/octet-stream");
-            header("Content-Disposition: attachment; filename='" . basename($filename) . "'");
-            
-            readfile ($filename);
-            exit();
+        else
+        {
+            print $langs->trans('FileNotReadable').$filename;
         }
         
     }
@@ -196,7 +202,16 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
             
-            $JSON['data'][] = array(
+            
+            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+            $disabled = false;
+            $disabledclass='';
+            if(!file_exists($filename) || !is_readable($filename)){
+                $disabled = true;
+                $disabledclass=' disabled ';
+            }
+            
+            $row = array(
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
@@ -205,7 +220,12 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
                 //'statut' => $object->getLibStatut(0),
             );
             
+            if($disabled){
+                $row['ref'] = $object->ref;
+                $row['link'] = $langs->trans('DocumentFileNotAvailable');
+            }
             
+            $JSON['data'][] = $row;
         }
         
     }
@@ -453,17 +473,31 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
             
-            $JSON['data'][] = array(
+            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+            $disabled = false;
+            $disabledclass='';
+            if(!file_exists($filename) || !is_readable($filename)){
+                $disabled = true;
+                $disabledclass=' disabled ';
+            }
+            
+            
+            $row = array(
                 //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
-                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'ref' => '<a class="'.$disabledclass.'" href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'link' => '<a class="btn btn-xs btn-primary '.$disabledclass.'" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 'statut' => $object->getLibStatut(0),
                 'fin_validite' => dol_print_date($object->fin_validite)
             );
             
+            if($disabled){
+                $row['ref'] = $object->ref;
+                $row['link'] = $langs->trans('DocumentFileNotAvailable');
+            }
             
+            $JSON['data'][] = $row;
         }
         
     }
@@ -576,7 +610,16 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
             
-            $JSON['data'][] = array(
+            
+            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+            $disabled = false;
+            $disabledclass='';
+            if(!file_exists($filename) || !is_readable($filename)){
+                $disabled = true;
+                $disabledclass=' disabled ';
+            }
+            
+            $row = array(
                 //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
@@ -584,8 +627,13 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
                 'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 'statut' => $object->getLibStatut(0)
             );
-           
             
+            if($disabled){
+                $row['ref'] = $object->ref;
+                $row['link'] = $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            $JSON['data'][] = $row;
         }
        
     }
