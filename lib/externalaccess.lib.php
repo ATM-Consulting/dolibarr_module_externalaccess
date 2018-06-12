@@ -122,7 +122,7 @@ function print_invoiceList($socId = 0)
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
-        print '<thead>';
+        print '</thead>';
         print '</table>';
         
         $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
@@ -245,7 +245,7 @@ function print_invoiceTable($socId = 0)
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
-        print '<thead>';
+        print '</thead>';
         
         print '<tbody>';
         foreach ($tableItems as $item)
@@ -314,7 +314,7 @@ function print_propalTable($socId = 0)
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
-        print '<thead>';
+        print '</thead>';
         
         print '<tbody>';
         foreach ($tableItems as $item)
@@ -377,7 +377,7 @@ function print_propalList($socId = 0)
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
-        print '<thead>';
+        print '</thead>';
         print '</table>';
         
         $jsonUrl = $context->getRootUrl().'script/interface.php?action=getPropalsList';
@@ -495,7 +495,7 @@ function print_orderList($socId = 0)
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
-        print '<thead>';
+        print '</thead>';
         print '</table>';
         
         $jsonUrl = $context->getRootUrl().'script/interface.php?action=getOrdersList';
@@ -623,7 +623,7 @@ function print_orderListTable($socId = 0)
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
-        print '<thead>';
+        print '</thead>';
         
         print '<tbody>';
         foreach ($tableItems as $item)
