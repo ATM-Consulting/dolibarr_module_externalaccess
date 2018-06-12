@@ -61,7 +61,7 @@ function externalaccessAdminPrepareHead()
 
 function downloadFile($filename, $forceDownload = 0)
 {
-    if(file_exists($filename))
+    if(!empty($filename) && file_exists($filename))
     {
         if(is_readable($filename))
         {
@@ -206,7 +206,7 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
             $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
             $disabled = false;
             $disabledclass='';
-            if(!file_exists($filename) || !is_readable($filename)){
+            if(empty($filename) || !file_exists($filename) || !is_readable($filename)){
                 $disabled = true;
                 $disabledclass=' disabled ';
             }
@@ -476,7 +476,7 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
             $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
             $disabled = false;
             $disabledclass='';
-            if(!file_exists($filename) || !is_readable($filename)){
+            if(empty($filename) ||  !file_exists($filename) || !is_readable($filename)){
                 $disabled = true;
                 $disabledclass=' disabled ';
             }
@@ -614,7 +614,7 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
             $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
             $disabled = false;
             $disabledclass='';
-            if(!file_exists($filename) || !is_readable($filename)){
+            if(empty($filename) || !file_exists($filename) || !is_readable($filename)){
                 $disabled = true;
                 $disabledclass=' disabled ';
             }
