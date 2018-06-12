@@ -804,6 +804,9 @@ a.list-group-item:focus {
 
 
 
-
+.btn.btn-xs{
+	padding: 0.2em 0.75em;
+	font-size:0.8em;
+}
 
 
