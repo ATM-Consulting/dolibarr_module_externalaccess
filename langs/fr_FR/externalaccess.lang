@@ -10,13 +10,13 @@ externalaccessAbout = A propos du module portail client
 externalaccess=Portail client
 
 # DROITS
-external_access_invoices=Peux consulter les factures
-external_access_propals=Peux consulter les devis
-external_access_orders=Peux consulter les commandes
-external_access_userinfos_edit=Peux modifier ces informations personnelles
+external_access_invoices=Peut consulter les factures
+external_access_propals=Peut consulter les devis
+external_access_orders=Peut consulter les commandes
+external_access_userinfos_edit=Peut modifier ces informations personnelles
 
 # MENU
-TopMenuexternalaccess=externalaccess
+TopMenuexternalaccess=Portail client
 
 # STATUS
 externalaccessStatusDraft=Brouillon (à valider)
@@ -30,7 +30,7 @@ Refused=Refusé
 Accepted=Accepté
 
 # LIST
-externalaccessList=Liste externalaccess
+externalaccessList=Liste Portail client
 Noexternalaccess=(vide)
 
 # CARD
@@ -56,7 +56,7 @@ WiewInvoicesDesc=Retrouvez facilement toutes vos factures
 EALINKNAME_invoices=Factures
 
 WiewPropals=Devis
-WiewPropalsDesc=Retrouvez facilement toutes vos devis
+WiewPropalsDesc=Retrouvez facilement tous vos devis
 EALINKNAME_propals=Devis
 
 WiewOrders=Commandes
@@ -77,7 +77,7 @@ EACCESS_TITLE_HELP=Visible sur le menu du haut
 EACCESS_GOBACK_URL=Url du lien de retour
 EACCESS_GOBACK_URL_HELP=Si l'URL est renseignée, celà ajoute un lien "retour vers le site" dans le menu du haut
 EACCESS_PRIMARY_COLOR=Couleur principale du thème
-EACCESS_PRIMARY_COLOR_HELP=Sur les pages du portail client, pensez à appuyez sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
+EACCESS_PRIMARY_COLOR_HELP=Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
 EACCESS_PHONE=Téléphone de contact
 EACCESS_EMAIL=Email de contact
 EACCESS_EMAIL_HELP=Cet adresse email est visible dans le pied de page
@@ -87,7 +87,7 @@ EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
 EACCESS_ACTIVATE_PROPALS=Téléchargement des Devis
 EACCESS_ACTIVATE_ORDERS=Téléchargement des Commandes
 EACCESS_HEADER_IMG=Url de l'image de fond
-EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyez sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
+EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
 AccessToCustomerGate=Consulter le portail client
 
 
