@@ -13,7 +13,7 @@ global $langs, $user, $conf;
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
-            <h2 class="section-heading"><?php print $langs->trans('Services');  ?></h2>
+            <h2 class="section-heading" id="services-title"><?php print $langs->trans('Services');  ?></h2>
             <hr class="my-4">
           </div>
         </div>

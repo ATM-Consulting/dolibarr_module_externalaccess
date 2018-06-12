@@ -19,7 +19,7 @@ global $langs;
           <?php if(!empty($context->desc)) { ?>
           <div class="col-lg-8 mx-auto">
             <p class="text-faded mb-5"><?php echo $context->desc; ?></p>
-            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#services"><i class="fa fa-arrow-right" aria-hidden="true"></i> <?php echo $langs->trans('MySpace'); ?> <i class="fa fa-arrow-left" aria-hidden="true"></i></a>
+            <a class="btn btn-primary btn-xl js-scroll-trigger" href="#services-title"><i class="fa fa-arrow-right" aria-hidden="true"></i> <?php echo $langs->trans('MySpace'); ?> <i class="fa fa-arrow-left" aria-hidden="true"></i></a>
           </div>
           <?php } ?>
         </div>
