@@ -20,7 +20,7 @@ class Context {
    public $controller;
    public $action;
    
-   public $tplDir = __DIR__.'/../';
+   public $tplDir;
    
    public $menu_active = array();
    
@@ -36,6 +36,7 @@ class Context {
        
        $this->dbTool = new ExternalDbTool($db) ;
        
+       $this->tplDir = __DIR__.'/../';
        
        $this->getRootUrl();
        
@@ -112,4 +113,3 @@ class Context {
 
 }
  
-?>
