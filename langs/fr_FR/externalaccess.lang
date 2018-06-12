@@ -47,6 +47,7 @@ Modify=Modifier
 Reopen=Rouvrir
 ToClone=Cloner
 Delete=Supprimer
+DateFinValidite=Date de fin de validité
 
 # MENU
 EALINKNAME_gobackurl=Retour au site

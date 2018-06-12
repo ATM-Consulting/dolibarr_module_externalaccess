@@ -373,6 +373,7 @@ function print_propalList($socId = 0)
         print ' <th>'.$langs->trans('Date').'</th>';
         print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
         print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('DateFinValidite').'</th>';
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
@@ -393,6 +394,7 @@ function print_propalList($socId = 0)
              { "data": "date" },
              { "data": "price" },
              { "data": "statut" },
+             { "data": "fin_validite" },
              { "data": "link" }
          ],
 
@@ -415,6 +417,57 @@ function print_propalList($socId = 0)
         print '</div>';
     }
 }
+
+
+function json_propalList($socId = 0, $limit=25, $offset=0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $langs->load('orders');
+    
+    dol_include_once('comm/propal/class/propal.class.php');
+    
+    $JSON = array();
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY p.datep DESC';
+    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        foreach ($tableItems as $item)
+        {
+            
+            $object = new Propal($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+            
+            $JSON['data'][] = array(
+                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'date' => dol_print_date($object->date),
+                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
+                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'statut' => $object->getLibStatut(0),
+                'fin_validite' => dol_print_date($object->fin_validite)
+            );
+            
+            
+        }
+        
+    }
+    
+    return json_encode($JSON);
+}
+
+
 
 function print_orderList($socId = 0)
 {
@@ -523,7 +576,7 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
                 'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
-                'statut' => $object->getLibStatut(0),
+                'statut' => $object->getLibStatut(0)
             );
            
             
@@ -534,53 +587,6 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
     return json_encode($JSON);
 }
 
-
-function json_propalList($socId = 0, $limit=25, $offset=0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-    
-    $langs->load('orders');
-    
-    dol_include_once('comm/propal/class/propal.class.php');
-    
-    $JSON = array();
-    
-    
-    $sql = 'SELECT rowid ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' AND fk_statut > 0';
-    $sql.= ' ORDER BY p.datep DESC';
-    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
-    
-    $tableItems = $context->dbTool->executeS($sql);
-    
-    if(!empty($tableItems))
-    {
-        foreach ($tableItems as $item)
-        {
-            
-            $object = new Propal($db);
-            $object->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
-            
-            $JSON['data'][] = array(
-                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
-                'date' => dol_print_date($object->date),
-                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
-                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
-                'statut' => $object->getLibStatut(0),
-            );
-            
-            
-        }
-        
-    }
-    
-    return json_encode($JSON);
-}
 
 
 function print_orderListTable($socId = 0)
