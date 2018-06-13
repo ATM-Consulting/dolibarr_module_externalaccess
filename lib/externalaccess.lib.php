@@ -144,9 +144,9 @@ function print_invoiceList($socId = 0)
 
          responsive: true,
     	 "columns": [
-             { "data": "view", "order" : "ref" },
-             { "data": "date" , "order" : "time" },
-             { "data": "price" , "order" : "amount" },
+             { "data": "view"},
+             { "data": "date" },
+             { "data": "price"},
              //{ "data": "statut" },
              { "data": "forcedownload" }
          ],
