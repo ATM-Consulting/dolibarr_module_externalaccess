@@ -82,6 +82,7 @@ function downloadFile($filename, $forceDownload = 0)
                 header("Content-Description: File Transfer");
                 header("Content-Type: application/octet-stream");
                 header("Content-Disposition: attachment; filename='" . basename($filename) . "'");
+                header('Content-Length: ' . filesize($filename));
                 
                 readfile ($filename);
                 exit();
@@ -143,11 +144,11 @@ function print_invoiceList($socId = 0)
 
          responsive: true,
     	 "columns": [
-             { "data": "ref" },
-             { "data": "date" },
-             { "data": "price" },
+             { "data": "view", "order" : "ref" },
+             { "data": "date" , "order" : "time" },
+             { "data": "price" , "order" : "amount" },
              //{ "data": "statut" },
-             { "data": "link" }
+             { "data": "forcedownload" }
          ],
 
          columnDefs: [{
@@ -157,6 +158,38 @@ function print_invoiceList($socId = 0)
              "bSearchable": false,
              "aTargets": [-1, -2]
          }]
+
+         /*,"buttons": [{
+             extend: 'print',
+             text: '<i class="icon-print" ></i> Imprimer',
+             exportOptions: {
+                 columns: ':not(:last-child)'
+             }
+         }, {
+             extend: 'copyHtml5',
+             text: '<i class="icon-copy" ></i> Copier',
+             exportOptions: {
+                 columns: ':not(:last-child)'
+             }
+         }, {
+             extend: 'excelHtml5',
+             text: '<i class="icon-table" ></i> Excel',
+             exportOptions: {
+                 columns: ':not(:last-child)'
+             }
+         }, {
+             extend: 'csvHtml5',
+             text: '<i class="icon-table" ></i> CSV',
+             exportOptions: {
+                 columns: ':not(:last-child)'
+             }
+         }, {
+             extend: 'pdfHtml5',
+             text: '<i class="icon-file-text" ></i> PDF',
+             exportOptions: {
+                 columns: ':not(:last-child)'
+             }
+         }]*/
          
      });
  });
@@ -212,11 +245,14 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
             }
             
             $row = array(
-                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'view' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'ref' => $object->ref, // for order
+                'time' => $object->date, // for order
+                'amount' => $object->multicurrency_total_ttc, // for order
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'forcedownload' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 //'statut' => $object->getLibStatut(0),
             );
             
