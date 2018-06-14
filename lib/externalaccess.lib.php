@@ -778,7 +778,7 @@ function print_orderListTable($socId = 0)
             print ' <td data-order="'.$object->multicurrency_total_ttc.'"  class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             
             
-            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$downloadLink.'</td>';
+            print ' <td  class="text-right" >'.$downloadLink.'</td>';
             
             
             print '</tr>';
