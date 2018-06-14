@@ -100,7 +100,9 @@ function downloadFile($filename, $forceDownload = 0)
     }
 }
 
-
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
 function print_invoiceList($socId = 0)
 {
     global $langs,$db;
@@ -145,7 +147,7 @@ function print_invoiceList($socId = 0)
          responsive: true,
     	 "columns": [
              { "data": "view"},
-             { "data": "date" },
+             { "data": "date"},
              { "data": "price"},
              //{ "data": "statut" },
              { "data": "forcedownload" }
@@ -154,42 +156,10 @@ function print_invoiceList($socId = 0)
          columnDefs: [{
              orderable: false,
              "aTargets": [-1]
-         }, {
+         },{
              "bSearchable": false,
              "aTargets": [-1, -2]
          }]
-
-         /*,"buttons": [{
-             extend: 'print',
-             text: '<i class="icon-print" ></i> Imprimer',
-             exportOptions: {
-                 columns: ':not(:last-child)'
-             }
-         }, {
-             extend: 'copyHtml5',
-             text: '<i class="icon-copy" ></i> Copier',
-             exportOptions: {
-                 columns: ':not(:last-child)'
-             }
-         }, {
-             extend: 'excelHtml5',
-             text: '<i class="icon-table" ></i> Excel',
-             exportOptions: {
-                 columns: ':not(:last-child)'
-             }
-         }, {
-             extend: 'csvHtml5',
-             text: '<i class="icon-table" ></i> CSV',
-             exportOptions: {
-                 columns: ':not(:last-child)'
-             }
-         }, {
-             extend: 'pdfHtml5',
-             text: '<i class="icon-file-text" ></i> PDF',
-             exportOptions: {
-                 columns: ':not(:last-child)'
-             }
-         }]*/
          
      });
  });
@@ -204,7 +174,9 @@ function print_invoiceList($socId = 0)
 }
 
 
-
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
 function json_invoiceList($socId = 0, $limit=25, $offset=0)
 {
     global $langs,$db;
@@ -292,7 +264,7 @@ function print_invoiceTable($socId = 0)
         
         
         
-        print '<table class="table table-striped" >';
+        print '<table id="invoice-list" class="table table-striped" >';
         
         print '<thead>';
         
@@ -312,20 +284,37 @@ function print_invoiceTable($socId = 0)
             $facture->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$facture->id;
             print '<tr>';
-            print ' <td><a href="'.$dowloadUrl.'" target="_blank" >'.$facture->ref.'</a></td>';
-            print ' <td>'.dol_print_date($facture->date).'</td>';
-            print ' <td class="text-right" >'.price($facture->multicurrency_total_ttc)  .' '.$facture->multicurrency_code.'</td>';
-            
-            
+            print ' <td data-search="'.$facture->ref.'" data-order="'.$facture->ref.'" ><a href="'.$dowloadUrl.'" target="_blank" >'.$facture->ref.'</a></td>';
+            print ' <td data-search="'.$facture->date.'" data-order="'.dol_print_date($facture->date).'"  >'.dol_print_date($facture->date).'</td>';
+            print ' <td data-order="'.$facture->multicurrency_total_ttc.'" class="text-right" >'.price($facture->multicurrency_total_ttc)  .' '.$facture->multicurrency_code.'</td>';
             print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
-            
-            
             print '</tr>';
             
         }
         print '</tbody>';
         
         print '</table>';
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
+    ?>
+    <script type="text/javascript" >
+     $(document).ready(function(){
+         $("#invoice-list").DataTable({
+             "language": {
+                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             },
+
+             responsive: true,
+             columnDefs: [{
+                 orderable: false,
+                 "aTargets": [-1]
+             },{
+                 "bSearchable": false,
+                 "aTargets": [-1, -2]
+             }]
+         });
+     });
+    </script>
+    <?php 
     }
     else {
         print '<div class="info clearboth text-center" >';
@@ -361,7 +350,7 @@ function print_propalTable($socId = 0)
         
         
         
-        print '<table class="table table-striped" >';
+        print '<table id="propal-list" class="table table-striped" >';
         
         print '<thead>';
         
@@ -381,9 +370,9 @@ function print_propalTable($socId = 0)
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
             print '<tr>';
-            print ' <td><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
-            print ' <td>'.dol_print_date($object->date).'</td>';
-            print ' <td class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
+            print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
+            print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             
             
             print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
@@ -395,6 +384,26 @@ function print_propalTable($socId = 0)
         print '</tbody>';
         
         print '</table>';
+        ?>
+    <script type="text/javascript" >
+     $(document).ready(function(){
+         $("#propal-list").DataTable({
+             "language": {
+                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             },
+
+             responsive: true,
+             columnDefs: [{
+                 orderable: false,
+                 "aTargets": [-1]
+             },{
+                 "bSearchable": false,
+                 "aTargets": [-1, -2]
+             }]
+         });
+     });
+    </script>
+    <?php 
     }
     else {
         print '<div class="info clearboth text-center" >';
@@ -406,6 +415,9 @@ function print_propalTable($socId = 0)
     
 }
 
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot 
+ */
 function print_propalList($socId = 0)
 {
     global $langs,$db;
@@ -440,36 +452,36 @@ function print_propalList($socId = 0)
         
         $jsonUrl = $context->getRootUrl().'script/interface.php?action=getPropalsList';
         ?>
-<script type="text/javascript" >
- $(document).ready(function(){
-     $("#ajax-propal-list").DataTable({
-         "language": {
-             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
-         },
-         "ajax": '<?php print $jsonUrl; ?>',
-
-         responsive: true,
-    	 "columns": [
-             { "data": "ref" },
-             { "data": "date" },
-             { "data": "price" },
-             { "data": "statut" },
-             { "data": "fin_validite" },
-             { "data": "link" }
-         ],
-
-         columnDefs: [{
-             orderable: false,
-             "aTargets": [-1]
-         }, {
-             "bSearchable": false,
-             "aTargets": [-1, -2]
-         }]
-         
+    <script type="text/javascript" >
+     $(document).ready(function(){
+         $("#ajax-propal-list").DataTable({
+             "language": {
+                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             },
+             "ajax": '<?php print $jsonUrl; ?>',
+    
+             responsive: true,
+        	 "columns": [
+                 { "data": "ref" },
+                 { "data": "date" },
+                 { "data": "price" },
+                 { "data": "statut" },
+                 { "data": "fin_validite" },
+                 { "data": "link" }
+             ],
+    
+             columnDefs: [{
+                 orderable: false,
+                 "aTargets": [-1]
+             }, {
+                 "bSearchable": false,
+                 "aTargets": [-1, -2]
+             }]
+             
+         });
      });
- });
-</script>
-<?php 
+    </script>
+    <?php 
     }
     else {
         print '<div class="info clearboth text-center" >';
@@ -478,7 +490,9 @@ function print_propalList($socId = 0)
     }
 }
 
-
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
 function json_propalList($socId = 0, $limit=25, $offset=0)
 {
     global $langs,$db;
@@ -542,7 +556,9 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
 }
 
 
-
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
 function print_orderList($socId = 0)
 {
     global $langs,$db;
@@ -615,7 +631,9 @@ function print_orderList($socId = 0)
 
 
 
-
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
 function json_orderList($socId = 0, $limit=25, $offset=0)
 {
     global $langs,$db;
@@ -702,7 +720,7 @@ function print_orderListTable($socId = 0)
         
         
         
-        print '<table class="table table-striped" >';
+        print '<table id="order-list" class="table table-striped" >';
         
         print '<thead>';
         
@@ -722,9 +740,9 @@ function print_orderListTable($socId = 0)
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
             print '<tr>';
-            print ' <td><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
-            print ' <td>'.dol_print_date($object->date).'</td>';
-            print ' <td class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
+            print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
+            print ' <td data-order="'.$object->multicurrency_total_ttc.'"  class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             
             
             print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
@@ -736,6 +754,28 @@ function print_orderListTable($socId = 0)
         print '</tbody>';
         
         print '</table>';
+        ?>
+        <script type="text/javascript" >
+         $(document).ready(function(){
+             $("#order-list").DataTable({
+                 "language": {
+                     "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+                 },
+        
+                 responsive: true,
+        
+                 columnDefs: [{
+                     orderable: false,
+                     "aTargets": [-1]
+                 }, {
+                     "bSearchable": false,
+                     "aTargets": [-1, -2]
+                 }]
+                 
+             });
+         });
+        </script>
+        <?php 
     }
     else {
         print '<div class="info clearboth text-center" >';

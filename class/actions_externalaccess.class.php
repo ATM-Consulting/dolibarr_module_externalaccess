@@ -247,21 +247,24 @@ class Actionsexternalaccess
 	public function print_invoiceList($socId = 0)
 	{
 	    print '<section id="section-invoice"><div class="container">';
-	    print_invoiceList($socId);
+	    //print_invoiceList($socId);
+	    print_invoiceTable($socId);
 	    print '</div></section>';
 	}
 	
 	public function print_orderList($socId = 0)
 	{
 	    print '<section id="section-invoice"><div class="container">';
-	    print_orderList($socId);
+	    //print_orderList($socId);
+	    print_orderListTable($socId);
 	    print '</div></section>';
 	}
 	
 	public function print_propalList($socId = 0)
 	{
 	    print '<section id="section-invoice"><div class="container">';
-	    print_propalList($socId);
+	    //print_propalList($socId);
+	    print_propalTable($socId);
 	    print '</div></section>';
 	}
 	
