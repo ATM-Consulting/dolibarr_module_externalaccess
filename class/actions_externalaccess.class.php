@@ -279,21 +279,27 @@ class Actionsexternalaccess
 	private function _downloadInvoice(){
 	    
 	    global $langs, $db, $conf, $user;
-	    
+	    $filename=false;
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
 	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	    {
 	        dol_include_once('compta/facture/class/facture.class.php');
-	        $facture = new Facture($db);
-	        if($facture->fetch($id)>0)
+	        $object = new Facture($db);
+	        if($object->fetch($id)>0)
 	        {
-	            if($facture->statut>=Facture::STATUS_VALIDATED && $facture->socid==$user->societe_id)
+	            if($object->statut>=Facture::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
-	                $filename = DOL_DATA_ROOT.'/'.$facture->last_main_doc;
+	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+
+	                if(!empty($object->last_main_doc)){
+	                    downloadFile($filename, $forceDownload);
+	                }
+	                else{
+	                    print $langs->trans('FileNotExists');
+	                }
 	                
-	                downloadFile($filename, $forceDownload);
 	            }
 	        }
 	    }
@@ -317,7 +323,12 @@ class Actionsexternalaccess
 	            {
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                
-	                downloadFile($filename, $forceDownload);
+	                if(!empty($object->last_main_doc)){
+	                    downloadFile($filename, $forceDownload);
+	                }
+	                else{
+	                    print $langs->trans('FileNotExists');
+	                }
 	            }
 	        }
 	    }
@@ -344,6 +355,13 @@ class Actionsexternalaccess
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                
 	                downloadFile($filename, $forceDownload);
+	                
+	                if(!empty($object->last_main_doc)){
+	                    downloadFile($filename, $forceDownload);
+	                }
+	                else{
+	                    print $langs->trans('FileNotExists');
+	                }
 	            }
 	        }
 	    }

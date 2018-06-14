@@ -63,7 +63,7 @@ function downloadFile($filename, $forceDownload = 0)
 {
     if(!empty($filename) && file_exists($filename))
     {
-        if(is_readable($filename))
+        if(is_readable($filename) && is_file ( $filename ))
         {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime = finfo_file($finfo, $filename);
@@ -90,13 +90,13 @@ function downloadFile($filename, $forceDownload = 0)
         }
         else
         {
-            print $langs->trans('FileNotReadable').$filename;
+            print $langs->trans('FileNotReadable');
         }
         
     }
     else
     {
-        print $langs->trans('FileNotExists').$filename;
+        print $langs->trans('FileNotExists');
     }
 }
 
@@ -283,11 +283,23 @@ function print_invoiceTable($socId = 0)
             $facture = new Facture($db);
             $facture->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$facture->id;
+            
+            
+            if(!empty($facture->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$facture->ref.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+            }
+            else{
+                $viewLink = $facture->ref;
+                $downloadLink =  $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            
             print '<tr>';
-            print ' <td data-search="'.$facture->ref.'" data-order="'.$facture->ref.'" ><a href="'.$dowloadUrl.'" target="_blank" >'.$facture->ref.'</a></td>';
+            print ' <td data-search="'.$facture->ref.'" data-order="'.$facture->ref.'" >'.$viewLink.'</td>';
             print ' <td data-search="'.$facture->date.'" data-order="'.dol_print_date($facture->date).'"  >'.dol_print_date($facture->date).'</td>';
             print ' <td data-order="'.$facture->multicurrency_total_ttc.'" class="text-right" >'.price($facture->multicurrency_total_ttc)  .' '.$facture->multicurrency_code.'</td>';
-            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
+            print ' <td  class="text-right" >'.$downloadLink.'</td>';
             print '</tr>';
             
         }
@@ -369,13 +381,24 @@ function print_propalTable($socId = 0)
             $object = new Propal($db);
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+            
+           
+            if(!empty($object->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+            }
+            else{
+                $viewLink = $object->ref;
+                $downloadLink =  $langs->trans('DocumentFileNotAvailable');
+            }
+            
             print '<tr>';
-            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
             print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
             print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             
             
-            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
+            print ' <td  class="text-right" >'.$downloadLink.'</td>';
             
             
             print '</tr>';
@@ -668,7 +691,7 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
             $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
             $disabled = false;
             $disabledclass='';
-            if(empty($filename) || !file_exists($filename) || !is_readable($filename)){
+            if(empty($object->last_main_doc) || !file_exists($filename) || !is_readable($filename)){
                 $disabled = true;
                 $disabledclass=' disabled ';
             }
@@ -739,13 +762,23 @@ function print_orderListTable($socId = 0)
             $object = new Commande($db);
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
+            
+            if(!empty($object->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+            }
+            else{
+                $viewLink = $object->ref;
+                $downloadLink =  $langs->trans('DocumentFileNotAvailable');
+            }
+            
             print '<tr>';
-            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a></td>';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
             print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
             print ' <td data-order="'.$object->multicurrency_total_ttc.'"  class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             
             
-            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a></td>';
+            print ' <td  class="text-right" ><a class="btn btn-xs btn-primary" href="'.$downloadLink.'</td>';
             
             
             print '</tr>';
