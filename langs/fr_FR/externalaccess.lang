@@ -49,6 +49,8 @@ ToClone=Cloner
 Delete=Supprimer
 DateFinValidite=Date de fin de validité
 EndValidDate=Fin de validité
+DateLivraison=Date prévue de livraison
+DatePayLimit=Date échéance
 
 # MENU
 EALINKNAME_gobackurl=Retour au site
@@ -138,6 +140,6 @@ EACCESS_Nothing=Actuellement il n'y a rien ici, patience, vos documents seront d
 
 Amount_HT=Montant HT
 Amount_TTC=Montant TTC
-Amount_TTC=Montant TTC
+RemainderToPay=Reste à payer
 DocumentFileNotAvailable=Document actuellement non disponible.
 

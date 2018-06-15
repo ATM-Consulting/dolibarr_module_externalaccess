@@ -100,146 +100,6 @@ function downloadFile($filename, $forceDownload = 0)
     }
 }
 
-/*
- * N'est finalement pas utilisé, utiliser datatable en html5 plutot
- */
-function print_invoiceList($socId = 0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-    
-    dol_include_once('compta/facture/class/facture.class.php');
-    
-    $sql = 'SELECT COUNT(*) ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' AND fk_statut > 0';
-    $sql.= ' ORDER BY f.datef DESC';
-    
-    $countItems = $context->dbTool->getvalue($sql);
-    
-    if(!empty($countItems))
-    {
-        print '<table id="ajax-invoice-list" class="table table-striped" >';
-        print '<thead>';
-        
-        print '<tr>';
-        print ' <th>'.$langs->trans('Ref').'</th>';
-        print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
-        //print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
-        print ' <th  class="text-right" ></th>';
-        print '</tr>';
-        
-        print '</thead>';
-        print '</table>';
-        
-        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
-        ?>
-<script type="text/javascript" >
- $(document).ready(function(){
-     $("#ajax-invoice-list").DataTable({
-         "language": {
-             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
-         },
-         "ajax": '<?php print $jsonUrl; ?>',
-
-         responsive: true,
-    	 "columns": [
-             { "data": "view"},
-             { "data": "date"},
-             { "data": "price"},
-             //{ "data": "statut" },
-             { "data": "forcedownload" }
-         ],
-
-         columnDefs: [{
-             orderable: false,
-             "aTargets": [-1]
-         },{
-             "bSearchable": false,
-             "aTargets": [-1, -2]
-         }]
-         
-     });
- });
-</script>
-<?php 
-    }
-    else {
-        print '<div class="info clearboth text-center" >';
-        print  $langs->trans('EACCESS_Nothing');
-        print '</div>';
-    }
-}
-
-
-/*
- * N'est finalement pas utilisé, utiliser datatable en html5 plutot
- */
-function json_invoiceList($socId = 0, $limit=25, $offset=0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-    
-    $langs->load('factures');
-    
-    
-    dol_include_once('compta/facture/class/facture.class.php');
-    
-    $JSON = array();
-    
-    
-    $sql = 'SELECT rowid ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' AND fk_statut > 0';
-    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
-    
-    $tableItems = $context->dbTool->executeS($sql);
-    
-    if(!empty($tableItems))
-    {
-        foreach ($tableItems as $item)
-        {
-            
-            $object = new Facture($db);
-            $object->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
-            
-            
-            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
-            $disabled = false;
-            $disabledclass='';
-            if(empty($filename) || !file_exists($filename) || !is_readable($filename)){
-                $disabled = true;
-                $disabledclass=' disabled ';
-            }
-            
-            $row = array(
-                'view' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'ref' => $object->ref, // for order
-                'time' => $object->date, // for order
-                'amount' => $object->multicurrency_total_ttc, // for order
-                'date' => dol_print_date($object->date),
-                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
-                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'forcedownload' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
-                //'statut' => $object->getLibStatut(0),
-            );
-            
-            if($disabled){
-                $row['ref'] = $object->ref;
-                $row['link'] = $langs->trans('DocumentFileNotAvailable');
-            }
-            
-            $JSON['data'][] = $row;
-        }
-        
-    }
-    
-    return json_encode($JSON);
-}
 
 function print_invoiceTable($socId = 0)
 {
@@ -248,6 +108,7 @@ function print_invoiceTable($socId = 0)
     
     dol_include_once('compta/facture/class/facture.class.php');
     
+    $langs->load('factures');
     
     
     $sql = 'SELECT rowid ';
@@ -269,11 +130,16 @@ function print_invoiceTable($socId = 0)
         print '<thead>';
         
         print '<tr>';
-        print ' <th>'.$langs->trans('Ref').'</th>';
-        print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount_TTC').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('RemainderToPay').'</th>';
-        print ' <th  class="text-right" ></th>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+        if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+            print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
+        }
+        print ' <th class="text-center" >'.$langs->trans('Amount_TTC').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('RemainderToPay').'</th>';
+        print ' <th class="text-center" ></th>';
         print '</tr>';
         
         print '</thead>';
@@ -284,7 +150,7 @@ function print_invoiceTable($socId = 0)
             $object = new Facture($db);
             $object->fetch($item->rowid);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
-            
+            //var_dump($object); exit;
             $totalpaye = $object->getSommePaiement();
             $totalcreditnotes = $object->getSumCreditNotesUsed();
             $totaldeposits = $object->getSumDepositsUsed();
@@ -301,9 +167,15 @@ function print_invoiceTable($socId = 0)
             }
             
             
-            print '<tr>';
+            print '<tr >';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
             print ' <td data-search="'.$object->date.'" data-order="'.dol_print_date($object->date).'"  >'.dol_print_date($object->date).'</td>';
+            print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
+            print ' <td  >'.$object->getLibStatut(0).'</td>';
+            
+            if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+                print ' <td data-order="'.$object->multicurrency_total_ht.'" class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
+            }
             print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             print ' <td data-order="'.$resteapayer.'" class="text-right" >'.price($resteapayer)  .' '.$object->multicurrency_code.'</td>';
             print ' <td  class="text-right" >'.$downloadLink.'</td>';
@@ -374,12 +246,12 @@ function print_propalTable($socId = 0)
         print '<thead>';
         
         print '<tr>';
-        print ' <th>'.$langs->trans('Ref').'</th>';
-        print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('DateFinValidite').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
-        print ' <th  class="text-right" ></th>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('EndValidDate').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th class="text-center" ></th>';
         print '</tr>';
         
         print '</thead>';
@@ -403,10 +275,10 @@ function print_propalTable($socId = 0)
             
             print '<tr>';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
-            print ' <td  class="text-right" data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
-            print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
-            print ' <td  class="text-right"  data-search="'.dol_print_date($object->fin_validite).'" data-order="'.$object->fin_validite.'" >'.dol_print_date($object->fin_validite).'</td>';
-            print ' <td  >'.$object->getLibStatut(0).'</td>';
+            print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
+            print ' <td data-search="'.dol_print_date($object->fin_validite).'" data-order="'.$object->fin_validite.'" >'.dol_print_date($object->fin_validite).'</td>';
+            print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
+            print ' <td data-order="'.$object->multicurrency_total_ht.'" class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
             
             
             print ' <td  class="text-right" >'.$downloadLink.'</td>';
@@ -449,288 +321,6 @@ function print_propalTable($socId = 0)
     
 }
 
-/*
- * N'est finalement pas utilisé, utiliser datatable en html5 plutot 
- */
-function print_propalList($socId = 0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-    
-    dol_include_once('comm/propal/class/propal.class.php');
-    
-    $sql = 'SELECT COUNT(*) ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' AND fk_statut > 0';
-    $sql.= ' ORDER BY p.datep DESC';
-    
-    $countItems = $context->dbTool->getvalue($sql);
-    
-    if(!empty($countItems))
-    {
-        print '<table id="ajax-propal-list" class="table table-striped" >';
-        print '<thead>';
-        
-        print '<tr>';
-        print ' <th>'.$langs->trans('Ref').'</th>';
-        print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('DateFinValidite').'</th>';
-        print ' <th  class="text-right" ></th>';
-        print '</tr>';
-        
-        print '</thead>';
-        print '</table>';
-        
-        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getPropalsList';
-        ?>
-    <script type="text/javascript" >
-     $(document).ready(function(){
-         $("#ajax-propal-list").DataTable({
-             "language": {
-                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
-             },
-             "ajax": '<?php print $jsonUrl; ?>',
-    
-             responsive: true,
-        	 "columns": [
-                 { "data": "ref" },
-                 { "data": "date" },
-                 { "data": "price" },
-                 { "data": "statut" },
-                 { "data": "fin_validite" },
-                 { "data": "link" }
-             ],
-    
-             columnDefs: [{
-                 orderable: false,
-                 "aTargets": [-1]
-             }, {
-                 "bSearchable": false,
-                 "aTargets": [-1, -2]
-             }]
-             
-         });
-     });
-    </script>
-    <?php 
-    }
-    else {
-        print '<div class="info clearboth text-center" >';
-        print  $langs->trans('EACCESS_Nothing');
-        print '</div>';
-    }
-}
-
-/*
- * N'est finalement pas utilisé, utiliser datatable en html5 plutot
- */
-function json_propalList($socId = 0, $limit=25, $offset=0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-    
-    $langs->load('orders');
-    
-    dol_include_once('comm/propal/class/propal.class.php');
-    
-    $JSON = array();
-    
-    
-    $sql = 'SELECT rowid ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' AND fk_statut > 0';
-    $sql.= ' ORDER BY p.datep DESC';
-    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
-    
-    $tableItems = $context->dbTool->executeS($sql);
-    
-    if(!empty($tableItems))
-    {
-        foreach ($tableItems as $item)
-        {
-            
-            $object = new Propal($db);
-            $object->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
-            
-            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
-            $disabled = false;
-            $disabledclass='';
-            if(empty($filename) ||  !file_exists($filename) || !is_readable($filename)){
-                $disabled = true;
-                $disabledclass=' disabled ';
-            }
-            
-            
-            $row = array(
-                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
-                'date' => dol_print_date($object->date),
-                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
-                'ref' => '<a class="'.$disabledclass.'" href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary '.$disabledclass.'" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
-                'statut' => $object->getLibStatut(0),
-                'fin_validite' => dol_print_date($object->fin_validite)
-            );
-            
-            if($disabled){
-                $row['ref'] = $object->ref;
-                $row['link'] = $langs->trans('DocumentFileNotAvailable');
-            }
-            
-            $JSON['data'][] = $row;
-        }
-        
-    }
-    
-    return json_encode($JSON);
-}
-
-
-/*
- * N'est finalement pas utilisé, utiliser datatable en html5 plutot
- */
-function print_orderList($socId = 0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-    
-    $sql = 'SELECT COUNT(*) ';    
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' AND fk_statut > 0';
-    $sql.= ' ORDER BY c.date_commande DESC';
-    
-    $countItems = $context->dbTool->getvalue($sql);
-    
-    if(!empty($countItems))
-    {
-        print '<table id="ajax-order-list" class="table table-striped" >';
-        print '<thead>';
-        
-        print '<tr>';
-        print ' <th>'.$langs->trans('Ref').'</th>';
-        print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
-        print ' <th  class="text-right" ></th>';
-        print '</tr>';
-        
-        print '</thead>';
-        print '</table>';
-        
-        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getOrdersList';
-?>
-<script type="text/javascript" >
- $(document).ready(function(){
-     $("#ajax-order-list").DataTable({
-         "language": {
-             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
-         },
-
-         responsive: true,
-         "ajax": '<?php print $jsonUrl; ?>',
-    	 "columns": [
-             { "data": "ref" },
-             { "data": "date" },
-             { "data": "price" },
-             { "data": "statut" },
-             { "data": "link" }
-         ],
-
-         columnDefs: [{
-             orderable: false,
-             "aTargets": [-1]
-         }, {
-             "bSearchable": false,
-             "aTargets": [-1, -2]
-         }]
-         
-     });
- });
-</script>
-<?php 
-    }
-    else {
-        print '<div class="info clearboth text-center" >';
-        print  $langs->trans('EACCESS_Nothing');
-        print '</div>';
-    }
-}
-
-
-
-
-
-/*
- * N'est finalement pas utilisé, utiliser datatable en html5 plutot
- */
-function json_orderList($socId = 0, $limit=25, $offset=0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-    
-    $langs->load('orders');
-    
-    dol_include_once('commande/class/commande.class.php');
-    
-    $JSON = array();
-    
-    
-    $sql = 'SELECT rowid ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' AND fk_statut > 0';
-    $sql.= ' ORDER BY c.date_commande DESC';
-    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
-    
-    $tableItems = $context->dbTool->executeS($sql);
-    
-    if(!empty($tableItems))
-    {
-        foreach ($tableItems as $item)
-        {
-            
-            $object = new Commande($db);
-            $object->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
-            
-            
-            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
-            $disabled = false;
-            $disabledclass='';
-            if(empty($object->last_main_doc) || !file_exists($filename) || !is_readable($filename)){
-                $disabled = true;
-                $disabledclass=' disabled ';
-            }
-            
-            $row = array(
-                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
-                'date' => dol_print_date($object->date),
-                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
-                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
-                'statut' => $object->getLibStatut(0)
-            );
-            
-            if($disabled){
-                $row['ref'] = $object->ref;
-                $row['link'] = $langs->trans('DocumentFileNotAvailable');
-            }
-            
-            $JSON['data'][] = $row;
-        }
-       
-    }
-    
-    return json_encode($JSON);
-}
-
-
-
 function print_orderListTable($socId = 0)
 {
     global $langs,$db;
@@ -760,11 +350,12 @@ function print_orderListTable($socId = 0)
         print '<thead>';
         
         print '<tr>';
-        print ' <th>'.$langs->trans('Ref').'</th>';
-        print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
-        print ' <th  class="text-right" ></th>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th class="text-center" ></th>';
         print '</tr>';
         
         print '</thead>';
@@ -788,10 +379,11 @@ function print_orderListTable($socId = 0)
             print '<tr>';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
             print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
-            print ' <td data-order="'.$object->multicurrency_total_ttc.'"  class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td data-search="'.dol_print_date($object->date_livraison).'" data-order="'.$object->date_livraison.'" >'.dol_print_date($object->date_livraison).'</td>';
+            print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
+            print ' <td data-order="'.$object->multicurrency_total_ht.'"  class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
             
             
-            print ' <td >'.$object->getLibStatut(0).'</td>';
             print ' <td class="text-right" >'.$downloadLink.'</td>';
             
             
@@ -1022,4 +614,446 @@ function menuSort($a, $b) {
     return ($a['rank'] > $b['rank']) ? -1 : 1;
     
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
+function print_invoiceList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('compta/facture/class/facture.class.php');
+    
+    $sql = 'SELECT COUNT(*) ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY f.datef DESC';
+    
+    $countItems = $context->dbTool->getvalue($sql);
+    
+    if(!empty($countItems))
+    {
+        print '<table id="ajax-invoice-list" class="table table-striped" >';
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        //print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '</thead>';
+        print '</table>';
+        
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
+        ?>
+<script type="text/javascript" >
+ $(document).ready(function(){
+     $("#ajax-invoice-list").DataTable({
+         "language": {
+             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+         },
+         "ajax": '<?php print $jsonUrl; ?>',
+
+         responsive: true,
+    	 "columns": [
+             { "data": "view"},
+             { "data": "date"},
+             { "data": "price"},
+             //{ "data": "statut" },
+             { "data": "forcedownload" }
+         ],
+
+         columnDefs: [{
+             orderable: false,
+             "aTargets": [-1]
+         },{
+             "bSearchable": false,
+             "aTargets": [-1, -2]
+         }]
+         
+     });
+ });
+</script>
+<?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+}
+
+
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
+function json_invoiceList($socId = 0, $limit=25, $offset=0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $langs->load('factures');
+    
+    
+    dol_include_once('compta/facture/class/facture.class.php');
+    
+    $JSON = array();
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        foreach ($tableItems as $item)
+        {
+            
+            $object = new Facture($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
+            
+            
+            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+            $disabled = false;
+            $disabledclass='';
+            if(empty($filename) || !file_exists($filename) || !is_readable($filename)){
+                $disabled = true;
+                $disabledclass=' disabled ';
+            }
+            
+            $row = array(
+                'view' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'ref' => $object->ref, // for order
+                'time' => $object->date, // for order
+                'amount' => $object->multicurrency_total_ttc, // for order
+                'date' => dol_print_date($object->date),
+                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
+                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'forcedownload' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                //'statut' => $object->getLibStatut(0),
+            );
+            
+            if($disabled){
+                $row['ref'] = $object->ref;
+                $row['link'] = $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            $JSON['data'][] = $row;
+        }
+        
+    }
+    
+    return json_encode($JSON);
+}
+
+
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
+function print_orderList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $sql = 'SELECT COUNT(*) ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY c.date_commande DESC';
+    
+    $countItems = $context->dbTool->getvalue($sql);
+    
+    if(!empty($countItems))
+    {
+        print '<table id="ajax-order-list" class="table table-striped" >';
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '</thead>';
+        print '</table>';
+        
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getOrdersList';
+        ?>
+<script type="text/javascript" >
+ $(document).ready(function(){
+     $("#ajax-order-list").DataTable({
+         "language": {
+             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+         },
+
+         responsive: true,
+         "ajax": '<?php print $jsonUrl; ?>',
+    	 "columns": [
+             { "data": "ref" },
+             { "data": "date" },
+             { "data": "price" },
+             { "data": "statut" },
+             { "data": "link" }
+         ],
+
+         columnDefs: [{
+             orderable: false,
+             "aTargets": [-1]
+         }, {
+             "bSearchable": false,
+             "aTargets": [-1, -2]
+         }]
+         
+     });
+ });
+</script>
+<?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+}
+
+
+
+
+
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
+function json_orderList($socId = 0, $limit=25, $offset=0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $langs->load('orders');
+    
+    dol_include_once('commande/class/commande.class.php');
+    
+    $JSON = array();
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY c.date_commande DESC';
+    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        foreach ($tableItems as $item)
+        {
+            
+            $object = new Commande($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
+            
+            
+            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+            $disabled = false;
+            $disabledclass='';
+            if(empty($object->last_main_doc) || !file_exists($filename) || !is_readable($filename)){
+                $disabled = true;
+                $disabledclass=' disabled ';
+            }
+            
+            $row = array(
+                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'date' => dol_print_date($object->date),
+                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
+                'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'statut' => $object->getLibStatut(0)
+            );
+            
+            if($disabled){
+                $row['ref'] = $object->ref;
+                $row['link'] = $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            $JSON['data'][] = $row;
+        }
+       
+    }
+    
+    return json_encode($JSON);
+}
+
+
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
+function print_propalList($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('comm/propal/class/propal.class.php');
+    
+    $sql = 'SELECT COUNT(*) ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY p.datep DESC';
+    
+    $countItems = $context->dbTool->getvalue($sql);
+    
+    if(!empty($countItems))
+    {
+        print '<table id="ajax-propal-list" class="table table-striped" >';
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th>'.$langs->trans('Ref').'</th>';
+        print ' <th>'.$langs->trans('Date').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('DateFinValidite').'</th>';
+        print ' <th  class="text-right" ></th>';
+        print '</tr>';
+        
+        print '</thead>';
+        print '</table>';
+        
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getPropalsList';
+        ?>
+    <script type="text/javascript" >
+     $(document).ready(function(){
+         $("#ajax-propal-list").DataTable({
+             "language": {
+                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             },
+             "ajax": '<?php print $jsonUrl; ?>',
+    
+             responsive: true,
+        	 "columns": [
+                 { "data": "ref" },
+                 { "data": "date" },
+                 { "data": "price" },
+                 { "data": "statut" },
+                 { "data": "fin_validite" },
+                 { "data": "link" }
+             ],
+    
+             columnDefs: [{
+                 orderable: false,
+                 "aTargets": [-1]
+             }, {
+                 "bSearchable": false,
+                 "aTargets": [-1, -2]
+             }]
+             
+         });
+     });
+    </script>
+    <?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+}
+
+/*
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ */
+function json_propalList($socId = 0, $limit=25, $offset=0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    $langs->load('orders');
+    
+    dol_include_once('comm/propal/class/propal.class.php');
+    
+    $JSON = array();
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY p.datep DESC';
+    $sql.= ' LIMIT '.intval($offset).','.intval($limit);
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        foreach ($tableItems as $item)
+        {
+            
+            $object = new Propal($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+            
+            $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+            $disabled = false;
+            $disabledclass='';
+            if(empty($filename) ||  !file_exists($filename) || !is_readable($filename)){
+                $disabled = true;
+                $disabledclass=' disabled ';
+            }
+            
+            
+            $row = array(
+                //'ref' => $object->ref,//'<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>', //
+                'date' => dol_print_date($object->date),
+                'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
+                'ref' => '<a class="'.$disabledclass.'" href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
+                'link' => '<a class="btn btn-xs btn-primary '.$disabledclass.'" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'statut' => $object->getLibStatut(0),
+                'fin_validite' => dol_print_date($object->fin_validite)
+            );
+            
+            if($disabled){
+                $row['ref'] = $object->ref;
+                $row['link'] = $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            $JSON['data'][] = $row;
+        }
+        
+    }
+    
+    return json_encode($JSON);
+}
+
+
+
+
 	
