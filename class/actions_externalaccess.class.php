@@ -97,8 +97,8 @@ class Actionsexternalaccess
 		    elseif($context->controller == 'personalinformations')
 		    {
 		        global $user;
-		        //$context->title = $langs->trans('UserInfosDesc') ; //$user->firstname .' '. $user->lastname;
-		        //$context->desc = $user->firstname .' '. $user->lastname;; //$langs->trans('UserInfosDesc');
+		        $context->title = $langs->trans('UserInfosDesc') ; //$user->firstname .' '. $user->lastname;
+		        $context->desc = $user->firstname .' '. $user->lastname;; //$langs->trans('UserInfosDesc');
 		        $context->meta_title = $user->firstname .' '. $user->lastname .' - '. $langs->trans('UserInfosDesc');
 		        //$context->doNotDisplayHeaderBar=1;// hide default header
 		        

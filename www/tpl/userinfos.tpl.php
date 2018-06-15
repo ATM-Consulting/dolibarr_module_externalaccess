@@ -20,11 +20,13 @@ if($user->rights->externalaccess->edit_user_personal_infos && $mode=='readonly')
     print '<a class="btn btn-primary pull-right btn-top-section" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
 }
 
+/*
 print '<h3 class="text-center">'.$langs->trans('YourPersonnalInformations').'</h3>';
 print '<hr/>';
 print '<h6 class="text-center">'.$user->firstname .' '. $user->lastname.'</h6>';
+*/
 
-
+print '<h5 class="text-center text-primary">'.$langs->trans('YourPersonnalInformations').'</h5>';
 
 
 if($context->action=='saved'){
