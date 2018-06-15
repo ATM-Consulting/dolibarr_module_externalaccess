@@ -42,7 +42,7 @@ print '<form method="post" action="'.$context->getRootUrl('personalinformations'
 
 print '<div class="row">';
 
-print '<div class="col-sm"><div class="card"><div class="card-body">';
+print '<div class="col-md-6"><div class="card"><div class="card-body">';
 
 //print '<div class="card-body" >';
 // Firstname
@@ -70,7 +70,7 @@ stdFormHelper('town' , $langs->trans('town'), $user->town, $mode, 1, $param);
 print '</div></div></div>';
 
 
-print '<div class="col-sm"><div class="card"><div class="card-body">';
+print '<div class="col-md-6"><div class="card"><div class="card-body">';
 
 if(!empty($user->socid)){
     $userSoc = new Societe($db);

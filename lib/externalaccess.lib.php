@@ -533,11 +533,11 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
     
     
     print '<div class="form-group row">';
-    print '<label for="staticEmail" class="col-sm-4 col-form-label">'.$label;
+    print '<label for="staticEmail" class="col-4 col-form-label">'.$label;
     if(!empty($param['required']) && $mode!='readonly'){ print '*'; }
     print '</label>';
     
-    print '<div class="col-sm-8">';
+    print '<div class="col-8">';
     
     $class = 'form-control'.($mode=='readonly'?'-plaintext':'').' '.$param['class'];
     
