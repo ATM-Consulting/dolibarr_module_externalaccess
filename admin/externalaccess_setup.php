@@ -126,7 +126,10 @@ _print_on_off('EACCESS_ACTIVATE_ORDERS',false, 'EACCESS_need_some_rights');
 
 
 _print_input_form_part('EACCESS_LOGIN_EXTRA_HTML',false,'',array(),'textarea');
-
+if(empty($conf->global->EACCESS_RGPD_MSG)){
+    dolibarr_set_const($db,'EACCESS_RGPD_MSG',$langs->trans('EACCESS_RGPD_MSG_default'), 'chaine', 0, '', $conf->entity) ;
+}
+_print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 
 
 print '</table>';

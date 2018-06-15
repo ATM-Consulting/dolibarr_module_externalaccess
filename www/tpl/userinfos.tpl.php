@@ -4,7 +4,7 @@ if (empty($context) || ! is_object($context))
 	print "Error, template page can't be called as URL";
 	exit;
 }
-global $langs, $user;
+global $langs, $user, $conf;
 
 $mode = 'readonly';
 if($user->rights->externalaccess->edit_user_personal_infos  && ($context->action == 'edit' || $context->action == 'saveError')){
@@ -108,6 +108,9 @@ if($mode=='edit'){
     print '<button class="btn btn-primary pull-right" type="submit" name="save" value="1" >'.$langs->trans('Save').'</button>';
     
     print '<a class="btn btn-secondary" href="'.$context->getRootUrl('personalinformations').'"  >'.$langs->trans('Cancel').'</a>';
+}
+else{
+    print '<p>'.$conf->global->EACCESS_RGPD_MSG.'</p>';
 }
 
 //print '<!-- /card-body --></div>';
