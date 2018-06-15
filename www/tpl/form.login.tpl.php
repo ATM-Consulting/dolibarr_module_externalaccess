@@ -22,17 +22,32 @@ if (empty($conf) || ! is_object($conf))
 		    $name = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
 		    print '<h4>'.$name.'</h4>';
 		}
+		
+		
+		print '<p id="profile-name" class="profile-name-card"></p>';
+		
+		// Show error message if defined
+		if (! empty($_SESSION['dol_loginmesg']))
+		{
+	    
+            	print '<div class="alert alert-danger" role="alert">';
+            	print $_SESSION['dol_loginmesg'];
+            	print '</div>';
+            	
+        }
+		
 ?>
             
             
-            <p id="profile-name" class="profile-name-card"></p>
 			<form class="form-signin" id="login" name="login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text"  name="username" id="inputUsername" class="form-control" placeholder="<?php echo $langs->trans("Login"); ?>" required autofocus>
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<?php echo $langs->trans("Password"); ?>" required>
                  
                  
-                <?php /* ?>
+                <?php
+                
+                /* ?>
                 <div id="remember" class="checkbox">
                     <label>
                         <a href="" ><?php print $langs->trans('ForgetPassword'); ?></a>
@@ -53,13 +68,15 @@ if (empty($conf) || ! is_object($conf))
                 <input type="hidden" name="dst_second" id="dst_second" value="" />
                 <input type="hidden" name="screenwidth" id="screenwidth" value="" />
                 <input type="hidden" name="screenheight" id="screenheight" value="" />
-                <input type="hidden" name="dol_hide_topmenu" id="dol_hide_topmenu" value="<?php echo $dol_hide_topmenu; ?>" />
-                <input type="hidden" name="dol_hide_leftmenu" id="dol_hide_leftmenu" value="<?php echo $dol_hide_leftmenu; ?>" />
-                <input type="hidden" name="dol_optimize_smallscreen" id="dol_optimize_smallscreen" value="<?php echo $dol_optimize_smallscreen; ?>" />
-                <input type="hidden" name="dol_no_mouse_hover" id="dol_no_mouse_hover" value="<?php echo $dol_no_mouse_hover; ?>" />
-                <input type="hidden" name="dol_use_jmobile" id="dol_use_jmobile" value="<?php echo $dol_use_jmobile; ?>" />
+                
                  
-                <?php         
+                <?php  
+                /*<input type="hidden" name="dol_hide_topmenu" id="dol_hide_topmenu" value="<?php echo $dol_hide_topmenu; ?>" />
+                 <input type="hidden" name="dol_hide_leftmenu" id="dol_hide_leftmenu" value="<?php echo $dol_hide_leftmenu; ?>" />
+                 <input type="hidden" name="dol_optimize_smallscreen" id="dol_optimize_smallscreen" value="<?php echo $dol_optimize_smallscreen; ?>" />
+                 <input type="hidden" name="dol_no_mouse_hover" id="dol_no_mouse_hover" value="<?php echo $dol_no_mouse_hover; ?>" />
+                 <input type="hidden" name="dol_use_jmobile" id="dol_use_jmobile" value="<?php echo $dol_use_jmobile; ?>" />*/
+                
                 /*
                 if ($captcha) {
                 	// Add a variable param to force not using cache (jmobile)
