@@ -48,6 +48,7 @@ Reopen=Rouvrir
 ToClone=Cloner
 Delete=Supprimer
 DateFinValidite=Date de fin de validité
+EndValidDate=Fin de validité
 
 # MENU
 EALINKNAME_gobackurl=Retour au site
@@ -136,5 +137,7 @@ SorryThereIsNothingHere=Désolé il n'y a rien ici
 EACCESS_Nothing=Actuellement il n'y a rien ici, patience, vos documents seront disponibles prochainement
 
 Amount_HT=Montant HT
+Amount_TTC=Montant TTC
+Amount_TTC=Montant TTC
 DocumentFileNotAvailable=Document actuellement non disponible.
 

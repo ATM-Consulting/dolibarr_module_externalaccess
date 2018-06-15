@@ -271,7 +271,8 @@ function print_invoiceTable($socId = 0)
         print '<tr>';
         print ' <th>'.$langs->trans('Ref').'</th>';
         print ' <th>'.$langs->trans('Date').'</th>';
-        print ' <th  class="text-right" >'.$langs->trans('Amount').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Amount_TTC').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('RemainderToPay').'</th>';
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
@@ -280,25 +281,31 @@ function print_invoiceTable($socId = 0)
         print '<tbody>';
         foreach ($tableItems as $item)
         {
-            $facture = new Facture($db);
-            $facture->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$facture->id;
+            $object = new Facture($db);
+            $object->fetch($item->rowid);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
+            
+            $totalpaye = $object->getSommePaiement();
+            $totalcreditnotes = $object->getSumCreditNotesUsed();
+            $totaldeposits = $object->getSumDepositsUsed();
+            $resteapayer = price2num($object->total_ttc - $totalpaye - $totalcreditnotes - $totaldeposits, 'MT');
             
             
-            if(!empty($facture->last_main_doc)){
-                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$facture->ref.'</a>';
+            if(!empty($object->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
                 $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
-                $viewLink = $facture->ref;
+                $viewLink = $object->ref;
                 $downloadLink =  $langs->trans('DocumentFileNotAvailable');
             }
             
             
             print '<tr>';
-            print ' <td data-search="'.$facture->ref.'" data-order="'.$facture->ref.'" >'.$viewLink.'</td>';
-            print ' <td data-search="'.$facture->date.'" data-order="'.dol_print_date($facture->date).'"  >'.dol_print_date($facture->date).'</td>';
-            print ' <td data-order="'.$facture->multicurrency_total_ttc.'" class="text-right" >'.price($facture->multicurrency_total_ttc)  .' '.$facture->multicurrency_code.'</td>';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
+            print ' <td data-search="'.$object->date.'" data-order="'.dol_print_date($object->date).'"  >'.dol_print_date($object->date).'</td>';
+            print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td data-order="'.$resteapayer.'" class="text-right" >'.price($resteapayer)  .' '.$object->multicurrency_code.'</td>';
             print ' <td  class="text-right" >'.$downloadLink.'</td>';
             print '</tr>';
             
@@ -370,6 +377,8 @@ function print_propalTable($socId = 0)
         print ' <th>'.$langs->trans('Ref').'</th>';
         print ' <th>'.$langs->trans('Date').'</th>';
         print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('DateFinValidite').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
@@ -394,8 +403,10 @@ function print_propalTable($socId = 0)
             
             print '<tr>';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
-            print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
+            print ' <td  class="text-right" data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
             print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td  class="text-right"  data-search="'.dol_print_date($object->fin_validite).'" data-order="'.$object->fin_validite.'" >'.dol_print_date($object->fin_validite).'</td>';
+            print ' <td  >'.$object->getLibStatut(0).'</td>';
             
             
             print ' <td  class="text-right" >'.$downloadLink.'</td>';
@@ -727,6 +738,7 @@ function print_orderListTable($socId = 0)
     
     dol_include_once('commande/class/commande.class.php');
     
+    $langs->load('orders');
     
     
     $sql = 'SELECT rowid ';
@@ -751,6 +763,7 @@ function print_orderListTable($socId = 0)
         print ' <th>'.$langs->trans('Ref').'</th>';
         print ' <th>'.$langs->trans('Date').'</th>';
         print ' <th  class="text-right" >'.$langs->trans('Amount_HT').'</th>';
+        print ' <th  class="text-right" >'.$langs->trans('Status').'</th>';
         print ' <th  class="text-right" ></th>';
         print '</tr>';
         
@@ -778,7 +791,8 @@ function print_orderListTable($socId = 0)
             print ' <td data-order="'.$object->multicurrency_total_ttc.'"  class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             
             
-            print ' <td  class="text-right" >'.$downloadLink.'</td>';
+            print ' <td >'.$object->getLibStatut(0).'</td>';
+            print ' <td class="text-right" >'.$downloadLink.'</td>';
             
             
             print '</tr>';
