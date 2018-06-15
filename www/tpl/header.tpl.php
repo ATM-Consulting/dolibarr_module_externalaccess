@@ -15,7 +15,7 @@ if (empty($conf) || ! is_object($conf))
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title><?php echo $context->meta_title?$context->title:$context->meta_title; ?></title>
+    <title><?php echo empty($context->meta_title)?$context->title:$context->meta_title;?> - <?php echo !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM; ?></title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php print $context->getRootUrl(); ?>vendor/bootstrap/css/bootstrap.css" rel="stylesheet">

@@ -111,6 +111,10 @@ section {
   padding: 8rem 0;
 }
 
+section.type-content {
+  padding: 4rem 0 8rem 0;
+}
+
 .section-heading {
   margin-top: 0;
 }
@@ -809,4 +813,7 @@ a.list-group-item:focus {
 	font-size:0.8em;
 }
 
+.btn-top-section{
+      margin-top: -80px;
+}
 

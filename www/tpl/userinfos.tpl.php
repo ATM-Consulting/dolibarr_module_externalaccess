@@ -6,9 +6,24 @@ if (empty($context) || ! is_object($context))
 }
 global $langs, $user;
 
+$mode = 'readonly';
+if($user->rights->externalaccess->edit_user_personal_infos  && ($context->action == 'edit' || $context->action == 'saveError')){
+    $mode = 'edit';
+}
 
-print '<section id="section-personalinformations" ><div class="container">';
+print '<section id="section-personalinformations"  class="type-content"  ><div class="container">';
 //var_dump($user);
+
+
+
+if($user->rights->externalaccess->edit_user_personal_infos && $mode=='readonly'){
+    print '<a class="btn btn-primary pull-right btn-top-section" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
+}
+
+print '<h3 class="text-center">'.$langs->trans('YourPersonnalInformations').'</h3>';
+print '<hr/>';
+print '<h6 class="text-center">'.$user->firstname .' '. $user->lastname.'</h6>';
+
 
 
 
@@ -20,29 +35,14 @@ if($context->action=='saveError'){
     print '<div class="alert alert-danger" role="alert">'.$langs->trans('ErrorDetected').'</div>';
 }
 
-$mode = 'readonly';
-if($user->rights->externalaccess->edit_user_personal_infos  && ($context->action == 'edit' || $context->action == 'saveError')){
-    $mode = 'edit';
-}
-
-if($user->rights->externalaccess->edit_user_personal_infos && $mode=='readonly'){
-    print '<a class="btn btn-primary pull-right" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
-}
-print '<h5 class="card-title">'.$langs->trans('YourPersonnalInformations').'</h5>';
-
-
 print '<form method="post" action="'.$context->getRootUrl('personalinformations').'&amp;action=save">';
 //print '<div class="card" >';
 //
 
-if(!empty($user->socid)){
-    $userSoc = new Societe($db);
-    
-    if($userSoc->fetch($user->socid) > 0){
-        // Societe
-        stdFormHelper('societe', $langs->trans('Company'), $userSoc->name, 'readonly', 1);
-    }
-}
+
+print '<div class="row">';
+
+print '<div class="col-sm"><div class="card"><div class="card-body">';
 
 //print '<div class="card-body" >';
 // Firstname
@@ -65,9 +65,25 @@ stdFormHelper('addresszip' , $langs->trans('addresszip'), $user->zip, $mode, 1, 
 $param = array('valid'=>0, 'feedback' => '');
 stdFormHelper('town' , $langs->trans('town'), $user->town, $mode, 1, $param);
 
+
+
+print '</div></div></div>';
+
+
+print '<div class="col-sm"><div class="card"><div class="card-body">';
+
+if(!empty($user->socid)){
+    $userSoc = new Societe($db);
+    
+    if($userSoc->fetch($user->socid) > 0){
+        // Societe
+        stdFormHelper('societe', $langs->trans('Company'), $userSoc->name, 'readonly', 1);
+    }
+}
+
 // email
 $param = array('valid'=>0, 'feedback' => '');
-stdFormHelper('email' , $langs->trans('email'), $user->email, $mode, 1, $param);
+stdFormHelper('email' , $langs->trans('Email'), $user->email, $mode, 1, $param);
 
 // User_mobile
 $param = array('valid'=>0, 'feedback' => '');
@@ -81,7 +97,9 @@ stdFormHelper('office_phone' , $langs->trans('Office_phone'), $user->office_phon
 $param = array('valid'=>0, 'feedback' => '');
 stdFormHelper('office_fax' , $langs->trans('Office_fax'), $user->office_fax, $mode, 1, $param);
 
+print '</div></div></div>';
 
+print '</div>';
 //var_dump($user);
 
 

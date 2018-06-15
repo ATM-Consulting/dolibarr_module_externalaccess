@@ -97,8 +97,9 @@ class Actionsexternalaccess
 		    elseif($context->controller == 'personalinformations')
 		    {
 		        global $user;
-		        $context->title = $user->firstname .' '. $user->lastname;
-		        $context->desc = $langs->trans('UserInfosDesc');
+		        //$context->title = $langs->trans('UserInfosDesc') ; //$user->firstname .' '. $user->lastname;
+		        //$context->desc = $user->firstname .' '. $user->lastname;; //$langs->trans('UserInfosDesc');
+		        $context->meta_title = $user->firstname .' '. $user->lastname .' - '. $langs->trans('UserInfosDesc');
 		        //$context->doNotDisplayHeaderBar=1;// hide default header
 		        
 		        if($context->action == 'save'){
@@ -111,6 +112,7 @@ class Actionsexternalaccess
 		            $user->user_mobile = GETPOST('user_mobile');
 		            $user->office_phone = GETPOST('office_phone');
 		            $user->office_fax = GETPOST('office_fax');
+		            $user->email = GETPOST('email');
 		            
 		            if($user->update($user)>0)
 		            {
@@ -153,7 +155,7 @@ class Actionsexternalaccess
 	        {
 	            $this->_downloadCommande();
 	        }
-	        elseif ($action === 'getOrdersList')
+	        /*elseif ($action === 'getOrdersList')
 	        {
 	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	            {
@@ -176,7 +178,7 @@ class Actionsexternalaccess
 	                print json_invoiceList($user->societe_id,99999, GETPOST('offset','int'));
 	                exit();
 	            }
-	        }
+	        }*/
 	        
 	    }
 	}
