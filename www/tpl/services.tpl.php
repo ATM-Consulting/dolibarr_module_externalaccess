@@ -48,6 +48,8 @@ if(empty($reshook)){
     
     $link = $context->getRootUrl('personalinformations');
     printService($langs->trans('MyPersonalInfos'),'fa-user',$link);
+	
+	if (!empty($hookmanager->resprints)) print $hookmanager->resprints;
 }
 ?>        
         </div>

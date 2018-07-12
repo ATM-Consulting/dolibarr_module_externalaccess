@@ -427,7 +427,8 @@ function print_orderListTable($socId = 0)
     
 }
 
-function printService($label='',$icon='',$link='',$desc='')
+
+function getService($label='',$icon='',$link='',$desc='')
 {
     $res = '<div class="col-lg-3 col-sm-6 col-6 text-center">';
     $res.= '<div class="service-box mt-5 mx-auto">';
@@ -439,7 +440,12 @@ function printService($label='',$icon='',$link='',$desc='')
     $res.= '</div>';
     $res.= '</div>';
     
-    print $res;
+    return $res;
+}
+
+function printService($label='',$icon='',$link='',$desc='')
+{
+    print getService($label,$icon,$link,$desc);
 }
 
 function printNav($Tmenu)
