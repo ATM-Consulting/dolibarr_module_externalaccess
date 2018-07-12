@@ -206,12 +206,14 @@ class Actionsexternalaccess
 	        $context = Context::getInstance();
 	        if($context->controller == 'default')
 	        {
+				$context->setControllerFound();
 	            include $context->tplPath .'/headbar_full.tpl.php';
 	            include $context->tplPath .'/services.tpl.php';
 	            return 1;
 	        }
 	        elseif($context->controller == 'invoices')
 	        {
+				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	            {
 	                $this->print_invoiceList($user->societe_id);
@@ -220,6 +222,7 @@ class Actionsexternalaccess
 	        }
 	        elseif($context->controller == 'orders')
 	        {
+				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	            {
 	                $this->print_orderList($user->societe_id);
@@ -228,6 +231,7 @@ class Actionsexternalaccess
 	        }
 	        elseif($context->controller == 'propals')
 	        {
+				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
 	            {
 	                $this->print_propalList($user->societe_id);
@@ -236,6 +240,7 @@ class Actionsexternalaccess
 	        }
 	        elseif($context->controller == 'personalinformations')
 	        {
+				$context->setControllerFound();
 	            if($context->userIslog())
 	            {
 	                $this->print_personalinformations();
@@ -244,6 +249,7 @@ class Actionsexternalaccess
 	        }
 	    }
 	    
+		return 0;
 	}
 	
 	public function print_invoiceList($socId = 0)

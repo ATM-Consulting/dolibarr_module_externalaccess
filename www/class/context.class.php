@@ -18,12 +18,14 @@ class Context {
    public $meta_desc;
    
    public $controller;
+   public $controller_found = false;
+   
    public $action;
    
    public $tplDir;
    
    public $menu_active = array();
-   
+ 
  
    /**
     * Constructeur de la classe
@@ -68,6 +70,9 @@ class Context {
    }
    
    
+   public function setControllerFound() {
+	   $this->controller_found = true;
+   }
    
    
    public function getRootUrl($controller = '')
