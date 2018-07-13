@@ -8,6 +8,7 @@ define('INC_FROM_EXTERNAL_SCRIPT', 1);
 
 require __DIR__.'/lib/login.lib.php';
 require __DIR__.'/../lib/externalaccess.lib.php';
+require __DIR__.'/lib/externalaccess.lib.php';
 require __DIR__.'/class/context.class.php';
 
 
