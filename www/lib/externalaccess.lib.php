@@ -20,7 +20,7 @@
 /**
  * \file /externalaccess/www/lib/externalaccess.lib.php
  * \ingroup externalaccess
- * \brief File of class to manage Session and trainee
+ * \brief Fichier qui a pour but de regrouper les fonctions permettant de générer des bouts de HTML ou autre avec bootstrap
  */
 
 /**
