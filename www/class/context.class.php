@@ -52,6 +52,17 @@ class Context {
        if(empty($this->controller)){
            $this->controller = 'default';
        }
+	   
+	   // Init de l'url de base
+       if(!empty($conf->global->EACCESS_ROOT_URL))
+       {
+           $this->rootUrl = $conf->global->EACCESS_ROOT_URL;
+           if(substr($this->rootUrl, -1) !== '/') $this->rootUrl .= '/';
+       }
+       else 
+       {
+           $this->rootUrl = dol_buildpath('/externalaccess/www/',2);
+       }
    }
  
    /**
@@ -75,28 +86,25 @@ class Context {
    }
    
    
-   public function getRootUrl($controller = '')
-   {
-       global $conf;
-       if(!empty($conf->global->EACCESS_ROOT_URL))
-       {
-           $this->rootUrl = $conf->global->EACCESS_ROOT_URL;
-           if(substr($url, -1))
-           {
-               $this->rootUrl .= '/';
-           }
-       }
-       else 
-       {
-           $this->rootUrl = dol_buildpath('/externalaccess/www/',2);
-       }
-       
-       
-       
-       return $this->rootUrl.(!empty($controller)?'?controller='.$controller : '');
-   }
-   
-   
+   public function getRootUrl($controller = '', $moreparams = '')
+	{
+		$url = $this->rootUrl;
+
+		if (!empty($controller)) $url .= '?controller='.$controller;
+		if (!empty($moreparams))
+		{
+			if (empty($controller))
+			{
+				if ($moreparams[0] !== '?') $url .= '?';
+				if ($moreparams[0] === '&') $moreparams = substr($moreparams, 1);
+			}
+			$url .= $moreparams;
+		}
+
+		return $url;
+	}
+
+	
    public function userIsLog()
    {
        // apparement dolibarr se sert de ça pour savoir si l'internaute est log
