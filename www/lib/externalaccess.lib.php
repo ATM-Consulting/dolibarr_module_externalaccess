@@ -71,11 +71,11 @@ function getEaNavbar($url_back='', $url_add='')
 {
 	global $langs;
 	
-	$out = '<nav class="navbar navbar-light bg-light justify-content-between mb-4">';
+	$out = '<nav class="navbar navbar-light justify-content-between mb-4">';
 	
 	$out.= '<a class="navbar-brand" href="'.(empty($url_back) ? '#" onclick="window.history.go(-1)' : $url_back).'"><i class="fa fa-chevron-left"></i> '.$langs->trans('EaBack').'</a>';
 	
-	if (!empty($url_add)) $out.= '<a class="btn btn-outline-success my-2 my-sm-0" href="'.$url_add.'"><i class="fa fa-plus"></i></a>';
+	if (!empty($url_add)) $out.= '<a class="btn btn-outline-primary my-2 my-sm-0" href="'.$url_add.'"><i class="fa fa-plus"></i></a>';
 	
 	$out.= '</nav>';
 	
