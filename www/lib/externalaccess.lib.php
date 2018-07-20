@@ -71,7 +71,7 @@ function getEaNavbar($url_back='', $url_add='')
 {
 	global $langs;
 	
-	$out = '<nav class="navbar navbar-light justify-content-between mb-4">';
+	$out = '<nav class="navbar navbar-light justify-content-between mb-4 px-0">';
 	
 	$out.= '<a class="navbar-brand" href="'.(empty($url_back) ? '#" onclick="window.history.go(-1)' : $url_back).'"><i class="fa fa-chevron-left"></i> '.$langs->trans('EaBack').'</a>';
 	
