@@ -122,7 +122,31 @@ class Context {
        return in_array($menuName, $this->menu_active);
    }
    
-   
+   public function setError($errors)
+   {
+	   if (!is_array($errors)) $errors = array($errors);
+	   if (!isset($_SESSION['EA_errors'])) $_SESSION['EA_errors'] = array();
+	   foreach ($errors as $msg)
+	   {
+		   $_SESSION['EA_errors'][] = $msg;
+	   }
+   }
 
+   public function getErrors()
+   {
+	   if (!empty($_SESSION['EA_errors']))
+	   {
+		   $this->errors = array_values($_SESSION['EA_errors']);
+		   return count($this->errors);
+	   }
+	   
+	   return 0;
+   }
+   
+   public function clearErrors()
+   {
+	   unset($_SESSION['EA_errors']);
+	   $this->errors = array();
+   }
 }
  
