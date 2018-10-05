@@ -128,7 +128,7 @@ class Context {
 	   if (!isset($_SESSION['EA_errors'])) $_SESSION['EA_errors'] = array();
 	   foreach ($errors as $msg)
 	   {
-		   $_SESSION['EA_errors'][] = $msg;
+		   if (!in_array($msg, $_SESSION['EA_errors'])) $_SESSION['EA_errors'][] = $msg;
 	   }
    }
 

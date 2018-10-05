@@ -74,11 +74,3 @@ if (empty($conf) || ! is_object($conf))
       include __DIR__ . '/headbar.tpl.php'; 
   }
   
-  if($context->getErrors()) 
-  {
-      include __DIR__ . '/errors.tpl.php'; 
-  }
-  
-  
-  
-  
