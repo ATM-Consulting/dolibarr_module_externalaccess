@@ -95,6 +95,10 @@ dol_fiche_head(
     "externalaccess@externalaccess"
 );
 
+if(!dol_include_once('/abricot/inc.core.php')) {
+    print '<div class="error" >'. $langs->trans('AbricotNotFound'). ' <a href="http://wiki.atm-consulting.fr/index.php/Nos_modules_Dolibarr#Abricot" target="_blank">'. $langs->trans('AbricotWiki'). '</a></div>';
+}
+
 // Setup page goes here
 $form=new Form($db);
 $var=false;

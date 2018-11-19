@@ -74,6 +74,8 @@ Welcome=Bienvenue
 WelcomeDesc=Bienvenue sur votre portail client
 
 # SETUP PAGE
+AbricotNotFound=Module Abricot non trouvé, le portail client ne peut pas fonctionner correctement sans ce module.
+AbricotWiki=Consulter la page d'information du module abricot.
 EACCESS_ROOT_URL=Url d'accès  public
 EACCESS_ROOT_URL_HELP=Si vous utilisez un virtual host
 EACCESS_TITLE=Titre de l'accès extérieur
