@@ -2,4 +2,4 @@
 .project
 .settings/
 *.log
-/nbproject/private/
+/nbproject

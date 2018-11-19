@@ -27,6 +27,11 @@ if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID)
 		print '</script>'."\n";
 	}
 }
+
+if($context->getErrors()) 
+{
+	include __DIR__ . '/errors.tpl.php'; 
+}
 ?>
 
 

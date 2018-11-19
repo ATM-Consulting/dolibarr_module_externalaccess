@@ -74,7 +74,3 @@ if (empty($conf) || ! is_object($conf))
       include __DIR__ . '/headbar.tpl.php'; 
   }
   
-  
-  
-  
-  
