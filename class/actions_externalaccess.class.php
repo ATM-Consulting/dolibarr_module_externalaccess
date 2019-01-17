@@ -299,6 +299,7 @@ class Actionsexternalaccess
 	        {
 	            if($object->statut>=Facture::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
+			load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 
 	                if(!empty($object->last_main_doc)){
@@ -329,6 +330,7 @@ class Actionsexternalaccess
 	        {
 	            if($object->statut>=Propal::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
+			load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                
 	                if(!empty($object->last_main_doc)){
@@ -360,6 +362,7 @@ class Actionsexternalaccess
 	        {
 	            if($object->statut>=Commande::STATUS_VALIDATED && $object->socid==$user->societe_id)
 	            {
+			load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 	                
 	                downloadFile($filename, $forceDownload);
