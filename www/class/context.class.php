@@ -70,7 +70,7 @@ class Context {
     * si elle n'existe pas encore puis la retourne.
     *
     * @param void
-    * @return Singleton
+    * @return Context Instance
     */
    public static function getInstance() {
  
