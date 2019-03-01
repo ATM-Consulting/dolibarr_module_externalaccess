@@ -61,6 +61,7 @@ function externalaccessAdminPrepareHead()
 
 function downloadFile($filename, $forceDownload = 0)
 {
+    global $langs;
     if(!empty($filename) && file_exists($filename))
     {
         if(is_readable($filename) && is_file ( $filename ))
@@ -149,13 +150,13 @@ function print_invoiceTable($socId = 0)
         {
             $object = new Facture($db);
             $object->fetch($item->rowid);
+	    load_last_main_doc($object);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
             //var_dump($object); exit;
             $totalpaye = $object->getSommePaiement();
             $totalcreditnotes = $object->getSumCreditNotesUsed();
             $totaldeposits = $object->getSumDepositsUsed();
             $resteapayer = price2num($object->total_ttc - $totalpaye - $totalcreditnotes - $totaldeposits, 'MT');
-            
             
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
@@ -261,6 +262,7 @@ function print_propalTable($socId = 0)
         {
             $object = new Propal($db);
             $object->fetch($item->rowid);
+	    load_last_main_doc($object);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
             
            
@@ -365,6 +367,7 @@ function print_orderListTable($socId = 0)
         {
             $object = new Commande($db);
             $object->fetch($item->rowid);
+	    load_last_main_doc($object);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
             
             if(!empty($object->last_main_doc)){
@@ -1059,7 +1062,13 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
     return json_encode($JSON);
 }
 
+function load_last_main_doc(&$object) {
 
+	global $conf;
 
+	if(empty($object->last_main_doc)) {
+		$last_main_doc = ($object->element == 'propal' ? 'propale' : $object->element).'/'.$object->ref.'/'.$object->ref.'.pdf';
+		if(is_readable(DOL_DATA_ROOT.'/'.$last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$last_main_doc )) $object->last_main_doc = $last_main_doc;
+	}
 
-	
+}
