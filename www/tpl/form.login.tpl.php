@@ -77,8 +77,8 @@ if (empty($conf) || ! is_object($conf))
                  <input type="hidden" name="dol_no_mouse_hover" id="dol_no_mouse_hover" value="<?php echo $dol_no_mouse_hover; ?>" />
                  <input type="hidden" name="dol_use_jmobile" id="dol_use_jmobile" value="<?php echo $dol_use_jmobile; ?>" />*/
                 
-                /*
-                if ($captcha) {
+
+                if (! empty($conf->global->MAIN_SECURITY_ENABLECAPTCHA)) {
                 	// Add a variable param to force not using cache (jmobile)
                 	$php_self = preg_replace('/[&\?]time=(\d+)/','',$php_self);	// Remove param time
                 	if (preg_match('/\?/',$php_self)) $php_self.='&time='.dol_print_date(dol_now(),'dayhourlog');
@@ -93,7 +93,7 @@ if (empty($conf) || ! is_object($conf))
                 	<img src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
                 	<a href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
                 	
-                <?php } */ ?>            
+                <?php }  ?>
             
             </form><!-- /form -->
             <?php /*if(!$conf->global->MAIN_SECURITY_DISABLEFORGETPASSLINK){ ?>
