@@ -82,7 +82,7 @@ function downloadFile($filename, $forceDownload = 0)
                 
                 header("Content-Description: File Transfer");
                 header("Content-Type: application/octet-stream");
-                header("Content-Disposition: attachment; filename='" . basename($filename) . "'");
+                header('Content-Disposition: attachment; filename="' . basename($filename) . '"');
                 header('Content-Length: ' . filesize($filename));
                 
                 readfile ($filename);
