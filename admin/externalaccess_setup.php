@@ -91,7 +91,7 @@ dol_fiche_head(
     $head,
     'settings',
     $langs->trans("ModuleName"),
-    0,
+    1,
     "externalaccess@externalaccess"
 );
 
@@ -137,6 +137,8 @@ _print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 
 
 print '</table>';
+
+dol_fiche_end(1);
 
 llxFooter();
 
