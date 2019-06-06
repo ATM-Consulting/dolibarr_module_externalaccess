@@ -48,7 +48,10 @@ class Context {
        
        $this->controller = GETPOST('controller', 'aZ09'); // for sécurity, limited to 'aZ09'
        $this->action = GETPOST('action', 'aZ09');// for sécurity, limited to 'aZ09'
-       
+
+	   $this->iframe = GETPOST('iframe', 'int');
+	   $this->iframe = (bool)$this->iframe;
+
        if(empty($this->controller)){
            $this->controller = 'default';
        }
@@ -90,7 +93,15 @@ class Context {
 	{
 		$url = $this->rootUrl;
 
-		if (!empty($controller)) $url .= '?controller='.$controller;
+		if (!empty($controller)){
+			$url .= '?controller='.$controller;
+
+			// added to remove somme part on iframe calls
+			if(!empty($this->iframe)){
+				$url .= '&iframe=1';
+			}
+		}
+
 		if (!empty($moreparams))
 		{
 			if (empty($controller))

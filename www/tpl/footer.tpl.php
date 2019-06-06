@@ -6,7 +6,9 @@ if (empty($conf) || ! is_object($conf))
 }
 global $langs;
 
-include __DIR__ .'/get_in_touch.tpl.php';
+if(empty($context->iframe)) {
+	include __DIR__ . '/get_in_touch.tpl.php';
+}
 
 // Google Analytics (need Google module)
 if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID))
@@ -34,7 +36,7 @@ if($context->getErrors())
 }
 ?>
 
-
+    <div class="clearboth" ></div>
   </body>
 
 </html>
