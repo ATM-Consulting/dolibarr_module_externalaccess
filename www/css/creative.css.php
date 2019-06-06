@@ -817,3 +817,7 @@ a.list-group-item:focus {
       margin-top: -80px;
 }
 
+
+body.iframe .container {
+    max-width: none !important;
+}

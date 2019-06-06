@@ -67,16 +67,19 @@ function getEaModalConfirm($htmlid, $title, $body, $action, $doAction)
 	return $out;
 }
 
-function getEaNavbar($url_back='', $url_add='')
+function getEaNavbar($url_back='', $url_add='', $url_edit='')
 {
 	global $langs;
 	
 	$out = '<nav class="navbar navbar-light justify-content-between mb-4 px-0">';
-	
-	$out.= '<a class="navbar-brand" href="'.(empty($url_back) ? '#" onclick="window.history.go(-1)' : $url_back).'"><i class="fa fa-chevron-left"></i> '.$langs->trans('EaBack').'</a>';
-	
-	if (!empty($url_add)) $out.= '<a class="btn btn-outline-primary my-2 my-sm-0" href="'.$url_add.'"><i class="fa fa-plus"></i></a>';
-	
+
+	if($url_back!==false) {
+		$out .= '<a class="navbar-brand" href="' . (empty($url_back) ? '#" onclick="window.history.go(-1)' : $url_back) . '"><i class="fa fa-chevron-left"></i> ' . $langs->trans('EaBack') . '</a>';
+	}
+	if (!empty($url_add)) $out.= '<a class="btn btn-outline-primary my-2 my-sm-0" href="'.$url_add.'"><i class="fa fa-plus-circle"></i><span class="d-none d-sm-inline" > '.$langs->trans('New').'</span></a>';
+
+	if (!empty($url_edit)) $out.= '<a class="btn btn-outline-primary my-2 my-sm-0" href="'.$url_edit.'"><i class="fa fa-edit"></i><span class="d-none d-sm-inline" > '.$langs->trans('Edit').'</span></a>';
+
 	$out.= '</nav>';
 	
 	return $out;

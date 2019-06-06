@@ -60,16 +60,16 @@ if (empty($conf) || ! is_object($conf))
 
   </head>
 
-  <body id="page-top">
+  <body id="page-top" class="<?php print $context->iframe?'iframe':''; ?>" >
 
   <?php 
   
-  if(empty($context->doNotDisplayMenu))
+  if(empty($context->doNotDisplayMenu) && empty($context->iframe))
   {
       include __DIR__ . '/menu.tpl.php';
   }
   
-  if(empty($context->doNotDisplayHeaderBar)) 
+  if(empty($context->doNotDisplayHeaderBar) && empty($context->iframe))
   {
       include __DIR__ . '/headbar.tpl.php'; 
   }
