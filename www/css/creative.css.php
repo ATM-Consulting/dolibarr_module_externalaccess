@@ -115,6 +115,11 @@ section.type-content {
   padding: 4rem 0 8rem 0;
 }
 
+.iframe section {
+    padding: 0.5rem 0 !important;
+}
+
+
 .section-heading {
   margin-top: 0;
 }

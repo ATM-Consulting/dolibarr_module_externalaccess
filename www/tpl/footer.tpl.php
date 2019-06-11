@@ -30,6 +30,36 @@ if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID)
 	}
 }
 
+
+$context->loadEvents();
+print '<script type="text/javascript">'."\n"; // 'mesgs', 'warnings', 'errors'
+
+if(!empty($context->events['mesgs'])){
+    foreach ($context->events['mesgs'] as $mesg)
+    {
+		print '$.notify("'.$mesg.'", "success");';
+    }
+}
+
+if(!empty($context->events['warnings'])){
+	foreach ($context->events['warnings'] as $mesg)
+	{
+		print '$.notify("'.$mesg.'", "warn");';
+	}
+}
+
+if(!empty($context->events['errors'])){
+	foreach ($context->events['errors'] as $mesg)
+	{
+		print '$.notify("'.$mesg.'", "error");';
+	}
+}
+
+print '</script>'."\n";
+
+$context->clearEvents();
+
+
 if($context->getErrors()) 
 {
 	include __DIR__ . '/errors.tpl.php'; 

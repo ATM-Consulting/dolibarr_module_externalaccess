@@ -47,6 +47,9 @@ if (empty($conf) || ! is_object($conf))
     <script src="<?php print $context->getRootUrl(); ?>vendor/data-tables/dataTables.bootstrap4.min.js"></script>
     <script src="<?php print $context->getRootUrl(); ?>vendor/data-tables/Buttons-1.5.1/js/buttons.print.js"></script>
 
+    <!-- Plugin Notify -->
+    <script src="<?php print $context->getRootUrl(); ?>vendor/notify/notify.min.js"></script>
+
     <!-- Custom scripts for this template -->
     <script src="<?php print $context->getRootUrl(); ?>js/creative.js"></script>
  
