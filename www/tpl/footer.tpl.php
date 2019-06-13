@@ -37,23 +37,40 @@ print '<script type="text/javascript">'."\n"; // 'mesgs', 'warnings', 'errors'
 if(!empty($context->events['mesgs'])){
     foreach ($context->events['mesgs'] as $mesg)
     {
-		print '$.notify("'.$mesg.'", "success");';
+		print 'new Noty({
+		    timeout: 3000,
+		    type: "success",
+            theme: "metroui",
+            text: "'.addslashes($mesg).'"
+        }).show();';
     }
 }
 
 if(!empty($context->events['warnings'])){
 	foreach ($context->events['warnings'] as $mesg)
 	{
-		print '$.notify("'.$mesg.'", "warn");';
+		print 'new Noty({
+		    timeout: 5000,
+		    type: "warning",
+            theme: "metroui",
+            text: "'.addslashes($mesg).'"
+        }).show();';
 	}
 }
 
 if(!empty($context->events['errors'])){
 	foreach ($context->events['errors'] as $mesg)
 	{
-		print '$.notify("'.$mesg.'", "error");';
+		print 'new Noty({
+		    timeout: 7000,
+		    type: "error",
+            theme: "metroui",
+            text: "'.addslashes($mesg).'"
+        }).show();';
 	}
 }
+
+
 
 print '</script>'."\n";
 

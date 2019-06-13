@@ -48,7 +48,10 @@ if (empty($conf) || ! is_object($conf))
     <script src="<?php print $context->getRootUrl(); ?>vendor/data-tables/Buttons-1.5.1/js/buttons.print.js"></script>
 
     <!-- Plugin Notify -->
-    <script src="<?php print $context->getRootUrl(); ?>vendor/notify/notify.min.js"></script>
+    <script src="<?php print $context->getRootUrl(); ?>vendor/noty/noty.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php print $context->getRootUrl(); ?>vendor/noty/noty.css"/>
+    <link rel="stylesheet" type="text/css" href="<?php print $context->getRootUrl(); ?>vendor/noty/themes/metroui.css"/>
+
 
     <!-- Custom scripts for this template -->
     <script src="<?php print $context->getRootUrl(); ?>js/creative.js"></script>
