@@ -431,12 +431,19 @@ function print_orderListTable($socId = 0)
 }
 
 
-function getService($label='',$icon='',$link='',$desc='')
+function getService($label='',$icon='',$link='',$desc='', $disabled = false)
 {
+    $iconClass = 'text-primary';
+
+    if($disabled){
+		$link='';
+		$iconClass = 'text-muted';
+    }
+
     $res = '<div class="col-lg-3 col-sm-6 col-6 text-center">';
-    $res.= '<div class="service-box mt-5 mx-auto">';
+    $res.= '<div class="service-box mt-5 mx-auto '.($disabled?'service-box-disabled':'').'">';
     $res.= !empty($link)?'<a href="'.$link.'" >':'';
-    $res.= '<i class="fa fa-4x '.$icon.' text-primary mb-3 sr-icons"></i>';
+    $res.= '<i class="fa fa-4x '.$icon.' '.$iconClass.' mb-3 sr-icons"></i>';
     $res.= '<h5 class="mb-3">'.$label.'</h5>';
     $res.= '<p class="text-muted mb-0">'.$desc.'</p>';
     $res.= !empty($link)?'</a>':'';

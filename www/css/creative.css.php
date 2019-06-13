@@ -308,6 +308,14 @@ header.masthead p {
   max-width: 400px;
 }
 
+.service-box a{
+    text-decoration: none;
+}
+
+.service-box-disabled{
+    cursor: not-allowed;
+}
+
 .portfolio-box {
   position: relative;
   display: block;
@@ -825,4 +833,23 @@ a.list-group-item:focus {
 
 body.iframe .container {
     max-width: none !important;
+}
+
+
+/* OR separator : <div class="or"> OR </div> */
+.or {
+    display:flex;
+    justify-content:center;
+    align-items: center;
+    color:grey;
+}
+
+.or:after,
+.or:before {
+    content: "";
+    display: block;
+    background: grey;
+    width: 30%;
+    height:1px;
+    margin: 0 10px;
 }
