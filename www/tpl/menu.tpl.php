@@ -24,16 +24,26 @@ if($context->userIsLog())
             'name' => $langs->trans('EALINKNAME_propals'),
         );
     }
-    
-    if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
-    {
-        $Tmenu['orders'] = array(
-            'id' => 'orders',
-            'rank' => 20,
-            'url' => $context->getRootUrl('orders'),
-            'name' => $langs->trans('EALINKNAME_orders'),
-        );
-    }
+
+	if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	{
+		$Tmenu['orders'] = array(
+			'id' => 'orders',
+			'rank' => 20,
+			'url' => $context->getRootUrl('orders'),
+			'name' => $langs->trans('EALINKNAME_orders'),
+		);
+	}
+
+	if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
+	{
+		$Tmenu['expeditions'] = array(
+			'id' => 'expeditions',
+			'rank' => 20,
+			'url' => $context->getRootUrl('expeditions'),
+			'name' => $langs->trans('EALINKNAME_expeditions'),
+		);
+	}
     
     if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
     {
