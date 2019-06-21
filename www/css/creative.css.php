@@ -848,8 +848,9 @@ body.iframe .container {
 .or:before {
     content: "";
     display: block;
-    background: grey;
+    border-top: 1px solid #b3c1ce;
+    border-bottom: 1px solid #b3c1ce;
     width: 30%;
-    height:1px;
+    height:3px;
     margin: 0 10px;
 }
