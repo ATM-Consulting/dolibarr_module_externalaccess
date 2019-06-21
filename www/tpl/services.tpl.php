@@ -34,11 +34,16 @@ if(empty($reshook)){
         $link = $context->getRootUrl('propals');
         printService($langs->trans('Quotations'),'fa-pencil',$link); // desc : $langs->trans('QuotationsDesc')
     }
-    
-    if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders)){
-        $link = $context->getRootUrl('orders');
-        printService($langs->trans('Orders'),'fa-file-text-o',$link); // desc : $langs->trans('OrdersDesc')
-    }
+
+	if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders)){
+		$link = $context->getRootUrl('orders');
+		printService($langs->trans('Orders'),'fa-file-text-o',$link); // desc : $langs->trans('OrdersDesc')
+	}
+
+	if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions)){
+		$link = $context->getRootUrl('expeditions');
+		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
+	}
     
     if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices)){
         $link = $context->getRootUrl('invoices');

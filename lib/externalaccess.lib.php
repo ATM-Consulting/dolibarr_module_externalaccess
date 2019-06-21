@@ -436,7 +436,8 @@ function print_expeditionTable($socId = 0)
 	global $langs,$db;
 	$context = Context::getInstance();
 
-	dol_include_once('expedition/class/expedition.class.php');
+	include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
+	include_once DOL_DOCUMENT_ROOT . '/core/lib/pdf.lib.php';
 
 	$langs->load('sendings');
 
@@ -461,7 +462,7 @@ function print_expeditionTable($socId = 0)
 
 		print '<tr>';
 		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
 		print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
 		print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
 		print ' <th class="text-center" ></th>';
@@ -486,9 +487,26 @@ function print_expeditionTable($socId = 0)
 				$downloadLink =  $langs->trans('DocumentFileNotAvailable');
 			}
 
+			$reftoshow = '';
+			$reftosearch = '';
+			$linkedobjects = pdf_getLinkedObjects($object,$langs);
+			if (! empty($linkedobjects))
+			{
+				foreach($linkedobjects as $linkedobject)
+				{
+				    if(!empty($reftoshow)){
+						$reftoshow.= ', ';
+						$reftosearch.= ' ';
+                    }
+					$reftoshow.= $linkedobject["ref_value"]; //$linkedobject["ref_title"].' : '.
+					$reftosearch.= $linkedobject["ref_value"];
+				}
+			}
+
+
 			print '<tr>';
 			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
-			print ' <td data-search="'.dol_print_date($object->date_shipping).'" data-order="'.$object->date_shipping.'" >'.dol_print_date($object->date_shipping).'</td>';
+			print ' <td data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
 			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
 			print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
 
@@ -504,7 +522,7 @@ function print_expeditionTable($socId = 0)
 		?>
         <script type="text/javascript" >
             $(document).ready(function(){
-                $("#order-list").DataTable({
+                $("#expedition-list").DataTable({
                     "language": {
                         "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
                     },

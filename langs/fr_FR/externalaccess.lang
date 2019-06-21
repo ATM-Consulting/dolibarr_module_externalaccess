@@ -33,6 +33,7 @@ Accepted=Accepté
 # LIST
 externalaccessList=Liste Portail client
 Noexternalaccess=(vide)
+pdfLinkedDocuments=documents liés
 
 # CARD
 Newexternalaccess=Création externalaccess
