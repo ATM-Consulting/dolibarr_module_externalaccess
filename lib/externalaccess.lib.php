@@ -431,6 +431,128 @@ function print_orderListTable($socId = 0)
 }
 
 
+function print_expeditionTable($socId = 0)
+{
+	global $langs,$db;
+	$context = Context::getInstance();
+
+	include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
+	include_once DOL_DOCUMENT_ROOT . '/core/lib/pdf.lib.php';
+
+	$langs->load('sendings');
+
+
+	$sql = 'SELECT rowid ';
+	$sql.= ' FROM `'.MAIN_DB_PREFIX.'expedition` ';
+	$sql.= ' WHERE fk_soc = '. intval($socId);
+	$sql.= ' AND fk_statut > 0';
+	$sql.= ' ORDER BY date_expedition DESC';
+
+	$tableItems = $context->dbTool->executeS($sql);
+
+	if(!empty($tableItems))
+	{
+
+
+
+
+		print '<table id="expedition-list" class="table table-striped" >';
+
+		print '<thead>';
+
+		print '<tr>';
+		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+		print ' <th class="text-center" ></th>';
+		print '</tr>';
+
+		print '</thead>';
+
+		print '<tbody>';
+		foreach ($tableItems as $item)
+		{
+			$object = new Expedition($db);
+			$object->fetch($item->rowid);
+			load_last_main_doc($object);
+			$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
+
+			if(!empty($object->last_main_doc)){
+				$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+				$downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+			}
+			else{
+				$viewLink = $object->ref;
+				$downloadLink =  $langs->trans('DocumentFileNotAvailable');
+			}
+
+			$reftoshow = '';
+			$reftosearch = '';
+			$linkedobjects = pdf_getLinkedObjects($object,$langs);
+			if (! empty($linkedobjects))
+			{
+				foreach($linkedobjects as $linkedobject)
+				{
+				    if(!empty($reftoshow)){
+						$reftoshow.= ', ';
+						$reftosearch.= ' ';
+                    }
+					$reftoshow.= $linkedobject["ref_value"]; //$linkedobject["ref_title"].' : '.
+					$reftosearch.= $linkedobject["ref_value"];
+				}
+			}
+
+
+			print '<tr>';
+			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+			print ' <td data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
+			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
+			print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
+
+			print ' <td class="text-right" >'.$downloadLink.'</td>';
+
+
+			print '</tr>';
+
+		}
+		print '</tbody>';
+
+		print '</table>';
+		?>
+        <script type="text/javascript" >
+            $(document).ready(function(){
+                $("#expedition-list").DataTable({
+                    "language": {
+                        "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+                    },
+
+                    responsive: true,
+
+                    columnDefs: [{
+                        orderable: false,
+                        "aTargets": [-1]
+                    }, {
+                        "bSearchable": false,
+                        "aTargets": [-1, -2]
+                    }]
+
+                });
+            });
+        </script>
+		<?php
+	}
+	else {
+		print '<div class="info clearboth text-center" >';
+		print  $langs->trans('EACCESS_Nothing');
+		print '</div>';
+	}
+
+
+
+
+}
+
 function getService($label='',$icon='',$link='',$desc='')
 {
     $res = '<div class="col-lg-3 col-sm-6 col-6 text-center">';
@@ -1067,7 +1189,15 @@ function load_last_main_doc(&$object) {
 	global $conf;
 
 	if(empty($object->last_main_doc)) {
-		$last_main_doc = ($object->element == 'propal' ? 'propale' : $object->element).'/'.$object->ref.'/'.$object->ref.'.pdf';
+		$last_main_doc = $object->element.'/'.$object->ref.'/'.$object->ref.'.pdf';
+
+		if($object->element == 'propal'){
+			$last_main_doc = 'propale/'.$object->ref.'/'.$object->ref.'.pdf';
+        }
+		elseif($object->element == 'shipping'){
+            $last_main_doc =  'expedition/sending/'.$object->ref.'/'.$object->ref.'.pdf';
+        }
+
 		if(is_readable(DOL_DATA_ROOT.'/'.$last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$last_main_doc )) $object->last_main_doc = $last_main_doc;
 	}
 

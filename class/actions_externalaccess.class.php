@@ -87,13 +87,19 @@ class Actionsexternalaccess
 	            $context->desc = $langs->trans('WiewPropalsDesc');
 	            $context->menu_active[] = 'propals';
 		    }
-		    elseif($context->controller == 'default')
-		    {
-		        $context->title = $langs->trans('Welcome');
-		        $context->desc = $langs->trans('WelcomeDesc');
-		        //$context->topMenu->shrink = 1; // no transparency menu
-		        $context->doNotDisplayHeaderBar=1;// hide default header
-		    }
+			elseif($context->controller == 'expeditions')
+			{
+				$context->title = $langs->trans('WiewExpeditions');
+				$context->desc = $langs->trans('WiewExpeditionsDesc');
+				$context->menu_active[] = 'expeditions';
+			}
+			elseif($context->controller == 'default')
+			{
+				$context->title = $langs->trans('Welcome');
+				$context->desc = $langs->trans('WelcomeDesc');
+				//$context->topMenu->shrink = 1; // no transparency menu
+				$context->doNotDisplayHeaderBar=1;// hide default header
+			}
 		    elseif($context->controller == 'personalinformations')
 		    {
 		        global $user;
@@ -155,6 +161,10 @@ class Actionsexternalaccess
 	        {
 	            $this->_downloadCommande();
 	        }
+			elseif ($action === 'downloadExpedition')
+			{
+				$this->_downloadExpedition();
+			}
 	        /*elseif ($action === 'getOrdersList')
 	        {
 	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
@@ -200,7 +210,11 @@ class Actionsexternalaccess
 	{
 	    global $conf, $user, $langs;
 	    $error = 0; // Error counter
-	    
+
+		if(empty($user->socid)){
+			$user->socid = $user->societe_id; // For compatibility support
+		}
+
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
@@ -216,7 +230,7 @@ class Actionsexternalaccess
 				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	            {
-	                $this->print_invoiceList($user->societe_id);
+	                $this->print_invoiceList($user->socid);
 	            }
 	            return 1;
 	        }
@@ -225,19 +239,28 @@ class Actionsexternalaccess
 				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	            {
-	                $this->print_orderList($user->societe_id);
+	                $this->print_orderList($user->socid);
 	            }
 	            return 1;
 	        }
-	        elseif($context->controller == 'propals')
-	        {
+			elseif($context->controller == 'propals')
+			{
 				$context->setControllerFound();
-	            if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
-	            {
-	                $this->print_propalList($user->societe_id);
-	            }
-	            return 1;
-	        }
+				if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+				{
+					$this->print_propalList($user->socid);
+				}
+				return 1;
+			}
+			elseif($context->controller == 'expeditions')
+			{
+				$context->setControllerFound();
+				if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
+				{
+					$this->print_expeditionList($user->socid);
+				}
+				return 1;
+			}
 	        elseif($context->controller == 'personalinformations')
 	        {
 				$context->setControllerFound();
@@ -255,25 +278,29 @@ class Actionsexternalaccess
 	public function print_invoiceList($socId = 0)
 	{
 	    print '<section id="section-invoice"><div class="container">';
-	    //print_invoiceList($socId);
 	    print_invoiceTable($socId);
 	    print '</div></section>';
 	}
 	
 	public function print_orderList($socId = 0)
 	{
-	    print '<section id="section-invoice"><div class="container">';
-	    //print_orderList($socId);
+	    print '<section id="section-order"><div class="container">';
 	    print_orderListTable($socId);
 	    print '</div></section>';
 	}
-	
+
 	public function print_propalList($socId = 0)
 	{
-	    print '<section id="section-invoice"><div class="container">';
-	    //print_propalList($socId);
-	    print_propalTable($socId);
-	    print '</div></section>';
+		print '<section id="section-propal"><div class="container">';
+		print_propalTable($socId);
+		print '</div></section>';
+	}
+
+	public function print_expeditionList($socId = 0)
+	{
+		print '<section id="section-expedition"><div class="container">';
+		print_expeditionTable($socId);
+		print '</div></section>';
 	}
 	
 	public function print_personalinformations()
@@ -378,4 +405,43 @@ class Actionsexternalaccess
 	    }
 	    
 	}
+
+
+	private function _downloadExpedition(){
+
+		global $langs, $db, $conf, $user;
+
+		$context = Context::getInstance();
+		$id = GETPOST('id','int');
+		$forceDownload = GETPOST('forcedownload','int');
+
+		if(empty($user->socid)){
+			$user->socid = $user->societe_id;
+		}
+
+		if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
+		{
+			require_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
+			$object = new Expedition($db);
+			if($object->fetch($id)>0)
+			{
+				if($object->statut>=Expedition::STATUS_VALIDATED && $object->socid==$user->socid)
+				{
+					load_last_main_doc($object);
+					$filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+
+					downloadFile($filename, $forceDownload);
+
+					if(!empty($object->last_main_doc)){
+						downloadFile($filename, $forceDownload);
+					}
+					else{
+						print $langs->trans('FileNotExists');
+					}
+				}
+			}
+		}
+
+	}
+
 }
