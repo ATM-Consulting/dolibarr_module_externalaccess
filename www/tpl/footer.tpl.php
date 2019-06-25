@@ -41,7 +41,7 @@ if(!empty($context->events['mesgs'])){
 		    timeout: 3000,
 		    type: "success",
             theme: "metroui",
-            text: "'.addslashes($mesg).'"
+            text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
         }).show();';
     }
 }
@@ -53,7 +53,7 @@ if(!empty($context->events['warnings'])){
 		    timeout: 5000,
 		    type: "warning",
             theme: "metroui",
-            text: "'.addslashes($mesg).'"
+            text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
         }).show();';
 	}
 }
@@ -65,7 +65,7 @@ if(!empty($context->events['errors'])){
 		    timeout: 7000,
 		    type: "error",
             theme: "metroui",
-            text: "'.addslashes($mesg).'"
+            text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
         }).show();';
 	}
 }
