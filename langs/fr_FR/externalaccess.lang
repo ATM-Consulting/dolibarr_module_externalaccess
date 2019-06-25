@@ -13,6 +13,7 @@ externalaccess=Portail client
 external_access_invoices=Peut consulter les factures
 external_access_propals=Peut consulter les devis
 external_access_orders=Peut consulter les commandes
+external_access_expeditions=Peut consulter les expéditions
 external_access_userinfos_edit=Peut modifier ces informations personnelles
 
 # MENU
@@ -32,6 +33,7 @@ Accepted=Accepté
 # LIST
 externalaccessList=Liste Portail client
 Noexternalaccess=(vide)
+pdfLinkedDocuments=documents liés
 
 # CARD
 Newexternalaccess=Création externalaccess
@@ -70,6 +72,10 @@ WiewOrders=Commandes
 WiewOrdersDesc=Retrouvez facilement toutes vos commandes
 EALINKNAME_orders=Commandes
 
+WiewExpeditions=Livraisons
+WiewExpeditionsDesc=Retrouvez facilement toutes vos livraisons
+EALINKNAME_expeditions=livraisons
+
 PersonalInformations=Informations personnelles
 
 # PAGE TITLE
@@ -101,6 +107,7 @@ AccessToCustomerGate=Consulter le portail client
 EACCESS_LOGIN_EXTRA_HTML=Text supplémentaire affiché sur la page de connexion.
 EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
 EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
+EACCESS_ACTIVATE_EXPEDITIONS=Téléchargement des expéditions
 
 # INDEX
 Quotations=Devis
