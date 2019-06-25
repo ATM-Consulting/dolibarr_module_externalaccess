@@ -40,6 +40,7 @@ if(!empty($context->events['mesgs'])){
 		print 'new Noty({
 		    timeout: 3000,
 		    type: "success",
+		    closeWith: [\'button\',\'click\'],
             theme: "metroui",
             text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
         }).show();';
@@ -52,6 +53,7 @@ if(!empty($context->events['warnings'])){
 		print 'new Noty({
 		    timeout: 5000,
 		    type: "warning",
+		    closeWith: [\'button\'],
             theme: "metroui",
             text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
         }).show();';
@@ -63,6 +65,7 @@ if(!empty($context->events['errors'])){
 	{
 		print 'new Noty({
 		    timeout: 7000,
+		    closeWith: [\'button\'],
 		    type: "error",
             theme: "metroui",
             text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
