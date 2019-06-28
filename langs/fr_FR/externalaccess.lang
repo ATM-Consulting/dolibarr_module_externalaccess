@@ -54,6 +54,9 @@ EndValidDate=Fin de validité
 DateLivraison=Date prévue de livraison
 DatePayLimit=Date échéance
 
+# Diver tools
+OrSeparator=Ou
+
 # MENU
 EALINKNAME_gobackurl=Retour au site
 

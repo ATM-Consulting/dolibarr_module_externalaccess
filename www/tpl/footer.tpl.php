@@ -30,6 +30,56 @@ if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID)
 	}
 }
 
+
+$context->loadEventMessages();
+print '<script type="text/javascript">'."\n"; // 'mesgs', 'warnings', 'errors'
+
+if(!empty($context->eventMessages['mesgs'])){
+    foreach ($context->eventMessages['mesgs'] as $mesg)
+    {
+		print 'new Noty({
+		    timeout: 3000,
+		    type: "success",
+		    closeWith: [\'button\',\'click\'],
+            theme: "metroui",
+            text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
+        }).show();';
+    }
+}
+
+if(!empty($context->eventMessages['warnings'])){
+	foreach ($context->eventMessages['warnings'] as $mesg)
+	{
+		print 'new Noty({
+		    timeout: 5000,
+		    type: "warning",
+		    closeWith: [\'button\'],
+            theme: "metroui",
+            text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
+        }).show();';
+	}
+}
+
+if(!empty($context->eventMessages['errors'])){
+	foreach ($context->eventMessages['errors'] as $mesg)
+	{
+		print 'new Noty({
+		    timeout: 7000,
+		    closeWith: [\'button\'],
+		    type: "error",
+            theme: "metroui",
+            text: "'.addslashes(preg_replace("/\r|\n/", "", nl2br($mesg))).'"
+        }).show();';
+	}
+}
+
+
+
+print '</script>'."\n";
+
+$context->clearEventMessages();
+
+
 if($context->getErrors()) 
 {
 	include __DIR__ . '/errors.tpl.php'; 
