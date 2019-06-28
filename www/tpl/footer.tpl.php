@@ -31,11 +31,11 @@ if (! empty($conf->google->enabled) && ! empty($conf->global->MAIN_GOOGLE_AN_ID)
 }
 
 
-$context->loadEvents();
+$context->loadEventMessages();
 print '<script type="text/javascript">'."\n"; // 'mesgs', 'warnings', 'errors'
 
-if(!empty($context->events['mesgs'])){
-    foreach ($context->events['mesgs'] as $mesg)
+if(!empty($context->eventMessages['mesgs'])){
+    foreach ($context->eventMessages['mesgs'] as $mesg)
     {
 		print 'new Noty({
 		    timeout: 3000,
@@ -47,8 +47,8 @@ if(!empty($context->events['mesgs'])){
     }
 }
 
-if(!empty($context->events['warnings'])){
-	foreach ($context->events['warnings'] as $mesg)
+if(!empty($context->eventMessages['warnings'])){
+	foreach ($context->eventMessages['warnings'] as $mesg)
 	{
 		print 'new Noty({
 		    timeout: 5000,
@@ -60,8 +60,8 @@ if(!empty($context->events['warnings'])){
 	}
 }
 
-if(!empty($context->events['errors'])){
-	foreach ($context->events['errors'] as $mesg)
+if(!empty($context->eventMessages['errors'])){
+	foreach ($context->eventMessages['errors'] as $mesg)
 	{
 		print 'new Noty({
 		    timeout: 7000,
@@ -77,7 +77,7 @@ if(!empty($context->events['errors'])){
 
 print '</script>'."\n";
 
-$context->clearEvents();
+$context->clearEventMessages();
 
 
 if($context->getErrors()) 

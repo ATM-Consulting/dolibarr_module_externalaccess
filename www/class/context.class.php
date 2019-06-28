@@ -26,7 +26,7 @@ class Context {
    
    public $menu_active = array();
 
-   public $events = array();
+   public $eventMessages = array();
  
    /**
     * Constructeur de la classe
@@ -166,11 +166,11 @@ class Context {
 	 *	Set event messages in dol_events session object. Will be output by calling dol_htmloutput_events.
 	 *  Note: Calling dol_htmloutput_events is done into pages by standard llxFooter() function.
 	 *
-	 *	@param	string	$mesg			Message string or array
+	 *	@param	string	$mesgs			Message string or array
 	 *  @param  string	$style      	Which style to use ('mesgs' by default, 'warnings', 'errors')
 	 *  @return	void
 	 */
-	public function setEvents($mesgs, $style='mesgs')
+	public function setEventMessages($mesgs, $style='mesgs')
 	{
 		$TAcceptedStyle = array('mesgs', 'warnings', 'errors');
 
@@ -191,11 +191,11 @@ class Context {
 		}
 	}
 
-	public function loadEvents()
+	public function loadEventMessages()
 	{
 		if (!empty($_SESSION['EA_events']))
 		{
-			$this->events = $_SESSION['EA_events'];
+			$this->eventMessages = $_SESSION['EA_events'];
 			return 1;
 		}
 
@@ -203,10 +203,10 @@ class Context {
 
 	}
 
-	public function clearEvents()
+	public function clearEventMessages()
 	{
 		unset($_SESSION['EA_events']);
-		$this->events = array();
+		$this->eventMessages = array();
 	}
 }
  
