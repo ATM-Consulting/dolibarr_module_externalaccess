@@ -37,7 +37,7 @@ function getEaModalConfirm($htmlid, $title, $body, $action, $doAction)
 {
 	global $langs;
 	
-	$out.= '
+	$out= '
 		<div class="modal fade" id="'.$htmlid.'" >
 			<div class="modal-dialog">
 				<div class="modal-content">
@@ -56,7 +56,7 @@ function getEaModalConfirm($htmlid, $title, $body, $action, $doAction)
 
 						<!-- Modal footer -->
 						<div class="modal-footer">
-							<button type="button" class="btn btn-danger mr-auto" data-dismiss="modal">'.$langs->trans('Cancel').'</button>
+							<button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">'.$langs->trans('Cancel').'</button>
 							<button type="submit" class="btn btn-primary ">'.$langs->trans('Confirm').'</button>
 						</div>
 					</form>
@@ -67,6 +67,12 @@ function getEaModalConfirm($htmlid, $title, $body, $action, $doAction)
 	return $out;
 }
 
+/** generate a simple nav bar : note for dev, keep it generic
+ * @param string $url_back
+ * @param string $url_add
+ * @param string $url_edit
+ * @return string
+ */
 function getEaNavbar($url_back='', $url_add='', $url_edit='')
 {
 	global $langs;

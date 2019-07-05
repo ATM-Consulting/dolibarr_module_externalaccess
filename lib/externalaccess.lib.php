@@ -104,7 +104,7 @@ function downloadFile($filename, $forceDownload = 0)
 
 function print_invoiceTable($socId = 0)
 {
-    global $langs,$db;
+    global $langs, $db, $conf;
     $context = Context::getInstance();
     
     dol_include_once('compta/facture/class/facture.class.php');
@@ -263,12 +263,12 @@ function print_propalTable($socId = 0)
             $object = new Propal($db);
             $object->fetch($item->rowid);
 	    load_last_main_doc($object);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+            $downloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
             
            
             if(!empty($object->last_main_doc)){
-                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+                $viewLink = '<a href="'.$downloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$downloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
                 $viewLink = $object->ref;
