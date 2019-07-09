@@ -81,4 +81,17 @@ $(document).ready(function(){
     }
   });
 
+  // scroll
+  if(window.location.hash) {
+    // Fragment exists
+
+    if($("#mainNav").length == 0){
+        var navbaroffset = 0;
+    }else{
+        var navbaroffset = $("#mainNav").height();
+    }
+
+    $(window).scrollTop($(window.location.hash).offset().top - navbaroffset - 30);
+  }
+
 }); // End of use strict
