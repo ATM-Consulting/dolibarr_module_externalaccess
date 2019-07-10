@@ -2,6 +2,7 @@ $(document).ready(function(){
   "use strict"; // Start of use strict
 
   $('[data-toggle="tips"]').popover({trigger:'hover'});
+  $('[data-toggle="tooltip"]').tooltip()
   
   // Smooth scrolling using jQuery easing
   $('a.js-scroll-trigger[href*="#"]:not([href="#"])').click(function() {
@@ -80,5 +81,18 @@ $(document).ready(function(){
       tError: '<a href="%url%">The image #%curr%</a> could not be loaded.'
     }
   });
+
+  // scroll
+  if(window.location.hash) {
+    // Fragment exists
+
+    if($("#mainNav").length == 0){
+        var navbaroffset = 0;
+    }else{
+        var navbaroffset = $("#mainNav").height();
+    }
+
+    $(window).scrollTop($(window.location.hash).offset().top - navbaroffset - 30);
+  }
 
 }); // End of use strict
