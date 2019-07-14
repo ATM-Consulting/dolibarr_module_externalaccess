@@ -13,7 +13,7 @@ externalaccess=Portail client
 external_access_invoices=Peut consulter les factures
 external_access_propals=Peut consulter les devis
 external_access_orders=Peut consulter les commandes
-external_access_userinfos_edit=Peut modifier ces informations personnelles
+external_access_userinfos_edit=Peut modifier ses informations personnelles
 
 # MENU
 TopMenuexternalaccess=Portail client
@@ -95,7 +95,7 @@ EACCESS_ACTIVATE_ORDERS=Téléchargement des Commandes
 EACCESS_HEADER_IMG=Url de l'image de fond
 EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
 AccessToCustomerGate=Consulter le portail client
-EACCESS_LOGIN_EXTRA_HTML=Text supplémentaire affiché sur la page de connexion.
+EACCESS_LOGIN_EXTRA_HTML=Texte supplémentaire affiché sur la page de connexion.
 EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
 EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
 
