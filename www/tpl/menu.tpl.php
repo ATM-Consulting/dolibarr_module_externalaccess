@@ -55,6 +55,16 @@ if($context->userIsLog())
         );
     }
     
+    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+    {
+        $Tmenu['tickets'] = array(
+            'id' => 'tickets',
+            'rank' => 50,
+            'url' => $context->getRootUrl('tickets'),
+            'name' => $langs->trans('EALINKNAME_tickets'),
+        );
+    }
+    
     
     
     $Tmenu['user'] = array(

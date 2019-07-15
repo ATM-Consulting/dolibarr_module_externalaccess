@@ -93,6 +93,12 @@ class Actionsexternalaccess
 				$context->desc = $langs->trans('WiewExpeditionsDesc');
 				$context->menu_active[] = 'expeditions';
 			}
+            elseif($context->controller == 'tickets')
+            {
+                $context->title = $langs->trans('WiewTickets');
+                $context->desc = $langs->trans('WiewTicketsDesc');
+                $context->menu_active[] = 'tickets';
+            }
 			elseif($context->controller == 'default')
 			{
 				$context->title = $langs->trans('Welcome');
@@ -261,6 +267,15 @@ class Actionsexternalaccess
 				}
 				return 1;
 			}
+            elseif($context->controller == 'tickets')
+            {
+                $context->setControllerFound();
+                if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+                {
+                    $this->print_ticketList($user->societe_id);
+                }
+                return 1;
+            }
 	        elseif($context->controller == 'personalinformations')
 	        {
 				$context->setControllerFound();
@@ -302,6 +317,13 @@ class Actionsexternalaccess
 		print_expeditionTable($socId);
 		print '</div></section>';
 	}
+
+    public function print_ticketList($socId = 0)
+    {
+        print '<section id="section-ticket"><div class="container">';
+        print_ticketTable($socId);
+        print '</div></section>';
+    }
 	
 	public function print_personalinformations()
 	{
