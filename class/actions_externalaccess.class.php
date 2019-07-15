@@ -71,32 +71,32 @@ class Actionsexternalaccess
 		    
 		    if($context->controller == 'invoices')
 		    {
-		        $context->title = $langs->trans('WiewInvoices');
-		        $context->desc = $langs->trans('WiewInvoicesDesc');
+		        $context->title = $langs->trans('ViewInvoices');
+		        $context->desc = $langs->trans('ViewInvoicesDesc');
 		        $context->menu_active[] = 'invoices';
 		    }
 		    elseif($context->controller == 'orders')
 		    {
-		        $context->title = $langs->trans('WiewOrders');
-		        $context->desc = $langs->trans('WiewOrdersDesc');
+		        $context->title = $langs->trans('ViewOrders');
+		        $context->desc = $langs->trans('ViewOrdersDesc');
 		        $context->menu_active[] = 'orders';
 		    }
 		    elseif($context->controller == 'propals')
 		    {
-	            $context->title = $langs->trans('WiewPropals');
-	            $context->desc = $langs->trans('WiewPropalsDesc');
+	            $context->title = $langs->trans('ViewPropals');
+	            $context->desc = $langs->trans('ViewPropalsDesc');
 	            $context->menu_active[] = 'propals';
 		    }
 			elseif($context->controller == 'expeditions')
 			{
-				$context->title = $langs->trans('WiewExpeditions');
-				$context->desc = $langs->trans('WiewExpeditionsDesc');
+				$context->title = $langs->trans('ViewExpeditions');
+				$context->desc = $langs->trans('ViewExpeditionsDesc');
 				$context->menu_active[] = 'expeditions';
 			}
             elseif($context->controller == 'tickets')
             {
-                $context->title = $langs->trans('WiewTickets');
-                $context->desc = $langs->trans('WiewTicketsDesc');
+                $context->title = $langs->trans('ViewTickets');
+                $context->desc = $langs->trans('ViewTicketsDesc');
                 $context->menu_active[] = 'tickets';
             }
 			elseif($context->controller == 'default')

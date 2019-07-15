@@ -54,7 +54,7 @@ if($context->userIsLog())
             'name' => $langs->trans('EALINKNAME_invoices'),
         );
     }
-    
+
     if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
     {
         $Tmenu['tickets'] = array(
