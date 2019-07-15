@@ -95,4 +95,7 @@ $(document).ready(function(){
     $(window).scrollTop($(window.location.hash).offset().top - navbaroffset - 30);
   }
 
+  // convert select imput into searchable select input class="selectsearchable" data-live-search="true"
+  $('.selectsearchable').selectpicker();
+
 }); // End of use strict

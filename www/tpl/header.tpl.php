@@ -52,6 +52,9 @@ if (empty($conf) || ! is_object($conf))
     <link rel="stylesheet" type="text/css" href="<?php print $context->getRootUrl(); ?>vendor/noty/noty.css"/>
     <link rel="stylesheet" type="text/css" href="<?php print $context->getRootUrl(); ?>vendor/noty/themes/metroui.css"/>
 
+    <!-- Plugin Select -->
+    <script src="<?php print $context->getRootUrl(); ?>vendor/bootstrap-select/dist/js/bootstrap-select.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="<?php print $context->getRootUrl(); ?>vendor/bootstrap-select/dist/css/bootstrap-select.min.css"/>
 
     <!-- Custom scripts for this template -->
     <script src="<?php print $context->getRootUrl(); ?>js/creative.js"></script>
