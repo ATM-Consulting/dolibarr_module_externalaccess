@@ -14,6 +14,7 @@ external_access_invoices=Peut consulter les factures
 external_access_propals=Peut consulter les devis
 external_access_orders=Peut consulter les commandes
 external_access_expeditions=Peut consulter les expéditions
+external_access_tickets=Peut consulter les tickets
 external_access_userinfos_edit=Peut modifier ces informations personnelles
 
 # MENU
@@ -60,21 +61,25 @@ OrSeparator=Ou
 # MENU
 EALINKNAME_gobackurl=Retour au site
 
-WiewInvoices=Factures
-WiewInvoicesDesc=Retrouvez facilement toutes vos factures
+ViewInvoices=Factures
+ViewInvoicesDesc=Retrouvez facilement toutes vos factures
 EALINKNAME_invoices=Factures
 
-WiewPropals=Devis
-WiewPropalsDesc=Retrouvez facilement tous vos devis
+ViewPropals=Devis
+ViewPropalsDesc=Retrouvez facilement tous vos devis
 EALINKNAME_propals=Devis
 
-WiewOrders=Commandes
-WiewOrdersDesc=Retrouvez facilement toutes vos commandes
+ViewOrders=Commandes
+ViewOrdersDesc=Retrouvez facilement toutes vos commandes
 EALINKNAME_orders=Commandes
 
-WiewExpeditions=Livraisons
-WiewExpeditionsDesc=Retrouvez facilement toutes vos livraisons
+ViewExpeditions=Livraisons
+ViewExpeditionsDesc=Retrouvez facilement toutes vos livraisons
 EALINKNAME_expeditions=livraisons
+
+ViewTickets=Tickets
+ViewTicketsDesc=Retrouvez facilement tous vos tickets
+EALINKNAME_tickets=Tickets
 
 PersonalInformations=Informations personnelles
 
@@ -108,6 +113,7 @@ EACCESS_LOGIN_EXTRA_HTML=Text supplémentaire affiché sur la page de connexion.
 EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
 EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
 EACCESS_ACTIVATE_EXPEDITIONS=Téléchargement des expéditions
+EACCESS_ACTIVATE_TICKETS=Téléchargement des Tickets
 
 # INDEX
 Quotations=Devis
