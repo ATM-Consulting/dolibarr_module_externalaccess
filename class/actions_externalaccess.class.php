@@ -71,28 +71,34 @@ class Actionsexternalaccess
 		    
 		    if($context->controller == 'invoices')
 		    {
-		        $context->title = $langs->trans('WiewInvoices');
-		        $context->desc = $langs->trans('WiewInvoicesDesc');
+		        $context->title = $langs->trans('ViewInvoices');
+		        $context->desc = $langs->trans('ViewInvoicesDesc');
 		        $context->menu_active[] = 'invoices';
 		    }
 		    elseif($context->controller == 'orders')
 		    {
-		        $context->title = $langs->trans('WiewOrders');
-		        $context->desc = $langs->trans('WiewOrdersDesc');
+		        $context->title = $langs->trans('ViewOrders');
+		        $context->desc = $langs->trans('ViewOrdersDesc');
 		        $context->menu_active[] = 'orders';
 		    }
 		    elseif($context->controller == 'propals')
 		    {
-	            $context->title = $langs->trans('WiewPropals');
-	            $context->desc = $langs->trans('WiewPropalsDesc');
+	            $context->title = $langs->trans('ViewPropals');
+	            $context->desc = $langs->trans('ViewPropalsDesc');
 	            $context->menu_active[] = 'propals';
 		    }
 			elseif($context->controller == 'expeditions')
 			{
-				$context->title = $langs->trans('WiewExpeditions');
-				$context->desc = $langs->trans('WiewExpeditionsDesc');
+				$context->title = $langs->trans('ViewExpeditions');
+				$context->desc = $langs->trans('ViewExpeditionsDesc');
 				$context->menu_active[] = 'expeditions';
 			}
+            elseif($context->controller == 'tickets')
+            {
+                $context->title = $langs->trans('ViewTickets');
+                $context->desc = $langs->trans('ViewTicketsDesc');
+                $context->menu_active[] = 'tickets';
+            }
 			elseif($context->controller == 'default')
 			{
 				$context->title = $langs->trans('Welcome');
@@ -261,6 +267,15 @@ class Actionsexternalaccess
 				}
 				return 1;
 			}
+            elseif($context->controller == 'tickets')
+            {
+                $context->setControllerFound();
+                if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+                {
+                    $this->print_ticketList($user->societe_id);
+                }
+                return 1;
+            }
 	        elseif($context->controller == 'personalinformations')
 	        {
 				$context->setControllerFound();
@@ -302,6 +317,13 @@ class Actionsexternalaccess
 		print_expeditionTable($socId);
 		print '</div></section>';
 	}
+
+    public function print_ticketList($socId = 0)
+    {
+        print '<section id="section-ticket"><div class="container">';
+        print_ticketTable($socId);
+        print '</div></section>';
+    }
 	
 	public function print_personalinformations()
 	{

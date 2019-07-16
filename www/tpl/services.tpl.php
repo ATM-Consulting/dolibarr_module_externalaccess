@@ -49,6 +49,11 @@ if(empty($reshook)){
         $link = $context->getRootUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
+
+    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets)){
+        $link = $context->getRootUrl('tickets');
+        printService($langs->trans('Tickets'),'fa-check-circle',$link);
+    }
     
     
     $link = $context->getRootUrl('personalinformations');
