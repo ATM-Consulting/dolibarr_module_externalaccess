@@ -103,22 +103,25 @@ if(!dol_include_once('/abricot/inc.core.php')) {
 $form=new Form($db);
 $var=false;
 print '<table class="noborder" width="100%">';
+print "<tr class=\"liste_titre\">";
+print "<td>".$langs->trans("Parameter")."</td>\n";
+print '<td width="60" align="center">'.$langs->trans("Value")."</td>\n";
+print "<td>&nbsp;</td>\n";
+print "</tr>";
 
 dol_include_once('externalaccess/www/class/context.class.php');
 $context = Context::getInstance();
 //$context = new Context();
-_print_input_form_part('EACCESS_ROOT_URL',false,'',array('placeholder'=>'http://'),'input','EACCESS_ROOT_URL_HELP');
-print '<tr>';
-print '<td colspan="3" ><a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a></td>'."\n";
-print '</tr>';
-_print_input_form_part('EACCESS_TITLE',false,'',array(),'input','EACCESS_TITLE_HELP');
-_print_input_form_part('EACCESS_GOBACK_URL',false,'',array(),'input','EACCESS_GOBACK_URL_HELP');
+$link = '<a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a>';
+_print_input_form_part('EACCESS_ROOT_URL',false,$link, array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_ROOT_URL_HELP');
+_print_input_form_part('EACCESS_TITLE',false,'',array('size'=> 50),'input','EACCESS_TITLE_HELP');
+_print_input_form_part('EACCESS_GOBACK_URL',false,'',array('size'=> 50),'input','EACCESS_GOBACK_URL_HELP');
 _print_input_form_part('EACCESS_PHONE');
-_print_input_form_part('EACCESS_EMAIL',false,'',array(),'input','EACCESS_EMAIL_HELP');
+_print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACCESS_EMAIL_HELP');
 
 
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
-_print_input_form_part('EACCESS_HEADER_IMG',false,'',array('placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
+_print_input_form_part('EACCESS_HEADER_IMG',false,'',array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -157,10 +160,9 @@ function _print_title($title="")
 
 function _print_on_off($confkey, $title = false, $desc ='')
 {
-    global $var, $bc, $langs, $conf;
-    $var=!$var;
+    global $langs, $conf;
     
-    print '<tr '.$bc[$var].'>';
+    print '<tr class="oddeven">';
     print '<td>'.($title?$title:$langs->trans($confkey));
     if(!empty($desc))
     {
@@ -168,7 +170,7 @@ function _print_on_off($confkey, $title = false, $desc ='')
     }
     print '</td>';
     print '<td align="center" width="20">&nbsp;</td>';
-    print '<td align="center" width="300">';
+    print '<td align="center">';
     print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
     print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
     print '<input type="hidden" name="action" value="set_'.$confkey.'">';
@@ -179,18 +181,20 @@ function _print_on_off($confkey, $title = false, $desc ='')
 
 function _print_input_form_part($confkey, $title = false, $desc ='', $metas = array(), $type='input', $help = false)
 {
-    global $var, $bc, $langs, $conf, $db;
-    $var=!$var;
+    global $langs, $conf, $db;
     
     $form=new Form($db);
     
     $defaultMetas = array(
         'name' => $confkey
     );
-    
+
+    $colspan = '';
     if($type!='textarea'){
         $defaultMetas['type']   = 'text';
         $defaultMetas['value']  = $conf->global->{$confkey};
+    } else {
+        $colspan = ' colspan="2"';
     }
     
     
@@ -201,8 +205,8 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
         $metascompil .= ' '.$key.'="'.$values.'" ';
     }
     
-    print '<tr '.$bc[$var].'>';
-    print '<td>';
+    print '<tr class="oddeven">';
+    print '<td'.$colspan.'>';
     
     if(!empty($help)){
         print $form->textwithtooltip( ($title?$title:$langs->trans($confkey)) , $langs->trans($help),2,1,img_help(1,''));
@@ -215,20 +219,25 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
     }
-    
-    print '</td>';
-    print '<td align="center" width="20">&nbsp;</td>';
-    print '<td align="right" width="300">';
+
+
+    if($type!='textarea') {
+        print '</td>';
+        print '<td align="right" width="300">';
+    }
     print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
     print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
     print '<input type="hidden" name="action" value="set_'.$confkey.'">';
     if($type=='textarea'){
-        print '<textarea '.$metascompil.'  >'.dol_htmlentities($conf->global->{$confkey}).'</textarea>';
+        include_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
+        $doleditor=new DolEditor($confkey, $conf->global->{$confkey}, '', 80, 'dolibarr_notes');
+        print $doleditor->Create();
     }
     else {
         print '<input '.$metascompil.'  />';
     }
-    
+
+    print '</td><td class="right">';
     print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
     print '</form>';
     print '</td></tr>';
