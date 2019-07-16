@@ -122,10 +122,10 @@ _print_input_form_part('EACCESS_HEADER_IMG',false,'',array('placeholder'=>'http:
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
-
 _print_on_off('EACCESS_ACTIVATE_PROPALS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_ORDERS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_EXPEDITIONS',false, 'EACCESS_need_some_rights');
+_print_on_off('EACCESS_ACTIVATE_TICKETS',false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
 
