@@ -21,6 +21,10 @@
  *	\ingroup	externalaccess
  *	\brief		This file is an example module library
  *				Put some comments here
+/*
+
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ >>646
  */
 
 function externalaccessAdminPrepareHead()
@@ -102,6 +106,8 @@ function downloadFile($filename, $forceDownload = 0)
 }
 
 
+
+//invoiceTable
 function print_invoiceTable($socId = 0)
 {
     global $langs,$db;
@@ -121,12 +127,7 @@ function print_invoiceTable($socId = 0)
     $tableItems = $context->dbTool->executeS($sql);
     
     if(!empty($tableItems))
-    {
-        
-        
-        
-        
-        print '<table id="invoice-list" class="table table-striped" >';
+    {   print '<table id="invoice-list" class="table table-striped" >';
         
         print '<thead>';
         
@@ -165,9 +166,7 @@ function print_invoiceTable($socId = 0)
             else{
                 $viewLink = $object->ref;
                 $downloadLink =  $langs->trans('DocumentFileNotAvailable');
-            }
-            
-            
+            }                     
             print '<tr >';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
             print ' <td data-search="'.$object->date.'" data-order="'.dol_print_date($object->date).'"  >'.dol_print_date($object->date).'</td>';
@@ -180,21 +179,16 @@ function print_invoiceTable($socId = 0)
             print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             print ' <td data-order="'.$resteapayer.'" class="text-right" >'.price($resteapayer)  .' '.$object->multicurrency_code.'</td>';
             print ' <td  class="text-right" >'.$downloadLink.'</td>';
-            print '</tr>';
-            
+            print '</tr>';            
         }
-        print '</tbody>';
-        
+        print '</tbody>';        
         print '</table>';
         $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
     ?>
     <script type="text/javascript" >
      $(document).ready(function(){
-         $("#invoice-list").DataTable({
-             "language": {
-                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+         $("#invoice-list").DataTable({            age": {"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
              },
-
              responsive: true,
              columnDefs: [{
                  orderable: false,
