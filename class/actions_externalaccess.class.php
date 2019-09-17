@@ -68,6 +68,20 @@ class Actionsexternalaccess
 		{
 		    $context = Context::getInstance();
 		      
+		  if($context->controller == 'ticket')
+		    {
+		        $context->title = $langs->trans('Wiewticket');
+		        $context->desc = $langs->trans('WiewticketDesc');
+		        $context->menu_active[] = 'ticket';
+		    } 
+			
+			
+		      if($context->controller == 'agenda')
+		    {
+		        $context->title = $langs->trans('Wiewagenda');
+		        $context->desc = $langs->trans('WiewagendaDesc');
+		        $context->menu_active[] = 'agenda';
+		    } 
 		    
 		    if($context->controller == 'invoices')
 		    {
@@ -75,26 +89,55 @@ class Actionsexternalaccess
 		        $context->desc = $langs->trans('WiewInvoicesDesc');
 		        $context->menu_active[] = 'invoices';
 		    }
-		    elseif($context->controller == 'orders')
+		    if($context->controller == 'orders')
 		    {
 		        $context->title = $langs->trans('WiewOrders');
 		        $context->desc = $langs->trans('WiewOrdersDesc');
 		        $context->menu_active[] = 'orders';
 		    }
-		    elseif($context->controller == 'propals')
+			
+			
+			
+			
+		    if($context->controller == 'project')
+		    {
+		        $context->title = $langs->trans('Wiewproject');
+		        $context->desc = $langs->trans('WiewprojectDesc');
+		        $context->menu_active[] = 'project';
+		    }
+		    
+
+		    elseif($context->controller == 'contract')
+		    {
+		        $context->title = $langs->trans('Wiewcontract');
+		        $context->desc = $langs->trans('WiewcontractDesc');
+		        $context->menu_active[] = 'contract';
+		    }
+
+
+             elseif($context->controller == 'fichinter')
+		    {
+		        $context->title = $langs->trans('Wiewfichinter');
+		        $context->desc = $langs->trans('WiewfichinterDesc');
+		        $context->menu_active[] = 'fichinter';
+		    }
+			
+			
+			
+		    if($context->controller == 'propals')
 		    {
 	            $context->title = $langs->trans('WiewPropals');
 	            $context->desc = $langs->trans('WiewPropalsDesc');
 	            $context->menu_active[] = 'propals';
 		    }
-		    elseif($context->controller == 'default')
+		    if($context->controller == 'default')
 		    {
 		        $context->title = $langs->trans('Welcome');
 		        $context->desc = $langs->trans('WelcomeDesc');
 		        //$context->topMenu->shrink = 1; // no transparency menu
 		        $context->doNotDisplayHeaderBar=1;// hide default header
 		    }
-		    elseif($context->controller == 'personalinformations')
+		    if($context->controller == 'personalinformations')
 		    {
 		        global $user;
 		        $context->title = $langs->trans('UserInfosDesc') ; //$user->firstname .' '. $user->lastname;
