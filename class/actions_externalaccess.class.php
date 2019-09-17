@@ -186,10 +186,16 @@ class Actionsexternalaccess
 	    
 	    if (in_array('externalaccessinterface', explode(':', $parameters['context'])))
 	    {
-	        if($action === 'downloadInvoice')
+		if ($action === 'downloadContracts')
+	        {
+	            $this->_downloadContracts();
+	        }
+	    
+		elseif($action === 'downloadInvoice')
 	        {
 	            $this->_downloadInvoice();
 	        }
+		    
 	        elseif ($action === 'downloadPropal')
 	        {
 	            $this->_downloadPropal();
@@ -198,6 +204,16 @@ class Actionsexternalaccess
 	        {
 	            $this->_downloadCommande();
 	        }
+		    
+		elseif ($action === 'downloadProjects')
+	        {
+	            $this->_downloadProjects();
+	        }
+	          elseif ($action === 'downloadFichinter')
+	        {
+	            $this->_downloadFichinter();
+	        }
+	       
 	        /*elseif ($action === 'getOrdersList')
 	        {
 	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
@@ -254,7 +270,15 @@ class Actionsexternalaccess
 	            include $context->tplPath .'/services.tpl.php';
 	            return 1;
 	        }
-	        elseif($context->controller == 'invoices')
+	        
+		    
+		    
+		    
+		    
+		    
+		    
+		    
+		    elseif($context->controller == 'invoices')
 	        {
 				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
@@ -272,6 +296,12 @@ class Actionsexternalaccess
 	            }
 	            return 1;
 	        }
+		    
+		    
+		    
+		    
+		    
+		    
 	        elseif($context->controller == 'propals')
 	        {
 				$context->setControllerFound();
@@ -422,3 +452,177 @@ class Actionsexternalaccess
 	    
 	}
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+	/**/
+	private function _downloadfichinter(){
+	    
+	    global $langs, $db, $conf, $user;
+	    
+	    $context = Context::getInstance();
+	    $id = GETPOST('id','int');
+	    $forceDownload = GETPOST('forcedownload','int');
+	    //if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_fichinter && !empty($user->rights->externalaccess->view_fichinter))
+	    {
+	        dol_include_once('fichinter/class/fichinter.class.php');
+	        $object = new Fichinter($db);
+	        if($object->fetch($id)>0)
+	        {
+	            if($object->statut>=Fichinter::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            {
+			load_last_main_doc($object);
+	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+	                
+	                if(!empty($object->last_main_doc)){
+	                    downloadFile($filename, $forceDownload);
+	                }
+	                else{
+	                    print $langs->trans('FileNotExists');
+	                }
+	            }
+	        }
+	    }
+	    
+	}
+	/**/
+	private function _downloadprojets(){
+	    
+	    global $langs, $db, $conf, $user;
+	    
+	    $context = Context::getInstance();
+	    $id = GETPOST('id','int');
+	    $forceDownload = GETPOST('forcedownload','int');
+	    //if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_fichinter && !empty($user->rights->externalaccess->view_fichinter))
+	    {
+	        dol_include_once('projet/class/projet.class.php');
+	        $object = new Projet($db);
+	        if($object->fetch($id)>0)
+	        {
+	            if($object->statut>=Projet::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            {
+			load_last_main_doc($object);
+	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+	                
+	                if(!empty($object->last_main_doc)){
+	                    downloadFile($filename, $forceDownload);
+	                }
+	                else{
+	                    print $langs->trans('FileNotExists');
+	                }
+	            }
+	        }
+	    }
+	    
+	}
+	/**/
+	private function _downloadcontracts(){
+	    
+	    global $langs, $db, $conf, $user;
+	    
+	    $context = Context::getInstance();
+	    $id = GETPOST('id','int');
+	    $forceDownload = GETPOST('forcedownload','int');
+	    //if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_fichinter && !empty($user->rights->externalaccess->view_fichinter))
+	    {
+	        dol_include_once('contrat/class/contrat.class.php');
+	        $object = new contract($db);
+	        if($object->fetch($id)>0)
+	        {
+	            if($object->statut>=contract::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            {
+			load_last_main_doc($object);
+	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+	                
+	                if(!empty($object->last_main_doc)){
+	                    downloadFile($filename, $forceDownload);
+	                }
+	                else{
+	                    print $langs->trans('FileNotExists');
+	                }
+	            }
+	        }
+	    }
+	    
+	}
+
+	/**/
+	
+	private function _downloadCommande(){
+	    
+	    global $langs, $db, $conf, $user;
+	    
+	    $context = Context::getInstance();
+	    $id = GETPOST('id','int');
+	    $forceDownload = GETPOST('forcedownload','int');
+	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	    {
+	        dol_include_once('commande/class/commande.class.php');
+	        $object = new Commande($db);
+	        if($object->fetch($id)>0)
+	        {
+	            if($object->statut>=Commande::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            {
+			load_last_main_doc($object);
+	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+	                
+	                downloadFile($filename, $forceDownload);
+	                
+	                if(!empty($object->last_main_doc)){
+	                    downloadFile($filename, $forceDownload);
+	                }
+	                else{
+	                    print $langs->trans('FileNotExists');
+	                }
+	            }
+	        }
+	    }
+	    
+	}
+
