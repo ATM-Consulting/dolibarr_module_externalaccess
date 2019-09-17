@@ -3,3 +3,5 @@
 .settings/
 *.log
 /nbproject
+*.php
+core/modules/modexternalaccess.class.php
