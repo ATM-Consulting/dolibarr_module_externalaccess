@@ -1,0 +1,151 @@
+ModuleName = Portail client / Accès externe
+ModuleDesc = Créer un portail client pour votre Dolibarr
+BackToModuleList=Retour à la liste des modules
+
+ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>Vous pouvez retrouver la documentation sur notre <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>Pour toute question technique ou retour, contactez-nous sur <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>Pour toute question commerciale, contactez-nous sur <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> ou au +33 9 77 19 50 70<br><br>Retrouvez nos autres modules sur <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+externalaccessSetup = Konfiguration des Kundenportal-Moduls
+externalaccessAbout = Über das Kundenportal-Modul
+
+externalaccess=Kundenportal
+
+# DROITS
+external_access_invoices=Kann Rechnungen anzeigen
+external_access_propals=Kann Zitate konsultieren
+external_access_orders=Kann Bestellungen einsehen
+external_access_userinfos_edit=Kann diese persönlichen Daten ändern
+
+# MENU
+TopMenuexternalaccess= Kundenportal
+
+# STATUS
+externalaccessStatusDraft=Entwurf (zu validieren)
+externalaccessStatusValidated=Validiert (zu akzeptieren)
+externalaccessStatusRefused=Abgelehnt (geschlossen)
+externalaccessStatusAccepted=Akzeptiert (geschlossen)
+
+Draft= Entwurf
+Validate= Validiert
+Refused= Abgelehnt
+Accepted= Akzeptiert
+
+# LIST
+externalaccessList=Kundenportal-Liste
+Noexternalaccess=(vide)
+
+# CARD
+Newexternalaccess=Externe Zugriffserstellung
+externalaccessCard=Externes Zugangsblatt
+ErrorDetected=Fehler gefunden, bitte überprüfen Sie das Formular
+
+# CARD TPL
+Save=Rekord
+CreateDraft=Entwurf erstellen
+Cancel=Stornieren
+Validate=Bestätigen
+Modify=Veränderung
+Reopen=Wieder öffnen
+ToClone=Klon
+Delete=Entfernen
+DateFinValidite=Gültigkeitsende
+EndValidDate=Ende der Gültigkeit
+DateLivraison=Voraussichtlicher Liefertermin
+DatePayLimit=Fälligkeitsdatum
+
+# MENU
+EALINKNAME_gobackurl=Zurück zur Site
+
+WiewInvoices=Rechnungen
+WiewInvoicesDesc=Finden Sie einfach alle Ihre Rechnungen
+EALINKNAME_invoices=Rechnungen
+
+WiewPropals= Zitate
+WiewPropalsDesc=Finden Sie ganz einfach alle Ihre Zitate
+EALINKNAME_propals=Zitate
+
+WiewOrders=Befehle
+WiewOrdersDesc=Finden Sie einfach alle Ihre Bestellungen
+EALINKNAME_orders=Bestellungen
+
+PersonalInformations=Persönliche Informationen
+
+# PAGE TITLE
+Welcome= Willkommen
+WelcomeDesc=Willkommen in Ihrem Kundenportal
+
+# SETUP PAGE
+AbricotNotFound=Apricot-Modul nicht gefunden, das Kundenportal kann ohne dieses Modul nicht einwandfrei funktionieren.
+AbricotWiki=Siehe die Informationsseite des Apricot-Moduls.
+EACCESS_ROOT_URL=Url d'accès  public
+EACCESS_ROOT_URL_HELP=Wenn Sie einen virtuellen Host verwenden
+EACCESS_TITLE=Titel des externen Zugriffs
+EACCESS_TITLE_HELP=Sichtbar im oberen Menü
+EACCESS_GOBACK_URL=URL des Returnlinks
+EACCESS_GOBACK_URL_HELP=Wenn die URL ausgefüllt ist, wird im oberen Menü ein Link "Zurück zur Site" hinzugefügt
+EACCESS_PRIMARY_COLOR=Hauptfarbe des Themas
+EACCESS_PRIMARY_COLOR_HELP=Denken Sie daran, auf den Client-Portalseiten die Tastenkombination CTRL + F5 zu drücken oder den Browser-Cache zu leeren, nachdem Sie diesen Wert geändert haben, damit die Änderung wirksam wird
+EACCESS_PHONE=Téléphone de contact
+EACCESS_EMAIL=Email de contact
+EACCESS_EMAIL_HELP=Cet adresse email est visible dans le pied de page
+EACCESS_ACTIVATE_MODULES=Modules accessibles
+EACCESS_ACTIVATE_INVOICES=Téléchargement des Factures
+EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
+EACCESS_ACTIVATE_PROPALS=Téléchargement des Devis
+EACCESS_ACTIVATE_ORDERS=Téléchargement des Commandes
+EACCESS_HEADER_IMG=Url de l'image de fond
+EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
+AccessToCustomerGate=Konsultieren Sie das Kundenportal
+EACCESS_LOGIN_EXTRA_HTML=Zusätzlicher Text, der auf der Anmeldeseite angezeigt wird.
+EACCESS_RGPD_MSG=RGPD-Nachricht auf dem Formular für persönliche Informationen
+EACCESS_RGPD_MSG_default=Sie können die Berichtigung ungenauer oder unvollständiger Informationen über Sie anfordern. Durch die Änderung und Übermittlung dieses Formulars erkläre ich mich damit einverstanden, dass die eingegebenen Daten von% s verwendet werden, damit sie das möglicherweise entstehende Vertragsverhältnis lesen und gegebenenfalls verwalten können.
+
+# INDEX
+Quotations=Zitat
+QuotationsDesc=
+Orders=Befehle
+OrdersDesc=
+Invoices=Rechnungen
+InvoicesDesc=
+MySpace=Konsultiere meinen Raum
+
+
+
+ForgotThePassword=Passwort vergessen?
+ForgotPassword=Passwort vergessen?
+Rememberme=Erinnere dich an mich
+SignIn=Einloggen
+YouCanResetYourPasswordHere=Sie können es hier erneuern
+Renew=Erneuern
+
+# FOOTER
+GetInTouch=Restons en contact
+GetInTouchDesc=Sind Sie bereit, Ihr nächstes Projekt mit uns zu beginnen? Rufen Sie uns an oder senden Sie uns eine E-Mail und wir werden uns so schnell wie möglich bei Ihnen melden!
+
+# UserInfos
+MyPersonalInfos=Ihre Daten
+UserInfosDesc=Ihre persönlichen Daten
+YourPersonnalInformations=Ihre persönlichen Daten
+firstname=Prénom
+lastname=Nom
+address=Adresse
+addresszip=Postleitzahl
+town=Stadt
+exa_Edit=Veränderung
+User_mobile=Mobiletelefon
+Office_phone=Bürotelefon
+Office_fax=Fax
+Saved=Sauvegardé
+Company=Société
+
+# 404 tpl 
+SorryThereIsNothingHere=Entschuldigung, hier ist nichts
+
+EACCESS_Nothing=Momentan gibt es hier nichts, Geduld, Ihre Unterlagen werden in Kürze verfügbar sein
+
+Amount_HT= Menge HT
+Amount_TTC=Menge TTC
+RemainderToPay=Noch zu bezahlen
+DocumentFileNotAvailable=Dokument derzeit nicht verfügbar.
+
+
+EaBack=Rückkehr
