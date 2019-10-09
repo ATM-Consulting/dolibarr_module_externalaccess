@@ -212,17 +212,17 @@ img::-moz-selection {
   #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
     color: #fff;
   }
-  
-  
+
+
   #mainNav.navbar-light {
-   
+
     border-bottom: 0px solid rgba(0, 0, 0, 0);
 	background: -moz-linear-gradient(top, rgba(0,0,0,0.65) 0%, rgba(0,0,0,0) 100%); /* FF3.6-15 */
 	background: -webkit-linear-gradient(top, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* Chrome10-25,Safari5.1-6 */
 	background: linear-gradient(to bottom, rgba(0,0,0,0.65) 0%,rgba(0,0,0,0) 100%); /* W3C, IE10+, FF16+, Chrome26+, Opera12+, Safari7+ */
 
   }
-  
+
   #mainNav.navbar-shrink {
     border-bottom: 1px solid rgba(33, 37, 41, 0.1);
     background: #fff;
@@ -1045,4 +1045,10 @@ body.iframe .container {
     }
     .main-timeline .timeline-content:before{ left: -7.3px; }
     .main-timeline .timeline-content:after{ left: -14%; }
+}
+
+
+input:invalid {
+	background-color: pink;
+	border-color: darkred;
 }
