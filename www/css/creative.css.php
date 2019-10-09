@@ -1048,7 +1048,7 @@ body.iframe .container {
 }
 
 
-input:invalid {
+.show-invalid:invalid {
 	background-color: pink;
 	border-color: darkred;
 }
