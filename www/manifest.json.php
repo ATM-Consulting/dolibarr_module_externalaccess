@@ -35,7 +35,7 @@ require_once __DIR__.'/config.php';
 $appli= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
 
 $primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
-$backgroundColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:$primaryColor;
+$backgroundColor = !empty($conf->global->EACCESS_APPLI_COLOR)?$conf->global->EACCESS_APPLI_COLOR:$primaryColor;
 
 ?>
 {

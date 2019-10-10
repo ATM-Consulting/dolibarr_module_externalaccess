@@ -69,7 +69,7 @@ if (empty($conf) || ! is_object($conf))
     print '<link rel="manifest" href="'.$context->getRootUrl().'manifest.json.php'.'" />'."\n";
 
 	$primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
-	$backgroundColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:$primaryColor;
+	$backgroundColor = !empty($conf->global->EACCESS_APPLI_COLOR)?$conf->global->EACCESS_APPLI_COLOR:$primaryColor;
 	print '<meta name="theme-color" content="'.$backgroundColor.'">' . "\n";
 
 ?>
