@@ -23,17 +23,17 @@ if (empty($conf) || ! is_object($conf))
     <!-- Custom fonts for this template -->
     <link href="<?php print $context->getRootUrl(); ?>vendor/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
     <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800' rel='stylesheet' type='text/css'>
-    
+
 
     <!-- Plugin CSS -->
     <link href="<?php print $context->getRootUrl(); ?>vendor/magnific-popup/magnific-popup.css" rel="stylesheet">
 
     <!-- Custom styles for this template -->
     <link href="<?php print $context->getRootUrl(); ?>css/creative.css.php" rel="stylesheet">
-    
+
     <link rel="stylesheet" type="text/css" href="<?php print $context->getRootUrl(); ?>vendor/data-tables/datatables.min.css"/>
-    
-    
+
+
     <!-- Bootstrap core JavaScript -->
     <script src="<?php print $context->getRootUrl(); ?>vendor/jquery/jquery.min.js"></script>
     <script src="<?php print $context->getRootUrl(); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
@@ -58,28 +58,35 @@ if (empty($conf) || ! is_object($conf))
 
     <!-- Custom scripts for this template -->
     <script src="<?php print $context->getRootUrl(); ?>js/creative.js"></script>
- 
- <?php 
+
+<?php
     if (! empty($conf->global->MAIN_FAVICON_URL)){
         $favicon=$conf->global->MAIN_FAVICON_URL;
-        print '<link rel="icon" type="image/png" href="'.$favicon.'">';
+        print '<link rel="icon" type="image/png" href="'.$favicon.'">'."\n";
     }
- ?>
+
+    // Mobile appli like icon
+    print '<link rel="manifest" href="'.$context->getRootUrl().'manifest.json.php'.'" />'."\n";
+
+	$primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
+	$backgroundColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:$primaryColor;
+	print '<meta name="theme-color" content="'.$backgroundColor.'">' . "\n";
+
+?>
 
 
   </head>
 
   <body id="page-top" class="<?php print $context->iframe?'iframe':''; ?>" >
 
-  <?php 
-  
+  <?php
+
   if(empty($context->doNotDisplayMenu) && empty($context->iframe))
   {
       include __DIR__ . '/menu.tpl.php';
   }
-  
+
   if(empty($context->doNotDisplayHeaderBar) && empty($context->iframe))
   {
-      include __DIR__ . '/headbar.tpl.php'; 
+      include __DIR__ . '/headbar.tpl.php';
   }
-  
