@@ -173,7 +173,7 @@ class modexternalaccess extends DolibarrModules
 		// Example:
 		//$this->boxes=array(array(0=>array('file'=>'myboxa.php','note'=>'','enabledbydefaulton'=>'Home'),1=>array('file'=>'myboxb.php','note'=>''),2=>array('file'=>'myboxc.php','note'=>'')););
 
-		// Permissions
+		// Permissions_TODOTOHACK
 		$this->rights = array();		// Permission array used by this module
 		$r=0;
 
@@ -200,6 +200,17 @@ class modexternalaccess extends DolibarrModules
 		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
 		$r++;
 		
+        
+        
+        $this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
+		$this->rights[$r][1] = 'external_access_contracts';	// Permission label
+		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
+		$this->rights[$r][4] = 'view_contracts';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$r++;
+        
+        
+        
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_userinfos_edit';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
@@ -222,6 +233,24 @@ class modexternalaccess extends DolibarrModules
         $r++;
 		
 		
+        
+        
+        
+        
+        //PERM
+        $this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
+		$this->rights[$r][1] = 'external_access_fichinter';	// Permission label
+		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
+		$this->rights[$r][4] = 'view_fichinter';
+        // In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][5] = '';
+        // In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$r++;
+        
+        
+        
+        
+        
 		// Main menu entries
 		$this->menu = array();			// List of menus to add
 		$r=0;
@@ -229,19 +258,19 @@ class modexternalaccess extends DolibarrModules
 		// Add here entries to declare new menus
 		//
 		// Example to declare a new Top Menu entry and its Left menu entry:
-		// $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=externalaccess',		// Put 0 if this is a single top menu or keep fk_mainmenu to give an entry on left
-		//							'type'=>'top',			                // This is a Top menu entry
-		//							'titre'=>'externalaccess top menu',
-		//							'mainmenu'=>'externalaccess',
-		//							'leftmenu'=>'externalaccess_left',			// This is the name of left menu for the next entries
-		//							'url'=>'/externalaccess/pagetop.php',
-		//							'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
+		$this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=externalaccess',		// Put 0 if this is a single top menu or keep fk_mainmenu to give an entry on left
+								'type'=>'top',			                // This is a Top menu entry
+								'titre'=>'externalaccess top menu',
+								'mainmenu'=>'externalaccess',
+									'leftmenu'=>'externalaccess_left',			// This is the name of left menu for the next entries
+									'url'=>'/externalaccess/pagetop.php',
+									'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 		//							'position'=>100,
-		//							'enabled'=>'$conf->externalaccess->enabled',	// Define condition to show or hide menu entry. Use '$conf->externalaccess->enabled' if entry must be visible if module is enabled.
-		//							'perms'=>'1',			                // Use 'perms'=>'$user->rights->externalaccess->level1->level2' if you want your menu with a permission rules
+								'enabled'=>'$conf->externalaccess->enabled',	// Define condition to show or hide menu entry. Use '$conf->externalaccess->enabled' if entry must be visible if module is enabled.
+									'perms'=>'1',			                // Use 'perms'=>'$user->rights->externalaccess->level1->level2' if you want your menu with a permission rules
 		//							'target'=>'',
 		//							'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
-		// $r++;
+		 $r++;
 		//
 		// Example to declare a Left Menu entry into an existing Top menu entry:
 		// $this->menu[$r]=array(	'fk_menu'=>'fk_mainmenu=externalaccess,fk_leftmenu=externalaccess_left',		    // Use 'fk_mainmenu=xxx' or 'fk_mainmenu=xxx,fk_leftmenu=yyy' where xxx is mainmenucode and yyy is a leftmenucode

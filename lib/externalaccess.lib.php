@@ -21,6 +21,11 @@
  *	\ingroup	externalaccess
  *	\brief		This file is an example module library
  *				Put some comments here
+
+**MENU*function*print_
+order-Invoice-propal-projet-agenda-
+ * N'est finalement pas utilisé, utiliser datatable en html5 plutot
+ //>>Ligne646
  */
 
 function externalaccessAdminPrepareHead()
@@ -102,6 +107,8 @@ function downloadFile($filename, $forceDownload = 0)
 }
 
 
+
+//invoiceTable
 function print_invoiceTable($socId = 0)
 {
     global $langs, $db, $conf;
@@ -121,12 +128,7 @@ function print_invoiceTable($socId = 0)
     $tableItems = $context->dbTool->executeS($sql);
     
     if(!empty($tableItems))
-    {
-        
-        
-        
-        
-        print '<table id="invoice-list" class="table table-striped" >';
+    {   print '<table id="invoice-list" class="table table-striped" >';
         
         print '<thead>';
         
@@ -165,9 +167,7 @@ function print_invoiceTable($socId = 0)
             else{
                 $viewLink = $object->ref;
                 $downloadLink =  $langs->trans('DocumentFileNotAvailable');
-            }
-            
-            
+            }                     
             print '<tr >';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
             print ' <td data-search="'.$object->date.'" data-order="'.dol_print_date($object->date).'"  >'.dol_print_date($object->date).'</td>';
@@ -180,21 +180,16 @@ function print_invoiceTable($socId = 0)
             print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
             print ' <td data-order="'.$resteapayer.'" class="text-right" >'.price($resteapayer)  .' '.$object->multicurrency_code.'</td>';
             print ' <td  class="text-right" >'.$downloadLink.'</td>';
-            print '</tr>';
-            
+            print '</tr>';            
         }
-        print '</tbody>';
-        
+        print '</tbody>';        
         print '</table>';
         $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
     ?>
     <script type="text/javascript" >
      $(document).ready(function(){
-         $("#invoice-list").DataTable({
-             "language": {
-                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+         $("#invoice-list").DataTable({            age": {"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
              },
-
              responsive: true,
              columnDefs: [{
                  orderable: false,
@@ -238,10 +233,6 @@ function print_propalTable($socId = 0)
     
     if(!empty($tableItems))
     {
-        
-        
-        
-        
         print '<table id="propal-list" class="table table-striped" >';
         
         print '<thead>';
@@ -322,6 +313,103 @@ function print_propalTable($socId = 0)
     
     
 }
+
+
+
+
+function print_projetsTable($socId = 1)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    dol_include_once('projet/class/project.class.php');
+    $langs->load('projet');
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'projet` projet';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY projet.datec DESC';
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        
+        
+        
+        
+        print '<table id="projet-list" class="table table-striped" >';
+        
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+        /*if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+            print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
+        }*/
+        //print ' <th class="text-center" >'.$langs->trans('Amount_TTC').'</th>';
+        //print ' <th class="text-center" >'.$langs->trans('RemainderToPay').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('projet').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('Titre').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Description').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('Lien de telechargement').'</th>';
+        print '</tr>';
+        
+        print '</thead>';
+        
+        print '<tbody>';
+        foreach ($tableItems as $item)
+        {
+            $object = new project($db);
+            $object->fetch($item->rowid);
+        load_last_main_doc($object);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadprojet&id='.$object->id;
+            //var_dump($object); exit;
+            /*$totalpaye = $object->getSommePaiement();
+            $totalcreditnotes = $object->getSumCreditNotesUsed();
+            $totaldeposits = $object->getSumDepositsUsed();
+            $resteapayer = price2num($object->total_ttc - $totalpaye - $totalcreditnotes - $totaldeposits, 'MT');
+            */
+            if(!empty($object->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+            }
+            else{
+                $viewLink = $object->ref;
+                $downloadLink =  $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            
+            print '<tr >';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
+			
+            print ' <td data-search="'.$object->dateo.'" data-order="'.dol_print_date($object->dateo).'"  >'.dol_print_date($object->dateo).'</td>';
+            //print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
+          
+			print ' <td data-search="'.$object->datec.'" data-order="'.dol_print_date($object->datec).'"  >'.dol_print_date($object->datec).'</td>';
+		  
+			print ' <td  >'.$object->getLibStatut(0).'</td>';
+            print ' <td data-search="'.$object->title.'" data-order="'.$object->title.'" ></td>';
+        
+			print '<td  ></td>';
+			print '<td  ></td>';
+			print ' <td  class="text-right" >'.$downloadLink.'</td>';
+            print '</tr>';
+            
+        }
+        print '</tbody>';
+        
+        print '</table>';
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getprojetList';
+	    
+	    
+	    
+	    
 
 function print_orderListTable($socId = 0)
 {
@@ -1282,4 +1370,145 @@ function load_last_main_doc(&$object) {
 		if(is_readable(DOL_DATA_ROOT.'/'.$last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$last_main_doc )) $object->last_main_doc = $last_main_doc;
 	}
 
+}
+
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    
+	    <?php
+		    function print_agendaTable($socId = 1)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    //dol_include_once('compta/facture/class/facture.class.php');
+    dol_include_once('comm/action/class/actioncomm.class.php');
+    $langs->load('actioncomm');
+    
+    
+    $sql = 'SELECT id';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'actioncomm` ac';
+    //$sql.= ' WHERE fk_contact = '. intval($socId);
+    //$sql.= ' AND code = '.AC_OTH;
+    $sql.= ' ORDER BY actioncomm.datec DESC';
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        
+        
+        
+        
+        print '<table id="actioncomm-list" class="table table-striped" >';
+        
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+        //print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
+        //print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+        //if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+         //   print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
+        //}
+        print ' <th class="text-center" >'.$langs->trans('Code').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Project').'</th>';
+        
+
+        print ' <th class="text-center" ></th>';
+        print '</tr>';
+        
+        print '</thead>';
+        
+        print '<tbody>';
+        foreach ($tableItems as $item)
+        {
+            $object = new actioncomm($db);
+            $object->fetch($item->id);
+        load_last_main_doc($object);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadagenda&id='.$object->id;
+            //var_dump($object); exit;
+            //$totalpaye = $object->getSommePaiement();
+            //$totalcreditnotes = $object->getSumCreditNotesUsed();
+            //$totaldeposits = $object->getSumDepositsUsed();
+            //$resteapayer = price2num($object->total_ttc - $totalpaye - $totalcreditnotes - $totaldeposits, 'MT');
+            
+            if(!empty($object->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref_ext.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+            }
+            else{
+                $viewLink = $object->ref_ext;
+                $downloadLink =  $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            
+            print '<tr >';
+            
+            print ' <td data-search="'.$object->ref_ext.'" data-order="'.$object->ref_ext.'" >'.$object->ref_ext.'</td>';
+
+            print ' <td data-search="'.$object->datep.'" data-order="'.dol_print_date($object->datep).'"  >'.dol_print_date($object->datep).'</td>';
+
+            print ' <td data-search="'.$object->datep2.'" data-order="'.dol_print_date($object->datep2).'"  >'.dol_print_date($object->datep2).'</td>';
+
+            //print ' <td  >'.$object->getLibStatut(0).'</td>';
+
+            //print ' <td  >'.$object->code.'</td>';
+
+            //print ' <td data-search="'.$object->fk_project.'" data-order="'.$object->fk_project.'" ><A href="/dolibarr900/htdocs/externalaccess/www/tpl/fiche/details_project.php?rowid='.$object->fk_project.'"target="_blank">'.$object->fk_project.'<A></td>';
+
+
+            //if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+                //print ' <td data-order="'.$object->multicurrency_total_ht.'" class="text-right" >'.price($object->multicurrency_total_ht)  //.' '.$object->multicurrency_code.'</td>';
+           // }
+            
+            //print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            //print ' <td data-order="'.$resteapayer.'" class="text-right" >'.price($resteapayer)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td  class="text-right" >'.$downloadLink.'</td>';
+            print '</tr>';
+            
+        }
+        print '</tbody>';
+        
+        print '</table>';
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getContractList';
+    ?>
+    <script type="text/javascript" >
+     $(document).ready(function(){
+         $("#invoice-list").DataTable({
+             "language": {
+                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             },
+
+             responsive: true,
+             columnDefs: [{
+                 orderable: false,
+                 "aTargets": [-1]
+             },{
+                 "bSearchable": false,
+                 "aTargets": [-1, -2]
+             }]
+         });
+     });
+    </script>
+    <?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+
+
+        
 }
