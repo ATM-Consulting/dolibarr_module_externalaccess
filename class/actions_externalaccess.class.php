@@ -67,8 +67,8 @@ class Actionsexternalaccess
 		if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 		{
 		    $context = Context::getInstance();
-		      
-		    
+
+
 		    if($context->controller == 'invoices')
 		    {
 		        $context->title = $langs->trans('ViewInvoices');
@@ -113,7 +113,7 @@ class Actionsexternalaccess
 		        $context->desc = $user->firstname .' '. $user->lastname;; //$langs->trans('UserInfosDesc');
 		        $context->meta_title = $user->firstname .' '. $user->lastname .' - '. $langs->trans('UserInfosDesc');
 		        //$context->doNotDisplayHeaderBar=1;// hide default header
-		        
+
 		        if($context->action == 'save'){
 		            // TODO: need to check all send informations to prevent and verbose errors
 		            $user->firstname = GETPOST('firstname');
@@ -125,7 +125,7 @@ class Actionsexternalaccess
 		            $user->office_phone = GETPOST('office_phone');
 		            $user->office_fax = GETPOST('office_fax');
 		            $user->email = GETPOST('email');
-		            
+
 		            if($user->update($user)>0)
 		            {
 		                header('Location: '.$context->getRootUrl('personalinformations').'&action=saved');
@@ -136,9 +136,9 @@ class Actionsexternalaccess
 		        }
 		    }
 		}
-		
+
 	}
-	
+
 	/**
 	 * Overloading the interface function : replacing the parent's function with the one below
 	 *
@@ -152,7 +152,7 @@ class Actionsexternalaccess
 	{
 	    $error = 0; // Error counter
 	    global $langs, $db, $conf, $user;
-	    
+
 	    if (in_array('externalaccessinterface', explode(':', $parameters['context'])))
 	    {
 	        if($action === 'downloadInvoice')
@@ -195,14 +195,14 @@ class Actionsexternalaccess
 	                exit();
 	            }
 	        }*/
-	        
+
 	    }
 	}
-	
 
-	
-	
-	
+
+
+
+
 	/**
 	 * Overloading the PrintPageView function : replacing the parent's function with the one below
 	 *
@@ -286,17 +286,17 @@ class Actionsexternalaccess
 	            return 1;
 	        }
 	    }
-	    
+
 		return 0;
 	}
-	
+
 	public function print_invoiceList($socId = 0)
 	{
 	    print '<section id="section-invoice"><div class="container">';
 	    print_invoiceTable($socId);
 	    print '</div></section>';
 	}
-	
+
 	public function print_orderList($socId = 0)
 	{
 	    print '<section id="section-order"><div class="container">';
@@ -324,23 +324,23 @@ class Actionsexternalaccess
         print_ticketTable($socId);
         print '</div></section>';
     }
-	
+
 	public function print_personalinformations()
 	{
 	    global $langs,$db,$user;
 	    $context = Context::getInstance();
-	    
+
 	    include $context->tplPath.'/userinfos.tpl.php';
 	}
-	
+
 	private function _downloadInvoice(){
-	    
+
 	    global $langs, $db, $conf, $user;
 	    $filename=false;
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+		if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	    {
 	        dol_include_once('compta/facture/class/facture.class.php');
 	        $object = new Facture($db);
@@ -357,21 +357,21 @@ class Actionsexternalaccess
 	                else{
 	                    print $langs->trans('FileNotExists');
 	                }
-	                
+
 	            }
 	        }
 	    }
-	
+
 	}
-	
+
 	private function _downloadPropal(){
-	    
+
 	    global $langs, $db, $conf, $user;
-	    
+
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
 	    {
 	        dol_include_once('comm/propal/class/propal.class.php');
 	        $object = new Propal($db);
@@ -381,7 +381,7 @@ class Actionsexternalaccess
 	            {
 			load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
-	                
+
 	                if(!empty($object->last_main_doc)){
 	                    downloadFile($filename, $forceDownload);
 	                }
@@ -391,15 +391,15 @@ class Actionsexternalaccess
 	            }
 	        }
 	    }
-	    
+
 	}
-	
-	
-	
+
+
+
 	private function _downloadCommande(){
-	    
+
 	    global $langs, $db, $conf, $user;
-	    
+
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
@@ -413,9 +413,9 @@ class Actionsexternalaccess
 	            {
 			load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
-	                
+
 	                downloadFile($filename, $forceDownload);
-	                
+
 	                if(!empty($object->last_main_doc)){
 	                    downloadFile($filename, $forceDownload);
 	                }
@@ -425,7 +425,7 @@ class Actionsexternalaccess
 	            }
 	        }
 	    }
-	    
+
 	}
 
 
