@@ -116,6 +116,7 @@ function print_invoiceTable($socId = 0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')'; //Compatibility with Multicompany
     $sql.= ' ORDER BY f.datef DESC';
     
     $tableItems = $context->dbTool->executeS($sql);
@@ -232,6 +233,7 @@ function print_propalTable($socId = 0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
     $sql.= ' ORDER BY p.datep DESC';
 
     $tableItems = $context->dbTool->executeS($sql);
@@ -337,6 +339,7 @@ function print_orderListTable($socId = 0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
     $sql.= ' ORDER BY c.date_commande DESC';
     
     $tableItems = $context->dbTool->executeS($sql);
@@ -446,6 +449,7 @@ function print_expeditionTable($socId = 0)
 	$sql.= ' FROM `'.MAIN_DB_PREFIX.'expedition` ';
 	$sql.= ' WHERE fk_soc = '. intval($socId);
 	$sql.= ' AND fk_statut > 0';
+    	$sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
 	$sql.= ' ORDER BY date_expedition DESC';
 
 	$tableItems = $context->dbTool->executeS($sql);
@@ -857,6 +861,7 @@ function print_invoiceList($socId = 0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
     $sql.= ' ORDER BY f.datef DESC';
     
     $countItems = $context->dbTool->getvalue($sql);
@@ -937,6 +942,7 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
     $sql.= ' LIMIT '.intval($offset).','.intval($limit);
     
     $tableItems = $context->dbTool->executeS($sql);
@@ -997,6 +1003,7 @@ function print_orderList($socId = 0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
     $sql.= ' ORDER BY c.date_commande DESC';
     
     $countItems = $context->dbTool->getvalue($sql);
@@ -1079,6 +1086,7 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
     $sql.= ' ORDER BY c.date_commande DESC';
     $sql.= ' LIMIT '.intval($offset).','.intval($limit);
     
@@ -1139,6 +1147,7 @@ function print_propalList($socId = 0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')';//Compatibility with Multicompany
     $sql.= ' ORDER BY p.datep DESC';
     
     $countItems = $context->dbTool->getvalue($sql);
@@ -1219,6 +1228,7 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+    $sql.= ' AND entity IN ('.getEntity($mysoc->rowid).')'; //Compatibility with Multicompany
     $sql.= ' ORDER BY p.datep DESC';
     $sql.= ' LIMIT '.intval($offset).','.intval($limit);
     
