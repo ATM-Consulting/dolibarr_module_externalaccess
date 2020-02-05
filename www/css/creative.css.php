@@ -495,7 +495,7 @@ header.masthead p {
 
 .btn.btn-signin {
     /*background-color: #4d90fe; */
-    background-color: rgb(104, 145, 162);
+    background-color: <?php print $primaryColor; ?>;;
     /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
     padding: 0px;
     font-weight: 700;
@@ -514,7 +514,7 @@ header.masthead p {
 .btn.btn-signin:hover,
 .btn.btn-signin:active,
 .btn.btn-signin:focus {
-    background-color: rgb(12, 97, 33);
+    background-color: <?php print $primaryColor; ?>;;
 }
 
 .forgot-password {
