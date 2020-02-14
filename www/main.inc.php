@@ -696,7 +696,7 @@ if (! defined('NOLOGIN'))
 
 		$loginfo = 'TZ='.$_SESSION["dol_tz"].';TZString='.$_SESSION["dol_tz_string"].';Screen='.$_SESSION["dol_screenwidth"].'x'.$_SESSION["dol_screenheight"];
 
-	
+
 		// Hooks on successfull login
 		$action='';
 		$hookmanager->initHooks(array('externallogin'));
@@ -717,16 +717,16 @@ if (! defined('NOLOGIN'))
 		}
 
 		// Change landing page if defined.
-		/*$landingpage=(empty($user->conf->MAIN_LANDING_PAGE)?(empty($conf->global->MAIN_LANDING_PAGE)?'':$conf->global->MAIN_LANDING_PAGE):$user->conf->MAIN_LANDING_PAGE);
+		$landingpage=(empty($_SESSION["urlfrom"])?$_SESSION["urlfrom"]:'');
 		if (! empty($landingpage))    // Example: /index.php
 		{
-			$newpath=dol_buildpath($landingpage, 1);
-			if ($_SERVER["PHP_SELF"] != $newpath)   // not already on landing page (avoid infinite loop)
+
+			if (Context::urlOrigin() != $landingpage)   // not already on landing page (avoid infinite loop)
 			{
-				header('Location: '.$newpath);
+				header('Location: '.$landingpage);
 				exit;
 			}
-		}*/
+		}
 	}
 
 
