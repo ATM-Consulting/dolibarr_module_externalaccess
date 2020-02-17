@@ -8,7 +8,7 @@ if (empty($conf) || ! is_object($conf))
 <div class="container">
 	<div class="row  ">
         <div class="card card-container col-lg-6  ">
-<?php            
+<?php
         if ( (! empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_small))
             || (! empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo))
             )
@@ -22,31 +22,31 @@ if (empty($conf) || ! is_object($conf))
 		    $name = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
 		    print '<h4>'.$name.'</h4>';
 		}
-		
-		
+
+
 		print '<p id="profile-name" class="profile-name-card"></p>';
-		
+
 		// Show error message if defined
 		if (! empty($_SESSION['dol_loginmesg']))
 		{
-	    
+
             	print '<div class="alert alert-danger" role="alert">';
             	print $_SESSION['dol_loginmesg'];
             	print '</div>';
-            	
+
         }
-		
+
 ?>
-            
-            
+
+
 			<form class="form-signin" id="login" name="login" method="post" action="<?php echo $_SERVER['PHP_SELF']; ?>">
                 <span id="reauth-email" class="reauth-email"></span>
                 <input type="text"  name="username" id="inputUsername" class="form-control" placeholder="<?php echo $langs->trans("Login"); ?>" required autofocus>
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<?php echo $langs->trans("Password"); ?>" required>
-                 
-                 
+                <input type="hidden" name="urlfrom" value="<?php print Context::urlOrigin(); ?>"/>
+
                 <?php
-                
+
                 /* ?>
                 <div id="remember" class="checkbox">
                     <label>
@@ -54,10 +54,10 @@ if (empty($conf) || ! is_object($conf))
                     </label>
                 </div>
                 <?php */ ?>
-                
+
                 <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
-            
-                            
+
+
                 <input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']; ?>" />
                 <input type="hidden" name="loginfunction" value="loginfunction" />
                 <!-- Add fields to send local user information -->
@@ -68,15 +68,15 @@ if (empty($conf) || ! is_object($conf))
                 <input type="hidden" name="dst_second" id="dst_second" value="" />
                 <input type="hidden" name="screenwidth" id="screenwidth" value="" />
                 <input type="hidden" name="screenheight" id="screenheight" value="" />
-                
-                 
-                <?php  
+
+
+                <?php
                 /*<input type="hidden" name="dol_hide_topmenu" id="dol_hide_topmenu" value="<?php echo $dol_hide_topmenu; ?>" />
                  <input type="hidden" name="dol_hide_leftmenu" id="dol_hide_leftmenu" value="<?php echo $dol_hide_leftmenu; ?>" />
                  <input type="hidden" name="dol_optimize_smallscreen" id="dol_optimize_smallscreen" value="<?php echo $dol_optimize_smallscreen; ?>" />
                  <input type="hidden" name="dol_no_mouse_hover" id="dol_no_mouse_hover" value="<?php echo $dol_no_mouse_hover; ?>" />
                  <input type="hidden" name="dol_use_jmobile" id="dol_use_jmobile" value="<?php echo $dol_use_jmobile; ?>" />*/
-                
+
 
                 if (! empty($conf->global->MAIN_SECURITY_ENABLECAPTCHA)) {
                 	// Add a variable param to force not using cache (jmobile)
@@ -86,15 +86,15 @@ if (empty($conf) || ! is_object($conf))
                 	// TODO: provide accessible captcha variants
                 ?>
                 	<!-- Captcha -->
-                	
+
                 	<span class="span-icon-security">
                 	<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="flat input-icon-security" type="text" size="12" maxlength="5" name="code" tabindex="3" />
                 	</span>
                 	<img src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
                 	<a href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
-                	
+
                 <?php }  ?>
-            
+
             </form><!-- /form -->
             <?php /*if(!$conf->global->MAIN_SECURITY_DISABLEFORGETPASSLINK){ ?>
             <a href="#forgottenpassword" class="forgot-password">
@@ -104,15 +104,15 @@ if (empty($conf) || ! is_object($conf))
         </div><!-- /card-container -->
    </div>
 
-<?php 
+<?php
 if(!empty($conf->global->EACCESS_LOGIN_EXTRA_HTML)){
     print '<div class="row  "><div class="card card-container col-lg-6 ">';
     print $conf->global->EACCESS_LOGIN_EXTRA_HTML;
     print '</div></div>';
-    
+
 }
 
 
 ?>
-   
+
 </div><!-- /container -->

@@ -717,8 +717,17 @@ if (! defined('NOLOGIN'))
 		}
 
 		// Change landing page if defined.
-		$landingpage=(!empty($_SESSION["urlfrom"])?$_SESSION["urlfrom"]:'');
-		unset($_SESSION["urlfrom"]);
+		if (GETPOST('urlfrom')){
+			$landingpage = GETPOST('urlfrom');
+		}
+		elseif(!empty($_SESSION["urlfrom"])){
+			$landingpage = $_SESSION["urlfrom"];
+			unset($_SESSION["urlfrom"]);
+		}
+		else{
+			$landingpage = false;
+		}
+
 		if (! empty($landingpage))    // Example: /index.php
 		{
 
