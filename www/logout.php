@@ -1,4 +1,4 @@
-<?php require __DIR__ .'/config.php'; 
+<?php require __DIR__ .'/config.php';
 
 
 // This can happen only with a bookmark or forged url call.
@@ -22,7 +22,7 @@ $urlfrom=empty($_SESSION["urlfrom"])?'':$_SESSION["urlfrom"];
 
 // Define url to go
 $url=$context->rootUrl."index.php";		// By default go to login page
-if ($urlfrom) $url=$context->rootUrl.$urlfrom;
+if ($urlfrom) $url=$urlfrom;
 
 // Destroy session
 $prefix=dol_getprefix('');
