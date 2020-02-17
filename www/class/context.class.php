@@ -131,7 +131,7 @@ class Context {
 		$url = $protocol . '://' . $host;
 
 		if($withRequestUri){
-			$url.=$host;
+			$url.=$s['REQUEST_URI'];
 		}
 
 		return $url;
