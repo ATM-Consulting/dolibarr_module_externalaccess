@@ -16,7 +16,9 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+# INSTALL
+Add this module to custom/ folder in dolibarr, rename dolibarr_module_externalaccess folder to dolibarr_module_externalaccess
 
-Pour utiliser le script :
-1. Se placer dans le dossier via terminal
-2. exectuer le fichier sh avec les paramètres suivants : nomdumodule numeromodule
+# DEVELOPERS
+To extend/add new pages to the external access, use hooks.
+This module use it's owns hooks to display pages show class/actions_externalaccess.class.php to get exemples
