@@ -276,6 +276,16 @@ class Actionsexternalaccess
                 }
                 return 1;
             }
+            elseif($context->controller == 'ticket_card')
+            {
+                $context->setControllerFound();
+				$ticketId = GETPOST('ticketId', 'int');
+                if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+                {
+                    $this->print_ticketCard($ticketId, $user->societe_id);
+                }
+                return 1;
+            }
 	        elseif($context->controller == 'personalinformations')
 	        {
 				$context->setControllerFound();
@@ -322,6 +332,13 @@ class Actionsexternalaccess
     {
         print '<section id="section-ticket"><div class="container">';
         print_ticketTable($socId);
+        print '</div></section>';
+    }
+
+    public function print_ticketCard($ticketId = 0, $socId = 0)
+    {
+        print '<section id="section-ticket"><div class="container">';
+        print_ticketCard($ticketId, $socId);
         print '</div></section>';
     }
 
