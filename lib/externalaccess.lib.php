@@ -631,7 +631,7 @@ function print_ticketTable($socId = 0)
 
 function print_ticketCard($ticketId = 0, $socId = 0)
 {
-	global $langs,$db;
+	global $langs,$db, $conf;
 	$context = Context::getInstance();
 	$out = '';
 
@@ -644,10 +644,10 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 	$object = new Ticket($db);
 	$object->fetch($ticketId);
 	$author = '';
+	$fuser = new User($db);
 
 	if ($object->fk_user_create > 0) {
 		$langs->load("users");
-		$fuser = new User($db);
 		$fuser->fetch($object->fk_user_create);
 		$author.= $fuser->getFullName($langs);
 	} else {
@@ -690,20 +690,169 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 					</div>
 					<div class="row clearfix form-group" id="InitialMessage">
 						<div class="col-md-4">'.$langs->transnoentities('InitialMessage').'</div>
-						<div class="col-md-8">'.$author.'</div>
+						<div class="col-md-8">'.$object->message.'</div>
 					</div>
 				</div>
 			</div>
 		</div>';
 
-		// get list of messages for the ticket
-		$object->loadCacheMsgsTicket();
-		var_dump($object->cache_msgs_ticket);
+	// get list of messages for the ticket
+	$object->loadCacheMsgsTicket();
+	//var_dump($object->cache_msgs_ticket);
+
+	if (!empty($object->cache_msgs_ticket))
+	{
+		require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
+
+		$actionstatic = new ActionComm($db);
+
+		ob_start();
+		define('ISLOADEDBYSTEELSHEET', true);
+		require_once DOL_DOCUMENT_ROOT.'/theme/eldy/timeline.inc.php';
+		$out.='<style>';
+		$out.= ob_get_clean();
+		$out.= '
+			img.userphoto {			/* size for user photo in lists */
+				border-radius: 0.72em;
+				width: 1.4em;
+				height: 1.4em;
+				background-size: contain;
+				vertical-align: middle;
+			}';
+		$out.='</style>';
 
 		$out.='
-		<div class="container px-0">
-			<h5>'.$langs->trans('TicketMessagesList').'</h5>
-		</div>';
+			<div class="container px-0">
+				<h5>'.$langs->trans('TicketMessagesList').'</h5>
+			';
+
+		$out .= '
+			<ul class="timeline">';
+
+		$datelabel = "";
+		foreach ($object->cache_msgs_ticket as $key => $value)
+		{
+			/* @var ActionComm $actionstatic */
+			$actionstatic->fetch($value['id']);
+
+			if ($datelabel != dol_print_date($value['datec']) && empty($value['private']))
+			{
+				$datelabel = dol_print_date($value['datec']);
+				$out .= '<!-- timeline time label -->';
+				$out .= '<li class="time-label">';
+				$out .= '<span class="timeline-badge-date">';
+				$out .= $datelabel;
+				$out .= '</span>';
+				$out .= '</li>';
+				$out .= '<!-- /.timeline-label -->';
+			}
+
+			if (empty($value['private']))
+			{
+//				$out.= '<li>'.dol_print_date($value['datec']).' lol </li>';
+				$out .= '<!-- timeline item -->'."\n";
+				$out .= '<li class="timeline-code-'.strtolower($actionstatic->code).'">';
+				$out .= '<!-- timeline icon -->'."\n";
+
+				$iconClass = 'fa fa-comments';
+				$img_picto = '';
+				$colorClass = '';
+				$pictoTitle = '';
+
+				if ($actionstatic->percentage == -1) {
+					$colorClass = 'timeline-icon-not-applicble';
+					$pictoTitle = $langs->trans('StatusNotApplicable');
+				}
+				elseif ($actionstatic->percentage == 0) {
+					$colorClass = 'timeline-icon-todo';
+					$pictoTitle = $langs->trans('StatusActionToDo').' (0%)';
+				}
+				elseif ($actionstatic->percentage > 0 && $actionstatic->percentage < 100) {
+					$colorClass = 'timeline-icon-in-progress';
+					$pictoTitle = $langs->trans('StatusActionInProcess').' ('.$actionstatic->percentage.'%)';
+				}
+				elseif ($actionstatic->percentage >= 100) {
+					$colorClass = 'timeline-icon-done';
+					$pictoTitle = $langs->trans('StatusActionDone').' (100%)';
+				}
+
+				if ($actionstatic->code == 'AC_TICKET_CREATE') {
+					$iconClass = 'fa fa-ticket';
+				}
+				elseif ($actionstatic->code == 'AC_TICKET_MODIFY') {
+					$iconClass = 'fa fa-pencil';
+				}
+				elseif ($actionstatic->code == 'TICKET_MSG') {
+					$iconClass = 'fa fa-comments';
+				}
+				elseif ($actionstatic->code == 'TICKET_MSG_PRIVATE') {
+					$iconClass = 'fa fa-mask';
+				}
+				elseif (!empty($conf->global->AGENDA_USE_EVENT_TYPE))
+				{
+					if ($actionstatic->type_picto) $img_picto = img_picto('', $actionstatic->type_picto);
+					else {
+						if ($actionstatic->type_code == 'AC_RDV')       $iconClass = 'fa fa-handshake';
+						elseif ($actionstatic->type_code == 'AC_TEL')   $iconClass = 'fa fa-phone';
+						elseif ($actionstatic->type_code == 'AC_FAX')   $iconClass = 'fa fa-fax';
+						elseif ($actionstatic->type_code == 'AC_EMAIL') $iconClass = 'fa fa-envelope';
+						elseif ($actionstatic->type_code == 'AC_INT')   $iconClass = 'fa fa-shipping-fast';
+						elseif ($actionstatic->type_code == 'AC_OTH_AUTO')   $iconClass = 'fa fa-robot';
+						elseif (!preg_match('/_AUTO/', $actionstatic->type_code)) $iconClass = 'fa fa-robot';
+					}
+				}
+
+				$out.= '<i class="'.$iconClass.' '.$colorClass.'" title="'.$pictoTitle.'">'.$img_picto.'</i>'."\n";
+
+				$out.= '<div class="timeline-item">';
+				// Date
+				$out.= '<span class="time"><i class="fa fa-clock-o"></i> ';
+				$out.= dol_print_date($value['datec'], 'dayhour');
+				$out.= '</span>';
+
+				// Ref
+				$out.='<h3 class="timeline-header">';
+
+				// Author of event
+				$out.='<span class="messaging-author">';
+				if ($actionstatic->userownerid > 0)
+				{
+					if(!isset($userGetNomUrlCache[$actionstatic->userownerid])){ // is in cache ?
+						$fuser->fetch($actionstatic->userownerid);
+						$userGetNomUrlCache[$actionstatic->userownerid] = $fuser->getNomUrl(-1, '', 0, 0, 16, 0, 'firstelselast', '');
+					}
+					$out.= $userGetNomUrlCache[$actionstatic->userownerid];
+				}
+				$out.='</span>';
+
+				// Title
+				$out .= ' <span class="messaging-title">';
+
+				if($actionstatic->code == 'TICKET_MSG') {
+					$out .= $langs->trans('TicketNewMessage');
+				}
+				elseif($actionstatic->code == 'TICKET_MSG_PRIVATE') {
+					$out .= $langs->trans('TicketNewMessage').' <em>('.$langs->trans('Private').')</em>';
+				}
+
+				$out .= '</span>';
+
+				$out .= '</h3>';
+
+				$out.= '<div class="timeline-body">'.$value['message'].'</div>';
+
+				$out.= '</div>';
+
+				$out.='</li>';
+				$out.='<!-- END timeline item -->';
+			}
+		}
+
+		$out.="
+			</ul>\n";
+
+		$out.="</div>";
+	}
 
 	print $out;
 }
