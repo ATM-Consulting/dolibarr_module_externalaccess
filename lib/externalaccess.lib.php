@@ -101,7 +101,131 @@ function downloadFile($filename, $forceDownload = 0)
     }
 }
 
+function print_fichinterTable($socId = 0)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+    
+    //dol_include_once('compta/facture/class/facture.class.php');
+    dol_include_once('fichinter/class/fichinter.class.php');
+    $langs->load('fichinter');
+    
+    
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'fichinter` f';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY f.datec DESC';
+    
+    $tableItems = $context->dbTool->executeS($sql);
+    
+    if(!empty($tableItems))
+    {
+        
+        
+        
+        
+        print '<table id="fichinter-list" class="table table-striped" >';
+        
+        print '<thead>';
+        
+        print '<tr>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+       
+        print ' <th class="text-center" >'.$langs->trans('Amount_TTC').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('RemainderToPay').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Description').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Note publique').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Projet Lié').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Contrat Lié').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Lien de telechargement').'</th>';
+        print ' <th class="text-center" ></th>';
+        print '<td  ></td>';
+        print '</tr>';
+        
+        print '</thead>';
+        
+        print '<tbody>';
+        foreach ($tableItems as $item)
+        {
+            $object = new fichinter($db);
+            $object->fetch($item->rowid);
+        load_last_main_doc($object);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadFichinter&id='.$object->id;
+            //var_dump($object); exit;
+            /*$totalpaye = $object->getSommePaiement();
+            $totalcreditnotes = $object->getSumCreditNotesUsed();
+            $totaldeposits = $object->getSumDepositsUsed();
+            $resteapayer = price2num($object->total_ttc - $totalpaye - $totalcreditnotes - $totaldeposits, 'MT');
+            */
+            if(!empty($object->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+            }
+            else{
+                $viewLink = $object->ref;
+                $downloadLink =  $langs->trans('DocumentFileNotAvailable');
+            }
+            
+            
+            print '<tr >';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
+                print '<td  ></td>';
+         print ' <td data-search="'.$object->datec.'" data-order="'.dol_print_date($object->datec).'"  >'.dol_print_date($object->datec).'</td>';
+            //print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
+            print ' <td  >'.$object->getLibStatut(0).'</td>';
+            
+           /* if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+                print ' <td data-order="'.$object->multicurrency_total_ht.'" class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
+            }*/
+            
+            print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td data-order="'.$resteapayer.'" class="text-right" >'.price($resteapayer)  .' '.$object->multicurrency_code.'</td>';
+            print ' <td data-search="'.$object->description.'" data-order="'.$object->description.'" ></td>';
+            print ' <td data-search="'.$object->note_public.'" data-order="'.$object->note_public.'" ></td>';
+            print ' <td data-search="'.$object->fk_project.'" data-order="'.$object->fk_project.'" ></td>';
+            print ' <td data-search="'.$object->fk_contrat.'" data-order="'.$object->fk_contrat.'" ></td>';
+            print ' <td  class="text-right" >'.$downloadLink.'</td>';
+            print '</tr>';
+            
+        }
+        print '</tbody>';
+        
+        print '</table>';
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
+    ?>
+    <script type="text/javascript" >
+     $(document).ready(function(){
+         $("#invoice-list").DataTable({
+             "language": {
+                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             },
 
+             responsive: true,
+             columnDefs: [{
+                 orderable: false,
+                 "aTargets": [-1]
+             },{
+                 "bSearchable": false,
+                 "aTargets": [-1, -2]
+             }]
+         });
+     });
+    </script>
+    <?php 
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+
+
+        
+}
 function print_invoiceTable($socId = 0)
 {
     global $langs, $db, $conf;

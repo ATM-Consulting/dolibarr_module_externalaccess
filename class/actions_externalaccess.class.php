@@ -99,6 +99,12 @@ class Actionsexternalaccess
                 $context->desc = $langs->trans('ViewTicketsDesc');
                 $context->menu_active[] = 'tickets';
             }
+             elseif($context->controller == 'fichinter')
+		    {
+		        $context->title = $langs->trans('Wiewfichinter');
+		        $context->desc = $langs->trans('WiewfichinterDesc');
+		        $context->menu_active[] = 'fichinter';
+		    }
 			elseif($context->controller == 'default')
 			{
 				$context->title = $langs->trans('Welcome');
