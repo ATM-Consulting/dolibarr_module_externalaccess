@@ -252,11 +252,6 @@ function print_projetsTable($socId = 1)
         print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
         print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
-        /*if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
-            print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
-        }*/
-        //print ' <th class="text-center" >'.$langs->trans('Amount_TTC').'</th>';
-        //print ' <th class="text-center" >'.$langs->trans('RemainderToPay').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Budget').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Titre').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Description').'</th>';
@@ -287,10 +282,7 @@ function print_projetsTable($socId = 1)
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
             
             print ' <td data-search="'.$object->dateo.'" data-order="'.dol_print_date($object->dateo).'"  >'.dol_print_date($object->dateo).'</td>';
-            //print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
-          
             print ' <td data-search="'.$object->datec.'" data-order="'.dol_print_date($object->datec).'"  >'.dol_print_date($object->datec).'</td>';
-          
             print ' <td  >'.$object->getLibStatut(0).'</td>';
             print ' <td data-search="'.$object->title.'" data-order="'.$object->title.'" ></td>';        
             print '<td  ></td>';
