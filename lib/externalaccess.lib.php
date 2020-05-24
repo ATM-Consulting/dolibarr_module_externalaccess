@@ -272,12 +272,7 @@ function print_projetsTable($socId = 1)
             $object->fetch($item->rowid);
         load_last_main_doc($object);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadprojet&id='.$object->id;
-            //var_dump($object); exit;
-            /*$totalpaye = $object->getSommePaiement();
-            $totalcreditnotes = $object->getSumCreditNotesUsed();
-            $totaldeposits = $object->getSumDepositsUsed();
-            $resteapayer = price2num($object->total_ttc - $totalpaye - $totalcreditnotes - $totaldeposits, 'MT');
-            */
+           
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
                 $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
@@ -297,17 +292,7 @@ function print_projetsTable($socId = 1)
             print ' <td data-search="'.$object->datec.'" data-order="'.dol_print_date($object->datec).'"  >'.dol_print_date($object->datec).'</td>';
           
             print ' <td  >'.$object->getLibStatut(0).'</td>';
-            print ' <td data-search="'.$object->title.'" data-order="'.$object->title.'" ></td>';
-        
-           /* if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
-                print ' <td data-order="'.$object->multicurrency_total_ht.'" class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
-            }*/
-            
-            //print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';
-           // print ' <td data-order="'.$resteapayer.'" class="text-right" >'.price($resteapayer)  .' '.$object->multicurrency_code.'</td>';
-           // print ' <th class="text-center" >'.$langs->trans('title').'</th>';
-            //print ' <td  class="text-right" >'.($object->title)'"class="text-right" ></td>;
-            //print ' <td data-search="'.$object->title.'" data-order="'.$object->title.'" ></td>';
+            print ' <td data-search="'.$object->title.'" data-order="'.$object->title.'" ></td>';        
             print '<td  ></td>';
             print '<td  ></td>';
             print ' <td  class="text-right" >'.$downloadLink.'</td>';
