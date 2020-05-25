@@ -1,4 +1,4 @@
-ModuleName = externalaccess
+ModuleName = ExternalAccess
 ModuleDesc = externalaccess Description
 
 ATMAbout = This module has been developed by <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>You can find the documentation on our <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>For any question or feedback, contact us on <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>For any commercial question, contact us on <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> or at +33 9 77 19 50 70<br><br>Find our other modules on <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
@@ -6,6 +6,67 @@ ATMAbout = This module has been developed by <a href="http://www.atm-consulting.
 externalaccessSetup = externalaccess module setup
 externalaccessAbout = About externalaccess
 
-ForgotThePassword=Forgot the password?
-Rememberme=Remember me
-SignIn=Sign in
+ForgotThePassword = Forgot the password?
+Rememberme = Remember me
+SignIn = Sign in
+
+BackToModuleList = Back to the list of modules
+
+externalaccess = ExternalAccess
+
+# RIGHTS 
+external_access_invoices = can view invoices
+external_access_propals = can view propals
+external_access_orders = can view orders
+external_access_expeditions = can view shipments 
+external_access_tickets = can view tickets 
+external_access_userinfos_edit = can modify personal information
+
+# MENU 
+TopMenuexternalaccess = External Access
+
+# STATUS 
+externalaccessStatusDraft = Draft (to be validated)
+externalaccessStatusValidated = Validated (to accept)
+externalaccessStatusRefused = Refused (closed)
+externalaccessStatusAccepted = Accepted (closed)
+
+Draft = Draft 
+Validate = Validate
+Refused = Refused 
+Accepted = Accepted
+
+# LIST
+externalaccessList = List Client Portal
+Noexternalaccess = (empty)
+pdfLinkedDocuments = linked documents
+
+# CARD 
+Newexternalaccess = create external access
+externalaccessCard = Card ExternalAccess
+ErrorDetected = Error(s) detected, please check the form
+
+# CARD TPL
+Save = save
+CreateDraft = create draft
+Cancel = cancel
+Validate = valitade
+Modify = modify
+Reopen = reopen
+ToClone = clone
+Delete = delete
+
+DateFinValidite = Expiration date
+EndValidDate = End of validity
+DateLivraison = Expected delivery date
+DatePayLimit = Date to pay
+
+# Diver tools
+OrSeparator = or
+
+
+# PAGE TITLE 
+Welcome = Welcome
+WelcomeDesc = Welcome to our Client Portal
+
+
