@@ -706,21 +706,6 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 
 		$actionstatic = new ActionComm($db);
 
-		ob_start();
-		define('ISLOADEDBYSTEELSHEET', true);
-		require_once DOL_DOCUMENT_ROOT.'/theme/eldy/timeline.inc.php';
-		$out.='<style>';
-		$out.= ob_get_clean();
-		$out.= '
-			img.userphoto {			/* size for user photo in lists */
-				border-radius: 0.72em;
-				width: 1.4em;
-				height: 1.4em;
-				background-size: contain;
-				vertical-align: middle;
-			}';
-		$out.='</style>';
-
 		$out.='
 			<div class="container px-0">
 				<h5>'.$langs->trans('TicketMessagesList').'</h5>
