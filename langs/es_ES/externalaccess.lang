@@ -1,0 +1,151 @@
+ModuleName = Portal del cliente / Accès externe
+ModuleDesc = Crea un portal de clientes para tu Dolibarr
+BackToModuleList=Volver a la lista de módulos
+
+ATMAbout = Este módulo fue desarrollado por <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>Puede encontrar la documentación en nuestro <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>Para cualquier consulta técnica o devolución, contáctenos en <a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>Para cualquier consulta comercial, contáctenos en <a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> ou au +33 9 77 19 50 70<br><br>Encuentra nuestros otros módulos en <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+externalaccessSetup = Configuración del módulo del portal del cliente.
+externalaccessAbout = Sobre el módulo del portal del cliente
+
+externalaccess=Portal del cliente
+
+# DROITS
+external_access_invoices=Puede ver facturas
+external_access_propals=Puede consultar cotizaciones
+external_access_orders=Puede consultar pedidos
+external_access_userinfos_edit=Puede cambiar esta información personal
+
+# MENU
+TopMenuexternalaccess=Portal del cliente
+
+# STATUS
+externalaccessStatusDraft=Borrador (para ser validado)
+externalaccessStatusValidated=Validado (para aceptar)
+externalaccessStatusRefused=Rechazado (cerrado)
+externalaccessStatusAccepted=Aceptado (cerrado)
+
+Draft= Borrador
+Validate=Validado
+Refused=Rechazado 
+Accepted= Aceptado
+
+# LIST
+externalaccessList=Liste Portal del cliente
+Noexternalaccess=(vide)
+
+# CARD
+Newexternalaccess=Creación de acceso externo
+externalaccessCard=Hoja de acceso externo
+ErrorDetected=Error (s) detectado (s), verifique el formulario
+
+# CARD TPL
+Save=Registro
+CreateDraft=Créar Borrador
+Cancel=Anular
+Validate=Validar
+Modify=Editar
+Reopen=Reabrir
+ToClone=Clon
+Delete=Eliminar
+DateFinValidite=Fecha de fin de validez
+EndValidDate=Fin de validez
+DateLivraison=Fecha de entrega esperada
+DatePayLimit=Fecha de vencimiento
+
+# MENU
+EALINKNAME_gobackurl=Volver al sitio
+
+WiewInvoices=Facturas
+WiewInvoicesDesc=Encuentra fácilmente todas tus facturas
+EALINKNAME_invoices=Facturas
+
+WiewPropals=Cotizaciones
+WiewPropalsDesc=Encuentra fácilmente todas tus cotizaciones
+EALINKNAME_propals=Cotizaciones
+
+WiewOrders=Pedidos
+WiewOrdersDesc=Encuentra fácilmente todos tus pedidos
+EALINKNAME_orders=Pedidos
+
+PersonalInformations=Información personal
+
+# PAGE TITLE
+Welcome= Bienvenido
+WelcomeDesc=Bienvenido a tu portal de clientes
+
+# SETUP PAGE
+AbricotNotFound=Módulo de albaricoque no encontrado, el portal del cliente no puede funcionar correctamente sin este módulo.
+AbricotWiki=Consulte la página de información del módulo Albaricoque.
+EACCESS_ROOT_URL=Url d'accès  public
+EACCESS_ROOT_URL_HELP=Si usa un host virtual
+EACCESS_TITLE=Título del acceso externo
+EACCESS_TITLE_HELP=Visible en el menú superior
+EACCESS_GOBACK_URL=URL del enlace de retorno
+EACCESS_GOBACK_URL_HELP=Si la URL está llena, agrega un enlace "volver al sitio" en el menú superior
+EACCESS_PRIMARY_COLOR=Color principal del tema.
+EACCESS_PRIMARY_COLOR_HELP=En las páginas del portal del cliente, recuerde presionar la tecla CTRL + F5 o borrar la memoria caché del navegador después de cambiar este valor para que el cambio surta efecto
+EACCESS_PHONE=Teléfono de contacto
+EACCESS_EMAIL=Email de contacto
+EACCESS_EMAIL_HELP=Esta dirección de correo electrónico está visible en el pie de página
+EACCESS_ACTIVATE_MODULES=Módulos accesibles
+EACCESS_ACTIVATE_INVOICES=Descargar facturas
+EACCESS_need_some_rights=Nota: los derechos de usuario deben configurarse
+EACCESS_ACTIVATE_PROPALS=Descargar cotizaciones
+EACCESS_ACTIVATE_ORDERS=Descargar pedidos
+EACCESS_HEADER_IMG=URL de la imagen de fondo
+EACCESS_HEADER_IMG_HELP=Puede usar una imagen personalizada o una de las siguientes imágenes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
+AccessToCustomerGate=Consulta el portal del cliente
+EACCESS_LOGIN_EXTRA_HTML=Texto adicional que se muestra en la página de inicio de sesión.
+EACCESS_RGPD_MSG=Mensaje RGPD en el formulario de información personal
+EACCESS_RGPD_MSG_default=Puede solicitar la corrección de información inexacta o incompleta sobre usted. Al modificar y enviar este formulario, acepto que los datos ingresados serán utilizados por% s para que pueda leer y, si es necesario, administrar la relación contractual que pueda resultar.
+
+# INDEX
+Quotations=Cita
+QuotationsDesc=
+Orders=Comandos
+OrdersDesc=
+Invoices=Facturas
+InvoicesDesc=
+MySpace=Consulta mi espacio
+
+
+
+ForgotThePassword=Contraseña olvidada ?
+ForgotPassword=Contraseña olvidada ?
+Rememberme=se acuerda de mi
+SignIn=Acceder
+YouCanResetYourPasswordHere=Puedes renovarlo aquí
+Renew=Renovar
+
+# FOOTER
+GetInTouch=Estamos en contacto
+GetInTouchDesc=¿Listo para comenzar su próximo proyecto con nosotros? ¡Llámenos o envíenos un correo electrónico y nos pondremos en contacto con usted lo antes posible!
+
+
+# UserInfos
+MyPersonalInfos=Su información 
+UserInfosDesc=Su información personal
+YourPersonnalInformations=Su información personal
+firstname=Prénom
+lastname=Nom
+address=Adresse
+addresszip=Código postal
+town=Ciudad
+exa_Edit=Editar
+User_mobile=Teléfono móvil
+Office_phone=Teléfono de la oficina
+Office_fax=Fax
+Saved=Sauvegardé
+Company=Sociedad
+
+# 404 tpl 
+SorryThereIsNothingHere=Lo siento no hay nada aqui
+
+EACCESS_Nothing=Actualmente no hay nada aquí, paciencia, sus documentos estarán disponibles pronto
+Amount_HT= Cantidad HT
+Amount_TTC=Cantidad TTC
+RemainderToPay=Queda por pagar
+DocumentFileNotAvailable=Documento actualmente no disponible.
+
+
+EaBack=Regreso
