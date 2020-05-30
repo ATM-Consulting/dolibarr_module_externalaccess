@@ -13,7 +13,15 @@ $Tmenu=array();
 
 
 if($context->userIsLog())
-{
+{   if($conf->global->EACCESS_ACTIVATE_FICHINTER && !empty($user->rights->externalaccess->view_fichinter))
+    {
+        $Tmenu['fichinter'] = array(
+            'id' => 'fichinter',
+            'rank' => 10,
+            'url' => $context->getRootUrl('fichinter'),
+            'name' => $langs->trans('EALINKNAME_fichinter'),
+        );
+    }
     
     if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
     {
