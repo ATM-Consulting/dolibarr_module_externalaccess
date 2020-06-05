@@ -804,7 +804,7 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 				{
 					if(!isset($userGetNomUrlCache[$actionstatic->userownerid])){ // is in cache ?
 						$fuser->fetch($actionstatic->userownerid);
-						$userGetNomUrlCache[$actionstatic->userownerid] = $fuser->getNomUrl(-1, '', 0, 0, 16, 0, 'firstelselast', '');
+						$userGetNomUrlCache[$actionstatic->userownerid] = getUserName($fuser, -1,  0, 16, 'firstelselast');
 					}
 					$out.= $userGetNomUrlCache[$actionstatic->userownerid];
 				}
