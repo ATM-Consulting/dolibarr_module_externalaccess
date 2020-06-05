@@ -166,7 +166,7 @@ function showUserPhoto($user, $width = 100, $height = 0, $cssclass = 'photowithm
 	$context = Context::getInstance();
 
 
-	$nophoto = $context->getRootUrl().'/img/user_anonymous.png';
+	$nophoto = $context->getRootUrl().'/img/avatar.png';
 	if ($user->gender == 'man') $nophoto = $context->getRootUrl().'/img/user_man.png';
 	if ($user->gender == 'woman') $nophoto = $context->getRootUrl().'/img/user_woman.png';
 
