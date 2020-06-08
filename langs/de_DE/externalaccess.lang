@@ -1,0 +1,166 @@
+ModuleName = Kundenportal / Externer Zugang
+ModuleDesc = Erstellen Sie ein Kundenportal für Ihren Dolibarr
+BackToModuleList=Zurück zur Liste der Module
+
+ATMAbout = Dieses Modul wurde von entwickelt <a href="http://www.atm-consulting.fr" target="_blank">ATM Consulting</a><br>Die Dokumentation finden Sie auf unserer <a href="http://wiki.atm-consulting.fr/index.php/Accueil" target="_blank">wiki</a><br><br>Bei technischen Fragen oder Rücksendungen kontaktieren Sie uns bitte unter<a href="mailto:support@atm-consulting.fr">support@atm-consulting.fr</a><br><br>Bei kommerziellen Fragen kontaktieren Sie uns bitte unter<a href="mailto:contact@atm-consulting.fr">contact@atm-consulting.fr</a> ou au +33 9 77 19 50 70<br><br>Finden Sie unsere anderen Module auf <a href="http://www.dolistore.com/search.php?orderby=position&orderway=desc&search_query=atm&submit_search=Rechercher" target="_blank">Dolistore</a>
+
+externalaccessSetup = Konfiguration des Kundenportalmoduls
+externalaccessAbout = Über das Kundenportalmodul
+
+externalaccess=Kundenportalmodul
+
+# DROITS
+external_access_invoices=Kann Rechnungen anzeigen
+external_access_propals=Kann Angebote anzeigen
+external_access_orders=Kann Bestellungen anzeigen
+external_access_expeditions=Kann Sendungen anzeigen
+external_access_tickets=Kann Tickets anzeigen
+external_access_userinfos_edit=Kann persönliche Informationen ändern
+
+# MENU
+TopMenuexternalaccess=Kundenportalmodul
+
+# STATUS
+externalaccessStatusDraft=Entwurf (zu validieren)
+externalaccessStatusValidated=Validiert (zu akzeptieren)
+externalaccessStatusRefused=Abgelehnt (geschlossen)
+externalaccessStatusAccepted=Akzeptiert (geschlossen)
+
+Draft=Entwurf
+Validate=Validiert
+Refused=Abgelehnt
+Accepted=Akzeptiert
+
+# LIST
+externalaccessList=Kundenportalliste
+Noexternalaccess=(vide)
+pdfLinkedDocuments=documents liés
+
+# CARD
+Newexternalaccess=Schaffung externalaccess
+externalaccessCard=Stecker externalaccess
+ErrorDetected=Fehler erkannt, bitte überprüfen Sie das Formular
+
+# CARD TPL
+Save=Aufzeichnung
+CreateDraft=Entwurf erstellen
+Cancel=Abbrechen
+Validate=Bestätigen
+Modify=Bearbeiten
+Reopen=Wieder öffnen
+ToClone=Klon
+Delete=Entfernen
+DateFinValidite=Haltbarkeitsdatum
+EndValidDate=Ende der Gültigkeit
+DateLivraison=Voraussichtliches Lieferdatum
+DatePayLimit=Termin Frist
+
+# Diver tools
+OrSeparator=Oder
+
+# MENU
+EALINKNAME_gobackurl=Zurück zur Seite
+
+ViewInvoices=Rechnungen
+ViewInvoicesDesc=Finden Sie einfach alle Ihre Rechnungen
+EALINKNAME_invoices=Rechnungen
+
+ViewPropals=Angebote
+ViewPropalsDesc=Finden Sie einfach alle Ihre Angebote
+EALINKNAME_propals=Angebote
+
+ViewOrders=Bestellungen
+ViewOrdersDesc=Finden Sie einfach alle Ihre Bestellungen
+EALINKNAME_orders=Bestellungen
+
+ViewExpeditions=Lieferungen
+ViewExpeditionsDesc=Finden Sie einfach alle Ihre Lieferungen
+EALINKNAME_expeditions=Lieferungen
+
+ViewTickets=Tickets
+ViewTicketsDesc=Finden Sie einfach alle Ihre Tickets
+EALINKNAME_tickets=Tickets
+
+PersonalInformations=Persönliche Informationen
+
+# PAGE TITLE
+Welcome=Willkommen
+WelcomeDesc=Willkommen in Ihrem Kundenportal
+
+# SETUP PAGE
+AbricotNotFound=Abricot Modul nicht gefunden, das Kundenportal kann ohne dieses Modul nicht richtig funktionieren.AbricotWiki=Consulter la page d'information du module abricot.
+EACCESS_ROOT_URL=URL für den öffentlichen Zugriff
+EACCESS_ROOT_URL_HELP=Wenn Sie einen virtuellen Host verwenden
+EACCESS_TITLE=Externer Zugriffstitel
+EACCESS_TITLE_HELP=Sichtbar im oberen Menü
+EACCESS_GOBACK_URL=Link-URL zurückgeben
+EACCESS_GOBACK_URL_HELP=Wenn die URL ausgefüllt ist, wird im oberen Menü ein Link "Zurück zur Site" hinzugefügt
+EACCESS_PRIMARY_COLOR=Hauptthema Farbe
+EACCESS_PRIMARY_COLOR_HELP=Denken Sie auf den Seiten des Kundenportals daran, die CTRL + F5-Taste zu drücken oder den Browser-Cache zu leeren, nachdem Sie diesen Wert geändert haben, damit die Änderung wirksam wird
+EACCESS_PHONE=Kontakt-Telefon
+EACCESS_EMAIL=Kontakt E-mail
+EACCESS_EMAIL_HELP=Diese E-Mail-Adresse ist in der Fußzeile sichtbar
+EACCESS_ACTIVATE_MODULES=Zugängliche Module
+EACCESS_ACTIVATE_INVOICES=Rechnungen herunterladen
+EACCESS_need_some_rights=Note: Benutzerrechte sind zu konfigurieren
+EACCESS_ACTIVATE_PROPALS=Zitate herunterladen
+EACCESS_ACTIVATE_ORDERS=Bestellungen herunterladen
+EACCESS_HEADER_IMG=Hintergrundbild-URL
+EACCESS_HEADER_IMG_HELP=Sie können ein benutzerdefiniertes Bild oder eines der folgenden Bilder verwenden: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Denken Sie auf den Seiten des Kundenportals daran, die CTRL + F5-Taste zu drücken oder den Browser-Cache zu leeren, nachdem Sie diesen Wert geändert haben, damit die Änderung wirksam wird
+AccessToCustomerGate=Konsultieren Sie das Kundenportal
+EACCESS_LOGIN_EXTRA_HTML=Zusätzlicher Text wird auf der Anmeldeseite angezeigt.
+EACCESS_RGPD_MSG=GDPR-Nachricht auf dem Formular für persönliche Informationen
+EACCESS_RGPD_MSG_default=Sie können die Berichtigung ungenauer oder unvollständiger Informationen über Sie beantragen. Durch das Ändern und Senden dieses Formulars akzeptiere ich, dass die eingegebenen Daten von% s verwendet werden, damit das daraus resultierende Vertragsverhältnis gelesen und gegebenenfalls verwaltet werden kann.
+EACCESS_ACTIVATE_EXPEDITIONS=Sendungen herunterladen
+EACCESS_ACTIVATE_TICKETS=Tickets herunterladen
+
+# INDEX
+Quotations=Zitat
+QuotationsDesc=
+Orders=Commandes
+OrdersDesc=
+Invoices=Rechnungen
+InvoicesDesc=
+MySpace=Konsultieren Sie meinen Raum
+
+
+
+ForgotThePassword=Haben Sie Ihr Passwort vergessen ?
+ForgotPassword=Haben Sie Ihr Passwort vergessen ?
+Rememberme=Erinnere dich an mich.
+SignIn=Anmelden
+YouCanResetYourPasswordHere=Sie können es hier erneuern
+Renew=Erneuern
+
+# FOOTER
+GetInTouch=Den Kontakt halten
+GetInTouchDesc=Bist du bereit, dein nächstes Projekt bei uns zu starten? Rufen Sie uns an oder mailen Sie uns und wir werden uns so schnell wie möglich bei Ihnen melden!
+
+# UserInfos
+MyPersonalInfos=Meine Information
+UserInfosDesc=Ihre persönliche Information
+YourPersonnalInformations=Ihre persönliche Information
+firstname=Vorname
+lastname=Nachname
+address=Adresse
+addresszip=Postleitzahl
+town=Stadt
+exa_Edit=Bearbeiten
+User_mobile=Mobiltelefon
+Office_phone=Bürotelefon
+Office_fax=Fax
+Saved=Gerettet
+Company=Gesellschaft
+
+# 404 tpl 
+SorryThereIsNothingHere=Entschuldigung, hier ist nichts
+
+EACCESS_Nothing=Derzeit gibt es hier nichts, Geduld, Ihre Dokumente werden bald verfügbar sein
+
+Amount_HT=Menge ohne MwSt. 
+Amount_TTC=Menge inkl. MwSt.
+RemainderToPay=Noch zu zahlen
+DocumentFileNotAvailable=Dokument derzeit nicht verfügbar.
+
+
+EaBack=Rückkehr
