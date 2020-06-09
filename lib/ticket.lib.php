@@ -445,6 +445,10 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 	 * current right used in program
 	 * create, addcomment, close, open
 	 */
+	if($user->socid && $rightToTest == 'create'){
+		return true;
+	}
+
 
 	// TODO : Add hook
 	if($user->socid > 0 && intval($ticket->socid) === intval($user->socid) ){
