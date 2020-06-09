@@ -3,7 +3,7 @@
 
 function print_ticketTable($socId = 0)
 {
-	global $langs,$db;
+	global $langs,$db, $user;
 	$context = Context::getInstance();
 
 	dol_include_once('ticket/class/ticket.class.php');
@@ -15,6 +15,9 @@ function print_ticketTable($socId = 0)
 	$sql.= ' WHERE fk_soc = '. intval($socId);
 	$sql.= ' ORDER BY t.datec DESC';
 	$tableItems = $context->dbTool->executeS($sql);
+
+	print '<div><a href="'.$context->getRootUrl('ticket_card', '&action=create').'" class="btn btn-primary pull-right" >'.$langs->trans('NewTicket').'</a></div>';
+
 
 	if(!empty($tableItems))
 	{
@@ -73,7 +76,131 @@ function print_ticketTable($socId = 0)
 	}
 }
 
-function print_ticketCard($ticketId = 0, $socId = 0)
+function print_ticketCard($ticketId = 0, $socId = 0, $action = ''){
+
+	if($action == 'create'){
+		return print_ticketCard_form($ticketId = 0, $socId = 0, $action = '');
+	}
+
+	return print_ticketCard_view($ticketId, $socId,  $action);
+}
+
+
+function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
+{
+	global $langs,$db, $conf;
+	$context = Context::getInstance();
+	$out = '';
+
+	$ticketId = intval($ticketId);
+
+	dol_include_once('ticket/class/ticket.class.php');
+	dol_include_once('user/class/user.class.php');
+
+
+	/** @var Ticket $object */
+	$object = new Ticket($db);
+	if($ticketId > 0){
+		$res = $object->fetch($ticketId);
+		if($res<1){
+			print '<div class="alert alert-danger" >'.$langs->transnoentities('TicketNotFound').'<div>';
+			return;
+		}
+	}
+
+	$out .= '<!-- ticket.lib print_ticketCard_form -->';
+	//$out.= '<h5>'.$langs->trans('Ticket').' '.$object->ref.'</h5>';
+
+
+	$out .= '<form role="form" autocomplete="off" class="form" method="post"  action="'.$context->getRootUrl('ticket_card').'" >';
+
+	if($object->id > 0){
+		$out.= '<input type="hidden" name="track_id" value="'.$object->track_id.'" />';
+		$out.= '<input type="hidden" name="id" value="'.$object->id.'" />';
+	}
+
+	//include_once DOL_DOCUMENT_ROOT . '/core/class/html.formticket.class.php';
+	//$formticket = new FormTicket($db); // TODO creer une class qui etend FormTicket pour rendre les methodes compatibles
+
+	$out .= '<div class="form-ticket-message-container" >';
+	$out .= '<div class="form-group">
+				<label for="ticket-subject">'.$langs->transnoentities('TicketSubject').'</label>
+				<input required type="text" name="subject" class="form-control" id="ticket-subject" aria-describedby="ticket-subject-help" placeholder="'.$langs->transnoentities('TicketSubjectHere').'" maxlength="200">
+				<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
+			</div>';
+
+
+//	$out .= '<div class="form-group">
+//				<label for="ticket-subject">'.$langs->transnoentities('TicketSubject').'</label>';
+//	$out .=  $formticket->selectTypesTickets($object->type_code, 'update_value_type', '', 2, 1, 1, 0, 'form-control');
+//	$out .=  '<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
+//			</div>';
+
+	$out .=  '<div class="form-group">
+				<label for="ticket-message">'.$langs->transnoentities('TicketMessage').'</label>
+				<textarea required name="message" class="form-control" id="ticket-message" rows="10">'.dol_htmlentities($object->message).'</textarea>
+			</div>
+			<div class="form-btn-action-container">';
+
+		if($object->id > 0 ){
+			$out .=  '<button type="submit" class="btn btn-success pull-right" name="action" value="save" >'.$langs->transnoentities('TicketBtnSubmitSave').'</button>';
+		}
+		else{
+			$out .=  '<button type="submit" class="btn btn-success pull-right" name="action" value="savecreate"  >'.$langs->transnoentities('TicketBtnSubmitCreate').'</button>';
+		}
+
+	$out .= '
+			</div>
+		</div>
+	</form>
+	';
+
+	print $out;
+}
+
+
+/**
+ * @param Ticket $object
+ * @param string $action
+ */
+function print_ticketCard_comment_form($object, $action = '')
+{
+	global $langs,$db, $conf, $user;
+	$langs->loadLangs(array("ticket", "externalticket@externalaccess"));
+	$context = Context::getInstance();
+
+	$out = '<!-- ticket.lib START print_ticketCard_comment_form -->';
+
+	if(!checkUserTicketRight($user, $object, 'create')){
+		$out .= '<!-- not enough right -->';
+		$out .= '<!-- END print_ticketCard_comment_form -->';
+		return $out;
+	}
+
+
+	$out .= '<form role="form" autocomplete="off" class="form" method="post"  action="'.$context->getRootUrl('ticket_card').'" >';
+
+	if($object->id > 0){
+		$out.= '<input type="hidden" name="track_id" value="'.$object->track_id.'" />';
+		$out.= '<input type="hidden" name="id" value="'.$object->id.'" />';
+	}
+	$out .= '<div class="form-ticket-message-container" >';
+	$out .=  '<div class="form-group">
+				<label for="ticket-message">'.$langs->transnoentities('AddMessage').'</label>
+				<textarea required name="ticket-comment" class="form-control" id="ticket-comment" placeholder="'.$langs->transnoentities('YourCommentHere').'" rows="10">'.dol_htmlentities(GETPOST('ticket-comment')).'</textarea>
+			</div>
+			<div class="form-btn-action-container">
+				<button type="submit" class="btn btn-success pull-right" name="action" value="new-comment" >'.$langs->transnoentities('SendMessage').'</button>
+			</div>';
+
+	$out .= '</div>';
+	$out .= '</form>';
+
+	return $out;
+}
+
+
+function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 {
 	global $langs,$db, $conf;
 	$context = Context::getInstance();
@@ -99,6 +226,13 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 	}
 	$out.= getEaNavbar($context->getRootUrl('tickets', '&save_lastsearch_values=1'));
 
+	/*
+					<div class="row clearfix form-group" id="trackId">
+						<div class="col-md-4">'.$langs->transnoentities('TicketTrackId').'</div>
+						<div class="col-md-8">'.$object->track_id.'</div>
+					</div>
+	 */
+
 	$out.= '
 		<div class="container px-0">
 			<h5>'.$langs->trans('Ticket').' '.$object->ref.'</h5>
@@ -107,10 +241,6 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 					<div class="row clearfix form-group" id="subject">
 						<div class="col-md-4">'.$langs->transnoentities('Subject').'</div>
 						<div class="col-md-8">'.$object->subject.'</div>
-					</div>
-					<div class="row clearfix form-group" id="trackId">
-						<div class="col-md-4">'.$langs->transnoentities('TicketTrackId').'</div>
-						<div class="col-md-8">'.$object->track_id.'</div>
 					</div>
 					<div class="row clearfix form-group" id="status">
 						<div class="col-md-4">'.$langs->transnoentities('Status').'</div>
@@ -144,6 +274,8 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 	$object->loadCacheMsgsTicket();
 	//var_dump($object->cache_msgs_ticket);
 
+
+
 	if (!empty($object->cache_msgs_ticket))
 	{
 		require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
@@ -159,7 +291,15 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 			<ul class="timeline">';
 
 		$datelabel = "";
-		foreach ($object->cache_msgs_ticket as $key => $value)
+
+
+		$numComments = count($object->cache_msgs_ticket);
+		$iComment = 0;
+
+		// TODO : ERGO : ajouter une conf utilisateur pour le choix d'orientation des messages (penser alors a changer l'emplacement du formulaire et du #lastcomment
+		$TMessage = array_reverse($object->cache_msgs_ticket, true);
+
+		foreach ($TMessage as $value)
 		{
 			/* @var ActionComm $actionstatic */
 			$actionstatic->fetch($value['id']);
@@ -180,7 +320,7 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 			{
 //				$out.= '<li>'.dol_print_date($value['datec']).' lol </li>';
 				$out .= '<!-- timeline item -->'."\n";
-				$out .= '<li class="timeline-code-'.strtolower($actionstatic->code).'">';
+				$out .= '<li id="comment-message-'.$actionstatic->id.'" class="timeline-code-'.strtolower($actionstatic->code).'">';
 				$out .= '<!-- timeline icon -->'."\n";
 
 				$iconClass = 'fa fa-comments';
@@ -233,6 +373,10 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 
 				$out.= '<i class="'.$iconClass.' '.$colorClass.'" title="'.$pictoTitle.'">'.$img_picto.'</i>'."\n";
 
+				if(++$iComment === $numComments) {
+					$out.= '<div id="lastcomment"></div>';
+				}
+
 				$out.= '<div class="timeline-item">';
 				// Date
 				$out.= '<span class="time"><i class="fa fa-clock-o"></i> ';
@@ -283,5 +427,47 @@ function print_ticketCard($ticketId = 0, $socId = 0)
 		$out.="</div>";
 	}
 
+	$out.= '<hr/>';
+	$out.= print_ticketCard_comment_form($object);
+
 	print $out;
+}
+
+/**
+ * @param User $user
+ * @param Ticket $ticket
+ * @param string $rightToTest
+ * @return bool
+ */
+function checkUserTicketRight($user, $ticket, $rightToTest = ''){
+
+	/*
+	 * current right used in program
+	 * create, addcomment, close, open
+	 */
+
+	// TODO : Add hook
+	if($user->socid > 0 && intval($ticket->socid) === intval($user->socid) ){
+
+		if($rightToTest == 'create' || $rightToTest == 'close'){
+			return true;
+		}
+
+		$TAvailableStatus = array(
+			$ticket::STATUS_ASSIGNED,
+			$ticket::STATUS_CLOSED,
+			$ticket::STATUS_IN_PROGRESS,
+			$ticket::STATUS_WAITING,
+			$ticket::STATUS_READ,
+			$ticket::STATUS_NEED_MORE_INFO,
+			$ticket::STATUS_NOT_READ
+		);
+		if($rightToTest == 'addcomment' && in_array($ticket->statut , $TAvailableStatus)){
+			return true;
+		}
+
+
+	}
+
+	return false;
 }

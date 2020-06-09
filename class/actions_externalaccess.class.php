@@ -99,6 +99,10 @@ class Actionsexternalaccess
                 $context->desc = $langs->trans('ViewTicketsDesc');
                 $context->menu_active[] = 'tickets';
             }
+            elseif($context->controller == 'ticket_card')
+            {
+				$this->actionTicketCard($parameters, $object, $action, $hookmanager);
+            }
 			elseif($context->controller == 'default')
 			{
 				$context->title = $langs->trans('Welcome');
@@ -338,7 +342,7 @@ class Actionsexternalaccess
     public function print_ticketCard($ticketId = 0, $socId = 0)
     {
         print '<section id="section-ticket"><div class="container">';
-        print_ticketCard($ticketId, $socId);
+        print_ticketCard($ticketId, $socId, GETPOST('action'));
         print '</div></section>';
     }
 
@@ -483,4 +487,102 @@ class Actionsexternalaccess
 
 	}
 
+	public function actionTicketCard($parameters, $object, $action, $hookmanager)
+	{
+		global $langs, $user;
+		$context = Context::getInstance();
+		$langs->loadLangs(array("companies", "other", "ticket", "externalticket@externalaccess"));
+
+		dol_include_once('ticket/class/ticket.class.php');
+
+		$ticket = new Ticket($context->dbTool->db);
+		$ticketId = GETPOST('id', 'int');
+		if($ticketId > 0) {
+			$res = $ticket->fetch($ticketId);
+		}
+
+		// DO ACTIONS
+
+		if($action == "new-comment"){
+			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
+
+				$ticket->message = GETPOST('ticket-comment');
+
+				// Copy attached files (saved into $_SESSION) as linked files to ticket. Return array with final name used.
+				$resarray = $ticket->copyFilesForTicket();
+
+				$listofpaths = $resarray['listofpaths'];
+				$listofnames = $resarray['listofnames'];
+				$listofmimes = $resarray['listofmimes'];
+
+				$ret = $ticket->createTicketMessage($user, 0, $listofpaths, $listofmimes, $listofnames);
+
+				if ($ret > 0) {
+					header('Location: '.$context->getRootUrl('ticket_card', '&ticketId='.$ticket->id.'#lastcomment'));
+					exit();
+				} else {
+					$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+				}
+			}
+			else{
+				// not enough rights
+			}
+		}
+		elseif($action == 'savecreate' )
+		{
+
+			if(checkUserTicketRight($user, $ticket, 'create')){ // TODO : finish checkUserTicketRight
+
+				// Check
+				$errors = 0;
+
+				$ticket->message = GETPOST('message');
+				$ticket->subject = GETPOST('subject');
+				$ticket->fk_soc = $user->socid;
+
+				if(empty($ticket->message)){
+					$errors ++;
+					$context->setEventMessages($langs->trans('MessageIsEmpty'), 'errors');
+				}
+
+				if(empty($ticket->subject)){
+					$errors ++;
+					$context->setEventMessages($langs->trans('SubjectIsEmpty'), 'errors');
+				}
+
+				if(empty($ticket->fk_soc)){
+					$errors ++;
+					$context->setEventMessages($langs->trans('SocIsEmpty'), 'errors');
+				}
+
+				if(empty($errors)){
+					$ticket->ref = $ticket->getDefaultRef();
+					$ticket->datec = time();
+
+					$res = $ticket->create($user);
+
+					if($res>0)
+					{
+						header('Location: '.$context->getRootUrl('ticket_card', '&ticketId='.$res));
+						exit();
+					}else{
+						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+					}
+				}
+			}
+		}
+
+		// ADAPT MENU AND TITLE
+
+		$context->menu_active[] = 'tickets';
+
+		if($action == 'create'){
+			$context->title = $langs->trans('NewTicketTitle');
+			$context->desc = $langs->trans('NewTicketTitleDesc');
+		}
+		else{
+			$context->title = $langs->trans('ViewTickets');
+			$context->desc = $langs->trans('ViewTicketsDesc');
+		}
+	}
 }
