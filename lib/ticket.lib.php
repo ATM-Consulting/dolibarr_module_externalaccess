@@ -443,7 +443,7 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 
 	/*
 	 * current right used in program
-	 * create, addcomment, close, open
+	 * create, comment, close, open
 	 */
 	if($user->socid && $rightToTest == 'create'){
 		return true;
@@ -453,7 +453,7 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 	// TODO : Add hook
 	if($user->socid > 0 && intval($ticket->socid) === intval($user->socid) ){
 
-		if($rightToTest == 'create' || $rightToTest == 'close'){
+		if($rightToTest == 'close'){
 			return true;
 		}
 
@@ -466,7 +466,7 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 			$ticket::STATUS_NEED_MORE_INFO,
 			$ticket::STATUS_NOT_READ
 		);
-		if($rightToTest == 'addcomment' && in_array($ticket->statut , $TAvailableStatus)){
+		if($rightToTest == 'comment' && in_array($ticket->statut , $TAvailableStatus)){
 			return true;
 		}
 
