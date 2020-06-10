@@ -166,6 +166,10 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 function print_ticketCard_comment_form($object, $action = '')
 {
 	global $langs,$db, $conf, $user;
+
+	dol_include_once('custom/externalaccess/class/ExternalFormTicket.class.php');
+	$externalForm = new ExternalFormTicket($db);
+
 	$langs->loadLangs(array("ticket", "externalticket@externalaccess"));
 	$context = Context::getInstance();
 
@@ -177,24 +181,30 @@ function print_ticketCard_comment_form($object, $action = '')
 		return $out;
 	}
 
-
-	$out .= '<form role="form" autocomplete="off" class="form" method="post"  action="'.$context->getRootUrl('ticket_card').'" >';
+	$out .= '<form role="form" autocomplete="off" class="form" method="post" enctype="multipart/form-data" action="'.$context->getRootUrl('ticket_card').'&ticketId='.$object->id.'#form-ticket-message-container">';
 
 	if($object->id > 0){
 		$out.= '<input type="hidden" name="track_id" value="'.$object->track_id.'" />';
 		$out.= '<input type="hidden" name="id" value="'.$object->id.'" />';
 	}
-	$out .= '<div class="form-ticket-message-container" >';
+	$out .= '<div id="form-ticket-message-container" class="form-ticket-message-container" >';
+	//TODO j'ai enlevé le required du commentaire (message), ajouter la vérification dans doAction.
 	$out .=  '<div class="form-group">
-				<label for="ticket-message">'.$langs->transnoentities('AddMessage').'</label>
-				<textarea required name="ticket-comment" class="form-control" id="ticket-comment" placeholder="'.$langs->transnoentities('YourCommentHere').'" rows="10">'.dol_htmlentities(GETPOST('ticket-comment')).'</textarea>
-			</div>
-			<div class="form-btn-action-container">
-				<button type="submit" class="btn btn-success pull-right" name="action" value="new-comment" >'.$langs->transnoentities('SendMessage').'</button>
-			</div>';
-
+				<label for="ticket-comment">'.$langs->transnoentities('AddMessage').'</label>
+				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="'.$langs->transnoentities('YourCommentHere').'" rows="10">'.dol_htmlentities(GETPOST('ticket-comment')).'</textarea>';
 	$out .= '</div>';
-	$out .= '</form>';
+	//Files
+	$externalForm->track_id = $object->track_id;
+	$externalForm->ref = $object->ref;
+	$externalForm->id = $object->id;
+	$externalForm->withfile = 2;
+	$externalForm->withcancel = 1;
+	$externalForm->param = array('fk_user_create' => $user->id);
+	$out .=	'<div class="form-group">';
+	$out .= $externalForm->showFilesForm();
+	$out .= '</div>';
+	$out .= '<button type="submit" class="btn btn-success pull-right" name="action" value="new-comment" >'.$langs->transnoentities('SendMessage').'</button>';
+	$out .= '</div></form>';
 
 	return $out;
 }

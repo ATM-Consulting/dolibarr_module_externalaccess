@@ -1,5 +1,4 @@
 <?php
-
 // For optional tuning. Enabled if environment variable MAIN_SHOW_TUNING_INFO is defined.
 $micro_start_time=0;
 if (! empty($_SERVER['MAIN_SHOW_TUNING_INFO']))

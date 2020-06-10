@@ -503,10 +503,33 @@ class Actionsexternalaccess
 
 		// DO ACTIONS
 
+		if($action == "add-comment-file" || $action == "new-comment"){
+			global $conf;
+			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
+				var_dump($_FILES);
+				/*include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+
+				// Set tmp directory TODO Use a dedicated directory for temp mails files
+				$vardir = $conf->ticket->dir_output;
+				$upload_dir_tmp = $vardir.'/temp/'.session_id();
+				if (!dol_is_dir($upload_dir_tmp)) {
+					dol_mkdir($upload_dir_tmp);
+				}
+
+				dol_add_file_process($upload_dir_tmp, 0, 0, 'addedfile', '', null, '', 0);
+				$action = 'create_ticket';*/
+			}
+		}
+
 		if($action == "new-comment"){
 			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
 
 				$ticket->message = GETPOST('ticket-comment');
+
+				if ($ticket->message == "") {
+					$context->setEventMessages($langs->trans('MissingComment'), 'warnings');
+					header('Location: '.$context->getRootUrl('ticket_card', '&ticketId='.$ticket->id.'#lastcomment'));
+				}
 
 				// Copy attached files (saved into $_SESSION) as linked files to ticket. Return array with final name used.
 				$resarray = $ticket->copyFilesForTicket();
