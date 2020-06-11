@@ -489,7 +489,7 @@ class Actionsexternalaccess
 
 	public function actionTicketCard($parameters, $object, $action, $hookmanager)
 	{
-		global $langs, $user;
+		global $langs, $user, $conf;
 		$context = Context::getInstance();
 		$langs->loadLangs(array("companies", "other", "mails", "ticket", "externalticket@externalaccess"));
 
@@ -503,6 +503,18 @@ class Actionsexternalaccess
 		}
 
 		// DO ACTIONS
+
+		// Remove file
+		if (GETPOST('removedfile', 'alpha') && !GETPOST('add', 'alpha')) {
+			include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+
+			// Set tmp directory
+			$vardir = $conf->ticket->dir_output.'/';
+			$upload_dir_tmp = $vardir.'/temp/'.session_id();
+
+			// TODO Delete only files that was uploaded from email form
+			dol_remove_file_process($_POST['removedfile'], 0, 0);
+		}
 
 		if($action == "add-comment-file" || $action == "new-comment"){
 			global $conf;

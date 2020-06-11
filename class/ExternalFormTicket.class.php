@@ -33,9 +33,9 @@ class ExternalFormTicket extends FormTicket
 			if (count($listofpaths)) {
 				foreach ($listofpaths as $key => $val) {
 					$out .= '<div id="attachfile_'.$key.'">';
-					$out .= img_mime($listofnames[$key]).' '.$listofnames[$key];
+					$out .= img_mime($listofnames[$key]).' '.$listofnames[$key]; // return font awesome
 					if (!$this->withfilereadonly) {
-						$out .= ' <input type="image" style="border: 0px;" src="'.DOL_URL_ROOT.'/theme/'.$conf->theme.'/img/delete.png" value="'.($key + 1).'" class="removedfile reposition" id="removedfile_'.$key.'" name="removedfile_'.$key.'" />';
+						$out .= ' <button type="submit" value="'.($key + 1).'" class="removedfile reposition" id="removedfile_'.$key.'" name="removedfile_'.$key.'" /><i class="fa fa-trash"></i></button>';
 					}
 				}
 			} else {
