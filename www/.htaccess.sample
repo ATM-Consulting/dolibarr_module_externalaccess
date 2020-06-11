@@ -1,0 +1,4 @@
+# Adapt this file to your need and apache version
+
+# Allow public connexion if your dolibar is protect by http auth or other
+Satisfy Any
