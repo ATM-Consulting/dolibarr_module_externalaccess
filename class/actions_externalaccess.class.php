@@ -581,7 +581,7 @@ class Actionsexternalaccess
 		elseif($action == 'savecreate' )
 		{
 
-			if(checkUserTicketRight($user, $ticket, 'create')){ // TODO : finish checkUserTicketRight
+			if(checkUserTicketRight($user, $ticket, 'create')){
 
 				// Check
 				$errors = 0;
