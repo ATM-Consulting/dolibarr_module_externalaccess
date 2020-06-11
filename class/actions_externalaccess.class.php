@@ -62,12 +62,11 @@ class Actionsexternalaccess
 	public function doActions($parameters, &$object, &$action, $hookmanager)
 	{
 		$error = 0; // Error counter
-		global $langs;
+		global $langs, $conf;
 
 		if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 		{
 		    $context = Context::getInstance();
-
 
 		    if($context->controller == 'invoices')
 		    {
@@ -93,13 +92,13 @@ class Actionsexternalaccess
 				$context->desc = $langs->trans('ViewExpeditionsDesc');
 				$context->menu_active[] = 'expeditions';
 			}
-            elseif($context->controller == 'tickets')
+            elseif($context->controller == 'tickets' && !empty($conf->ticket->enabled))
             {
                 $context->title = $langs->trans('ViewTickets');
                 $context->desc = $langs->trans('ViewTicketsDesc');
                 $context->menu_active[] = 'tickets';
             }
-            elseif($context->controller == 'ticket_card')
+            elseif($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
             {
 				$this->actionTicketCard($parameters, $object, $action, $hookmanager);
             }
@@ -271,7 +270,7 @@ class Actionsexternalaccess
 				}
 				return 1;
 			}
-            elseif($context->controller == 'tickets')
+            elseif($context->controller == 'tickets' && !empty($conf->ticket->enabled))
             {
                 $context->setControllerFound();
                 if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
@@ -280,7 +279,7 @@ class Actionsexternalaccess
                 }
                 return 1;
             }
-            elseif($context->controller == 'ticket_card')
+            elseif($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
             {
                 $context->setControllerFound();
 				$ticketId = GETPOST('id', 'int');
