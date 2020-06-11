@@ -59,6 +59,9 @@ if (empty($conf) || ! is_object($conf))
     <!-- Custom scripts for this template -->
     <script src="<?php print $context->getRootUrl(); ?>js/creative.js"></script>
 
+	<!-- Custom include ckeditor -->
+	<script src="<?php print $context->getRootUrl(); ?>vendor/ckeditor/ckeditor.js"></script>
+
 <?php
     if (! empty($conf->global->MAIN_FAVICON_URL)){
         $favicon=$conf->global->MAIN_FAVICON_URL;

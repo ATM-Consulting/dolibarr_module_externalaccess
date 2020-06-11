@@ -385,11 +385,14 @@ header.masthead p {
 }
 
 .btn {
-  font-weight: 700;
-  text-transform: uppercase;
   border: none;
   border-radius: 300px;
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
+}
+
+.btn-strong{
+	font-weight: 700;
+	text-transform: uppercase;
 }
 
 .btn-xl {
@@ -861,4 +864,9 @@ body.iframe .container {
 	border-color: darkred;
 }
 
-<?php include_once __DIR__ . '/timeline.inc.php'; ?>
+<?php
+
+include_once __DIR__ . '/timeline.inc.php';
+include_once __DIR__ . '/status.inc.php';
+
+
