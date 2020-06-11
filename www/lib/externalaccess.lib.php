@@ -56,8 +56,8 @@ function getEaModalConfirm($htmlid, $title, $body, $action, $doAction)
 
 						<!-- Modal footer -->
 						<div class="modal-footer">
-							<button type="button" class="btn btn-secondary mr-auto" data-dismiss="modal">'.$langs->trans('Cancel').'</button>
-							<button type="submit" class="btn btn-primary ">'.$langs->trans('Confirm').'</button>
+							<button type="button" class="btn btn-secondary btn-strong mr-auto" data-dismiss="modal">'.$langs->trans('Cancel').'</button>
+							<button type="submit" class="btn btn-primary btn-strong ">'.$langs->trans('Confirm').'</button>
 						</div>
 					</form>
 				</div>

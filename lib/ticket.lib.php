@@ -16,7 +16,7 @@ function print_ticketTable($socId = 0)
 	$sql.= ' ORDER BY t.datec DESC';
 	$tableItems = $context->dbTool->executeS($sql);
 
-	print '<div><a href="'.$context->getRootUrl('ticket_card', '&action=create').'" class="btn btn-primary pull-right" >'.$langs->trans('NewTicket').'</a></div>';
+	print '<div><a href="'.$context->getRootUrl('ticket_card', '&action=create').'" class="btn btn-primary btn-strong pull-right" >'.$langs->trans('NewTicket').'</a></div>';
 
 
 	if(!empty($tableItems))
@@ -39,7 +39,7 @@ function print_ticketTable($socId = 0)
 			$object->fetch($item->rowid);
 
 			print '<tr>';
-			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$context->getRootUrl('ticket_card', '&ticketId='.$item->rowid).'">'.$object->ref.'</a></td>';
+			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$context->getRootUrl('ticket_card', '&id='.$item->rowid).'">'.$object->ref.'</a></td>';
 			print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
 			print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
 			print ' <td data-search="'.$object->type_label.'" data-order="'.$object->type_label.'" >'.$object->type_label.'</td>';
@@ -140,14 +140,19 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 				<label for="ticket-message">'.$langs->transnoentities('TicketMessage').'</label>
 				<textarea required name="message" class="form-control" id="ticket-message" rows="10">'.dol_htmlentities($object->message).'</textarea>
 			</div>
-			<div class="form-btn-action-container">';
+	';
 
-		if($object->id > 0 ){
-			$out .=  '<button type="submit" class="btn btn-success pull-right" name="action" value="save" >'.$langs->transnoentities('TicketBtnSubmitSave').'</button>';
-		}
-		else{
-			$out .=  '<button type="submit" class="btn btn-success pull-right" name="action" value="savecreate"  >'.$langs->transnoentities('TicketBtnSubmitCreate').'</button>';
-		}
+	if (empty($conf->global->EACCESS_DISABLE_CKEDITOR)){
+		$out .= '<script>CKEDITOR.replace( "message" );</script>';
+	}
+
+	$out .=  '<div class="form-btn-action-container">';
+	if($object->id > 0 ){
+		$out .=  '<button type="submit" class="btn btn-success btn-strong pull-right" name="action" value="save" >'.$langs->transnoentities('TicketBtnSubmitSave').'</button>';
+	}
+	else{
+		$out .=  '<button type="submit" class="btn btn-success btn-strong pull-right" name="action" value="savecreate"  >'.$langs->transnoentities('TicketBtnSubmitCreate').'</button>';
+	}
 
 	$out .= '
 			</div>
@@ -160,12 +165,14 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 
 /**
- * @param Ticket $object
+ * @param Ticket $ticket
  * @param string $action
+ * @param int $timelineIntegration  true add timeline , embed, false to disable
+ * @return string
  */
-function print_ticketCard_comment_form($object, $action = '')
+function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegration = 1)
 {
-	global $langs,$db, $conf, $user;
+	global $langs, $db, $conf, $user;
 
 	dol_include_once('custom/externalaccess/class/ExternalFormTicket.class.php');
 	$externalForm = new ExternalFormTicket($db);
@@ -175,37 +182,117 @@ function print_ticketCard_comment_form($object, $action = '')
 
 	$out = '<!-- ticket.lib START print_ticketCard_comment_form -->';
 
-	if(!checkUserTicketRight($user, $object, 'create')){
+	if (!checkUserTicketRight($user, $ticket, 'create')) {
 		$out .= '<!-- not enough right -->';
 		$out .= '<!-- END print_ticketCard_comment_form -->';
 		return $out;
 	}
 
-	$out .= '<form role="form" autocomplete="off" class="form" method="post" enctype="multipart/form-data" action="'.$context->getRootUrl('ticket_card').'&ticketId='.$object->id.'#form-ticket-message-container">';
+	$out .= '<form role="form" autocomplete="off" class="form" method="post" enctype="multipart/form-data" action="' . $context->getRootUrl('ticket_card') . '&id=' . $ticket->id . '&time=' . time() . '#form-ticket-message-container">';
+	if ($timelineIntegration) {
+		if ($timelineIntegration != 'embed') $out .= '<ul class="timeline">';
 
-	if($object->id > 0){
-		$out.= '<input type="hidden" name="track_id" value="'.$object->track_id.'" />';
-		$out.= '<input type="hidden" name="id" value="'.$object->id.'" />';
+		$out .= '<li class="time-label"><span class="timeline-badge-date"><i class="fa fa-comments" ></i> ' . $langs->transnoentities('AddMessage') . '</span></li>';
+		$out .= '<li class="timeline-code-ticket_msg">';
+		$out .= '<div class="timeline-item">';
+		$out .= '<div id="form-ticket-message-container" class="' . ($timelineIntegration ? 'timeline-body' : '') . ' form-ticket-message-container">';
 	}
-	$out .= '<div id="form-ticket-message-container" class="form-ticket-message-container" >';
-	//TODO j'ai enlevé le required du commentaire (message), ajouter la vérification dans doAction.
-	$out .=  '<div class="form-group">
-				<label for="ticket-comment">'.$langs->transnoentities('AddMessage').'</label>
-				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="'.$langs->transnoentities('YourCommentHere').'" rows="10">'.dol_htmlentities(GETPOST('ticket-comment')).'</textarea>';
+
+	if ($ticket->id > 0) {
+		$out .= '<input type="hidden" name="track_id" value="' . $ticket->track_id . '" />';
+		$out .= '<input type="hidden" name="id" value="' . $ticket->id . '" />';
+	}
+
+
+	$out .= '<div class="form-group">
+				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment')) . '</textarea>';
 	$out .= '</div>';
+
+	if (empty($conf->global->EACCESS_DISABLE_CKEDITOR)){
+		$out .= '<script>CKEDITOR.replace( "ticket-comment" );</script>';
+	}
+
+
 	//Files
-	$externalForm->track_id = $object->track_id;
-	$externalForm->ref = $object->ref;
-	$externalForm->id = $object->id;
+	$externalForm->track_id = $ticket->track_id;
+	$externalForm->ref = $ticket->ref;
+	$externalForm->id = $ticket->id;
 	$externalForm->withfile = 2;
 	$externalForm->withcancel = 1;
 	$externalForm->param = array('fk_user_create' => $user->id);
 	$out .=	'<div class="form-group">';
 	$out .= $externalForm->showFilesForm();
 	$out .= '</div>';
-	$out .= '<button type="submit" class="btn btn-success pull-right" name="action" value="new-comment" >'.$langs->transnoentities('SendMessage').'</button>';
-	$out .= '</div></form>';
 
+	$out .= '</div><!-- end timeline-body -->';
+
+	$out .=	'<div class="'.($timelineIntegration?'timeline-footer':'').' text-right">';
+
+
+
+
+	$status = (int)$ticket->fk_statut; // TODO : vérifier sur les nouvelles version si le nom du champ na pas changé
+
+	$out .=	'<div class="btn-group">';
+
+	$btnNewComment = '<button type="submit" class="btn btn-success" name="action" value="new-comment" data-toggle="tooltip" title="'.dol_htmlentities($langs->transnoentities('SendMessageHelp'),ENT_QUOTES).'"  >'.$langs->transnoentities('SendMessage').'</button>';
+	$btnCommentAndReopen = '<button type="submit" class="btn btn-primary" name="action" value="new-comment-reopen" data-toggle="tooltip" title="'.dol_htmlentities($langs->transnoentities('SendMessageAndReopenHelp'),ENT_QUOTES).'" >'.$langs->transnoentities('SendMessageAndReopen').'</button>';
+	$dropDown = false;
+	if (in_array($status, array(
+		$ticket::STATUS_NOT_READ,
+		$ticket::STATUS_READ,
+		$ticket::STATUS_ASSIGNED,
+		$ticket::STATUS_IN_PROGRESS,
+		$ticket::STATUS_WAITING))
+	){
+		$out .=	$btnNewComment;
+	}
+	elseif ($status == $ticket::STATUS_NEED_MORE_INFO) {
+		$out .=	'<button type="submit" class="btn btn-primary" name="action" value="new-comment"  data-toggle="tooltip" title="'.dol_htmlentities($langs->transnoentities('SendAnswerMessageHelp'),ENT_QUOTES).'"  >'.$langs->transnoentities('SendAnswerMessage').'</button>';
+		$out .=	'<button type="submit" class="btn btn-success" name="action" value="new-comment-close" >'.$langs->transnoentities('SendAnswerMessageAndClose').'</button>';
+
+		//$dropDown = true;
+	}
+	elseif ($status == $ticket::STATUS_CANCELED) {
+		if (!checkUserTicketRight($user, $ticket, 'reopen')) {
+			$out .=	$btnCommentAndReopen;
+		}
+	}
+	elseif ($status == $ticket::STATUS_CLOSED) {
+		$out .= '<button type="submit" class="btn btn-success" name="action" value="new-comment" data-toggle="tooltip" title="'.dol_htmlentities($langs->transnoentities('SendMessageOnClosedStatusHelp'),ENT_QUOTES).'"  >'.$langs->transnoentities('SendMessageOnClosedStatus').'</button>';
+		if (!checkUserTicketRight($user, $ticket, 'reopen')) {
+			$out .=	$btnCommentAndReopen;
+		}
+		//$dropDown = true;
+	}
+
+	if($dropDown){
+		// j'ai préparé un drop down pour plus tard au niveau interface utilisateur
+		$out .= '<button type="button" class="btn btn-secondary btn-strong dropdown-toggle dropdown-toggle-split" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><span class="sr-only">'.$langs->transnoentities('SendCommentOtherActions').'</span> <i class="fa fa-cog" aria-hidden="true"></i> </button>';
+		$out .= '<div class="dropdown-menu">';
+
+		if ($status == $ticket::STATUS_NEED_MORE_INFO) {
+			$out .= '<button type="submit" class="dropdown-item" name="action" value="new-comment-test" >'.$langs->transnoentities('test').'</button>';
+		}
+		elseif ($status == $ticket::STATUS_CLOSED) {
+			$out .= '<button type="submit" class="dropdown-item" name="action" value="new-comment-test" >'.$langs->transnoentities('test').'</button>';
+		}
+
+		$out .= '</div>';
+	}
+
+
+	$out .=	'</div"><!-- end btn-group -->';
+
+	$out .= '</div><!-- end timeline-footer -->';
+
+	if($timelineIntegration) {
+		$out .= '</div><!-- end timeline-item -->';
+		$out .= '</li>';
+		if ($timelineIntegration != 'embed') $out .= '</ul>';
+	}
+
+	$out .= '</form><!-- end form -->';
 	return $out;
 }
 
@@ -222,8 +309,13 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	$langs->load('ticket');
 
 	/** @var Ticket $object */
-	$object = new Ticket($db);
-	$object->fetch($ticketId);
+	if(!empty($context->fetchedTicket)){
+		$object = $context->fetchedTicket;
+	}else{
+		$object = new Ticket($db);
+		$object->fetch($ticketId);
+	}
+
 	$author = '';
 	$fuser = new User($db);
 
@@ -254,7 +346,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					</div>
 					<div class="row clearfix form-group" id="status">
 						<div class="col-md-4">'.$langs->transnoentities('Status').'</div>
-						<div class="col-md-8">'.$object->getLibStatut().'</div>
+						<div class="col-md-8">'.ticketLibStatut($object).'</div>
 					</div>
 					<div class="row clearfix form-group" id="Type">
 						<div class="col-md-4">'.$langs->transnoentities('Type').'</div>
@@ -484,4 +576,62 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 	}
 
 	return false;
+}
+
+
+/**
+ *    Return status label of object
+ *
+ * @param Ticket $ticket
+ * @param int $mode
+ * @return     string                 Label
+ */
+function ticketLibStatut(Ticket $ticket, $mode = 2)
+{
+	// phpcs:enable
+	global $langs;
+
+	if(intval(DOL_VERSION) > 11){
+		return $ticket->getLibStatut($mode);
+	}
+
+	$status = $ticket->fk_statut;
+
+	$ticket_statuts_short = $ticket_statuts = array($ticket::STATUS_NOT_READ => 'Unread', $ticket::STATUS_READ => 'Read', $ticket::STATUS_ASSIGNED => 'Assigned', $ticket::STATUS_IN_PROGRESS => 'InProgress', $ticket::STATUS_NEED_MORE_INFO => 'NeedMoreInformation', $ticket::STATUS_WAITING => 'Suspended', $ticket::STATUS_CLOSED => 'Closed', $ticket::STATUS_CANCELED => 'Canceled');
+
+	$labelStatus = $ticket_statuts[$status];
+	$labelStatusShort = $ticket_statuts_short[$status];
+
+	if ($status == $ticket::STATUS_NOT_READ) {
+		$statusType = 'status0';
+	}
+	elseif ($status == $ticket::STATUS_READ) {
+		$statusType = 'status1';
+	}
+	elseif ($status == $ticket::STATUS_ASSIGNED) {
+		$statusType = 'status3';
+	}
+	elseif ($status == $ticket::STATUS_IN_PROGRESS) {
+		$statusType = 'status4';
+	}
+	elseif ($status == $ticket::STATUS_WAITING) {
+		$statusType = 'status3';
+	}
+	elseif ($status == $ticket::STATUS_NEED_MORE_INFO) {
+		$statusType = 'status9';
+	}
+	elseif ($status == $ticket::STATUS_CANCELED) {
+		$statusType = 'status9';
+	}
+	elseif ($status == $ticket::STATUS_CLOSED) {
+		$statusType = 'status6';
+	}
+	else {
+		$labelStatus = $langs->trans('Unknown');
+		$labelStatusShort = $langs->trans('Unknown');
+		$statusType = 'status0';
+		$mode = 0;
+	}
+
+	return dolGetStatus($langs->trans($labelStatus), $langs->trans($labelStatusShort), '', $statusType, $mode);
 }

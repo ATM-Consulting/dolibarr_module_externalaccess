@@ -283,7 +283,7 @@ class Actionsexternalaccess
             elseif($context->controller == 'ticket_card')
             {
                 $context->setControllerFound();
-				$ticketId = GETPOST('ticketId', 'int');
+				$ticketId = GETPOST('id', 'int');
                 if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
                 {
                     $this->print_ticketCard($ticketId, $user->societe_id);
@@ -341,7 +341,7 @@ class Actionsexternalaccess
 
     public function print_ticketCard($ticketId = 0, $socId = 0)
     {
-        print '<section id="section-ticket"><div class="container">';
+        print '<section id="section-ticket-card" class="type-content"><div class="container">';
         print_ticketCard($ticketId, $socId, GETPOST('action'));
         print '</div></section>';
     }
@@ -491,7 +491,7 @@ class Actionsexternalaccess
 	{
 		global $langs, $user;
 		$context = Context::getInstance();
-		$langs->loadLangs(array("companies", "other", "ticket", "externalticket@externalaccess"));
+		$langs->loadLangs(array("companies", "other", "mails", "ticket", "externalticket@externalaccess"));
 
 		dol_include_once('ticket/class/ticket.class.php');
 
@@ -499,6 +499,7 @@ class Actionsexternalaccess
 		$ticketId = GETPOST('id', 'int');
 		if($ticketId > 0) {
 			$res = $ticket->fetch($ticketId);
+			$context->fetchedTicket = $ticket;
 		}
 
 		// DO ACTIONS
@@ -506,8 +507,8 @@ class Actionsexternalaccess
 		if($action == "add-comment-file" || $action == "new-comment"){
 			global $conf;
 			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
-				var_dump($_FILES);
-				/*include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
+
+				include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 
 				// Set tmp directory TODO Use a dedicated directory for temp mails files
 				$vardir = $conf->ticket->dir_output;
@@ -517,18 +518,20 @@ class Actionsexternalaccess
 				}
 
 				dol_add_file_process($upload_dir_tmp, 0, 0, 'addedfile', '', null, '', 0);
-				$action = 'create_ticket';*/
+
 			}
 		}
 
-		if($action == "new-comment"){
+		$newCommentActions = array('new-comment', 'new-comment-close', 'new-comment-reopen');
+		if(in_array($action, $newCommentActions)){
 			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
 
 				$ticket->message = GETPOST('ticket-comment');
 
-				if ($ticket->message == "") {
-					$context->setEventMessages($langs->trans('MissingComment'), 'warnings');
-					header('Location: '.$context->getRootUrl('ticket_card', '&ticketId='.$ticket->id.'#lastcomment'));
+				if (empty($ticket->message)) {
+					$context->setEventMessages($langs->trans('TicketCommentMissing'), 'warnings');
+					header('Location: '.$context->getRootUrl('ticket_card', '&id='.$ticket->id.'&time='.microtime().'#form-ticket-message-container'));
+					exit;
 				}
 
 				// Copy attached files (saved into $_SESSION) as linked files to ticket. Return array with final name used.
@@ -538,10 +541,34 @@ class Actionsexternalaccess
 				$listofnames = $resarray['listofnames'];
 				$listofmimes = $resarray['listofmimes'];
 
+
+				// MANAGE STATUS
+				if($action == 'new-comment-reopen'){
+					$ticket->setStatut($ticket::STATUS_NOT_READ);
+				}elseif($action == 'new-comment-close'){
+					$ticket->setStatut($ticket::STATUS_CLOSED);
+				}
+				elseif (in_array($ticket->fk_statut, array(
+						//$ticket::STATUS_NOT_READ,
+						//$ticket::STATUS_READ,
+						//$ticket::STATUS_ASSIGNED,
+						//$ticket::STATUS_IN_PROGRESS,
+						//$ticket::STATUS_WAITING,
+						$ticket::STATUS_NEED_MORE_INFO,
+						//$ticket::STATUS_CANCELED,
+						//$ticket::STATUS_CLOSED
+				))){
+					// Leave status as is
+					$ticket->setStatut($ticket::STATUS_NOT_READ);
+				}
+				else{
+					// Leave status as is
+				}
+
 				$ret = $ticket->createTicketMessage($user, 0, $listofpaths, $listofmimes, $listofnames);
 
 				if ($ret > 0) {
-					header('Location: '.$context->getRootUrl('ticket_card', '&ticketId='.$ticket->id.'#lastcomment'));
+					header('Location: '.$context->getRootUrl('ticket_card', '&id='.$ticket->id.'#lastcomment'));
 					exit();
 				} else {
 					$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
@@ -586,7 +613,7 @@ class Actionsexternalaccess
 
 					if($res>0)
 					{
-						header('Location: '.$context->getRootUrl('ticket_card', '&ticketId='.$res));
+						header('Location: '.$context->getRootUrl('ticket_card', '&id='.$res));
 						exit();
 					}else{
 						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
@@ -596,12 +623,15 @@ class Actionsexternalaccess
 		}
 
 		// ADAPT MENU AND TITLE
-
 		$context->menu_active[] = 'tickets';
 
 		if($action == 'create'){
 			$context->title = $langs->trans('NewTicketTitle');
 			$context->desc = $langs->trans('NewTicketTitleDesc');
+		}
+		elseif($ticket->id > 0){
+			$context->title = $langs->trans('ViewTickets').' '.$ticket->ref;
+			$context->desc = $ticket->subject;
 		}
 		else{
 			$context->title = $langs->trans('ViewTickets');

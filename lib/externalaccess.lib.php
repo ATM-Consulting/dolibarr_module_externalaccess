@@ -163,7 +163,7 @@ function print_invoiceTable($socId = 0)
 
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
                 $viewLink = $object->ref;
@@ -272,7 +272,7 @@ function print_propalTable($socId = 0)
 
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$downloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$downloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$downloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
                 $viewLink = $object->ref;
@@ -377,7 +377,7 @@ function print_orderListTable($socId = 0)
 
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
                 $viewLink = $object->ref;
@@ -486,7 +486,7 @@ function print_expeditionTable($socId = 0)
 
 			if(!empty($object->last_main_doc)){
 				$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-				$downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+				$downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
 			}
 			else{
 				$viewLink = $object->ref;
@@ -902,7 +902,7 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'forcedownload' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'forcedownload' => '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 //'statut' => $object->getLibStatut(0),
             );
 
@@ -1044,7 +1044,7 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'link' => '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 'statut' => $object->getLibStatut(0)
             );
 
@@ -1186,7 +1186,7 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a class="'.$disabledclass.'" href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary '.$disabledclass.'" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'link' => '<a class="btn btn-xs btn-primary btn-strong '.$disabledclass.'" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 'statut' => $object->getLibStatut(0),
                 'fin_validite' => dol_print_date($object->fin_validite)
             );
