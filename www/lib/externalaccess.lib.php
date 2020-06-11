@@ -94,7 +94,7 @@ function getEaNavbar($url_back='', $url_add='', $url_edit='')
 
 
 /**
- *  Return a link to the user card (with optionaly the picto)
+ *  Return a link to the user card (with optionally the picto)
  *    Use this->id,this->lastname, this->firstname
  *
  * @param User $user

@@ -119,9 +119,6 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 		$out.= '<input type="hidden" name="id" value="'.$object->id.'" />';
 	}
 
-	//include_once DOL_DOCUMENT_ROOT . '/core/class/html.formticket.class.php';
-	//$formticket = new FormTicket($db); // TODO creer une class qui etend FormTicket pour rendre les methodes compatibles
-
 	$out .= '<div class="form-ticket-message-container" >';
 	$out .= '<div class="form-group">
 				<label for="ticket-subject">'.$langs->transnoentities('TicketSubject').'</label>
@@ -129,10 +126,9 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 				<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
 			</div>';
 
-
 //	$out .= '<div class="form-group">
-//				<label for="ticket-subject">'.$langs->transnoentities('TicketSubject').'</label>';
-//	$out .=  $formticket->selectTypesTickets($object->type_code, 'update_value_type', '', 2, 1, 1, 0, 'form-control');
+//				<label for="ticket-type-code">'.$langs->transnoentities('TicketTypeCode').'</label>';
+//	$out .=  $formticket->selectTypesTickets($object->type_code, 'ticket-type-code', '', 2, 1, 1, 0, 'form-control');
 //	$out .=  '<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
 //			</div>';
 
