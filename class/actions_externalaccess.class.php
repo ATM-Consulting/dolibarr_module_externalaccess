@@ -499,8 +499,10 @@ class Actionsexternalaccess
 		if($ticketId > 0) {
 			$res = $ticket->fetch($ticketId);
 			$context->fetchedTicket = $ticket;
+			if($object->id != $user->socid){
+				return null;
+			}
 		}
-
 		// DO ACTIONS
 
 		// Remove file

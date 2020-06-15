@@ -31,3 +31,5 @@ TicketCommentMissing = Vous devez ajouter un message !
 SendFile = Envoyer le fichier
 AddFileToComment = Ajouter le fichier
 SendCommentOtherActions = choisir une autre action
+SortMessagesDesc = Trier les messages du dernier au premier
+SortMessagesAsc = Trier les messages du premier au dernier
