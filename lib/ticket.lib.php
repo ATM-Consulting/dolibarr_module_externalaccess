@@ -138,7 +138,7 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 			</div>
 	';
 
-	if (empty($conf->global->EACCESS_DISABLE_CKEDITOR)){
+	if (!empty($conf->global->FCKEDITOR_ENABLE_TICKET)){
 		$out .= '<script>CKEDITOR.replace( "message" );</script>';
 	}
 
@@ -204,7 +204,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment')) . '</textarea>';
 	$out .= '</div>';
 
-	if (empty($conf->global->EACCESS_DISABLE_CKEDITOR)){
+	if (!empty($conf->global->FCKEDITOR_ENABLE_TICKET)){
 		$out .= '<script>CKEDITOR.replace( "ticket-comment" );</script>';
 	}
 
@@ -295,7 +295,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 
 function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 {
-	global $langs,$db, $conf;
+	global $langs,$db, $conf, $user;
 	$context = Context::getInstance();
 	$out = '';
 
@@ -310,6 +310,11 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	}else{
 		$object = new Ticket($db);
 		$object->fetch($ticketId);
+	}
+
+	if(empty($object->id)  || $object->fk_soc != $user->socid){
+		$context->controller_found = false;
+		return '';
 	}
 
 	$author = '';
@@ -377,11 +382,26 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	if (!empty($object->cache_msgs_ticket))
 	{
 		require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
+		require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
 		$actionstatic = new ActionComm($db);
 
+		// Sort messages
+		$sortMsg = !empty($user->conf->EA_TICKET_MSG_SORT_ORDER)?$user->conf->EA_TICKET_MSG_SORT_ORDER:'asc';
+		$getSortMsg = GETPOST('sortmsg');
+		if(!empty($getSortMsg) && in_array($getSortMsg, array('asc','desc'))){
+			$sortMsg = $getSortMsg;
+			dol_set_user_param($db, $conf,$user, array('EA_TICKET_MSG_SORT_ORDER' => $sortMsg));
+		}
+
+		if($sortMsg == 'asc'){
+			$sortBtn = '<a class="pull-right btn btn-light" data-toggle="tooltip" title="'.$langs->trans('SortMessagesDesc').'" href="'.$context->getRootUrl('ticket_card', '&id='.$object->id.'&sortmsg=desc').'" ><i class="fa fa-sort-numeric-desc"></i></a>';
+		}else{
+			$sortBtn = '<a class="pull-right btn btn-light" data-toggle="tooltip" title="'.$langs->trans('SortMessagesAsc').'"  href="'.$context->getRootUrl('ticket_card', '&id='.$object->id.'&sortmsg=asc').'" ><i class="fa fa fa-sort-numeric-asc""></i></a>';
+		}
+
 		$out.='
-			<div class="container px-0">
+			<div class="container px-0">'.$sortBtn.'
 				<h5>'.$langs->trans('TicketMessagesList').'</h5>
 			';
 
@@ -394,8 +414,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		$numComments = count($object->cache_msgs_ticket);
 		$iComment = 0;
 
-		// TODO : ERGO : ajouter une conf utilisateur pour le choix d'orientation des messages (penser alors a changer l'emplacement du formulaire et du #lastcomment
-		$TMessage = array_reverse($object->cache_msgs_ticket, true);
+		$TMessage = $object->cache_msgs_ticket;
+		if($sortMsg == 'asc') {
+			$TMessage = array_reverse($object->cache_msgs_ticket, true);
+		}
 
 		foreach ($TMessage as $value)
 		{
@@ -414,7 +436,9 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 				$out .= '<!-- /.timeline-label -->';
 			}
 
-			if (empty($value['private']))
+			// strange behavior, in some case $value['private'] is empty but $actionstatic->code == 'TICKET_MSG_PRIVATE'
+			$TExcluseActionCode = array('TICKET_MSG_PRIVATE');
+			if (empty($value['private']) || !in_array($actionstatic->code, $TExcluseActionCode))
 			{
 //				$out.= '<li>'.dol_print_date($value['datec']).' lol </li>';
 				$out .= '<!-- timeline item -->'."\n";
@@ -500,10 +524,11 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 				$out .= ' <span class="messaging-title">';
 
 				if($actionstatic->code == 'TICKET_MSG') {
-					$out .= $langs->trans('TicketNewMessage');
+					// $out .= $langs->trans('TicketNewMessage');
 				}
 				elseif($actionstatic->code == 'TICKET_MSG_PRIVATE') {
-					$out .= $langs->trans('TicketNewMessage').' <em>('.$langs->trans('Private').')</em>';
+					// $out .= $langs->trans('TicketNewMessage');
+					$out .= ' <em>('.$langs->trans('Private').')</em>';
 				}
 
 				$out .= '</span>';
