@@ -14,6 +14,15 @@ $Tmenu=array();
 
 if($context->userIsLog())
 {
+    if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
+    {
+        $Tmenu['projects'] = array(
+            'id' => 'projects',
+            'rank' => 10,
+            'url' => $context->getRootUrl('projects'),
+            'name' => $langs->trans('EALINKNAME_projects'),
+        );
+    }
 
     if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
     {
