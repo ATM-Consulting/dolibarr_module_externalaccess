@@ -13,7 +13,8 @@ $Tmenu=array();
 
 
 if($context->userIsLog())
-{   if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
+{   
+    if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
     {
         $Tmenu['projects'] = array(
             'id' => 'projects',
@@ -63,7 +64,7 @@ if($context->userIsLog())
         );
     }
 
-    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets) && !empty($conf->ticket->enabled))
     {
         $Tmenu['tickets'] = array(
             'id' => 'tickets',

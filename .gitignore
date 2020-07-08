@@ -3,3 +3,5 @@
 .settings/
 *.log
 /nbproject
+www/.htaccess
+www/.htaccess.sample

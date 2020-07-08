@@ -17,7 +17,7 @@ print '<section id="section-personalinformations"  class="type-content"  ><div c
 
 
 if($user->rights->externalaccess->edit_user_personal_infos && $mode=='readonly'){
-    print '<a class="btn btn-primary pull-right btn-top-section" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
+    print '<a class="btn btn-primary btn-strong pull-right btn-top-section" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
 }
 
 /*
@@ -76,7 +76,7 @@ print '<div class="col-md-6"><div class="card"><div class="card-body">';
 
 if(!empty($user->socid)){
     $userSoc = new Societe($db);
-    
+
     if($userSoc->fetch($user->socid) > 0){
         // Societe
         stdFormHelper('societe', $langs->trans('Company'), $userSoc->name, 'readonly', 1);
@@ -106,10 +106,10 @@ print '</div>';
 
 
 if($mode=='edit'){
-    
-    print '<button class="btn btn-primary pull-right" type="submit" name="save" value="1" >'.$langs->trans('Save').'</button>';
-    
-    print '<a class="btn btn-secondary" href="'.$context->getRootUrl('personalinformations').'"  >'.$langs->trans('Cancel').'</a>';
+
+    print '<button class="btn btn-primary btn-strong pull-right" type="submit" name="save" value="1" >'.$langs->trans('Save').'</button>';
+
+    print '<a class="btn btn-secondary btn-strong" href="'.$context->getRootUrl('personalinformations').'"  >'.$langs->trans('Cancel').'</a>';
 }
 else{
     print '<p>'.$conf->global->EACCESS_RGPD_MSG.'</p>';
