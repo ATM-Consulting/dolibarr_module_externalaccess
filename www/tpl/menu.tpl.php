@@ -13,7 +13,7 @@ $Tmenu=array();
 
 
 if($context->userIsLog())
-{   
+{
     if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
     {
         $Tmenu['projects'] = array(
@@ -23,7 +23,7 @@ if($context->userIsLog())
             'name' => $langs->trans('EALINKNAME_projects'),
         );
     }
-    
+
     if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
     {
         $Tmenu['propals'] = array(
@@ -53,7 +53,7 @@ if($context->userIsLog())
 			'name' => $langs->trans('EALINKNAME_expeditions'),
 		);
 	}
-    
+
     if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
     {
         $Tmenu['invoices'] = array(
@@ -73,23 +73,23 @@ if($context->userIsLog())
             'name' => $langs->trans('EALINKNAME_tickets'),
         );
     }
-    
-    
-    
+
+
+
     $Tmenu['user'] = array(
         'id' => 'user',
         'rank' => 100,
         'url' => '',
         'name' => '<i class="fa fa-user"></i> ' . $user->login,
     );
-    
+
     $Tmenu['user']['children']['personalinformations'] = array(
         'id' => 'personalinformations',
         'rank' => 10,
         'url' => $context->getRootUrl('personalinformations'),
         'name' => '<i class="fa fa-user"></i> '.$langs->trans('PersonalInformations'),
     );
-    
+
     $Tmenu['user']['children']['logout'] = array(
         'id' => 'logout',
         'separator' => 1,
@@ -97,7 +97,7 @@ if($context->userIsLog())
         'url' => $context->getRootUrl().'logout.php',
         'name' => '<i class="fa fa-sign-out"></i> '.$langs->trans('Logout'),
     );
-    
+
 }
 
 
@@ -124,10 +124,10 @@ if(empty($reshook)){
     if(!empty($hookmanager->resArray)){
         $Tmenu = array_replace($Tmenu,$hookmanager->resArray);
     }
-    
+
     if(!empty($Tmenu)){
-        
-        
+
+
     // Sorting
     uasort ( $Tmenu,'menuSortInv');
 ?>
@@ -140,14 +140,14 @@ if(empty($reshook)){
         </button>
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
-            <?php 
+            <?php
                 print printNav($Tmenu);
             ?>
           </ul>
         </div>
       </div>
     </nav>
-    
-<?php 
+
+<?php
     }
-}    
+}

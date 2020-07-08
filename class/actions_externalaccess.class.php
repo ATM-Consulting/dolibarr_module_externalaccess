@@ -102,11 +102,11 @@ class Actionsexternalaccess
             {
 				$this->actionTicketCard($parameters, $object, $action, $hookmanager);
             }
-            elseif($context->controller == 'project')
+            elseif($context->controller == 'projects')
 		    {
-		        $context->title = $langs->trans('Wiewproject');
-		        $context->desc = $langs->trans('WiewprojectDesc');
-		        $context->menu_active[] = 'project';
+		        $context->title = $langs->trans('ViewProjects');
+		        $context->desc = $langs->trans('ViewProjectsDesc');
+		        $context->menu_active[] = 'projects';
 		    }
 			elseif($context->controller == 'default')
 			{
@@ -267,6 +267,15 @@ class Actionsexternalaccess
 				}
 				return 1;
 			}
+			elseif($context->controller == 'projects' && !empty($conf->projet->enabled))
+			{
+				$context->setControllerFound();
+				if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
+				{
+					$this->print_projectList($user->socid);
+				}
+				return 1;
+			}
 			elseif($context->controller == 'expeditions')
 			{
 				$context->setControllerFound();
@@ -327,6 +336,13 @@ class Actionsexternalaccess
 	{
 		print '<section id="section-propal"><div class="container">';
 		print_propalTable($socId);
+		print '</div></section>';
+	}
+
+	public function print_projectList($socId = 0)
+	{
+		print '<section id="section-project"><div class="container">';
+		print_projetsTable($socId);
 		print '</div></section>';
 	}
 
