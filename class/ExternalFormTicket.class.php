@@ -42,8 +42,8 @@ class ExternalFormTicket extends FormTicket
 				$out .= $langs->trans("NoAttachedFiles").'<br>';
 			}
 			if ($this->withfile == 2) { // Can add other files
-				$out .= '<input name="addedfile" type="file" class="fileToUpload" id="fileToUpload"/>';
-				$out .= '<button type="submit" class="button" id="add-comment-file" name="action" value="add-comment-file">'.$langs->trans("AddFileToComment").'</button>';
+				$out .= '<input name="addedfile" type="file" class="fileToUpload btn" id="fileToUpload"/>';
+				$out .= '<button type="submit" class="btn" id="add-comment-file" name="action" value="add-comment-file">'.$langs->trans("AddFileToComment").'</button>';
 			}
 
 		}
