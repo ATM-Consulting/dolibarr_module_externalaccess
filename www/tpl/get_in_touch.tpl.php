@@ -19,16 +19,28 @@ global $langs;
           </div>
         </div>
         <div class="row">
+<?php if(!empty($conf->global->EACCESS_PHONE)): ?>
           <div class="col-lg-4 ml-auto text-center">
             <i class="fa fa-phone fa-3x mb-3 sr-contact"></i>
             <p><a href="tel:<?php print preg_replace("/[^0-9\+]/", "", $conf->global->EACCESS_PHONE); ?>"><?php print $conf->global->EACCESS_PHONE; ?></a></p>
           </div>
+<?php endif; ?>
+
+<?php if(!empty($conf->global->EACCESS_EMAIL)):
+	$link = $conf->global->EACCESS_EMAIL;
+	$linkName = $langs->trans("ContactUs");
+	if(filter_var($conf->global->EACCESS_EMAIL, FILTER_VALIDATE_EMAIL)){
+		$link = "mailto:".$conf->global->EACCESS_EMAIL;
+		$linkName = $conf->global->EACCESS_EMAIL;
+	}
+?>
           <div class="col-lg-4 mr-auto text-center">
             <i class="fa fa-envelope-o fa-3x mb-3 sr-contact"></i>
             <p>
-              <a href="mailto:<?php print $conf->global->EACCESS_EMAIL; ?>"><?php print $conf->global->EACCESS_EMAIL; ?></a>
+              <a href="<?php print $link; ?>"><?php print $linkName; ?></a>
             </p>
           </div>
+<?php endif; ?>
         </div>
       </div>
     </section>
