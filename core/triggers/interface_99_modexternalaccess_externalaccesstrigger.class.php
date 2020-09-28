@@ -33,11 +33,8 @@
 /**
  * Trigger class
  */
-class Interfaceexternalaccesstrigger
+class Interfaceexternalaccesstrigger extends DolibarrTriggers
 {
-
-    private $db;
-
     /**
      * Constructor
      *
@@ -101,7 +98,7 @@ class Interfaceexternalaccesstrigger
 
     /**
      * Function called when a Dolibarrr business event is done.
-     * All functions "run_trigger" are triggered if file
+     * All functions "runTrigger" are triggered if file
      * is inside directory core/triggers
      *
      * 	@param		string		$action		Event action code
@@ -111,7 +108,7 @@ class Interfaceexternalaccesstrigger
      * 	@param		conf		$conf		Object conf
      * 	@return		int						<0 if KO, 0 if no triggered ran, >0 if OK
      */
-    public function run_trigger($action, $object, $user, $langs, $conf)
+    public function runTrigger($action, $object, $user, $langs, $conf)
     {
         // Put here code you want to execute when a Dolibarr business events occurs.
         // Data and type of action are stored into $object and $action
