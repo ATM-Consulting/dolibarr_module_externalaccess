@@ -123,7 +123,7 @@ EACCESS_ACTIVATE_EXPEDITIONS= Expéditions
 EACCESS_ACTIVATE_TICKETS = Tickets
 EACCESS_ACTIVATE_PROJECTS = Projets
 EACCESS_ACTIVATE_REPAIR = Ordres de réparation
-EACCESS_ACTIVATE_DISPONIBILITY = Pr�vision de disponibilité du véhicules
+EACCESS_ACTIVATE_DISPONIBILITY = Prévision de disponibilité des véhicules
 
 # INDEX
 Quotations=Devis
