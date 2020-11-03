@@ -17,7 +17,8 @@ external_access_expeditions= Consulter ses expéditions
 external_access_tickets= Consulter ses tickets
 external_access_userinfos_edit= Modifier ses informations personnelles
 external_access_projets = Consulter ses projets
-external_access_OR = Consulter ses ordres de r�paration
+external_access_repair = Consulter ses ordres de réparation
+external_access_disponibility = Consulter le planning de disponibilité des véhicules
 
 # MENU
 TopMenuexternalaccess=Portail client
@@ -121,7 +122,8 @@ EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations 
 EACCESS_ACTIVATE_EXPEDITIONS= Expéditions
 EACCESS_ACTIVATE_TICKETS = Tickets
 EACCESS_ACTIVATE_PROJECTS = Projets
-EACCESS_ACTIVATE_OR = Ordre de réparation
+EACCESS_ACTIVATE_REPAIR = Ordres de réparation
+EACCESS_ACTIVATE_DISPONIBILITY = Planning des disponibilités des véhicules
 
 # INDEX
 Quotations=Devis

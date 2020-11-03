@@ -129,7 +129,8 @@ _print_on_off('EACCESS_ACTIVATE_ORDERS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_EXPEDITIONS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_TICKETS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_PROJECTS',false, 'EACCESS_need_some_rights');
-_print_on_off('EACCESS_ACTIVATE_OR',false, 'EACCESS_need_some_rights');
+_print_on_off('EACCESS_ACTIVATE_REPAIR',false, 'EACCESS_need_some_rights');
+_print_on_off('EACCESS_ACTIVATE_DISPONIBILITY',false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
 
