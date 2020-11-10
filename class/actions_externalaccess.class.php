@@ -125,15 +125,15 @@ class Actionsexternalaccess
 
 		        if($context->action == 'save'){
 		            // TODO: need to check all send informations to prevent and verbose errors
-		            $user->firstname = GETPOST('firstname');
-		            $user->lastname = GETPOST('lastname');
-		            $user->address = GETPOST('address');
-		            $user->zip = GETPOST('addresszip');
-		            $user->town = GETPOST('town');
-		            $user->user_mobile = GETPOST('user_mobile');
-		            $user->office_phone = GETPOST('office_phone');
-		            $user->office_fax = GETPOST('office_fax');
-		            $user->email = GETPOST('email');
+		            $user->firstname = GETPOST('firstname', 'none');
+		            $user->lastname = GETPOST('lastname', 'none');
+		            $user->address = GETPOST('address', 'none');
+		            $user->zip = GETPOST('addresszip', 'none');
+		            $user->town = GETPOST('town', 'none');
+		            $user->user_mobile = GETPOST('user_mobile', 'none');
+		            $user->office_phone = GETPOST('office_phone', 'none');
+		            $user->office_fax = GETPOST('office_fax', 'none');
+		            $user->email = trim(GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL));
 
 		            if($user->update($user)>0)
 		            {
@@ -363,7 +363,7 @@ class Actionsexternalaccess
     public function print_ticketCard($ticketId = 0, $socId = 0)
     {
         print '<section id="section-ticket-card" class="type-content"><div class="container">';
-        print_ticketCard($ticketId, $socId, GETPOST('action'));
+        print_ticketCard($ticketId, $socId, GETPOST('action', 'none'));
         print '</div></section>';
     }
 
@@ -561,7 +561,7 @@ class Actionsexternalaccess
 		if(in_array($action, $newCommentActions)){
 			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
 
-				$ticket->message = GETPOST('ticket-comment');
+				$ticket->message = GETPOST('ticket-comment', 'none');
 
 				if (empty($ticket->message)) {
 					$context->setEventMessages($langs->trans('TicketCommentMissing'), 'warnings');
@@ -621,8 +621,8 @@ class Actionsexternalaccess
 				// Check
 				$errors = 0;
 
-				$ticket->message = GETPOST('message');
-				$ticket->subject = GETPOST('subject');
+				$ticket->message = GETPOST('message', 'none');
+				$ticket->subject = GETPOST('subject', 'none');
 				$ticket->fk_soc = $user->socid;
 
 				if(empty($ticket->message)){
