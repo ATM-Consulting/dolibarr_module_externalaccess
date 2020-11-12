@@ -133,7 +133,7 @@ class Actionsexternalaccess
 		            $user->user_mobile = GETPOST('user_mobile', 'none');
 		            $user->office_phone = GETPOST('office_phone', 'none');
 		            $user->office_fax = GETPOST('office_fax', 'none');
-		            $user->email = trim(GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL));
+		            $user->email = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
 
 		            if($user->update($user)>0)
 		            {

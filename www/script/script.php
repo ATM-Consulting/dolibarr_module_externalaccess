@@ -3,7 +3,7 @@
 define('INC_FROM_SCRIPT', 1);
 require __DIR__ .'/../config.php';
 
-$action = GETPOST('action', 'none');
+$action = GETPOST('action', 'alpha');
 
 if($action === 'getlogo')
 {
