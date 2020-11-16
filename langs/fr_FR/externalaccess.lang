@@ -114,6 +114,7 @@ EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
 EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
 EACCESS_ACTIVATE_EXPEDITIONS=Téléchargement des expéditions
 EACCESS_ACTIVATE_TICKETS=Téléchargement des Tickets
+EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
 
 # INDEX
 Quotations=Devis
@@ -124,6 +125,8 @@ Invoices=Factures
 InvoicesDesc=
 MySpace=Consulter mon espace
 
+# Traductions par attribut d'objet
+ref_client=Réf. client
 
 
 ForgotThePassword=Mot de passe oublié ?

@@ -125,7 +125,8 @@ function print_invoiceTable($socId = 0)
     {
 
 
-
+		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+		if(empty($TOther_fields)) $TOther_fields = array();
 
         print '<table id="invoice-list" class="table table-striped" >';
 
@@ -133,6 +134,13 @@ function print_invoiceTable($socId = 0)
 
         print '<tr>';
         print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+
+		if(!empty($TOther_fields)) {
+			foreach ($TOther_fields as $field) {
+				print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+			}
+		}
+
         print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
         print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
@@ -171,6 +179,13 @@ function print_invoiceTable($socId = 0)
 
             print '<tr >';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
+
+			if(!empty($TOther_fields)) {
+				foreach ($TOther_fields as $field) {
+					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+				}
+			}
+
             print ' <td data-order="'.$object->date.'" data-search="'.dol_print_date($object->date).'"  >'.dol_print_date($object->date).'</td>';
             print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
             print ' <td  >'.$object->getLibStatut(0).'</td>';
@@ -195,7 +210,7 @@ function print_invoiceTable($socId = 0)
              "language": {
                  "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
              },
-			 "order": [[1, 'desc']],
+			 "order": [[<?php echo (count($TOther_fields) + 1); ?>, 'desc']],
 
              responsive: true,
              columnDefs: [{
@@ -223,7 +238,7 @@ function print_invoiceTable($socId = 0)
 
 function print_propalTable($socId = 0)
 {
-    global $langs,$db;
+    global $langs,$db,$conf;
     $context = Context::getInstance();
 
     dol_include_once('comm/propal/class/propal.class.php');
@@ -243,7 +258,8 @@ function print_propalTable($socId = 0)
     {
 
 
-
+		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+		if(empty($TOther_fields)) $TOther_fields = array();
 
         print '<table id="propal-list" class="table table-striped" >';
 
@@ -251,6 +267,13 @@ function print_propalTable($socId = 0)
 
         print '<tr>';
         print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+
+		if(!empty($TOther_fields)) {
+			foreach ($TOther_fields as $field) {
+				print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+			}
+		}
+
         print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
         print ' <th class="text-center" >'.$langs->trans('EndValidDate').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
@@ -280,6 +303,13 @@ function print_propalTable($socId = 0)
 
             print '<tr>';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+
+			if(!empty($TOther_fields)) {
+				foreach ($TOther_fields as $field) {
+					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+				}
+			}
+
             print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
             print ' <td data-search="'.dol_print_date($object->fin_validite).'" data-order="'.$object->fin_validite.'" >'.dol_print_date($object->fin_validite).'</td>';
             print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
@@ -302,7 +332,7 @@ function print_propalTable($socId = 0)
              "language": {
                  "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
              },
-			 "order": [[1, 'desc']],
+			 "order": [[<?php echo (count($TOther_fields) + 1); ?>, 'desc']],
 
              responsive: true,
              columnDefs: [{
@@ -329,7 +359,7 @@ function print_propalTable($socId = 0)
 
 function print_orderListTable($socId = 0)
 {
-    global $langs,$db;
+    global $langs,$db,$conf;
     $context = Context::getInstance();
 
     dol_include_once('commande/class/commande.class.php');
@@ -350,14 +380,22 @@ function print_orderListTable($socId = 0)
     {
 
 
-
+		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+		if(empty($TOther_fields)) $TOther_fields = array();
 
         print '<table id="order-list" class="table table-striped" >';
 
         print '<thead>';
 
         print '<tr>';
-        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+
+		if(!empty($TOther_fields)) {
+			foreach ($TOther_fields as $field) {
+				print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+			}
+		}
+
         print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
         print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
@@ -386,7 +424,12 @@ function print_orderListTable($socId = 0)
 
             print '<tr>';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
-            print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
+			if(!empty($TOther_fields)) {
+				foreach ($TOther_fields as $field) {
+					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+				}
+			}
+			print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
             print ' <td data-search="'.dol_print_date($object->date_livraison).'" data-order="'.$object->date_livraison.'" >'.dol_print_date($object->date_livraison).'</td>';
             print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
             print ' <td data-order="'.$object->multicurrency_total_ht.'"  class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
@@ -408,7 +451,7 @@ function print_orderListTable($socId = 0)
                  "language": {
                      "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
                  },
-				 "order": [[1, 'desc']],
+				 "order": [[<?php echo (count($TOther_fields) + 1); ?>, 'desc']],
 
                  responsive: true,
 
@@ -439,7 +482,7 @@ function print_orderListTable($socId = 0)
 
 function print_expeditionTable($socId = 0)
 {
-	global $langs,$db;
+	global $langs,$db,$conf;
 	$context = Context::getInstance();
 
 	include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
@@ -461,7 +504,8 @@ function print_expeditionTable($socId = 0)
 	{
 
 
-
+		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+		if(empty($TOther_fields)) $TOther_fields = array();
 
 		print '<table id="expedition-list" class="table table-striped" >';
 
@@ -469,6 +513,11 @@ function print_expeditionTable($socId = 0)
 
 		print '<tr>';
 		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+		if(!empty($TOther_fields)) {
+			foreach ($TOther_fields as $field) {
+				print ' <th class="text-center" >'.$langs->trans($field).'</th>';
+			}
+		}
 		print ' <th class="text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
 		print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
 		print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
@@ -510,9 +559,14 @@ function print_expeditionTable($socId = 0)
 				}
 			}
 
-
 			print '<tr>';
 			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+			if(!empty($TOther_fields)) {
+				foreach ($TOther_fields as $field) {
+					if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
+					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+				}
+			}
 			print ' <td data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
 			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
 			print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
@@ -533,7 +587,7 @@ function print_expeditionTable($socId = 0)
                     "language": {
                         "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
                     },
-					"order": [[2, 'desc']],
+					"order": [[<?php echo (count($TOther_fields) + 2); ?>, 'desc']],
 
                     responsive: true,
 
