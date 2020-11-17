@@ -31,6 +31,7 @@ if (! $res) {
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/externalaccess.lib.php';
+require_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
 
 // Translations
 $langs->load("externalaccess@externalaccess");
@@ -49,7 +50,9 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	if (dolibarr_set_const($db, $code, GETPOST($code), 'chaine', 0, '', $conf->entity) > 0)
+	$val = GETPOST($code);
+	if(is_array($val)) $val = serialize($val);
+	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
 	{
 		header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
@@ -59,7 +62,7 @@ if (preg_match('/set_(.*)/',$action,$reg))
 		dol_print_error($db);
 	}
 }
-	
+
 if (preg_match('/del_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
@@ -122,6 +125,7 @@ _print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACC
 
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
 _print_input_form_part('EACCESS_HEADER_IMG',false,'',array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
+_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -161,7 +165,7 @@ function _print_title($title="")
 function _print_on_off($confkey, $title = false, $desc ='')
 {
     global $langs, $conf;
-    
+
     print '<tr class="oddeven">';
     print '<td>'.($title?$title:$langs->trans($confkey));
     if(!empty($desc))
@@ -182,9 +186,9 @@ function _print_on_off($confkey, $title = false, $desc ='')
 function _print_input_form_part($confkey, $title = false, $desc ='', $metas = array(), $type='input', $help = false)
 {
     global $langs, $conf, $db;
-    
+
     $form=new Form($db);
-    
+
     $defaultMetas = array(
         'name' => $confkey
     );
@@ -196,25 +200,25 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     } else {
         $colspan = ' colspan="2"';
     }
-    
-    
+
+
     $metas = array_merge ($defaultMetas, $metas);
     $metascompil = '';
     foreach ($metas as $key => $values)
     {
         $metascompil .= ' '.$key.'="'.$values.'" ';
     }
-    
+
     print '<tr class="oddeven">';
     print '<td'.$colspan.'>';
-    
+
     if(!empty($help)){
         print $form->textwithtooltip( ($title?$title:$langs->trans($confkey)) , $langs->trans($help),2,1,img_help(1,''));
     }
     else {
         print $title?$title:$langs->trans($confkey);
     }
-    
+
     if(!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
@@ -241,4 +245,31 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
     print '</form>';
     print '</td></tr>';
+}
+
+/**
+ * Function used to print a multiselect
+ * @param $confkey	string	name of conf in llx_const
+ * @param $title	string	label of conf
+ * @param $Tab		array	available values
+ */
+function _print_multiselect($confkey, $title, $Tab) {
+
+	global $langs, $form, $conf;
+
+	print '<tr class="oddeven"><td>';
+	print $title?$title:$langs->trans($confkey);
+	print '</td>';
+	print '<td align="right" width="300">';
+	print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+	print '<input type="hidden" name="action" value="set_'.$confkey.'">';
+
+	print $form->multiselectarray($confkey, $Tab, unserialize($conf->global->{$confkey}), '', 0, '', 0, '100%');
+
+    print '</td><td class="right">';
+    print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
+    print '</form>';
+    print '</td></tr>';
+
 }
