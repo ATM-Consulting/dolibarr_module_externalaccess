@@ -115,6 +115,7 @@ EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations 
 EACCESS_ACTIVATE_EXPEDITIONS=Téléchargement des expéditions
 EACCESS_ACTIVATE_TICKETS=Téléchargement des Tickets
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
+EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
 
 # INDEX
 Quotations=Devis
@@ -125,6 +126,8 @@ Invoices=Factures
 InvoicesDesc=
 MySpace=Consulter mon espace
 
+# Traductions par attribut d'objet
+ref_client=Réf. client
 
 
 ForgotThePassword=Mot de passe oublié ?
