@@ -126,7 +126,7 @@ _print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACC
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
 _print_input_form_part('EACCESS_HEADER_IMG',false,'',array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
 _print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
-_print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE');
+_print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -163,12 +163,24 @@ function _print_title($title="")
     print '</tr>';
 }
 
-function _print_on_off($confkey, $title = false, $desc ='')
+/**
+ * @param $confkey	string	name of conf in llx_const
+ * @param $title	string 	label of conf
+ * @param $desc		string 	description written in small text under title
+ * @param $help		string	text for tooltip
+ */
+function _print_on_off($confkey, $title = false, $desc = '', $help = '')
 {
     global $langs, $conf;
 
-    print '<tr class="oddeven">';
+	print '<tr class="oddeven">';
     print '<td>'.($title?$title:$langs->trans($confkey));
+
+    $form=new Form($db);
+	if(!empty($help)){
+		print $form->textwithtooltip('', $langs->trans($help),2,1,img_help(1,''));
+	}
+
     if(!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
