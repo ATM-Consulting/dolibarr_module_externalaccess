@@ -59,7 +59,7 @@ if (preg_match('/set_(.*)/',$action,$reg))
 		dol_print_error($db);
 	}
 }
-	
+
 if (preg_match('/del_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
@@ -122,6 +122,7 @@ _print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACC
 
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
 _print_input_form_part('EACCESS_HEADER_IMG',false,'',array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
+_print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE');
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -161,7 +162,7 @@ function _print_title($title="")
 function _print_on_off($confkey, $title = false, $desc ='')
 {
     global $langs, $conf;
-    
+
     print '<tr class="oddeven">';
     print '<td>'.($title?$title:$langs->trans($confkey));
     if(!empty($desc))
@@ -182,9 +183,9 @@ function _print_on_off($confkey, $title = false, $desc ='')
 function _print_input_form_part($confkey, $title = false, $desc ='', $metas = array(), $type='input', $help = false)
 {
     global $langs, $conf, $db;
-    
+
     $form=new Form($db);
-    
+
     $defaultMetas = array(
         'name' => $confkey
     );
@@ -196,25 +197,25 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     } else {
         $colspan = ' colspan="2"';
     }
-    
-    
+
+
     $metas = array_merge ($defaultMetas, $metas);
     $metascompil = '';
     foreach ($metas as $key => $values)
     {
         $metascompil .= ' '.$key.'="'.$values.'" ';
     }
-    
+
     print '<tr class="oddeven">';
     print '<td'.$colspan.'>';
-    
+
     if(!empty($help)){
         print $form->textwithtooltip( ($title?$title:$langs->trans($confkey)) , $langs->trans($help),2,1,img_help(1,''));
     }
     else {
         print $title?$title:$langs->trans($confkey);
     }
-    
+
     if(!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';

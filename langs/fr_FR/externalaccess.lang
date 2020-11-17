@@ -114,6 +114,7 @@ EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
 EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
 EACCESS_ACTIVATE_EXPEDITIONS=Téléchargement des expéditions
 EACCESS_ACTIVATE_TICKETS=Téléchargement des Tickets
+EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
 
 # INDEX
 Quotations=Devis
@@ -155,6 +156,10 @@ Company=Société
 
 # 404 tpl 
 SorryThereIsNothingHere=Désolé il n'y a rien ici
+
+# Commercial du client
+YourSalesRep=Votre commercial chez %s :
+YourSalesRepMultiple=Vos commerciaux chez %s :
 
 EACCESS_Nothing=Actuellement il n'y a rien ici, patience, vos documents seront disponibles prochainement
 
