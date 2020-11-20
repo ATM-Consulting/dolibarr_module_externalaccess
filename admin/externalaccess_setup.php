@@ -23,6 +23,8 @@
  * 				Put some comments here
  */
 // Dolibarr environment
+
+
 $res = @include("../../main.inc.php"); // From htdocs directory
 if (! $res) {
     $res = @include("../../../main.inc.php"); // From "custom" directory
@@ -40,6 +42,12 @@ if (! $user->admin) {
     accessforbidden();
 }
 
+// Appel des class operationorder tri�s par statut et par type
+dol_include_once('operationorder/class/operationorderstatus.class.php');
+$statuslist= new Operationorderstatus($db);
+//dol_include_once('operationorder/class/operationorder.class.php');
+//$typelist= new OperationOrderType();
+
 // Parameters
 $action = GETPOST('action', 'alpha');
 
@@ -49,7 +57,15 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	if (dolibarr_set_const($db, $code, GETPOST($code, 'none'), 'chaine', 0, '', $conf->entity) > 0)
+
+	if (is_array(GETPOST($code))){
+		$val=json_encode(GETPOST($code));
+	}else{
+		$val=GETPOST($code);
+	}
+	
+	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
+
 	{
 		header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
@@ -130,8 +146,91 @@ _print_on_off('EACCESS_ACTIVATE_EXPEDITIONS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_TICKETS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_PROJECTS',false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
+_print_on_off('EACCESS_ACTIVATE_OR',false, 'EACCESS_need_some_rights');
+//Rafraichissement de la page automatique
+?>
+<script>
+	$(document).ready(function() {
+		$("#set_EACCESS_ACTIVATE_OR").click(function() {
+			document.location.reload(true);
+		});
+	});
+	$(document).ready(function() {
+		$("#del_EACCESS_ACTIVATE_OR").click(function() {
+			document.location.reload(true);
+		});
+	});
+</script>
+<?php
 
+//module OR parametrable par statut
+if (!empty($conf->global->EACCESS_ACTIVATE_OR)){
+	print '<tr>';
+	print '<td  id="coltitle-status-allowed" >'.$langs->trans('ETargetableStatus').'</td>';
+	print '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
+	print '<input type="hidden" name="token" value="'.newToken().'">';
+	print '<input type="hidden" name="action" value="set_EACCESS_OR_STATUT_DISP">';
+	print '<td  id="colval-status-allowed" >';
+	$TStatus = $statuslist->fetchAll(0,false, array('entity'=> $conf->entity ));
+	if(!empty($TStatus)){
+		$TAvailableStatus = array();
+		foreach ($TStatus as $key => $status){
+			if($status->id != $statuslist->status){
+				if($status->code == $statuslist->code){
+					continue;
+				}
+			$TAvailableStatus[$status->code] = $status->label;
+			}
+		}
+	// il faut reverifier vu que l'on a supprim�...
+		if(!empty($TStatus)){
+			$val=array();
+			$val=json_decode($conf->global->EACCESS_OR_STATUT_DISP);
+			print $form->multiselectarray('EACCESS_OR_STATUT_DISP', $TAvailableStatus, $val, $key_in_label = 0, $value_as_key = 0, '', 0, '100%', '', '', '', 1);	
+		}
+	}
+	print "</td>";
+	print '<td> <input type="submit" class="butAction" value="'.$langs->trans("Modify").'"> </td>';
+	print '</form>';
+	print "</tr>";
+}
 
+//module OR parametrable par type
+if (!empty($conf->global->EACCESS_ACTIVATE_OR)){
+	print '<tr>';
+	print '<td  id="coltitle-status-allowed" >'.$langs->trans('ETargetableType').'</td>';
+	print '<form method="post" action="'.$_SERVER['PHP_SELF'].'">';
+	print '<input type="hidden" name="token" value="'.newToken().'">';
+	print '<input type="hidden" name="action" value="set_EACCESS_OR_TYPE_DISP">';
+	print '<td  id="colval-status-allowed" >';
+	
+	$TAvailableType = array();
+	$sql = 'SELECT rowid, label';
+	$sql .= ' FROM '.MAIN_DB_PREFIX.'c_operationorder_type';
+	$resql = $db->query($sql);
+	//print_r($resql);
+	//exit;
+	if ($resql){
+		while ($typelist = $db->fetch_object($resql)){
+			$TAvailableType [$typelist->rowid] = $typelist->label;
+		}
+	}
+		// il faut reverifier vu que l'on a supprim�...
+	if(!empty($TAvailableType)){
+			$val=array();
+			$val=json_decode($conf->global->EACCESS_OR_TYPE_DISP);
+			print $form->multiselectarray('EACCESS_OR_TYPE_DISP', $TAvailableType, $val, $key_in_label = 0, $value_as_key = 0, '', 0, '100%', '', '', '', 1);
+		} 
+	print "</td>";
+	print '<td> <input type="submit" class="butAction" value="'.$langs->trans("Modify").'"> </td>';
+	print '</form>';
+	print "</tr>";
+}
+
+//module disponibilit� des v�hicules parametrable par ??
+_print_on_off('EACCESS_ACTIVATE_DISPONIBILITY',false, 'EACCESS_need_some_rights');
+
+//texte ajustable
 _print_input_form_part('EACCESS_LOGIN_EXTRA_HTML',false,'',array(),'textarea');
 if(empty($conf->global->EACCESS_RGPD_MSG)){
     dolibarr_set_const($db,'EACCESS_RGPD_MSG',$langs->trans('EACCESS_RGPD_MSG_default',$conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity) ;
@@ -238,7 +337,7 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     }
 
     print '</td><td class="right">';
-    print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
+    print '<input type="submit" value="'.$langs->trans("Modify").'">';
     print '</form>';
     print '</td></tr>';
 }
