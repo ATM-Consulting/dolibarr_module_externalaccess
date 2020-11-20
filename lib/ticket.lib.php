@@ -7,6 +7,7 @@ function print_ticketTable($socId = 0)
 	$context = Context::getInstance();
 
 	dol_include_once('ticket/class/ticket.class.php');
+	$ticketStatic = new Ticket($context->dbTool->db);
 
 	$langs->load('ticket');
 
@@ -16,8 +17,10 @@ function print_ticketTable($socId = 0)
 	$sql.= ' ORDER BY t.datec DESC';
 	$tableItems = $context->dbTool->executeS($sql);
 
-	print '<div><a href="'.$context->getRootUrl('ticket_card', '&action=create').'" class="btn btn-primary btn-strong pull-right" >'.$langs->trans('NewTicket').'</a></div>';
 
+	if(checkUserTicketRight($user, $ticketStatic, 'create')) {
+		print '<div><a href="' . $context->getRootUrl('ticket_card', '&action=create') . '" class="btn btn-primary btn-strong pull-right" >' . $langs->trans('NewTicket') . '</a></div>';
+	}
 
 	if(!empty($tableItems))
 	{
@@ -77,9 +80,18 @@ function print_ticketTable($socId = 0)
 }
 
 function print_ticketCard($ticketId = 0, $socId = 0, $action = ''){
+	global $user, $langs;
+	dol_include_once('ticket/class/ticket.class.php');
+	$context = Context::getInstance();
 
 	if($action == 'create'){
-		return print_ticketCard_form($ticketId = 0, $socId = 0, $action = '');
+		$ticketStatic = new Ticket($context->dbTool->db);
+		if(checkUserTicketRight($user, $ticketStatic, 'create')) {
+			return print_ticketCard_form($ticketId = 0, $socId = 0, $action = '');
+		}
+		else{
+			$context->setEventMessages($langs->trans('ErrorNoRightToCreateTicket'), 'errors');
+		}
 	}
 
 	return print_ticketCard_view($ticketId, $socId,  $action);
@@ -308,8 +320,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	if(!empty($context->fetchedTicket)){
 		$object = $context->fetchedTicket;
 	}else{
-		$object = new Ticket($db);
-		$object->fetch($ticketId);
+		if(!empty($ticketId)){
+			$object = new Ticket($db);
+			$object->fetch($ticketId);
+		}
 	}
 
 	if(empty($object->id)  || $object->fk_soc != $user->socid){
