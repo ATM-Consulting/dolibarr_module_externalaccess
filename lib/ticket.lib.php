@@ -201,7 +201,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 
 
 	$out .= '<div class="form-group">
-				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment')) . '</textarea>';
+				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment', 'none')) . '</textarea>';
 	$out .= '</div>';
 
 	if (!empty($conf->global->FCKEDITOR_ENABLE_TICKET)){
@@ -388,7 +388,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 		// Sort messages
 		$sortMsg = !empty($user->conf->EA_TICKET_MSG_SORT_ORDER)?$user->conf->EA_TICKET_MSG_SORT_ORDER:'asc';
-		$getSortMsg = GETPOST('sortmsg');
+		$getSortMsg = GETPOST('sortmsg', 'none');
 		if(!empty($getSortMsg) && in_array($getSortMsg, array('asc','desc'))){
 			$sortMsg = $getSortMsg;
 			dol_set_user_param($db, $conf,$user, array('EA_TICKET_MSG_SORT_ORDER' => $sortMsg));

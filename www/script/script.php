@@ -1,9 +1,9 @@
-<?php 
+<?php
 
 define('INC_FROM_SCRIPT', 1);
-require __DIR__ .'/../config.php'; 
+require __DIR__ .'/../config.php';
 
-$action = GETPOST('action');
+$action = GETPOST('action', 'alpha');
 
 if($action === 'getlogo')
 {
@@ -15,7 +15,7 @@ if($action === 'getlogo')
     {
         $logoFile = $conf->mycompany->dir_output.'/logos/'.$mysoc->logo;
     }
-    
+
     if(!empty($logoFile))
     {
         $type=dol_mimetype($logoFile);
@@ -29,10 +29,10 @@ if($action === 'getlogo')
             top_httphead('image/png');
             header('Content-Disposition: inline; filename="'.basename($logoFile).'"');
         }
-        
-        
+
+
         $fullpath_original_file_osencoded=dol_osencode($logoFile);
-        
+
         readfile($fullpath_original_file_osencoded);
     }
 }

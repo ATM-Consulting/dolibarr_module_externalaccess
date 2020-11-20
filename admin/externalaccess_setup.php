@@ -42,7 +42,7 @@ if (! $user->admin) {
     accessforbidden();
 }
 
-// Appel des class operationorder triés par statut et par type
+// Appel des class operationorder triï¿½s par statut et par type
 dol_include_once('operationorder/class/operationorderstatus.class.php');
 $statuslist= new Operationorderstatus($db);
 //dol_include_once('operationorder/class/operationorder.class.php');
@@ -57,7 +57,7 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	
+
 	if (is_array(GETPOST($code))){
 		$val=json_encode(GETPOST($code));
 	}else{
@@ -65,6 +65,7 @@ if (preg_match('/set_(.*)/',$action,$reg))
 	}
 	
 	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
+
 	{
 		header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
@@ -181,7 +182,7 @@ if (!empty($conf->global->EACCESS_ACTIVATE_OR)){
 			$TAvailableStatus[$status->code] = $status->label;
 			}
 		}
-	// il faut reverifier vu que l'on a supprimé...
+	// il faut reverifier vu que l'on a supprimï¿½...
 		if(!empty($TStatus)){
 			$val=array();
 			$val=json_decode($conf->global->EACCESS_OR_STATUT_DISP);
@@ -214,7 +215,7 @@ if (!empty($conf->global->EACCESS_ACTIVATE_OR)){
 			$TAvailableType [$typelist->rowid] = $typelist->label;
 		}
 	}
-		// il faut reverifier vu que l'on a supprimé...
+		// il faut reverifier vu que l'on a supprimï¿½...
 	if(!empty($TAvailableType)){
 			$val=array();
 			$val=json_decode($conf->global->EACCESS_OR_TYPE_DISP);
@@ -226,7 +227,7 @@ if (!empty($conf->global->EACCESS_ACTIVATE_OR)){
 	print "</tr>";
 }
 
-//module disponibilité des véhicules parametrable par ??
+//module disponibilitï¿½ des vï¿½hicules parametrable par ??
 _print_on_off('EACCESS_ACTIVATE_DISPONIBILITY',false, 'EACCESS_need_some_rights');
 
 //texte ajustable
