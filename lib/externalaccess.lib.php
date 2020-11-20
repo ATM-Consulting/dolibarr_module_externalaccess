@@ -784,26 +784,26 @@ function print_disponibilityListTable($socId = 0)
 	$resql=$db->query($sql);
 	if(!empty($resql))
 	{
-		print '<table id="disponibility-list" class="table table-striped" >';
-		print '<thead>';
-		print '<tr>';
-		print ' <th style="border-left: 1px solid #dee2e6" class="text-center" > '.$langs->trans('vehicule').' </th>';
-		print ' <th style="border-right: 1px solid #dee2e6" class="text-center" > '.$langs->trans('vehiculetype').' </th>';
+		print '<table id="disponibility-list" class="table table-striped" style="padding:5px" >';
+		print '<thead style="padding:5px">';
+		print '<tr style="padding:5px">';
+		print ' <th style="border-left: 1px solid #dee2e6x; padding:5px" class="text-center" > '.$langs->trans('vehicule').' </th>';
+		print ' <th style="border-right: 1px solid #dee2e6; padding:5px" class="text-center" > '.$langs->trans('vehiculetype').' </th>';
 		
 		for ($i=-7; $i<15; $i++){
 			$date = date ('d /m', $timestamp+($i*86400));
 			if ($date==date ('d /m', $timestamp)){
-				print '<th style="border: 1px solid #F05F40" colspan="2" class="text-center" >'.$date.'</th>';
+				print '<th style="border: 1px solid #F05F40; padding:5px" colspan="2" class="text-center" >'.$date.'</th>';
 			}else{
-			print ' <th style="border-left: 1px solid #dee2e6" colspan="2" class="text-center" >'.$date.'</th>';
+			print ' <th style="border-left: 1px solid #dee2e6; padding:5px" colspan="2" class="text-center" >'.$date.'</th>';
 			}
 		}
 
 		print '</tr>';
 		print '<tr>';
 		print '<form method="post" action="'.$_SERVER["PHP_SELF"].'?controller=disponibility">';
-		print ' <th style="border-left: 1px solid #dee2e6" class="text-center" ><input  style="width:75px" type="text" name="searchvh" value="'.$searchvh.'"></th>';
-		print ' <th style="border-right: 1px solid #dee2e6; white-space: nowrap;" class="text-center" ><input style="width:75px" type="text" name="searchtype" value="'.$searchtype.'"><button name="button"><i class="fa fa-search"></i></button> </th>';
+		print ' <th style="border-left: 1px solid #dee2e6; padding:5px" class="text-center" ><input  style="width:75px" type="text" name="searchvh" value="'.$searchvh.'"></th>';
+		print ' <th style="border-right: 1px solid #dee2e6; white-space: nowrap; padding:5px" class="text-center" ><input style="width:75px" type="text" name="searchtype" value="'.$searchtype.'"><button name="button"><i class="fa fa-search"></i></button> </th>';
 		print '</form>';
 		for ($i=1; $i<23; $i++){	
 			if ($i==7 || $i==8){	
@@ -811,8 +811,8 @@ function print_disponibilityListTable($socId = 0)
 			}else{
 				$color= '#dee2e6';
 			}
-		print ' <th style="border-left: 1px solid #dee2e6" class="text-center" >am</th>';
-		print ' <th style="border-right: 1px solid '.$color.'" class="text-center" >pm</th>';
+		print ' <th style="border-left: 1px solid #dee2e6 padding:5px" class="text-center" >am</th>';
+		print ' <th style="border-right: 1px solid '.$color.'; padding:5px" class="text-center" >pm</th>';
 		}
 		print '</tr>';
 		print '</thead>';
@@ -824,8 +824,8 @@ function print_disponibilityListTable($socId = 0)
 			$dispo->fetch($object->id);
 
 			print '<tr>';
-			print ' <td style="border-left: 1px solid #dee2e6" data-search="'.$object->immatriculation.'" data-order="'.$object->immatriculation.'"  >'.$object->immatriculation.'</td>';
-			print ' <td style="border-right: 1px solid #dee2e6" data-search="'.$object->type.'" data-order="'.$object->type.'"  >'.$object->type.'</td>';
+			print ' <td style="border-left: 1px solid #dee2e6 padding:5px" data-search="'.$object->immatriculation.'" data-order="'.$object->immatriculation.'"  >'.$object->immatriculation.'</td>';
+			print ' <td style="border-right: 1px solid #dee2e6 padding:5px" data-search="'.$object->type.'" data-order="'.$object->type.'"  >'.$object->type.'</td>';
 			
 			for ($i=-7; $i<15; $i++){
 				$date = date ('Ymd', $timestamp+($i*86400));
@@ -838,10 +838,10 @@ function print_disponibilityListTable($socId = 0)
 						if($planning[$object->immatriculation][$date]["matin"]['color']){
             				$bgcolor= 'bgcolor="'.$planning[$object->immatriculation][$date]["matin"]['color'].'"';
 						} 
-						print $bgcolor.' style="border-left: 1px solid #dee2e6" class="text-center" >';					
+						print $bgcolor.' style="border-left: 1px solid #dee2e6; padding:5px" class="text-center" >';					
 						$infobulle="";
 						$path="";
-						//afficher les dates prévisionnelles
+						//afficher les dates prï¿½visionnelles
 						if($planning[$object->immatriculation][$date]["matin"]['picto']){
 							$infobulle=$planning[$object->immatriculation][$date]["matin"]['picto'];
 							$path = DOL_URL_ROOT.'/theme/eldy/img/error.png';
@@ -850,17 +850,17 @@ function print_disponibilityListTable($socId = 0)
 						print '</td>';						
 					}else{
 						print ' <td ';
-						//afficher les statuts atelier de l'après midi
+						//afficher les statuts atelier de l'aprï¿½s midi
 						$bgcolor='';
-						if($planning[$object->immatriculation][$date]["après-midi"]['color']){
-							$bgcolor= 'bgcolor="'.$planning[$object->immatriculation][$date]["après-midi"]['color'].'"';
+						if($planning[$object->immatriculation][$date]["aprï¿½s-midi"]['color']){
+							$bgcolor= 'bgcolor="'.$planning[$object->immatriculation][$date]["aprï¿½s-midi"]['color'].'"';
 						}
 						print $bgcolor.' style="border-right: 1px solid';
 						//materialiser la date du jour
 						if ($date==date ('Ymd', $timestamp) || $date==date ('Ymd', $timestamp-86400)){
-							print ' #F05F40" class="text-center" >';
+							print ' #F05F40" class="text-center; padding:5px" >';
 						}else{
-							print '	#dee2e6" class="text-center" >';
+							print '	#dee2e6" class="text-center; padding:5px" >';
 						}
 					print '</td>';
 					}
@@ -883,7 +883,7 @@ function calculPlanning($socId, $dateDebut, $dateFin){
 	dol_include_once('operationorder/lib/operationorder.lib.php');
 	dol_include_once('core/lib/date.lib.php');
 	
-	//récupération de la couleur de l'état quand le vehicule est à l'atelier
+	//rï¿½cupï¿½ration de la couleur de l'ï¿½tat quand le vehicule est ï¿½ l'atelier
 	$sql = 'SELECT v.rowid as id, v.immatriculation as immatriculation, t.label as type, s.color as color';
 	$sql .= ', o.planned_date as planned_date, o.time_planned_t as time_planned, o.entity as entity ';
 	$sql.= ' FROM `'.MAIN_DB_PREFIX.'dolifleet_vehicule` as v';
@@ -915,7 +915,7 @@ function calculPlanning($socId, $dateDebut, $dateFin){
 				$planning[$object->immatriculation][$jour]["matin"]['color']=$object->color;
 			}
 			else{
-				$planning[$object->immatriculation][$jour]["après-midi"]['color']=$object->color;
+				$planning[$object->immatriculation][$jour]["aprï¿½s-midi"]['color']=$object->color;
 			}			
 			$i+=3600;
 			$plannedTime+=$i;
@@ -923,7 +923,7 @@ function calculPlanning($socId, $dateDebut, $dateFin){
 	}	
 	$conf->entity=$oldconf;
 	 
-	//récupération des dates prévisionnelles de maintenance à programmer
+	//rï¿½cupï¿½ration des dates prï¿½visionnelles de maintenance ï¿½ programmer
 	$sql = 'SELECT a.id as id, v.immatriculation as immatriculation, p.label as product, a.percent as percent';
 	$sql .= ', a.datep as datep, a.code as code ';
 	$sql.= ' FROM `'.MAIN_DB_PREFIX.'actioncomm` as a';

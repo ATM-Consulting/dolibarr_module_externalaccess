@@ -417,7 +417,7 @@ class Actionsexternalaccess
             
     public function print_disponibilityList($socId = 0)
     {
-    	print '<section id="section-disponibility"><div class="container">';
+    	print '<section id="section-disponibility" style="padding:25px"><div class="container"style="padding-rignt:0;padding-left:0;margin-rignt:0;margin-left:0">';
     	print_disponibilityListTable($socId);
     	print '</div></section>';
     }
@@ -579,7 +579,7 @@ class Actionsexternalaccess
 				{
 					load_last_main_doc($object);
 					$filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
-	//faire print pour tester et vérifier dans le repertoire affiché si le doc existe	
+	//faire print pour tester et vï¿½rifier dans le repertoire affichï¿½ si le doc existe	
 	//print $filename; exit;
 					if(!empty($object->last_main_doc)){
 						downloadFile($filename, $forceDownload);

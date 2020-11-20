@@ -126,11 +126,11 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 				<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
 			</div>';
 
-//	$out .= '<div class="form-group">
-//				<label for="ticket-type-code">'.$langs->transnoentities('TicketTypeCode').'</label>';
-//	$out .=  $formticket->selectTypesTickets($object->type_code, 'ticket-type-code', '', 2, 1, 1, 0, 'form-control');
-//	$out .=  '<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
-//			</div>';
+	$out .= '<div class="form-group">
+				<label for="ticket-type-code">'.$langs->transnoentities('TicketTypeCode').'</label>';
+	$out .=  $formticket->selectTypesTickets($object->type_code, 'ticket-type-code', '', 2, 1, 1, 0, 'form-control');
+	$out .=  '<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
+			</div>';
 
 	$out .=  '<div class="form-group">
 				<label for="ticket-message">'.$langs->transnoentities('TicketMessage').'</label>
