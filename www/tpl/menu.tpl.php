@@ -73,7 +73,26 @@ if($context->userIsLog())
             'name' => $langs->trans('EALINKNAME_tickets'),
         );
     }
-
+    
+    if($conf->global->EACCESS_ACTIVATE_OR && !empty($user->rights->externalaccess->view_or) && !empty($conf->ticket->enabled))
+    {
+    	$Tmenu['or'] = array(
+    			'id' => 'or',
+    			'rank' => 60,
+    			'url' => $context->getRootUrl('or'),
+    			'name' => $langs->trans('EALINKNAME_or'),
+    	);
+    }
+    
+    if($conf->global->EACCESS_ACTIVATE_DISPONIBILITY && !empty($user->rights->externalaccess->view_disponibility) && !empty($conf->ticket->enabled))
+    {
+    	$Tmenu['disponibility'] = array(
+    			'id' => 'disponibility',
+    			'rank' => 70,
+    			'url' => $context->getRootUrl('disponibility'),
+    			'name' => $langs->trans('EALINKNAME_disponibility'),
+    	);
+    }
 
 
     $Tmenu['user'] = array(

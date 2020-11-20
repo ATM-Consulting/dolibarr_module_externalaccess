@@ -125,14 +125,8 @@ function print_invoiceTable($socId = 0)
 
     if(!empty($tableItems))
     {
-
-
-
-
         print '<table id="invoice-list" class="table table-striped" >';
-
         print '<thead>';
-
         print '<tr>';
         print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
@@ -241,11 +235,8 @@ function print_projetsTable($socId = 1)
 
     if(!empty($tableItems))
     {
-
         print '<table id="projet-list" class="table table-striped" >';
-
         print '<thead>';
-
         print '<tr>';
         print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
@@ -256,9 +247,7 @@ function print_projetsTable($socId = 1)
         print ' <th class="text-center" >'.$langs->trans('Description').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Lien de telechargement').'</th>';
         print '</tr>';
-
         print '</thead>';
-
         print '<tbody>';
         foreach ($tableItems as $item)
         {
@@ -275,10 +264,8 @@ function print_projetsTable($socId = 1)
                 $viewLink = $object->ref;
                 $downloadLink =  $langs->trans('DocumentFileNotAvailable');
             }
-
             print '<tr >';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
-
             print ' <td data-search="'.$object->dateo.'" data-order="'.dol_print_date($object->dateo).'"  >'.dol_print_date($object->dateo).'</td>';
             print ' <td data-search="'.$object->datec.'" data-order="'.dol_print_date($object->datec).'"  >'.dol_print_date($object->datec).'</td>';
             print ' <td  >'.$object->getLibStatut(0).'</td>';
@@ -451,13 +438,8 @@ function print_orderListTable($socId = 0)
     if(!empty($tableItems))
     {
 
-
-
-
         print '<table id="order-list" class="table table-striped" >';
-
         print '<thead>';
-
         print '<tr>';
         print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
         print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
@@ -492,8 +474,6 @@ function print_orderListTable($socId = 0)
             print ' <td data-search="'.dol_print_date($object->date_livraison).'" data-order="'.$object->date_livraison.'" >'.dol_print_date($object->date_livraison).'</td>';
             print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
             print ' <td data-order="'.$object->multicurrency_total_ht.'"  class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
-
-
             print ' <td class="text-right" >'.$downloadLink.'</td>';
 
 
@@ -548,7 +528,6 @@ function print_expeditionTable($socId = 0)
 
 	$langs->load('sendings');
 
-
 	$sql = 'SELECT rowid ';
 	$sql.= ' FROM `'.MAIN_DB_PREFIX.'expedition` ';
 	$sql.= ' WHERE fk_soc = '. intval($socId);
@@ -560,14 +539,8 @@ function print_expeditionTable($socId = 0)
 
 	if(!empty($tableItems))
 	{
-
-
-
-
 		print '<table id="expedition-list" class="table table-striped" >';
-
 		print '<thead>';
-
 		print '<tr>';
 		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
 		print ' <th class="text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
@@ -575,9 +548,7 @@ function print_expeditionTable($socId = 0)
 		print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
 		print ' <th class="text-center" ></th>';
 		print '</tr>';
-
 		print '</thead>';
-
 		print '<tbody>';
 		foreach ($tableItems as $item)
 		{
@@ -610,17 +581,12 @@ function print_expeditionTable($socId = 0)
 					$reftosearch.= $linkedobject["ref_value"];
 				}
 			}
-
-
 			print '<tr>';
 			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
 			print ' <td data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
 			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
 			print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
-
 			print ' <td class="text-right" >'.$downloadLink.'</td>';
-
-
 			print '</tr>';
 
 		}
@@ -655,10 +621,327 @@ function print_expeditionTable($socId = 0)
 		print  $langs->trans('EACCESS_Nothing');
 		print '</div>';
 	}
+}
 
+function print_orTable($socId = 0)
+{
+	global $langs,$db,$conf;
+	$context = Context::getInstance();
+	
+	include_once DOL_DOCUMENT_ROOT . '/custom/operationorder/class/operationorder.class.php';
+	include_once DOL_DOCUMENT_ROOT . '/core/lib/pdf.lib.php';
+	
+	$allowedstatus = array();
+	$allowedstatus = json_decode($conf->global->EACCESS_OR_STATUT_DISP);
+		$filterstatut='';
+		foreach ($allowedstatus as $statut){
+			$filterstatut .= "'".$statut."',";
+		}
+		$filterstatut=substr($filterstatut,0,-1);
+		
+	$allowedtypes = array();
+	$allowedtypes = json_decode($conf->global->EACCESS_OR_TYPE_DISP);
+		$filtertype='';
+		foreach ($allowedtypes as $type){
+			$filtertype .= $type.',';
+		}
+		$filtertype=substr($filtertype,0,-1);
+		
+	$langs->load('sendings');
+		
+	$sql = 'SELECT o.rowid as id, t.label as type, o.last_main_doc as last_main_doc, o.ref as ref, v.immatriculation as immatriculation, ';
+	$sql .= 'o.date_creation as date_creation, (IF(o.total_ht_part IS NOT NULL, o.total_ht_part, 0)+IF(o.total_ht_mo IS NOT NULL, o.total_ht_mo, 0)+IF(o.total_ht_external IS NOT NULL, o.total_ht_external, 0)) as total_ht  , s.label as statut ';
+	$sql.= ' FROM `'.MAIN_DB_PREFIX.'operationorder` as o';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'operationorder_status` as s ON s.rowid=o.status';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'c_operationorder_type` as t ON t.rowid=o.fk_c_operationorder_type';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'operationorder_extrafields` as es ON es.fk_object=o.rowid';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'dolifleet_vehicule` as v ON v.rowid=es.fk_dolifleet_vehicule';
+	$sql.= ' WHERE o.fk_soc = '. intval($socId);
+	$sql.= ' AND s.code IN ('.$filterstatut.") ";
+	$sql.= ' AND fk_c_operationorder_type IN ('.$filtertype.") ";
+	$sql.= ' AND o.entity IN ('.getEntity("operationorder").')';//Compatibility with Multicompany
+	$sql.= ' ORDER BY o.date_creation DESC';
+	//print $sql;exit;
+	$resql=$db->query($sql);
+	
+	if(!empty($resql))
+	{		
+		print '<table id="operationorder-list" class="table table-striped" >';		
+		print '<thead>';		
+		print '<tr>';
+		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('vehicule').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('DateCreation').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('montantHT').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
+		print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+		print ' <th class="text-center" ></th>';
+		print '</tr>';		
+		print '</thead>';	
+		
+		print '<tbody>';
+		while ($object = $db->fetch_object($resql)){
+		$or=new OperationOrder ($db);
+		$or->fetch($object->id);
+			
+			//print_r ($object); exit;
+			load_last_main_doc($or);
+			$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadOperationOrder&id='.$object->id;
+			
+			if(!empty($object->last_main_doc)){
+				$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+				$downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+			}
+			else{
+				$viewLink = $object->ref;
+				$downloadLink =  $langs->trans('DocumentFileNotAvailable');
+			}			
+			$reftoshow = '';
+			$reftosearch = '';
+			$linkedobjects = pdf_getLinkedObjects($or,$langs);
+			if (! empty($linkedobjects))
+			{
+				foreach($linkedobjects as $linkedobject)
+				{
+					if(!empty($reftoshow)){
+						$reftoshow.= ', ';
+						$reftosearch.= ' ';
+					}
+					$reftoshow.= $linkedobject["ref_value"]; //$linkedobject["ref_title"].' : '.
+					$reftosearch.= $linkedobject["ref_value"];
+				}
+			}			
+			print '<tr>';
+			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+			print ' <td data-search="'.$object->immatriculation.'" data-order="'.$object->immatriculation.'"  >'.$object->immatriculation.'</td>';
+			print ' <td data-search="'.dol_print_date($object->date_creation).'" data-order="'.$object->date_creation.'" >'.dol_print_date($object->date_creation).'</td>';
+			print ' <td data-search="'.$object->total_ht.'" data-order="'.$object->total_ht.'"  class="text-right" >'.price($object->total_ht, 0, '', 1, 2, 2)  .' </td>';
+			print ' <td data-search="'.$object->type.'" data-order="'.$object->type.'"  >'.$object->type.'</td>';
+			print ' <td class="text-center" >'.$or->getLibStatut(0).'</td>';			
+			print ' <td class="text-right" >'.$downloadLink.'</td>';			
+			print '</tr>';			
+		}
+		print '</tbody>';
+		print '</table>';
+		?>
+        <script type="text/javascript" >
+            $(document).ready(function(){
+                $("#operationorder-list").DataTable({
+                    "language": {
+                        "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+                    },
+                    responsive: true,
+                    columnDefs: [{
+                        orderable: false,
+                        "aTargets": [-1]
+                    }, {
+                        "bSearchable": false,
+                        "aTargets": [-1, -2]
+                    }]
+                });
+            });
+        </script>
+		<?php
+	}
+	else {
+		print '<div class="info clearboth text-center" >';
+		print  $langs->trans('EACCESS_Nothing');
+		print '</div>';
+	}
+}
 
+function print_disponibilityListTable($socId = 0)
+{
+	global $langs,$db;
+	$timestamp=dol_mktime (0, 0, 0, date("m" ), date("d"), date("Y"));
+	$dateDebut = date ('Y-m-d H:i:s', $timestamp-604800);
+	$dateFin = date ('Y-m-d 23:59:59', $timestamp+1209600);
+	$context = Context::getInstance();
+	
+	include_once DOL_DOCUMENT_ROOT . '/custom/dolifleet/class/vehicule.class.php';
+	include_once DOL_DOCUMENT_ROOT . '/core/lib/pdf.lib.php';
+	
+	$langs->load('sendings');
+	
+	$searchvh=GETPOST("searchvh");
+	$searchtype=GETPOST("searchtype");
+	$sql = 'SELECT v.rowid as id, v.immatriculation as immatriculation, t.label as type';
+	$sql.= ' FROM `'.MAIN_DB_PREFIX.'dolifleet_vehicule` as v';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'c_dolifleet_vehicule_type` as t ON t.rowid=v.fk_vehicule_type';	
+	$sql.= ' WHERE v.fk_soc = '. intval($socId);
+	if($searchvh){
+		$sql.= " AND v.immatriculation LIKE '%" .$searchvh . "%'";
+	}
+	if($searchtype){
+		$sql.= " AND t.label LIKE '%" .$searchtype . "%'";
+	}
+	$sql.= ' AND v.status=1';
+	$sql.= ' ORDER BY v.immatriculation DESC';
+	
+	$planning= array();
+	$planning=calculPlanning($socId, $dateDebut, $dateFin);
+	
+	$resql=$db->query($sql);
+	if(!empty($resql))
+	{
+		print '<table id="disponibility-list" class="table table-striped" >';
+		print '<thead>';
+		print '<tr>';
+		print ' <th style="border-left: 1px solid #dee2e6" class="text-center" > '.$langs->trans('vehicule').' </th>';
+		print ' <th style="border-right: 1px solid #dee2e6" class="text-center" > '.$langs->trans('vehiculetype').' </th>';
+		
+		for ($i=-7; $i<15; $i++){
+			$date = date ('d /m', $timestamp+($i*86400));
+			if ($date==date ('d /m', $timestamp)){
+				print '<th style="border: 1px solid #F05F40" colspan="2" class="text-center" >'.$date.'</th>';
+			}else{
+			print ' <th style="border-left: 1px solid #dee2e6" colspan="2" class="text-center" >'.$date.'</th>';
+			}
+		}
 
+		print '</tr>';
+		print '<tr>';
+		print '<form method="post" action="'.$_SERVER["PHP_SELF"].'?controller=disponibility">';
+		print ' <th style="border-left: 1px solid #dee2e6" class="text-center" ><input  style="width:75px" type="text" name="searchvh" value="'.$searchvh.'"></th>';
+		print ' <th style="border-right: 1px solid #dee2e6; white-space: nowrap;" class="text-center" ><input style="width:75px" type="text" name="searchtype" value="'.$searchtype.'"><button name="button"><i class="fa fa-search"></i></button> </th>';
+		print '</form>';
+		for ($i=1; $i<23; $i++){	
+			if ($i==7 || $i==8){	
+				$color= '#F05F40';
+			}else{
+				$color= '#dee2e6';
+			}
+		print ' <th style="border-left: 1px solid #dee2e6" class="text-center" >am</th>';
+		print ' <th style="border-right: 1px solid '.$color.'" class="text-center" >pm</th>';
+		}
+		print '</tr>';
+		print '</thead>';
+		
+		print '<tbody>';
 
+		while ($object = $db->fetch_object($resql)){
+			$dispo=new doliFleetVehicule($db);
+			$dispo->fetch($object->id);
+
+			print '<tr>';
+			print ' <td style="border-left: 1px solid #dee2e6" data-search="'.$object->immatriculation.'" data-order="'.$object->immatriculation.'"  >'.$object->immatriculation.'</td>';
+			print ' <td style="border-right: 1px solid #dee2e6" data-search="'.$object->type.'" data-order="'.$object->type.'"  >'.$object->type.'</td>';
+			
+			for ($i=-7; $i<15; $i++){
+				$date = date ('Ymd', $timestamp+($i*86400));
+				
+				for ($j=1; $j<3; $j++){
+					if ($j==1){
+						print ' <td ';
+						//afficher les statuts atelier du matin
+						$bgcolor='';
+						if($planning[$object->immatriculation][$date]["matin"]['color']){
+            				$bgcolor= 'bgcolor="'.$planning[$object->immatriculation][$date]["matin"]['color'].'"';
+						} 
+						print $bgcolor.' style="border-left: 1px solid #dee2e6" class="text-center" >';					
+						$infobulle="";
+						$path="";
+						//afficher les dates prévisionnelles
+						if($planning[$object->immatriculation][$date]["matin"]['picto']){
+							$infobulle=$planning[$object->immatriculation][$date]["matin"]['picto'];
+							$path = DOL_URL_ROOT.'/theme/eldy/img/error.png';
+							print '<img class="inline-block" src="'.$path.'" title="'.$infobulle.'">';						
+						}
+						print '</td>';						
+					}else{
+						print ' <td ';
+						//afficher les statuts atelier de l'après midi
+						$bgcolor='';
+						if($planning[$object->immatriculation][$date]["après-midi"]['color']){
+							$bgcolor= 'bgcolor="'.$planning[$object->immatriculation][$date]["après-midi"]['color'].'"';
+						}
+						print $bgcolor.' style="border-right: 1px solid';
+						//materialiser la date du jour
+						if ($date==date ('Ymd', $timestamp) || $date==date ('Ymd', $timestamp-86400)){
+							print ' #F05F40" class="text-center" >';
+						}else{
+							print '	#dee2e6" class="text-center" >';
+						}
+					print '</td>';
+					}
+				}				
+			}
+			print '</tr>';
+		}
+		print '</tbody>';
+		print '</table>';
+	}
+	else {
+		print '<div class="info clearboth text-center" >';
+		print  $langs->trans('EACCESS_Nothing');
+		print '</div>';
+	}
+}
+
+function calculPlanning($socId, $dateDebut, $dateFin){
+	global $db, $conf;	
+	dol_include_once('operationorder/lib/operationorder.lib.php');
+	dol_include_once('core/lib/date.lib.php');
+	
+	//récupération de la couleur de l'état quand le vehicule est à l'atelier
+	$sql = 'SELECT v.rowid as id, v.immatriculation as immatriculation, t.label as type, s.color as color';
+	$sql .= ', o.planned_date as planned_date, o.time_planned_t as time_planned, o.entity as entity ';
+	$sql.= ' FROM `'.MAIN_DB_PREFIX.'dolifleet_vehicule` as v';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'c_dolifleet_vehicule_type` as t ON t.rowid=v.fk_vehicule_type';
+	$sql .= ' INNER JOIN `'.MAIN_DB_PREFIX.'operationorder_extrafields` as es ON v.rowid=es.fk_dolifleet_vehicule';
+	$sql .= ' INNER JOIN `'.MAIN_DB_PREFIX.'operationorder` as o ON es.fk_object=o.rowid';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'operationorder_status` as s ON s.rowid=o.status';
+	$sql.= ' WHERE v.fk_soc = '. intval($socId);
+	$sql.= " AND o.planned_date BETWEEN '".$dateDebut."' AND '". $dateFin."'";
+	$sql.= ' AND o.planned_date IS NOT NULL';
+	$sql.= ' AND v.entity IN ('.getEntity("disponibility").')';//Compatibility with Multicompany
+	$sql.= ' ORDER BY v.immatriculation DESC';
+	
+	$oldconf=$conf->entity;
+	
+	$planning=array();
+	$resql = $db->query($sql);
+	while ($object = $db->fetch_object($resql)){		
+		$conf->entity=$object->entity;			
+		$startTime=dol_stringtotime($object->planned_date); //format timestamp
+		$endTime= calculateEndTimeEventByBusinessHours($startTime, $object->time_planned); // formet timestamp
+		
+		$plannedTime = $startTime;
+		$i=0;
+		while ($plannedTime<$endTime){			
+			$jour=date("Ymd", $plannedTime);
+			$heure=date("Hi", $plannedTime);
+			if ($heure>0 && $heure<1201){
+				$planning[$object->immatriculation][$jour]["matin"]['color']=$object->color;
+			}
+			else{
+				$planning[$object->immatriculation][$jour]["après-midi"]['color']=$object->color;
+			}			
+			$i+=3600;
+			$plannedTime+=$i;
+		}	
+	}	
+	$conf->entity=$oldconf;
+	 
+	//récupération des dates prévisionnelles de maintenance à programmer
+	$sql = 'SELECT a.id as id, v.immatriculation as immatriculation, p.label as product, a.percent as percent';
+	$sql .= ', a.datep as datep, a.code as code ';
+	$sql.= ' FROM `'.MAIN_DB_PREFIX.'actioncomm` as a';
+	$sql.= ' INNER JOIN `'.MAIN_DB_PREFIX.'dolifleet_vehicule` as v ON v.rowid=a.fk_element';
+	$sql .= ' INNER JOIN `'.MAIN_DB_PREFIX.'actioncomm_extrafields` as ef ON a.id=ef.fk_object';
+	$sql .= ' INNER JOIN `'.MAIN_DB_PREFIX.'product` as p ON ef.fk_product=p.rowid';
+	$sql.= ' WHERE a.fk_soc = '. intval($socId);
+	$sql.= " AND a.datep BETWEEN '".$dateDebut."' AND '". $dateFin."'";
+	$sql.= ' AND a.percent="0" AND a.code="AC_OR"';
+	$sql.= ' ORDER BY v.immatriculation DESC';
+
+	$resql = $db->query($sql);
+	while ($object = $db->fetch_object($resql)){
+		$datePlann = dol_stringtotime($object->datep);
+		$jour=date("Ymd", $datePlann);
+		$planning[$object->immatriculation][$jour]["matin"]['picto'].=$object->product." ". chr(13);		
+	}
+	return $planning;
 }
 
 
@@ -861,6 +1144,9 @@ function menuSort($a, $b) {
     return ($a['rank'] > $b['rank']) ? -1 : 1;
 
 }
+
+
+
 
 
 

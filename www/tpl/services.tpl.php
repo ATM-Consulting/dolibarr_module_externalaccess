@@ -55,6 +55,15 @@ if(empty($reshook)){
         printService($langs->trans('Tickets'),'fa-ticket',$link);
     }
     
+    if($conf->global->EACCESS_ACTIVATE_OR && !empty($user->rights->externalaccess->view_or)){
+    	$link = $context->getRootUrl('or');
+    	printService($langs->trans('Or'),'fa-wrench',$link);
+    }
+    
+    if($conf->global->EACCESS_ACTIVATE_DISPONIBILITY && !empty($user->rights->externalaccess->view_disponibility)){
+    	$link = $context->getRootUrl('disponibility');
+    	printService($langs->trans('Disponibility'),'fa-calendar',$link);
+    }
     
     $link = $context->getRootUrl('personalinformations');
     printService($langs->trans('MyPersonalInfos'),'fa-user',$link);

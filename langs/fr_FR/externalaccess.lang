@@ -17,7 +17,7 @@ external_access_expeditions= Consulter ses expéditions
 external_access_tickets= Consulter ses tickets
 external_access_userinfos_edit= Modifier ses informations personnelles
 external_access_projets = Consulter ses projets
-external_access_repair = Consulter ses ordres de réparation
+external_access_or = Consulter les ordres de réparation des véhicules
 external_access_disponibility = Consulter le planning de disponibilité des véhicules
 
 # MENU
@@ -57,6 +57,15 @@ DateFinValidite=Date de fin de validité
 EndValidDate=Fin de validité
 DateLivraison=Date prévue de livraison
 DatePayLimit=Date échéance
+Amount_HT=Montant HT
+Amount_TTC=Montant TTC
+RemainderToPay=Reste à payer
+DateCreation=Date de création de l'OR
+DateDispo=Date prévue de disponibilité
+vehicule=Immatriculation du Véhicule
+vehiculetype=Type de véhicule
+montantHT=Montant total HT
+DocumentFileNotAvailable=Document actuellement non disponible.
 
 # Diver tools
 OrSeparator=Ou
@@ -87,6 +96,14 @@ EALINKNAME_tickets=Tickets
 ViewProjects = Projets
 ViewProjectsDesc = Retrouvez facilement vos projets
 EALINKNAME_projects = Projets
+
+ViewOr = Ordres de Réparation
+ViewOrDesc = Retrouvez facilement vos ordres de Réparation
+EALINKNAME_or = Ordres de Réparation
+
+ViewDisponibility = Disponibilités des véhicules
+ViewDisponibilityDesc = Retrouvez facilement les disponibilités de vos véhicules
+EALINKNAME_disponibility = Disponibilités des véhicules
 
 PersonalInformations=Informations personnelles
 
@@ -122,8 +139,10 @@ EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations 
 EACCESS_ACTIVATE_EXPEDITIONS= Expéditions
 EACCESS_ACTIVATE_TICKETS = Tickets
 EACCESS_ACTIVATE_PROJECTS = Projets
-EACCESS_ACTIVATE_REPAIR = Ordres de réparation
-EACCESS_ACTIVATE_DISPONIBILITY = Prévision de disponibilité des véhicules
+EACCESS_ACTIVATE_OR = Ordres de réparation
+EACCESS_ACTIVATE_DISPONIBILITY = Disponibilités des véhicules
+ETargetableStatus = Statuts d'OR accessibles dans le portail client
+ETargetableType = Types d'OR accessibles dans le portail client
 
 # INDEX
 Quotations=Devis
@@ -133,7 +152,8 @@ OrdersDesc=
 Invoices=Factures
 InvoicesDesc=
 MySpace=Consulter mon espace
-
+Or=Ordres de réparation
+Disponibility=Disponibilités des véhicules
 
 
 ForgotThePassword=Mot de passe oublié ?
@@ -167,11 +187,6 @@ Company=Société
 SorryThereIsNothingHere=Désolé il n'y a rien ici
 
 EACCESS_Nothing=Actuellement il n'y a rien ici, patience, vos documents seront disponibles prochainement
-
-Amount_HT=Montant HT
-Amount_TTC=Montant TTC
-RemainderToPay=Reste à payer
-DocumentFileNotAvailable=Document actuellement non disponible.
 
 
 EaBack=Retour

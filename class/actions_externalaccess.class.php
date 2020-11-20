@@ -107,7 +107,19 @@ class Actionsexternalaccess
 		        $context->title = $langs->trans('ViewProjects');
 		        $context->desc = $langs->trans('ViewProjectsDesc');
 		        $context->menu_active[] = 'projects';
-		    }
+            }     
+            elseif($context->controller == 'or')
+            {
+            	$context->title = $langs->trans('ViewOr');
+            	$context->desc = $langs->trans('ViewOrDesc');
+            	$context->menu_active[] = 'or';
+            }  
+            elseif($context->controller == 'disponibility')
+            {
+            	$context->title = $langs->trans('ViewDisponibility');
+            	$context->desc = $langs->trans('ViewDisponibilityDesc');
+            	$context->menu_active[] = 'disponibility';
+            }     
 			elseif($context->controller == 'default')
 			{
 				$context->title = $langs->trans('Welcome');
@@ -179,6 +191,14 @@ class Actionsexternalaccess
 			elseif ($action === 'downloadExpedition')
 			{
 				$this->_downloadExpedition();
+			}
+			elseif ($action === 'downloadOperationOrder')
+			{
+				$this->_downloadOperationOrder();
+			}
+			elseif ($action === 'downloadDisponibility')
+			{
+				$this->_downloadDisponibility();
 			}
 	        /*elseif ($action === 'getOrdersList')
 	        {
@@ -313,9 +333,26 @@ class Actionsexternalaccess
 	            }
 	            return 1;
 	        }
-	    }
-
+	        elseif($context->controller == 'or')
+	        {
+	        	$context->setControllerFound();
+	        	if($conf->global->EACCESS_ACTIVATE_OR && !empty($user->rights->externalaccess->view_or))
+	        	{
+	        		$this->print_orList($user->socid);
+	        	}
+	        	return 1;
+	        }
+	    	elseif($context->controller == 'disponibility')
+	    	{
+	    		$context->setControllerFound();
+	    		if($conf->global->EACCESS_ACTIVATE_DISPONIBILITY && !empty($user->rights->externalaccess->view_disponibility))
+	    		{
+	    		$this->print_disponibilityList($user->socid);
+	    		}
+	    	return 1;
+	    	}
 		return 0;
+	    }
 	}
 
 	public function print_invoiceList($socId = 0)
@@ -366,7 +403,21 @@ class Actionsexternalaccess
         print_ticketCard($ticketId, $socId, GETPOST('action'));
         print '</div></section>';
     }
-
+        
+    public function print_orList($socId = 0)
+    {
+        print '<section id="section-or"><div class="container">';
+        print_orTable($socId);
+        print '</div></section>';
+    }
+            
+    public function print_disponibilityList($socId = 0)
+    {
+    	print '<section id="section-disponibility"><div class="container">';
+    	print_disponibilityListTable($socId);
+    	print '</div></section>';
+    }
+    
 	public function print_personalinformations()
 	{
 	    global $langs,$db,$user;
@@ -455,7 +506,6 @@ class Actionsexternalaccess
 	            {
 			load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
-
 	                downloadFile($filename, $forceDownload);
 
 	                if(!empty($object->last_main_doc)){
@@ -505,8 +555,40 @@ class Actionsexternalaccess
 				}
 			}
 		}
-
 	}
+	
+	
+	private function _downloadOperationOrder(){
+		
+		global $langs, $db, $conf, $user;
+		$filename=false;
+		$context = Context::getInstance();
+		$id = GETPOST('id','int');
+		$forceDownload = GETPOST('forcedownload','int');
+		if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_OR && !empty($user->rights->externalaccess->view_or))
+		{
+			dol_include_once('/custom/operationorder/class/operationorder.class.php');
+			$object = new OperationOrder($db);
+			if($object->fetch($id)>0)
+			{
+				if($object->socid==$user->societe_id)
+				{
+					load_last_main_doc($object);
+					$filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+	//faire print pour tester et vérifier dans le repertoire affiché si le doc existe	
+	//print $filename; exit;
+					if(!empty($object->last_main_doc)){
+						downloadFile($filename, $forceDownload);
+					}
+					else{
+						print $langs->trans('FileNotExists');
+					}					
+				}
+			}
+		}
+	}
+	
+
 
 	public function actionTicketCard($parameters, $object, $action, $hookmanager)
 	{
