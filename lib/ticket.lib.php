@@ -614,10 +614,6 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					$footer.= '</div>';
 				}
 
-				if(!empty($footer)){
-					$out.= '<div class="timeline-footer">'.$footer.'</div>';
-				}
-
 				$out.= '</div>';
 
 				$out.='</li>';
