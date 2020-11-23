@@ -213,7 +213,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 
 
 	$out .= '<div class="form-group">
-				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment')) . '</textarea>';
+				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment', 'none')) . '</textarea>';
 	$out .= '</div>';
 
 	if (!empty($conf->global->FCKEDITOR_ENABLE_TICKET)){
@@ -426,7 +426,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 		// Sort messages
 		$sortMsg = !empty($user->conf->EA_TICKET_MSG_SORT_ORDER)?$user->conf->EA_TICKET_MSG_SORT_ORDER:'asc';
-		$getSortMsg = GETPOST('sortmsg');
+		$getSortMsg = GETPOST('sortmsg', 'none');
 		if(!empty($getSortMsg) && in_array($getSortMsg, array('asc','desc'))){
 			$sortMsg = $getSortMsg;
 			dol_set_user_param($db, $conf,$user, array('EA_TICKET_MSG_SORT_ORDER' => $sortMsg));
@@ -576,7 +576,43 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 				$out.= '<div class="timeline-body">'.$value['message'].'</div>';
 
-				$footer = '';// je prevoit pour la suite
+				$footer = ''; // init footer as empty
+				$documents = getTicketActionCommEcmList($actionstatic) ;
+				if(!empty($documents))
+				{
+					$footer.= '<div class="timeline-documents-container">';
+					foreach ($documents as $doc)
+					{
+						$footer.= '<span id="document_'.$doc->id.'" class="timeline-documents" ';
+						$footer.= ' data-id="'.$doc->id.'" ';
+						$footer.= ' data-path="'.$doc->filepath.'"';
+						$footer.= ' data-filename="'.dol_escape_htmltag($doc->filename).'" ';
+						$footer.= '>';
+
+						$filePath = DOL_DATA_ROOT . '/'. $doc->filepath . '/'. $doc->filename;
+						$mime = dol_mimetype($filePath);
+						$file = $actionstatic->id.'/'.$doc->filename;
+						$thumb = $actionstatic->id.'/thumbs/'.substr($doc->filename, 0, strrpos($doc->filename, '.')).'_mini'.substr($doc->filename, strrpos($doc->filename, '.'));
+
+						// TODO : make a document.php and viewimage.php external access version
+						//$doclink = dol_buildpath('document.php', 1).'?modulepart=actions&attachment=0&file='.urlencode($file).'&entity='.$conf->entity;
+						//$viewlink = dol_buildpath('viewimage.php', 1).'?modulepart=actions&file='.urlencode($thumb).'&entity='.$conf->entity;
+
+						$mimeAttr = ' mime="'.$mime.'" ';
+						$class = '';
+						if(in_array($mime, array('image/png', 'image/jpeg', 'application/pdf'))){
+							$class.= ' documentpreview';
+						}
+
+						// TODO : uncomment link when we have a secured display document syteme
+						//$footer.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
+						$footer.= img_mime($filePath).' '.$doc->filename;
+						//$footer.= '</a>';
+
+						$footer.= '</span>';
+					}
+					$footer.= '</div>';
+				}
 
 				if(!empty($footer)){
 					$out.= '<div class="timeline-footer">'.$footer.'</div>';

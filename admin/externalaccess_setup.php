@@ -49,7 +49,7 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	if (dolibarr_set_const($db, $code, GETPOST($code), 'chaine', 0, '', $conf->entity) > 0)
+	if (dolibarr_set_const($db, $code, GETPOST($code, 'none'), 'chaine', 0, '', $conf->entity) > 0)
 	{
 		header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
@@ -83,7 +83,7 @@ llxHeader('', $langs->trans($page_name));
 // Subheader
 $linkback = '<a href="' . DOL_URL_ROOT . '/admin/modules.php">'
     . $langs->trans("BackToModuleList") . '</a>';
-print_fiche_titre($langs->trans($page_name), $linkback);
+print load_fiche_titre($langs->trans($page_name), $linkback, "title_externalaccess@externalaccess");
 
 // Configuration header
 $head = externalaccessAdminPrepareHead();
@@ -91,8 +91,7 @@ dol_fiche_head(
     $head,
     'settings',
     $langs->trans("ModuleName"),
-    1,
-    "externalaccess@externalaccess"
+    1
 );
 
 if(!dol_include_once('/abricot/inc.core.php')) {
