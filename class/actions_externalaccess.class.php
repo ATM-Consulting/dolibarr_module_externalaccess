@@ -553,9 +553,6 @@ class Actionsexternalaccess
 				}
 
 				$addFileProcessRes = dol_add_file_process($upload_dir_tmp, 0, 0, 'addedfile', '', null, '', 0);
-				if($addFileProcessRes){
-					// Convert to public file
-				}
 			}
 		}
 
@@ -605,6 +602,11 @@ class Actionsexternalaccess
 				$ret = $ticket->createTicketMessage($user, 0, $listofpaths, $listofmimes, $listofnames);
 
 				if ($ret > 0) {
+					$Terrors = array();
+					// TODO remove not uploaded file from $listofnames.
+					// TODO Il ne faudrait pas rendre un fichier de ce ticket public juste parceque l'utilisateur a tenté d'envoyer un fichier avec le même nom...
+					updateFileUploadedToBePublic($ticket, $listofnames, $Terrors);
+
 					header('Location: '.$context->getRootUrl('ticket_card', '&id='.$ticket->id.'#lastcomment'));
 					exit();
 				} else {
