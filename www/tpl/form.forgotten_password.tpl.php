@@ -14,12 +14,12 @@ if (empty($conf) || ! is_object($conf))
                   <h2 class="text-center"><?php echo $langs->trans("ForgotPassword"); ?></h2>
                   <p><?php echo $langs->trans("YouCanResetYourPasswordHere"); ?>.</p>
                   <div class="panel-body">
-    
+
                     <form id="register-form" role="form" autocomplete="off" class="form" method="post"  action="<?php echo $_SERVER['PHP_SELF']; ?>#forgottenpassword">
-    
+
                         <input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']; ?>">
                         <input type="hidden" name="action" value="buildnewpassword">
-    
+
                       <div class="form-group">
                         <div class="input-group">
                           <span class="input-group-addon"><i class="glyphicon glyphicon-envelope color-blue"></i></span>
@@ -27,9 +27,9 @@ if (empty($conf) || ! is_object($conf))
                         </div>
                       </div>
                       <div class="form-group">
-                        <button name="recover-submit" class="btn btn-lg btn-primary btn-block" type="submit"><?php echo $langs->trans("Renew"); ?></button>
+                        <button name="recover-submit" class="btn btn-lg btn-primary btn-strong btn-block" type="submit"><?php echo $langs->trans("Renew"); ?></button>
                       </div>
-                      
+
                     </form>
 
                   </div>

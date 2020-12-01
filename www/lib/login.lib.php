@@ -28,7 +28,7 @@ function dol_loginfunction($langs,$conf,$mysoc)
     $sessiontimeout='DOLSESSTIMEOUT_'.$prefix;
     if (! empty($conf->global->MAIN_SESSION_TIMEOUT)) setcookie($sessiontimeout, $conf->global->MAIN_SESSION_TIMEOUT, 0, "/", null, false, true);
 
-    if (GETPOST('urlfrom')) $_SESSION["urlfrom"]=GETPOST('urlfrom');
+    if (GETPOST('urlfrom', 'none')) $_SESSION["urlfrom"]=GETPOST('urlfrom', 'none');
     else $_SESSION["urlfrom"] = Context::urlOrigin();
 
 

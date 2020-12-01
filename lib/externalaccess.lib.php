@@ -16,6 +16,8 @@
  * along with this program.  If not, see <http://www.gnu.org/licenses/>.
  */
 
+include_once __DIR__ . '/ticket.lib.php';
+
 /**
  *	\file		lib/externalaccess.lib.php
  *	\ingroup	externalaccess
@@ -169,7 +171,7 @@ function print_invoiceTable($socId = 0)
 
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
                 $viewLink = $object->ref;
@@ -235,6 +237,108 @@ function print_invoiceTable($socId = 0)
 
 }
 
+function print_projetsTable($socId = 1)
+{
+    global $langs,$db;
+    $context = Context::getInstance();
+
+    //dol_include_once('compta/facture/class/facture.class.php');
+    dol_include_once('projet/class/project.class.php');
+    $langs->load('projet');
+
+
+    $sql = 'SELECT rowid ';
+    $sql.= ' FROM `'.MAIN_DB_PREFIX.'projet` projet';
+    $sql.= ' WHERE fk_soc = '. intval($socId);
+    $sql.= ' AND fk_statut > 0';
+    $sql.= ' ORDER BY projet.datec DESC';
+
+    $tableItems = $context->dbTool->executeS($sql);
+
+    if(!empty($tableItems))
+    {
+
+        print '<table id="projet-list" class="table table-striped" >';
+
+        print '<thead>';
+
+        print '<tr>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Budget').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Titre').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Description').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Lien de telechargement').'</th>';
+        print '</tr>';
+
+        print '</thead>';
+
+        print '<tbody>';
+        foreach ($tableItems as $item)
+        {
+            $object = new project($db);
+            $object->fetch($item->rowid);
+        	load_last_main_doc($object);
+            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadprojet&id='.$object->id;
+
+            if(!empty($object->last_main_doc)){
+                $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+            }
+            else{
+                $viewLink = $object->ref;
+                $downloadLink =  $langs->trans('DocumentFileNotAvailable');
+            }
+
+            print '<tr >';
+            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
+
+            print ' <td data-search="'.$object->dateo.'" data-order="'.dol_print_date($object->dateo).'"  >'.dol_print_date($object->dateo).'</td>';
+            print ' <td data-search="'.$object->datec.'" data-order="'.dol_print_date($object->datec).'"  >'.dol_print_date($object->datec).'</td>';
+            print ' <td  >'.$object->getLibStatut(0).'</td>';
+            print ' <td data-search="'.$object->title.'" data-order="'.$object->title.'" ></td>';
+            print '<td  ></td>';
+            print '<td  ></td>';
+            print ' <td  class="text-right" >'.$downloadLink.'</td>';
+            print '</tr>';
+
+        }
+        print '</tbody>';
+
+        print '</table>';
+        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getprojetList';
+    ?>
+    <script type="text/javascript" >
+     $(document).ready(function(){
+         $("#invoice-list").DataTable({
+             "language": {
+                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             },
+
+             responsive: true,
+             columnDefs: [{
+                 orderable: false,
+                 "aTargets": [-1]
+             },{
+                 "bSearchable": false,
+                 "aTargets": [-1, -2]
+             }]
+         });
+     });
+    </script>
+    <?php
+    }
+    else {
+        print '<div class="info clearboth text-center" >';
+        print  $langs->trans('EACCESS_Nothing');
+        print '</div>';
+    }
+
+
+
+}
 
 function print_propalTable($socId = 0)
 {
@@ -294,7 +398,7 @@ function print_propalTable($socId = 0)
 
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$downloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$downloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$downloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
                 $viewLink = $object->ref;
@@ -388,7 +492,7 @@ function print_orderListTable($socId = 0)
         print '<thead>';
 
         print '<tr>';
-		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
 
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
@@ -415,7 +519,7 @@ function print_orderListTable($socId = 0)
 
             if(!empty($object->last_main_doc)){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-                $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+                $downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
             else{
                 $viewLink = $object->ref;
@@ -429,7 +533,7 @@ function print_orderListTable($socId = 0)
 					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
 				}
 			}
-			print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
+            print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
             print ' <td data-search="'.dol_print_date($object->date_livraison).'" data-order="'.$object->date_livraison.'" >'.dol_print_date($object->date_livraison).'</td>';
             print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
             print ' <td data-order="'.$object->multicurrency_total_ht.'"  class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
@@ -536,7 +640,7 @@ function print_expeditionTable($socId = 0)
 
 			if(!empty($object->last_main_doc)){
 				$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-				$downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+				$downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
 			}
 			else{
 				$viewLink = $object->ref;
@@ -558,6 +662,7 @@ function print_expeditionTable($socId = 0)
 					$reftosearch.= $linkedobject["ref_value"];
 				}
 			}
+
 
 			print '<tr>';
 			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
@@ -615,79 +720,6 @@ function print_expeditionTable($socId = 0)
 
 }
 
-function print_ticketTable($socId = 0)
-{
-    global $langs,$db;
-    $context = Context::getInstance();
-
-    dol_include_once('ticket/class/ticket.class.php');
-
-    $langs->load('ticket');
-
-    $sql = 'SELECT rowid ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'ticket` t';
-    $sql.= ' WHERE fk_soc = '. intval($socId);
-    $sql.= ' ORDER BY t.datec DESC';
-    $tableItems = $context->dbTool->executeS($sql);
-
-    if(!empty($tableItems))
-    {
-        print '<table id="ticket-list" class="table table-striped" >';
-        print '<thead>';
-        print '<tr>';
-        print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
-        print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
-        print ' <th class="text-center" >'.$langs->trans('Subject').'</th>';
-        print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
-        print ' <th class="text-center" >'.$langs->trans('TicketSeverity').'</th>';
-        print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
-        print '</tr>';
-        print '</thead>';
-        print '<tbody>';
-        foreach ($tableItems as $item)
-        {
-            $object = new Ticket($db);
-            $object->fetch($item->rowid);
-            $type = $langs->getLabelFromKey($db, $object->type_code, 'c_ticket_type', 'code', 'label');
-            $severity = $langs->getLabelFromKey($db, $object->severity_code, 'c_ticket_severity', 'code', 'label');
-
-            print '<tr>';
-            print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$object->ref.'</td>';
-            print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
-            print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
-            print ' <td data-search="'.$type.'" data-order="'.$type.'" >'.$type.'</td>';
-            print ' <td data-search="'.$severity.'" data-order="'.$severity.'" >'.$severity.'</td>';
-            print ' <td class="text-center" >'.$object->getLibStatut(1).'</td>';
-            print '</tr>';
-        }
-        print '</tbody>';
-        print '</table>';
-        ?>
-        <script type="text/javascript" >
-            $(document).ready(function(){
-                $("#ticket-list").DataTable({
-                    "language": {
-                        "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
-                    },
-                    responsive: true,
-                    columnDefs: [{
-                        orderable: false,
-                        "aTargets": [-1]
-                    },{
-                        "bSearchable": false,
-                        "aTargets": [-1, -2]
-                    }]
-                });
-            });
-        </script>
-        <?php
-    }
-    else {
-        print '<div class="info clearboth text-center" >';
-        print  $langs->trans('EACCESS_Nothing');
-        print '</div>';
-    }
-}
 
 function getService($label='',$icon='',$link='',$desc='', $disabled = false)
 {
@@ -1031,7 +1063,7 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'forcedownload' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'forcedownload' => '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 //'statut' => $object->getLibStatut(0),
             );
 
@@ -1173,7 +1205,7 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'link' => '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 'statut' => $object->getLibStatut(0)
             );
 
@@ -1315,7 +1347,7 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
                 'date' => dol_print_date($object->date),
                 'price' => price($object->multicurrency_total_ttc).' '.$object->multicurrency_code,
                 'ref' => '<a class="'.$disabledclass.'" href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>',
-                'link' => '<a class="btn btn-xs btn-primary '.$disabledclass.'" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
+                'link' => '<a class="btn btn-xs btn-primary btn-strong '.$disabledclass.'" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>',
                 'statut' => $object->getLibStatut(0),
                 'fin_validite' => dol_print_date($object->fin_validite)
             );

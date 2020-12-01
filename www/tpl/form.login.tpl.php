@@ -55,7 +55,7 @@ if (empty($conf) || ! is_object($conf))
                 </div>
                 <?php */ ?>
 
-                <button class="btn btn-lg btn-primary btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
+                <button class="btn btn-lg btn-primary btn-strong btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
 
 
                 <input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']; ?>" />

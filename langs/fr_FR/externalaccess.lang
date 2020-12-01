@@ -10,12 +10,13 @@ externalaccessAbout = A propos du module portail client
 externalaccess=Portail client
 
 # DROITS
-external_access_invoices=Peut consulter les factures
-external_access_propals=Peut consulter les devis
-external_access_orders=Peut consulter les commandes
-external_access_expeditions=Peut consulter les expéditions
-external_access_tickets=Peut consulter les tickets
-external_access_userinfos_edit=Peut modifier ses informations personnelles
+external_access_invoices= Consulter ses factures
+external_access_propals= Consulter ses devis
+external_access_orders= Consulter ses commandes
+external_access_expeditions= Consulter ses expéditions
+external_access_tickets= Consulter ses tickets
+external_access_userinfos_edit= Modifier ses informations personnelles
+external_access_projets = Consulter ses projets
 
 # MENU
 TopMenuexternalaccess=Portail client
@@ -81,6 +82,10 @@ ViewTickets=Tickets
 ViewTicketsDesc=Retrouvez facilement tous vos tickets
 EALINKNAME_tickets=Tickets
 
+ViewProjects = Projets
+ViewProjectsDesc = Retrouvez facilement vos projets
+EALINKNAME_projects = Projets
+
 PersonalInformations=Informations personnelles
 
 # PAGE TITLE
@@ -102,21 +107,19 @@ EACCESS_PHONE=Téléphone de contact
 EACCESS_EMAIL=Email de contact
 EACCESS_EMAIL_HELP=Cet adresse email est visible dans le pied de page
 EACCESS_ACTIVATE_MODULES=Modules accessibles
-EACCESS_ACTIVATE_INVOICES=Téléchargement des Factures
+EACCESS_ACTIVATE_INVOICES= Factures
 EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
-EACCESS_ACTIVATE_PROPALS=Téléchargement des Devis
-EACCESS_ACTIVATE_ORDERS=Téléchargement des Commandes
+EACCESS_ACTIVATE_PROPALS= Devis
+EACCESS_ACTIVATE_ORDERS= Commandes
 EACCESS_HEADER_IMG=Url de l'image de fond
 EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
 AccessToCustomerGate=Consulter le portail client
 EACCESS_LOGIN_EXTRA_HTML=Texte supplémentaire affiché sur la page de connexion.
 EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
 EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
-EACCESS_ACTIVATE_EXPEDITIONS=Téléchargement des expéditions
-EACCESS_ACTIVATE_TICKETS=Téléchargement des Tickets
-EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
-EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP=Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie
-EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
+EACCESS_ACTIVATE_EXPEDITIONS= Expéditions
+EACCESS_ACTIVATE_TICKETS = Tickets
+EACCESS_ACTIVATE_PROJECTS = Projets
 
 # INDEX
 Quotations=Devis

@@ -37,5 +37,5 @@ dol_syslog("End of session ".$sessionname);
 unset($_SESSION['dol_login']);
 unset($_SESSION['dol_entity']);
 
-if (GETPOST('noredirect')) return;
+if (GETPOST('noredirect', 'none')) return;
 header("Location: ".$url);		// Default behaviour is redirect to index.php page

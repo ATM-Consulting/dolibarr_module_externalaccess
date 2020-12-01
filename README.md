@@ -1,4 +1,3 @@
-![ExternalAccess logo](img/externalaccess.png) 
 # DOLIBARR MODULE EXTERNAL ACCESS
 ![Last realease](https://img.shields.io/github/v/release/ATM-Consulting/dolibarr_module_externalaccess)
 
