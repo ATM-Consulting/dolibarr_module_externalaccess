@@ -304,7 +304,7 @@ class Actionsexternalaccess
 				$ticketId = GETPOST('id', 'int');
                 if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
                 {
-                    $this->print_ticketCard($ticketId, $user->societe_id);
+                    $this->print_ticketCard($ticketId, $user->socid);
                 }
                 return 1;
             }
@@ -525,7 +525,7 @@ class Actionsexternalaccess
 		if($ticketId > 0) {
 			$res = $ticket->fetch($ticketId);
 			$context->fetchedTicket = $ticket;
-			if($object->id != $user->socid){
+			if($ticket->fk_soc != $user->socid){
 				return null;
 			}
 		}
@@ -556,8 +556,10 @@ class Actionsexternalaccess
 					dol_mkdir($upload_dir_tmp);
 				}
 
-				dol_add_file_process($upload_dir_tmp, 0, 0, 'addedfile', '', null, '', 0);
-
+				$addFileProcessRes = dol_add_file_process($upload_dir_tmp, 0, 0, 'addedfile', '', null, '', 0);
+				if($addFileProcessRes){
+					// Convert to public file
+				}
 			}
 		}
 
@@ -615,6 +617,7 @@ class Actionsexternalaccess
 			}
 			else{
 				// not enough rights
+				$context->setEventMessages($langs->trans('ErrorNoRightToDoThisAction'), 'errors');
 			}
 		}
 		elseif($action == 'savecreate' )
@@ -658,6 +661,9 @@ class Actionsexternalaccess
 						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
 					}
 				}
+			}
+			else{
+				$context->setEventMessages($langs->trans('ErrorNoRightToCreateTicket'), 'errors');
 			}
 		}
 
