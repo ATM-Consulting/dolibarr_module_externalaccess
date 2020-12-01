@@ -31,6 +31,7 @@ if (! $res) {
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/externalaccess.lib.php';
+require_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
 
 // Translations
 $langs->load("externalaccess@externalaccess");
@@ -49,7 +50,9 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	if (dolibarr_set_const($db, $code, GETPOST($code, 'none'), 'chaine', 0, '', $conf->entity) > 0)
+	$val = GETPOST($code);
+	if(is_array($val)) $val = serialize($val);
+	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
 	{
 		header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
@@ -91,7 +94,8 @@ dol_fiche_head(
     $head,
     'settings',
     $langs->trans("ModuleName"),
-    1
+    1,
+    "externalaccess@externalaccess"
 );
 
 if(!dol_include_once('/abricot/inc.core.php')) {
@@ -121,6 +125,8 @@ _print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACC
 
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
 _print_input_form_part('EACCESS_HEADER_IMG',false,'',array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
+_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
+_print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -158,12 +164,24 @@ function _print_title($title="")
     print '</tr>';
 }
 
-function _print_on_off($confkey, $title = false, $desc ='')
+/**
+ * @param $confkey	string	name of conf in llx_const
+ * @param $title	string 	label of conf
+ * @param $desc		string 	description written in small text under title
+ * @param $help		string	text for tooltip
+ */
+function _print_on_off($confkey, $title = false, $desc = '', $help = '')
 {
     global $langs, $conf;
 
-    print '<tr class="oddeven">';
+	print '<tr class="oddeven">';
     print '<td>'.($title?$title:$langs->trans($confkey));
+
+    $form=new Form($db);
+	if(!empty($help)){
+		print $form->textwithtooltip('', $langs->trans($help),2,1,img_help(1,''));
+	}
+
     if(!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
@@ -241,4 +259,31 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
     print '</form>';
     print '</td></tr>';
+}
+
+/**
+ * Function used to print a multiselect
+ * @param $confkey	string	name of conf in llx_const
+ * @param $title	string	label of conf
+ * @param $Tab		array	available values
+ */
+function _print_multiselect($confkey, $title, $Tab) {
+
+	global $langs, $form, $conf;
+
+	print '<tr class="oddeven"><td>';
+	print $title?$title:$langs->trans($confkey);
+	print '</td>';
+	print '<td align="right" width="300">';
+	print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+	print '<input type="hidden" name="action" value="set_'.$confkey.'">';
+
+	print $form->multiselectarray($confkey, $Tab, unserialize($conf->global->{$confkey}), '', 0, '', 0, '100%');
+
+    print '</td><td class="right">';
+    print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
+    print '</form>';
+    print '</td></tr>';
+
 }
