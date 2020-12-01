@@ -130,6 +130,8 @@ Invoices=Factures
 InvoicesDesc=
 MySpace=Consulter mon espace
 
+# Traductions par attribut d'objet
+ref_client=Réf. client
 
 
 ForgotThePassword=Mot de passe oublié ?
@@ -161,6 +163,10 @@ Company=Société
 
 # 404 tpl 
 SorryThereIsNothingHere=Désolé il n'y a rien ici
+
+# Commercial du client
+YourSalesRep=Votre contact chez %s :
+YourSalesRepMultiple=Vos contacts chez %s :
 
 EACCESS_Nothing=Actuellement il n'y a rien ici, patience, vos documents seront disponibles prochainement
 
