@@ -33,3 +33,5 @@ AddFileToComment = Ajouter le fichier
 SendCommentOtherActions = choisir une autre action
 SortMessagesDesc = Trier les messages du dernier au premier
 SortMessagesAsc = Trier les messages du premier au dernier
+ErrorNoRightToCreateTicket = Droit insuffisant, vous ne pouvez pas créer de ticket
+ErrorNoRightToDoThisAction = Désolé, votre compte utilisateur ne dispose pas du droit pour effectuer cette action.
