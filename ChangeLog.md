@@ -1,7 +1,14 @@
 # Change Log
 All notable changes to this project will be documented in this file.
+___
+
+# [Unreleased]
+___
+
+
 
 # RELEASE 1.3
+___
 
 ## Added
 
@@ -10,6 +17,7 @@ All notable changes to this project will be documented in this file.
 
 
 # RELEASE 1.2
+___
 
 ## Added
 
@@ -28,6 +36,7 @@ Modification (et typage) de tous les paramètres check manquants.
 
 
 # RELEASE 1.1
+___
 
 ## Added
 
