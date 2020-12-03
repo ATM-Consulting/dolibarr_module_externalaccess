@@ -1,9 +1,27 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-# RELEASE 1.2
+# VERSION 1.2
 
-## NEW
+## Added
+
+### NEW : T2436 : Ajout de la colonne "Réf. client" sur toutes les listes du portail #34
+
+## Changed
+
+### FIX : V12 compatibility
+A partir de la v12 le paramètre check de la fonction GETPOST est alphanohtml par défaut ce qui fait que tous nos inputs ayant une balise html sont vidés.
+Modification (et typage) de tous les paramètres check manquants.
+
+### FIX : Trigger class doesn't extend DolibarrTriggers
+- Change the subtotal module trigger class definition to avoid error message from Dolibarr
+- Rename `run_trigger` to `runTrigger`
+- Remove the declaration of the `$db` field if present (already declared as `protected` in the parent class)
+
+
+# VERSION 1.1
+
+## Added
 
 ### NEW : Display and design improuvements
 - Fullcalendar lib
@@ -37,7 +55,7 @@ Permet par exemple de mettre un lien vers la page de contact du site vitrine de 
 Fix an issue that show all documents available in DOLIBARR when Multicompany module activated.
 Now, it will show only the documents created by the Portal owner company.
 
-## FIX
+## Changed
 
 ### FIX : Divers
 - FIX : Modification du comportement d'affichage des éléments du footer si pas de téléphone ou pas de mail de contact, il ne sont pas affichés
