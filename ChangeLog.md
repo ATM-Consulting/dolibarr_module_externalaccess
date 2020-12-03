@@ -2,45 +2,45 @@
 All notable changes to this project will be documented in this file.
 ___
 
-# [Unreleased]
+## [Unreleased]
 ___
 
 
 
-# RELEASE 1.3
+## RELEASE 1.3 - 2020-12-01
 ___
 
-## Added
+### Added
 
 - Ajout colonne Réf client sur toutes les listes (soumis à configuration)
 - Ajout signature commercial associé au tiers de l'utilisateur externe
 
 
-# RELEASE 1.2
+## RELEASE 1.2 - 2020-12-01
 ___
 
-## Added
+### Added
 
-### NEW : T2436 : Ajout de la colonne "Réf. client" sur toutes les listes du portail #34
+#### NEW : T2436 : Ajout de la colonne "Réf. client" sur toutes les listes du portail #34
 
-## Changed
+### Changed
 
-### FIX : V12 compatibility
+#### FIX : V12 compatibility
 A partir de la v12 le paramètre check de la fonction GETPOST est alphanohtml par défaut ce qui fait que tous nos inputs ayant une balise html sont vidés.
 Modification (et typage) de tous les paramètres check manquants.
 
-### FIX : Trigger class doesn't extend DolibarrTriggers
+#### FIX : Trigger class doesn't extend DolibarrTriggers
 - Change the subtotal module trigger class definition to avoid error message from Dolibarr
 - Rename `run_trigger` to `runTrigger`
 - Remove the declaration of the `$db` field if present (already declared as `protected` in the parent class)
 
 
-# RELEASE 1.1
+## RELEASE 1.1 - 2020-10-20
 ___
 
-## Added
+### Added
 
-### NEW : Display and design improuvements
+#### NEW : Display and design improuvements
 - Fullcalendar lib
 - Iframe support
 - Add new event messages style
@@ -48,48 +48,48 @@ ___
 - WYSIWYG editor
 - Mobile design improuvement by adding manifest
 
-### NEW : Shipping support
+#### NEW : Shipping support
 
-### NEW : Project support
+#### NEW : Project support
 Allow external user to show project support
 
-### NEW : Langs support
+#### NEW : Langs support
 - Create German externalaccess.lang
 - Create spanish externalaccess.lang
 
-### NEW : Ticket support
+#### NEW : Ticket support
 - Ajout de la fiche d'un ticket au portail externe avec affichage des infos principales + timeline des messages du ticket
 - Add ticket file list on ticket message
   Reste à permettre de cliquer sur les liens pour les voir mais au moins on voit la liste des fichiers que l'on a envoyé
 
-### NEW : Footer link behavior
+#### NEW : Footer link behavior
 Dans le footer, sur l'icône de contact, si le mail de contact n'est pas une adresse email alors conversion en lien std.
 Permet par exemple de mettre un lien vers la page de contact du site vitrine de la société.
 
-### NEW : Redirection on login to custom or asked page
+#### NEW : Redirection on login to custom or asked page
 
-### NEW Add compatibility with Multicompany Module
+#### NEW Add compatibility with Multicompany Module
 Fix an issue that show all documents available in DOLIBARR when Multicompany module activated.
 Now, it will show only the documents created by the Portal owner company.
 
-## Changed
+### Changed
 
-### FIX : Divers
+#### FIX : Divers
 - FIX : Modification du comportement d'affichage des éléments du footer si pas de téléphone ou pas de mail de contact, il ne sont pas affichés
 - FIX : changement de librairie et autre dom déprécié
 - FIX : Add good practice for css : déplacement de style css vers un fichier dédié.
 
-### FIX : tables ordering (20/10/2020)
+#### FIX : tables ordering (20/10/2020)
 The tables were ordered by ref asc by default.
 The sql requests were ordered by date DESC which is logical but not implemented on list rendering.
 That's done now.
 
-### FIX : Trigger class doesn't extend DolibarrTriggers (30/09/2020)
+#### FIX : Trigger class doesn't extend DolibarrTriggers (30/09/2020)
 - Change the subtotal module trigger class definition to avoid error message from Dolibarr
 - Rename `run_trigger` to `runTrigger`
 - Remove the declaration of the `$db` field if present (already declared as `protected` in the parent class)
 
-### FIX : Ticket : Fix private msg, msg sort order, secure message access
+#### FIX : Ticket : Fix private msg, msg sort order, secure message access
 - Sécurité : id ticket est modifiable dans l'URL
 - Wysiwyg : se caler sur l'option du module standard Dolibarr
 - Messages : ne pas afficher les messages privés si utilisateur externe
