@@ -1,7 +1,15 @@
 # Change Log
 All notable changes to this project will be documented in this file.
 
-# VERSION 1.2
+# RELEASE 1.3
+
+## Added
+
+- Ajout colonne Réf client sur toutes les listes (soumis à configuration)
+- Ajout signature commercial associé au tiers de l'utilisateur externe
+
+
+# RELEASE 1.2
 
 ## Added
 
@@ -19,7 +27,7 @@ Modification (et typage) de tous les paramètres check manquants.
 - Remove the declaration of the `$db` field if present (already declared as `protected` in the parent class)
 
 
-# VERSION 1.1
+# RELEASE 1.1
 
 ## Added
 
