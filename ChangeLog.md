@@ -3,21 +3,17 @@ All notable changes to this project will be documented in this file.
 ___
 
 ## [Unreleased]
+
 ___
-
-
-
 ## RELEASE 1.3 - 2020-12-01
-___
 
 ### Added
 
 - Ajout colonne Réf client sur toutes les listes (soumis à configuration)
 - Ajout signature commercial associé au tiers de l'utilisateur externe
 
-
-## RELEASE 1.2 - 2020-12-01
 ___
+## RELEASE 1.2 - 2020-12-01
 
 ### Added
 
@@ -35,8 +31,8 @@ Modification (et typage) de tous les paramètres check manquants.
 - Remove the declaration of the `$db` field if present (already declared as `protected` in the parent class)
 
 
-## RELEASE 1.1 - 2020-10-20
 ___
+## RELEASE 1.1 - 2020-10-20
 
 ### Added
 
