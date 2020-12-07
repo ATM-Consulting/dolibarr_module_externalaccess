@@ -864,6 +864,12 @@ body.iframe .container {
 	border-color: darkred;
 }
 
+.navbar #logo {
+  width: 70px;
+  height: auto;
+}
+
+
 <?php
 
 include_once __DIR__ . '/timeline.inc.php';
