@@ -139,7 +139,7 @@ function print_invoiceTable($socId = 0)
 
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
-				print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+				if(property_exists('Facture', $field)) print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
 			}
 		}
 
@@ -182,9 +182,13 @@ function print_invoiceTable($socId = 0)
             print '<tr >';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
 
+			$total_more_fields=0;
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
-					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+					if(property_exists('Facture', $field)) {
+						$total_more_fields+=1;
+						print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+					}
 				}
 			}
 
@@ -212,7 +216,7 @@ function print_invoiceTable($socId = 0)
              "language": {
                  "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
              },
-			 "order": [[<?php echo (count($TOther_fields) + 1); ?>, 'desc']],
+			 "order": [[<?php echo ($total_more_fields + 1); ?>, 'desc']],
 
              responsive: true,
              columnDefs: [{
@@ -374,7 +378,7 @@ function print_propalTable($socId = 0)
 
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
-				print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+				if(property_exists('Propal', $field)) print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
 			}
 		}
 
@@ -408,9 +412,13 @@ function print_propalTable($socId = 0)
             print '<tr>';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
 
+			$total_more_fields=0;
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
-					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+					if(property_exists('Propal', $field)) {
+						$total_more_fields+=1;
+						print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+					}
 				}
 			}
 
@@ -436,7 +444,7 @@ function print_propalTable($socId = 0)
              "language": {
                  "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
              },
-			 "order": [[<?php echo (count($TOther_fields) + 1); ?>, 'desc']],
+			 "order": [[<?php echo ($total_more_fields + 1); ?>, 'desc']],
 
              responsive: true,
              columnDefs: [{
@@ -496,7 +504,7 @@ function print_orderListTable($socId = 0)
 
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
-				print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+				if(property_exists('Commande', $field)) print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
 			}
 		}
 
@@ -528,9 +536,13 @@ function print_orderListTable($socId = 0)
 
             print '<tr>';
             print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+			$total_more_fields=0;
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
-					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+					if(property_exists('Commande', $field)) {
+						$total_more_fields+=1;
+						print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+					}
 				}
 			}
             print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
@@ -555,7 +567,7 @@ function print_orderListTable($socId = 0)
                  "language": {
                      "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
                  },
-				 "order": [[<?php echo (count($TOther_fields) + 1); ?>, 'desc']],
+				 "order": [[<?php echo ($total_more_fields + 1); ?>, 'desc']],
 
                  responsive: true,
 
@@ -592,7 +604,7 @@ function print_expeditionTable($socId = 0)
 	include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
 	include_once DOL_DOCUMENT_ROOT . '/core/lib/pdf.lib.php';
 
-	$langs->load('sendings');
+	$langs->load('sendings', 'main');
 
 
 	$sql = 'SELECT rowid ';
@@ -619,7 +631,8 @@ function print_expeditionTable($socId = 0)
 		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
-				print ' <th class="text-center" >'.$langs->trans($field).'</th>';
+				if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
+				if(property_exists('Expedition', $field)) print ' <th class="text-center" >'.$langs->trans($field).'</th>';
 			}
 		}
 		print ' <th class="text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
@@ -666,10 +679,14 @@ function print_expeditionTable($socId = 0)
 
 			print '<tr>';
 			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+			$total_more_fields = 0;
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
 					if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
-					print ' <td data-search="'.$object->{$field}.'" data-order="'.$object->{$field}.'" >'.$object->{$field}.'</td>';
+					if(property_exists('Expedition', $field)) {
+						$total_more_fields+=1;
+						print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+					}
 				}
 			}
 			print ' <td data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
@@ -692,7 +709,7 @@ function print_expeditionTable($socId = 0)
                     "language": {
                         "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
                     },
-					"order": [[<?php echo (count($TOther_fields) + 2); ?>, 'desc']],
+					"order": [[<?php echo ($total_more_fields + 2); ?>, 'desc']],
 
                     responsive: true,
 
