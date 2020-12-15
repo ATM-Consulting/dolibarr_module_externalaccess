@@ -95,8 +95,6 @@ EACCESS_ACTIVATE_ORDERS=Descargar pedidos
 EACCESS_HEADER_IMG=URL de la imagen de fondo
 EACCESS_HEADER_IMG_HELP=Puede usar una imagen personalizada o una de las siguientes imágenes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
 AccessToCustomerGate=Consulta el portal del cliente
-EACCESS_LOGIN_IMG=
-EACCESS_LOGIN_IMG_HELP=
 EACCESS_LOGIN_EXTRA_HTML=Texto adicional que se muestra en la página de inicio de sesión.
 EACCESS_RGPD_MSG=Mensaje RGPD en el formulario de información personal
 EACCESS_RGPD_MSG_default=Puede solicitar la corrección de información inexacta o incompleta sobre usted. Al modificar y enviar este formulario, acepto que los datos ingresados serán utilizados por% s para que pueda leer y, si es necesario, administrar la relación contractual que pueda resultar.
@@ -151,3 +149,48 @@ DocumentFileNotAvailable=Documento actualmente no disponible.
 
 
 EaBack=Regreso
+
+#
+# MISSING TRANSLATION FROM fr_FR
+#
+external_access_expeditions=Consulter ses expéditions
+external_access_tickets=Consulter ses tickets
+external_access_projets=Consulter ses projets
+pdfLinkedDocuments=documents liés
+OrSeparator=Ou
+ViewInvoices=Factures
+ViewInvoicesDesc=Retrouvez facilement toutes vos factures
+ViewPropals=Devis
+ViewPropalsDesc=Retrouvez facilement tous vos devis
+ViewOrders=Commandes
+ViewOrdersDesc=Retrouvez facilement toutes vos commandes
+ViewExpeditions=Livraisons
+ViewExpeditionsDesc=Retrouvez facilement toutes vos livraisons
+EALINKNAME_expeditions=livraisons
+ViewTickets=Tickets
+ViewTicketsDesc=Retrouvez facilement tous vos tickets
+EALINKNAME_tickets=Tickets
+ViewProjects=Projets
+ViewProjectsDesc=Retrouvez facilement vos projets
+EALINKNAME_projects=Projets
+EACCESS_ACTIVATE_EXPEDITIONS=Expéditions
+EACCESS_ACTIVATE_TICKETS=Tickets
+EACCESS_ACTIVATE_PROJECTS=Projets
+EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
+EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP=Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie
+EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
+TrackingNumberOnlyExpedition=Numéro de suivi (liste expéditions uniquement)
+ConfLinkedToContents=Paramètres liés au contenu
+ConfLinkedToContactInfos=Paramètres liés au contact
+ConfLinkedToDesign=Paramètres liés à l'apparence
+EACCESS_LOGIN_IMG=Url du logo
+EACCESS_LOGIN_IMG_HELP=Cette image apparait sur la page de connexion du portail. Laisser vide pour utiliser le logo configuré dans les paramètres de votre société.
+EACCESS_TOP_MENU_IMG=Url du logo pour le menu
+EACCESS_TOP_MENU_IMG_HELP=Laisser vide pour utiliser le "Titre de l'accès extérieur"
+EACCESS_TOP_MENU_IMG_SHRINK=Url du logo de substitution
+EACCESS_TOP_MENU_IMG_SHRINK_HELP=Si défini, le logo de substitution remplace le logo de menu par celui-ci lorsque le menu change "d'état" durant le défilement de la page. Celà permet par exemple d'utiliser une image de logo transparente avec des textes blanc et lors du changement d'etat du menu d'utiliser un logo compatible au format.
+ref_client=Réf. client
+ref_customer=Réf. client
+tracking_url=Numéro de suivi
+YourSalesRep=Votre contact chez %s :
+YourSalesRepMultiple=Vos contacts chez %s :

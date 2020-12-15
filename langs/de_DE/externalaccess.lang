@@ -108,8 +108,6 @@ EACCESS_ACTIVATE_ORDERS=Bestellungen herunterladen
 EACCESS_HEADER_IMG=Hintergrundbild-URL
 EACCESS_HEADER_IMG_HELP=Sie können ein benutzerdefiniertes Bild oder eines der folgenden Bilder verwenden: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Denken Sie auf den Seiten des Kundenportals daran, die CTRL + F5-Taste zu drücken oder den Browser-Cache zu leeren, nachdem Sie diesen Wert geändert haben, damit die Änderung wirksam wird
 AccessToCustomerGate=Konsultieren Sie das Kundenportal
-EACCESS_LOGIN_IMG=
-EACCESS_LOGIN_IMG_HELP=
 EACCESS_LOGIN_EXTRA_HTML=Zusätzlicher Text wird auf der Anmeldeseite angezeigt.
 EACCESS_RGPD_MSG=GDPR-Nachricht auf dem Formular für persönliche Informationen
 EACCESS_RGPD_MSG_default=Sie können die Berichtigung ungenauer oder unvollständiger Informationen über Sie beantragen. Durch das Ändern und Senden dieses Formulars akzeptiere ich, dass die eingegebenen Daten von% s verwendet werden, damit das daraus resultierende Vertragsverhältnis gelesen und gegebenenfalls verwaltet werden kann.
@@ -166,3 +164,31 @@ DocumentFileNotAvailable=Dokument derzeit nicht verfügbar.
 
 
 EaBack=Rückkehr
+
+#
+# MISSING TRANSLATION FROM fr_FR
+#
+external_access_projets=Consulter ses projets
+ViewProjects=Projets
+ViewProjectsDesc=Retrouvez facilement vos projets
+EALINKNAME_projects=Projets
+AbricotWiki=Consulter la page d'information du module abricot.
+EACCESS_ACTIVATE_PROJECTS=Projets
+EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
+EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP=Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie
+EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
+TrackingNumberOnlyExpedition=Numéro de suivi (liste expéditions uniquement)
+ConfLinkedToContents=Paramètres liés au contenu
+ConfLinkedToContactInfos=Paramètres liés au contact
+ConfLinkedToDesign=Paramètres liés à l'apparence
+EACCESS_LOGIN_IMG=Url du logo
+EACCESS_LOGIN_IMG_HELP=Cette image apparait sur la page de connexion du portail. Laisser vide pour utiliser le logo configuré dans les paramètres de votre société.
+EACCESS_TOP_MENU_IMG=Url du logo pour le menu
+EACCESS_TOP_MENU_IMG_HELP=Laisser vide pour utiliser le "Titre de l'accès extérieur"
+EACCESS_TOP_MENU_IMG_SHRINK=Url du logo de substitution
+EACCESS_TOP_MENU_IMG_SHRINK_HELP=Si défini, le logo de substitution remplace le logo de menu par celui-ci lorsque le menu change "d'état" durant le défilement de la page. Celà permet par exemple d'utiliser une image de logo transparente avec des textes blanc et lors du changement d'etat du menu d'utiliser un logo compatible au format.
+ref_client=Réf. client
+ref_customer=Réf. client
+tracking_url=Numéro de suivi
+YourSalesRep=Votre contact chez %s :
+YourSalesRepMultiple=Vos contacts chez %s :
