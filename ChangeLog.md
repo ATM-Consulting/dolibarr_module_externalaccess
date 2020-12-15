@@ -4,6 +4,8 @@ ___
 
 ## [Unreleased]
 
+- NEW : Ajout du tri par défaut sur la date de création des tickets sur la liste des tickets [2020-12-15]
+
 ___
 ## RELEASE 1.3 - 2020-12-01
 

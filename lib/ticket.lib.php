@@ -59,6 +59,8 @@ function print_ticketTable($socId = 0)
 					"language": {
 						"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
 					},
+                    'order': [[1, 'desc']], // 1 = 2e colonne
+
 					responsive: true,
 					columnDefs: [{
 						orderable: false,
