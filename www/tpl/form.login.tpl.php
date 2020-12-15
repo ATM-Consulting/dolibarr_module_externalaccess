@@ -21,7 +21,7 @@ if (empty($conf) || ! is_object($conf))
         }
 
         if($urllogo != "") {
-            print '<div class="text-center"><img alt="" src="'.$urllogo.'" id="img_logo" /></div>';
+            print '<div class="text-center login-logo-container"><img alt="" src="'.$urllogo.'" id="img_login_logo" /></div>';
         }
 		else
 		{

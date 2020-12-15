@@ -191,7 +191,32 @@ img::-moz-selection {
   background-color: transparent;
 }
 
+.navbar .logo{
+	max-height: 30px;
+}
+
+#logo{
+	display: none;
+}
+
+.login-logo-container img{
+	max-width: 100%;
+}
+
 @media (min-width: 992px) {
+	#logo{
+		display: inline;
+	}
+	#logoshrink{
+		display: none;
+	}
+	#mainNav.navbar-shrink #logoshrink{
+		display: inline;
+	}
+	#mainNav.navbar-shrink #logo{
+		display: none;
+  	}
+
   #mainNav {
     border-color: transparent;
     background-color: transparent;
@@ -862,11 +887,6 @@ body.iframe .container {
 .show-invalid:invalid {
 	background-color: pink;
 	border-color: darkred;
-}
-
-.navbar #logo {
-  width: 70px;
-  height: auto;
 }
 
 
