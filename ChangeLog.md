@@ -9,6 +9,7 @@ ___
 - NEW : Add option to allow brand logo in menu and change login logo too [2020-12-15]
 
 - FIX : Missing translation keys [2020-12-15]
+- FIX : Login page title [2020-12-16]
 ___
 ## RELEASE 1.3 - 2020-12-01
 
