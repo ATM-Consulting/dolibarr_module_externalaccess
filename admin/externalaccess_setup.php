@@ -50,7 +50,7 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	$val = GETPOST($code);
+	$val = GETPOST($code,  'none');
 	if(is_array($val)) $val = serialize($val);
 	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
 	{
