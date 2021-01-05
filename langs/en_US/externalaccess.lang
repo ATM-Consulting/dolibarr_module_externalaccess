@@ -69,7 +69,7 @@ OrSeparator = or
 Welcome = Welcome
 WelcomeDesc = Welcome to our Client Portal
 
-external_access_projets = Consult his projects
+external_access_projets = View his projects
 EALINKNAME_gobackurl = Back to website
 ViewInvoices = Invoices
 ViewInvoicesDesc = Easily find all your invoices
@@ -89,7 +89,7 @@ EALINKNAME_tickets = Tickets
 ViewProjects = Projects
 ViewProjectsDesc = Easily find all your projects
 EALINKNAME_projects = Projects
-PersonalInformations = Personal informations
+PersonalInformations = Personal information
 
 #
 # MISSING TRANSLATION FROM fr_FR
