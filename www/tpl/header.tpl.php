@@ -4,6 +4,13 @@ if (empty($conf) || ! is_object($conf))
 	print "Error, template page can't be called as URL";
 	exit;
 }
+
+$metaTitle = '';
+if (!empty($context->meta_title)) { $metaTitle = $context->meta_title; }
+elseif (!empty($context->title)){ $metaTitle = $context->title; }
+if (!empty($metaTitle)) { $metaTitle.= ' - '; }
+$metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -15,7 +22,7 @@ if (empty($conf) || ! is_object($conf))
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title><?php echo empty($context->meta_title)?$context->title:$context->meta_title;?> - <?php echo !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM; ?></title>
+    <title><?php echo $metaTitle; ?></title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php print $context->getRootUrl(); ?>vendor/bootstrap/css/bootstrap.css" rel="stylesheet">

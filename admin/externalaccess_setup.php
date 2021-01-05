@@ -50,7 +50,7 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	$val = GETPOST($code);
+	$val = GETPOST($code,  'none');
 	if(is_array($val)) $val = serialize($val);
 	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
 	{
@@ -119,14 +119,21 @@ $link = '<a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-a
 _print_input_form_part('EACCESS_ROOT_URL',false,$link, array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_ROOT_URL_HELP');
 _print_input_form_part('EACCESS_TITLE',false,'',array('size'=> 50),'input','EACCESS_TITLE_HELP');
 _print_input_form_part('EACCESS_GOBACK_URL',false,'',array('size'=> 50),'input','EACCESS_GOBACK_URL_HELP');
+
+_print_title('ConfLinkedToContactInfos');
 _print_input_form_part('EACCESS_PHONE');
 _print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACCESS_EMAIL_HELP');
-
-
-_print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
-_print_input_form_part('EACCESS_HEADER_IMG',false,'',array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
-_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client'), 'tracking_url'=>$langs->trans('TrackingNumberOnlyExpedition')));
 _print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
+
+
+_print_title('ConfLinkedToDesign');
+_print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
+_print_input_form_part('EACCESS_HEADER_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
+_print_input_form_part('EACCESS_LOGIN_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_LOGIN_IMG_HELP');
+_print_input_form_part('EACCESS_TOP_MENU_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_HELP');
+_print_input_form_part('EACCESS_TOP_MENU_IMG_SHRINK',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_SHRINK_HELP');
+
+
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -138,12 +145,14 @@ _print_on_off('EACCESS_ACTIVATE_PROJECTS',false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
 
+_print_title('ConfLinkedToContents');
 _print_input_form_part('EACCESS_LOGIN_EXTRA_HTML',false,'',array(),'textarea');
 if(empty($conf->global->EACCESS_RGPD_MSG)){
     dolibarr_set_const($db,'EACCESS_RGPD_MSG',$langs->trans('EACCESS_RGPD_MSG_default',$conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity) ;
 }
 _print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 
+_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client'), 'tracking_url'=>$langs->trans('TrackingNumberOnlyExpedition')));
 
 print '</table>';
 

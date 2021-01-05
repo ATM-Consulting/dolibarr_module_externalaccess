@@ -9,13 +9,20 @@ if (empty($conf) || ! is_object($conf))
 	<div class="row  ">
         <div class="card card-container col-lg-6  ">
 <?php
-        if ( (! empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_small))
-            || (! empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo))
-            )
-		{
-		    $urllogo=$context->getRootUrl().'/script/script.php?action=getlogo';
-			print '<div class="text-center"><img alt="" src="'.$urllogo.'" id="img_logo" /></div>';
-		}
+        // Default center logo is defined on admin panel, then if empty we use company default logo
+        $urllogo = !empty($conf->global->EACCESS_LOGIN_IMG)?$conf->global->EACCESS_LOGIN_IMG:'';
+        if($urllogo == '') {
+            if ( (! empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_small))
+                || (! empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo))
+                )
+            {
+                $urllogo=$context->getRootUrl().'/script/script.php?action=getlogo';
+            }
+        }
+
+        if($urllogo != "") {
+            print '<div class="text-center login-logo-container"><img alt="" src="'.$urllogo.'" id="img_login_logo" /></div>';
+        }
 		else
 		{
 		    //print '<img id="profile-img" class="profile-img-card" src="'.$context->rootUrl.'img/avatar.png" />';
