@@ -40,9 +40,12 @@ $langs->load("externalaccess@externalaccess");
 if (! $user->admin) {
     accessforbidden();
 }
-
+$object = '';
 // Parameters
 $action = GETPOST('action', 'alpha');
+
+// Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
+$hookmanager->initHooks(array('externalaccesssetup'));
 
 /*
  * Actions
@@ -125,15 +128,27 @@ _print_input_form_part('EACCESS_PHONE');
 _print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACCESS_EMAIL_HELP');
 _print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
 
-
+/*
+ * DESIGN
+ */
 _print_title('ConfLinkedToDesign');
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
 _print_input_form_part('EACCESS_HEADER_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
 _print_input_form_part('EACCESS_LOGIN_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_LOGIN_IMG_HELP');
 _print_input_form_part('EACCESS_TOP_MENU_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_HELP');
 _print_input_form_part('EACCESS_TOP_MENU_IMG_SHRINK',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_SHRINK_HELP');
+_print_input_form_part('EACCESS_MANIFEST_ICON',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_MANIFEST_ICON_HELP');
+
+$parameters = array();
+$reshook=$hookmanager->executeHooks('formDesignOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+print $hookmanager->resPrint;
 
 
+
+/*
+ * ACTIVATE MODULES
+ */
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -143,6 +158,11 @@ _print_on_off('EACCESS_ACTIVATE_EXPEDITIONS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_TICKETS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_PROJECTS',false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
+
+$parameters = array();
+$reshook=$hookmanager->executeHooks('formActivateModuleOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+print $hookmanager->resPrint;
 
 
 _print_title('ConfLinkedToContents');
@@ -155,6 +175,17 @@ _print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 _print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client'), 'tracking_url'=>$langs->trans('TrackingNumberOnlyExpedition')));
 
 print '</table>';
+
+
+/*
+ * Add setup hook
+ */
+
+$parameters = array();
+$reshook=$hookmanager->executeHooks('formMoreOptions', $parameters,$object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+print $hookmanager->resPrint;
+
 
 dol_fiche_end(1);
 
@@ -187,6 +218,11 @@ function _print_on_off($confkey, $title = false, $desc = '', $help = '')
     print '<td>'.($title?$title:$langs->trans($confkey));
 
     $form=new Form($db);
+
+	if(empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
+		$help = $confkey . '_HELP';
+	}
+
 	if(!empty($help)){
 		print $form->textwithtooltip('', $langs->trans($help),2,1,img_help(1,''));
 	}
@@ -235,6 +271,10 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     print '<tr class="oddeven">';
     print '<td'.$colspan.'>';
 
+	if(empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
+		$help = $confkey . '_HELP';
+	}
+
     if(!empty($help)){
         print $form->textwithtooltip( ($title?$title:$langs->trans($confkey)) , $langs->trans($help),2,1,img_help(1,''));
     }
@@ -260,9 +300,13 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
         $doleditor=new DolEditor($confkey, $conf->global->{$confkey}, '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }
-    else {
-        print '<input '.$metascompil.'  />';
-    }
+	elseif($type=='input'){
+		print '<input '.$metascompil.'  />';
+	}
+	else{
+		// custom
+		print $type;
+	}
 
     print '</td><td class="right">';
     print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';

@@ -37,17 +37,22 @@ $appli= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf-
 $primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
 $backgroundColor = !empty($conf->global->EACCESS_APPLI_COLOR)?$conf->global->EACCESS_APPLI_COLOR:$primaryColor;
 
-?>
-{
-"name": "<?php echo $appli; ?>",
-"icons": [
-{
-"src": "<?php print $context->getRootUrl().'script/script.php?action=getlogo'; ?>",
-"sizes": "256x256",
-"type": "image/png"
+
+$manifest = new stdClass();
+$manifest->name = dol_htmlentities($appli, ENT_QUOTES);
+$manifest->theme_color = "#ffffff";
+$manifest->background_color = "#ffffff";
+$manifest->display = "standalone";
+$manifest->splash_pages = null;
+
+if(!empty($conf->global->EACCESS_MANIFEST_ICON)){
+	$icon = new stdClass();
+	$icon->src = $conf->global->EACCESS_MANIFEST_ICON;
+	$icon->sizes = "256x256";
+	$icon->type = "image/png";
+	$manifest->icons = array($icon);
 }
-],
-"theme_color": "#ffffff",
-"background_color": "#ffffff",
-"display": "standalone"
-}
+
+
+print json_encode($manifest, JSON_PRETTY_PRINT);
+
