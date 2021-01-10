@@ -4,12 +4,15 @@ if (empty($conf) || ! is_object($conf))
 	print "Error, template page can't be called as URL";
 	exit;
 }
+/** @var HookManager $hookmanager */
 
 $metaTitle = '';
 if (!empty($context->meta_title)) { $metaTitle = $context->meta_title; }
 elseif (!empty($context->title)){ $metaTitle = $context->title; }
 if (!empty($metaTitle)) { $metaTitle.= ' - '; }
 $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+
+
 
 ?>
 <!DOCTYPE html>
@@ -19,10 +22,10 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
 
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="">
-    <meta name="author" content="">
+    <meta name="description" content="<?php echo dol_htmlentities($context->meta_desc, ENT_QUOTES); ?>">
+    <meta name="author" content="<?php echo dol_htmlentities($conf->global->MAIN_INFO_SOCIETE_NOM, ENT_QUOTES); ?>">
 
-    <title><?php echo $metaTitle; ?></title>
+    <title><?php echo dol_htmlentities($metaTitle); ?></title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php print $context->getRootUrl(); ?>vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
@@ -72,19 +75,24 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
 <?php
     if (! empty($conf->global->MAIN_FAVICON_URL)){
         $favicon=$conf->global->MAIN_FAVICON_URL;
-        print '<link rel="icon" type="image/png" href="'.$favicon.'">'."\n";
+        print '	<link rel="icon" type="image/png" href="'.$favicon.'">' . "\r\n";
     }
 
     // Mobile appli like icon
-    print '<link rel="manifest" href="'.$context->getRootUrl().'manifest.json.php'.'" />'."\n";
+    print '	<link rel="manifest" href="'.$context->getRootUrl().'manifest.json.php'.'" />' . "\r\n";
 
 	$primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
 	$backgroundColor = !empty($conf->global->EACCESS_APPLI_COLOR)?$conf->global->EACCESS_APPLI_COLOR:$primaryColor;
-	print '<meta name="theme-color" content="'.$backgroundColor.'">' . "\n";
+	print '	<meta name="theme-color" content="'.$backgroundColor.'">' . "\r\n";
+
+
+ 	print "\r\n" . ' 	<!-- Custom head from hooks -->' . "\r\n";
+	$parameters=array();
+	$reshook=$hookmanager->executeHooks('externalAccessAddHtmlHeader',$parameters,$context, $context->action);    // same as Dolibarr addHtmlHeader hook but avoid missconfigured module to execute this hook
+	print $hookmanager->resPrint;
+
 
 ?>
-
-
   </head>
 
   <body id="page-top" class="<?php print $context->iframe?'iframe':''; ?>" >

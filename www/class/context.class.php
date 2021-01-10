@@ -28,6 +28,12 @@ class Context {
 
    public $eventMessages = array();
 
+	/**
+	 * Curent object of page
+	 * @var object $object
+	 */
+   public $object;
+
    /**
     * Constructeur de la classe
     *

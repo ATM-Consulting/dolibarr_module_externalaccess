@@ -117,7 +117,6 @@ print "</tr>";
 
 dol_include_once('externalaccess/www/class/context.class.php');
 $context = Context::getInstance();
-//$context = new Context();
 $link = '<a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a>';
 _print_input_form_part('EACCESS_ROOT_URL',false,$link, array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_ROOT_URL_HELP');
 _print_input_form_part('EACCESS_TITLE',false,'',array('size'=> 50),'input','EACCESS_TITLE_HELP');
@@ -133,6 +132,7 @@ _print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_AD
  */
 _print_title('ConfLinkedToDesign');
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
+_print_on_off('EACCESS_NO_FULL_HEADBAR_FOR_HOME');
 _print_input_form_part('EACCESS_HEADER_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
 _print_input_form_part('EACCESS_LOGIN_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_LOGIN_IMG_HELP');
 _print_input_form_part('EACCESS_TOP_MENU_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_HELP');

@@ -10,6 +10,7 @@ global $langs, $user, $conf;
 ?>
 
 	<section id="services">
+<?php if(empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){ ?>
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
@@ -18,6 +19,7 @@ global $langs, $user, $conf;
           </div>
         </div>
       </div>
+<?php } ?>
       <div class="container">
         <div class="row">
 
