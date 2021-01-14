@@ -4,6 +4,7 @@ ___
 
 ## [Unreleased]
 
+- NEW : Add product photo display possibility [2021-01-14]
 - NEW : Add Hooks [2021-01-10]
 - NEW : Add icon option for manifest [2021-01-10]
 - NEW : Add option for simple home display [2021-01-10]

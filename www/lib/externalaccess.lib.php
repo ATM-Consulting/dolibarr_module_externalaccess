@@ -188,3 +188,133 @@ function showUserPhoto($user, $width = 100, $height = 0, $cssclass = 'photowithm
 
 	return $ret;
 }
+
+/**
+ * @param       $searchProductId
+ * @return false|stdClass
+ */
+function getProductImgFileInfos($searchProductId)
+{
+	global $db, $conf, $user;
+
+	if(empty($searchProductId)){
+		return false;
+	}
+
+	$photo = new stdClass();
+
+	$searchProduct = new Product($db);
+	$res = $searchProduct->fetch($searchProductId);
+	if ($res > 0) {
+
+		if (! empty($conf->global->PRODUCT_USE_OLD_PATH_FOR_PHOTO))
+		{
+			$pdir[0] = get_exdir($searchProduct->id,2,0,0,$searchProduct,'product') . $searchProduct->id ."/photos/";
+			$pdir[1] = get_exdir(0,0,0,0,$searchProduct,'product') . dol_sanitizeFileName($searchProduct->ref).'/';
+		}
+		else
+		{
+			$pdir[0] = get_exdir(0,0,0,0,$searchProduct,'product') . dol_sanitizeFileName($searchProduct->ref).'/'; // default
+			$pdir[1] = get_exdir($searchProduct->id,2,0,0,$searchProduct,'product') . $searchProduct->id ."/photos/";	// alternative
+		}
+
+		$arephoto = false;
+		foreach ($pdir as $midir)
+		{
+			if (! $arephoto)
+			{
+				$dir = $conf->product->dir_output.'/'.$midir;
+
+				// on prend toujours la dernière photo uploader
+				foreach ($searchProduct->liste_photos($dir, 0) as $key => $obj)
+				{
+					$photo->imageUrl = $photo->imageUrlThumb = $dir.$obj['photo'];
+					if ($obj['photo_vignette']){
+						$photo->imageUrlThumb = $dir.$obj['photo_vignette'];
+					}
+
+					$arephoto = true;
+				}
+			}
+		}
+
+		if(!empty($arephoto))
+		{
+			return $photo;
+		}
+	}
+}
+
+/**
+ * @param       $searchProductId
+ * @param mixed $size
+ * @param @param mixed $size see getProductImgFileInfos
+ */
+function outputProductImg($searchProductId, $size = false)
+{
+	$photo = getProductImgFileInfos($searchProductId);
+
+	// TODO : ajouter un droit permettant de voir les photos pour l'instant pour limiter l'access seul les utilisateurs identifiés peuvent voir les photos
+	//$user->rights->externalaccess->see_product_img
+//	if(empty($user->id)){ // bon l'interface n'a pas d'utilisateur...
+//		$photo = false;
+//	}
+
+	// TODO : Taille d'image
+	/* 	$size = false; // image std full size
+		$size = 'thumb'; // use thumb image in Dolibarr
+		$size = array(
+			'h' => 200, // height in Pixels
+			'w' => 200, // width in Pixels
+			'crop' => auto|contain|cover,
+					// contain 	: 	Un mot-clé qui redimensionne l'image afin qu'elle soit la plus grande possible et que l'image conserve ses proportions.
+									L'image est contrainte dans le conteneur. Les zones éventuellement vide sont remplies avec la couleur d'arrière-plan (définie grâce à background-color).
+					// cover	: 	Un mot-clé dont le comportement est opposé à celui de contain.
+									L'image est redimensionnée pour être aussi grande que possible et pour conserver ses proportions.
+									L'image couvre toute la largeur ou la hauteur du conteneur et les parties qui dépassent sont rognées si les proportions du conteneur sont différentes (il n'y aucun espace libre sur lequel on verrait la couleur d'arrière-plan).
+					// auto		:	Un mot-clé qui redimensionne l'image d'arrière-plan afin que ses proportions soient conservées. contrairement a contain et cover , h et w deviennent des limites et non pas des valeurs fixes
+			'proportion' => true|false,
+			'background-color' => #FFFFFF, // couleur du fond de l'image lors d'un crop
+		)
+
+	NOTE 1 : 	Par expérience il faut prévoir un cache des images générées avec un moyen facile de le vider par une tâche cron par exemple
+	NOTE 2 : 	Par expérience il est préférable de ne pas permettre à l'internaute de choisir le format d'image directement mais seulement une 'class' de format ex : large,medium,small,etc...
+				la class étant la clé d'un tableau de l'ensemble des formats possibles.
+
+	Une fois celà fait il nous sera possible de créer une vue catalogue en ligne ou autre
+	 */
+
+
+	if(!empty($photo))
+	{
+		$file = $photo->imageUrl;
+		if($size === 'thumb'){
+			$file = $photo->imageUrlThumb;
+		}
+		$type = mime_content_type($photo->imageUrl);
+		header('Content-Type:'.$type);
+		header('Content-Length: ' . filesize($file));
+		readfile($file);
+		exit();
+	}
+	else
+	{
+		$file = DOL_DOCUMENT_ROOT.'/public/theme/common/nophoto.png';
+		$type = mime_content_type($file);
+		header('Content-Type:'.$type);
+		header('Content-Length: ' . filesize($file));
+		readfile($file);
+		exit();
+	}
+}
+
+/**
+ * @param        $searchProductId
+ * @param string $format
+ * @return string
+ */
+function getProductImgUrl($searchProductId, $format = 'thumb')
+{
+	$context = Context::getInstance();
+	return $context->getRootUrl().'script/interface.php?action=productimg&p='.intval($searchProductId).'&f='.$format;
+}
