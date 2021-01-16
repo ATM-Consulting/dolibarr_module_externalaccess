@@ -203,6 +203,8 @@ function getProductImgFileInfos($searchProductId)
 
 	$photo = new stdClass();
 
+	require_once DOL_DOCUMENT_ROOT . '/product/class/product.class.php';
+
 	$searchProduct = new Product($db);
 	$res = $searchProduct->fetch($searchProductId);
 	if ($res > 0) {
