@@ -320,3 +320,34 @@ function getProductImgUrl($searchProductId, $format = 'thumb')
 	$context = Context::getInstance();
 	return $context->getRootUrl().'script/interface.php?action=productimg&p='.intval($searchProductId).'&f='.$format;
 }
+
+
+/**
+ * return tags to use for js confirmation even on buttons or link
+ * @param string $msg
+ * @param string $url
+ * @param string $title
+ * @param string $confirmText
+ * @param string $cancelTxt
+ * @return string
+ */
+function getConfirmDialogsTags($msg, $url, $title = '', $confirmText='Confirm', $cancelTxt = 'Cancel')
+{
+	global $langs;
+
+	$Tags = array(
+		'data-confirm' => 1,
+		'data-confirm-title' => !empty($title)?$langs->trans($title):'',
+		'data-confirm-message' => $langs->trans($msg),
+		'data-confirm-canceltxt' => $langs->trans($cancelTxt),
+		'data-confirm-confirmtxt' => $langs->trans($confirmText),
+		'data-confirm-url' => $url,
+	);
+
+	$TCompiledAttr = array();
+	foreach ($Tags as $key => $value) {
+		$TCompiledAttr[] = $key.'="'.dol_escape_htmltag($value).'"';
+	}
+
+	return !empty($TCompiledAttr) ?implode(' ', $TCompiledAttr) : '';
+}

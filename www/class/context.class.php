@@ -28,7 +28,7 @@ class Context {
 
    public $eventMessages = array();
 
-   protected $tokenKey = 'ctoken';
+   public $tokenKey = 'ctoken';
 
 	/**
 	 * Curent object of page
@@ -100,29 +100,63 @@ class Context {
 	   $this->controller_found = true;
    }
 
-
-   public function getRootUrl($controller = '', $moreparams = '')
+	/**
+	 * @param string       $controller
+	 * @param string|array $moreParams
+	 * @param bool         $addToken add token hash only if $controller is setted
+	 * @return string
+	 */
+   public function getRootUrl($controller = false, $moreParams = '', $addToken = true)
    {
 		$url = $this->rootUrl;
 
-		if (!empty($controller)){
-			$url .= '?controller='.$controller;
+		if(empty($controller)){
+			// because can be called without params to get only rootUrl
+			return $url;
+		}
 
+		$Tparams = array();
+
+		if (!empty($controller)){
+			$Tparams['controller'] = $controller;
 			// added to remove somme part on iframe calls
 			if(!empty($this->iframe)){
-				$url .= '&iframe=1';
+				$Tparams['iframe'] = 1;
+			}
+
+			if(!empty($addToken)){
+				$Tparams[$this->tokenKey] = $this->newToken();
 			}
 		}
 
-		if (!empty($moreparams))
-		{
-			if (empty($controller))
-			{
-				if ($moreparams[0] !== '?') $url .= '?';
-				if ($moreparams[0] === '&') $moreparams = substr($moreparams, 1);
+	   // if $moreParams is an array
+	   if (!empty($moreParams) && is_array($moreParams)){
+			if (isset($moreParams['controller'])) unset($moreParams['controller']);
+			if(!empty($moreParams)){
+				foreach ($moreParams as $paramKey => $paramVal){
+					$Tparams[$paramKey] = $paramVal;
+				}
 			}
-			$url .= $moreparams;
-		}
+	   }
+
+	   if(!empty($Tparams)){
+		   $TCompiledAttr = array();
+		   foreach ($Tparams as $key => $value) {
+			   $TCompiledAttr[] = $key.'='.$value;
+		   }
+		   $url .= '?'.implode("&", $TCompiledAttr);
+	   }
+
+	   // if $moreParams is a string
+	   if (!empty($moreParams) && !is_array($moreParams))
+	   {
+		   if (empty($Tparams))
+		   {
+			   if ($moreParams[0] !== '?') $url .= '?';
+			   if ($moreParams[0] === '&') $moreParams = substr($moreParams, 1);
+		   }
+		   $url .= $moreParams;
+	   }
 
 		return $url;
    }

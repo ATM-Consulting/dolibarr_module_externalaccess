@@ -48,6 +48,9 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
     <script src="<?php print $context->getRootUrl(); ?>vendor/jquery/jquery.min.js"></script>
     <script src="<?php print $context->getRootUrl(); ?>vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
+	<!-- bootbox code -->
+	<script src="<?php print $context->getRootUrl(); ?>vendor/bootbox/bootbox.all.min.js"></script>
+
     <!-- Plugin JavaScript -->
     <script src="<?php print $context->getRootUrl(); ?>vendor/jquery-easing/jquery.easing.min.js"></script>
     <script src="<?php print $context->getRootUrl(); ?>vendor/scrollreveal/scrollreveal.min.js"></script>
