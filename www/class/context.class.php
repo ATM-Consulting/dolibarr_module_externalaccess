@@ -28,6 +28,8 @@ class Context {
 
    public $eventMessages = array();
 
+   protected $tokenKey = 'ctoken';
+
 	/**
 	 * Curent object of page
 	 * @var object $object
@@ -62,6 +64,9 @@ class Context {
        if(empty($this->controller)){
            $this->controller = 'default';
        }
+
+	   $this->generateNewToken();
+
 
 	   // Init de l'url de base
        if(!empty($conf->global->EACCESS_ROOT_URL))
@@ -234,6 +239,117 @@ class Context {
 	{
 		unset($_SESSION['EA_events']);
 		$this->eventMessages = array();
+	}
+
+	/**
+	 * Return the value of token currently saved into session with name 'newToken'.
+	 * This token must be send by any POST as it will be used by next page for comparison with value in session.
+	 * This token depend of controller
+	 *
+	 * @param false|string $controller
+	 * @return  string
+	 */
+	function newToken($controller = false)
+	{
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+
+		if(!isset($_SESSION['controllers_tokens'][$controller]['newToken'])){
+			$this->generateNewToken($controller);
+		}
+
+		return $_SESSION['controllers_tokens'][$controller]['newToken'];
+	}
+
+	/**
+	 * generate new token.
+	 *
+	 * @param false|string $controller
+	 * @return  string
+	 */
+	protected function generateNewToken($controller = false)
+	{
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+
+
+		if(empty($_SESSION['controllers_tokens'])){$_SESSION['controllers_tokens'] = array();}
+		if(empty($_SESSION['controllers_tokens'][$controller])){$_SESSION['controllers_tokens'][$controller] = array();}
+
+
+		// Creation of a token against CSRF vulnerabilities
+		if (!defined('NOTOKENRENEWAL')) {
+
+			// Rolling token at each call ($_SESSION['token'] contains token of previous page)
+			if (isset($_SESSION['controllers_tokens'][$controller]['newToken'])) {
+				$_SESSION['controllers_tokens'][$controller]['token'] = $_SESSION['controllers_tokens'][$controller]['newToken'];
+			}
+
+
+			// Save what will be next token. Into forms, we will add param $context->newToken();
+			$token = dol_hash(uniqid(mt_rand(), TRUE)); // Generat
+			$_SESSION['controllers_tokens'][$controller]['newToken'] = $token;
+
+			return $token;
+
+		}
+		else{
+			return newToken($controller);
+		}
+	}
+
+	/**
+	 * Return the value of token currently saved into session with name 'token'.
+	 *
+	 * @return  string
+	 */
+	function currentToken($controller = false)
+	{
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		return isset($_SESSION['controllers_tokens'][$controller]['token'])?$_SESSION['controllers_tokens'][$controller]['token']:false;
+	}
+
+	/**
+	 * @param false $controller
+	 * @param bool  $erase
+	 * @return bool
+	 */
+	function validateToken($controller = false, $erase = true){
+
+		$token = GETPOST($this->tokenKey, 'aZ09');
+
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		$currentToken = $this->currentToken($controller);
+		if(empty($currentToken)) return false;
+		if(empty($token)) return false;
+		if($currentToken === $token){
+			if($erase){
+				unset($_SESSION['controllers_tokens'][$controller]['token']);
+			}
+			return true;
+		}
+	}
+
+	/**
+	 * @param false|string $controller
+	 * @return string|null
+	 */
+	function getUrlToken($controller = false){
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		$token = $this->newToken($controller);
+		if($token){
+			return '&'.$this->tokenKey.'='.$this->newToken($controller);
+		}
+	}
+
+	/**
+	 * @param false|string $controller
+	 * @return string|null
+	 */
+	function getFormToken($controller = false){
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		$token = $this->newToken($controller);
+		if($token) {
+			return '<input type="hidden" name="' . $this->tokenKey . '" value="' . $this->newToken($controller) . '" />';
+		}
 	}
 }
 
