@@ -12,6 +12,8 @@ ___
 - NEW : Ajout colonne "Numéro de suivi" des expéditions pour cette liste uniquement (soumis à configuration)
 - NEW : Add option to allow brand logo in menu and change login logo too [2020-12-15]
 - NEW : Add context token system [2021-01-17]
+- NEW : Add js dialog confirm for button possibility for developers [2021-01-17]
+- NEW : getRootUrl can have an array for url parameters [2021-01-17]
 
 - FIX : Missing translation keys [2020-12-15]
 - FIX : Login page title [2020-12-16]
