@@ -1,6 +1,6 @@
-<?php
+<?php 
 
-require __DIR__ .'/../config.php';
+require __DIR__ .'/../config.php'; 
 
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
