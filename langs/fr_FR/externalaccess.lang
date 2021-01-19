@@ -133,7 +133,8 @@ EACCESS_TOP_MENU_IMG = Url du logo pour le menu
 EACCESS_TOP_MENU_IMG_HELP = Laisser vide pour utiliser le "Titre de l'accès extérieur"
 EACCESS_TOP_MENU_IMG_SHRINK = Url du logo de substitution
 EACCESS_TOP_MENU_IMG_SHRINK_HELP = Si défini, le logo de substitution remplace le logo de menu par celui-ci lorsque le menu change "d'état" durant le défilement de la page. Celà permet par exemple d'utiliser une image de logo transparente avec des textes blanc et lors du changement d'etat du menu d'utiliser un logo compatible au format.
-
+EACCESS_MANIFEST_ICON = Url de l'icône d'application
+EACCESS_MANIFEST_ICON_HELP = Sur certains smartphones, les utilisateurs peuvent ajouter le portail client à leur écran d'accueil, le portail client apparaît alors comme une apllication mobile. Cette option permet de définir l'icône représentant cette application. l'image doit être au format png de taille 256x256 pixels.
 
 # INDEX
 Quotations=Devis
