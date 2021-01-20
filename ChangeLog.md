@@ -4,6 +4,8 @@ ___
 
 ## [Unreleased]
 
+___
+## RELEASE 1.6 - 2021-01-20
 - NEW : Add product photo display possibility [2021-01-14]
 - NEW : Add Hooks [2021-01-10]
 - NEW : Add icon option for manifest [2021-01-10]
