@@ -281,17 +281,19 @@ class Context {
 	 * This token depend of controller
 	 *
 	 * @param false|string $controller
+	 * @param bool         $generateIfNull
 	 * @return  string
 	 */
-	function newToken($controller = false)
+	function newToken($controller = false, $generateIfNull = true)
 	{
 		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
 
-		if(!isset($_SESSION['controllers_tokens'][$controller]['newToken'])){
+		if(!isset($_SESSION['controllers_tokens'][$controller]['newToken'])
+			&& $generateIfNull){
 			$this->generateNewToken($controller);
 		}
 
-		return $_SESSION['controllers_tokens'][$controller]['newToken'];
+		return !empty($_SESSION['controllers_tokens'][$controller]['newToken'])?$_SESSION['controllers_tokens'][$controller]['newToken']:'';
 	}
 
 	/**
@@ -326,7 +328,7 @@ class Context {
 
 		}
 		else{
-			return newToken($controller);
+			return newToken($controller, false);
 		}
 	}
 
