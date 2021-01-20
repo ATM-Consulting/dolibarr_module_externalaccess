@@ -70,9 +70,19 @@ function downloadFile($filename, $forceDownload = 0)
         {
             $finfo = finfo_open(FILEINFO_MIME_TYPE);
             $mime = finfo_file($finfo, $filename);
-            if($mime == 'application/pdf' && empty($forceDownload))
+            if(empty($forceDownload))
             {
-                header('Content-type: application/pdf');
+            	// In some cases finfo_file return 'text/plain' for js and css
+            	if($mime == 'text/plain'){
+					$path_parts = pathinfo($filename);
+					if($path_parts['extension'] == 'js'){ $mime = 'application/javascript'; }
+					if($path_parts['extension'] == 'css'){ $mime = 'text/css'; }
+					if($path_parts['extension'] == 'csv'){ $mime = 'text/csv'; }
+					if($path_parts['extension'] == 'json'){ $mime = 'application/json'; }
+				}
+
+
+                header('Content-type: '.$mime);
                 header('Content-Disposition: inline; filename="' . basename($filename) . '"');
                 header('Content-Transfer-Encoding: binary');
                 header('Accept-Ranges: bytes');

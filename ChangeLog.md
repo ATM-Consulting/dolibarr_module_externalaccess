@@ -4,9 +4,16 @@ ___
 
 ## [Unreleased]
 
+- NEW : Add product photo display possibility [2021-01-14]
+- NEW : Add Hooks [2021-01-10]
+- NEW : Add icon option for manifest [2021-01-10]
+- NEW : Add option for simple home display [2021-01-10]
 - NEW : Ajout du tri par défaut sur la date de création des tickets sur la liste des tickets [2020-12-15]
 - NEW : Ajout colonne "Numéro de suivi" des expéditions pour cette liste uniquement (soumis à configuration)
 - NEW : Add option to allow brand logo in menu and change login logo too [2020-12-15]
+- NEW : Add context token system [2021-01-17]
+- NEW : Add js dialog confirm for button possibility for developers [2021-01-17]
+- NEW : getRootUrl can have an array for url parameters [2021-01-17]
 
 - FIX : Missing translation keys [2020-12-15]
 - FIX : Login page title [2020-12-16]
