@@ -240,7 +240,12 @@ class Actionsexternalaccess
 	        if($context->controller == 'default')
 	        {
 				$context->setControllerFound();
-	            include $context->tplPath .'/headbar_full.tpl.php';
+				if(!empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){
+					include $context->tplPath .'/headbar.tpl.php';
+				}
+				else{
+					include $context->tplPath .'/headbar_full.tpl.php';
+				}
 	            include $context->tplPath .'/services.tpl.php';
 	            return 1;
 	        }

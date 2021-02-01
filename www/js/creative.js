@@ -98,4 +98,33 @@ $(document).ready(function(){
   // convert select imput into searchable select input class="selectsearchable" data-live-search="true"
   $('.selectsearchable').selectpicker();
 
+
+
+  // Confirm dialog button trigger
+	$(document).on("click", "[data-confirm=\"1\"]", function(event) {
+		event.preventDefault();
+		var dial = $(this);
+
+		// http://bootboxjs.com/examples.html
+
+		bootbox.confirm({
+			title: dial.attr('data-confirm-title'),
+			message: dial.attr('data-confirm-message'),
+			buttons: {
+				cancel: {
+					label: '<i class="fa fa-times"></i> ' + dial.attr('data-confirm-canceltxt')
+				},
+				confirm: {
+					label: '<i class="fa fa-check"></i> ' + dial.attr('data-confirm-confirmtxt')
+				}
+			},
+			callback: function (result) {
+				if(result){
+					window.location.replace(dial.attr('data-confirm-url'));
+				}
+			}
+		});
+	});
+
+
 }); // End of use strict

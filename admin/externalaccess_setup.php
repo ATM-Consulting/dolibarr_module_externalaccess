@@ -31,6 +31,7 @@ if (! $res) {
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/externalaccess.lib.php';
+require_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
 
 // Translations
 $langs->load("externalaccess@externalaccess");
@@ -39,9 +40,12 @@ $langs->load("externalaccess@externalaccess");
 if (! $user->admin) {
     accessforbidden();
 }
-
+$object = '';
 // Parameters
 $action = GETPOST('action', 'alpha');
+
+// Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
+$hookmanager->initHooks(array('externalaccesssetup'));
 
 /*
  * Actions
@@ -49,7 +53,9 @@ $action = GETPOST('action', 'alpha');
 if (preg_match('/set_(.*)/',$action,$reg))
 {
 	$code=$reg[1];
-	if (dolibarr_set_const($db, $code, GETPOST($code, 'none'), 'chaine', 0, '', $conf->entity) > 0)
+	$val = GETPOST($code,  'none');
+	if(is_array($val)) $val = serialize($val);
+	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
 	{
 		header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
@@ -91,7 +97,8 @@ dol_fiche_head(
     $head,
     'settings',
     $langs->trans("ModuleName"),
-    1
+    1,
+    "externalaccess@externalaccess"
 );
 
 if(!dol_include_once('/abricot/inc.core.php')) {
@@ -110,17 +117,38 @@ print "</tr>";
 
 dol_include_once('externalaccess/www/class/context.class.php');
 $context = Context::getInstance();
-//$context = new Context();
 $link = '<a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a>';
 _print_input_form_part('EACCESS_ROOT_URL',false,$link, array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_ROOT_URL_HELP');
 _print_input_form_part('EACCESS_TITLE',false,'',array('size'=> 50),'input','EACCESS_TITLE_HELP');
 _print_input_form_part('EACCESS_GOBACK_URL',false,'',array('size'=> 50),'input','EACCESS_GOBACK_URL_HELP');
+
+_print_title('ConfLinkedToContactInfos');
 _print_input_form_part('EACCESS_PHONE');
 _print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACCESS_EMAIL_HELP');
+_print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
 
-
+/*
+ * DESIGN
+ */
+_print_title('ConfLinkedToDesign');
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
-_print_input_form_part('EACCESS_HEADER_IMG',false,'',array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
+_print_on_off('EACCESS_NO_FULL_HEADBAR_FOR_HOME');
+_print_input_form_part('EACCESS_HEADER_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
+_print_input_form_part('EACCESS_LOGIN_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_LOGIN_IMG_HELP');
+_print_input_form_part('EACCESS_TOP_MENU_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_HELP');
+_print_input_form_part('EACCESS_TOP_MENU_IMG_SHRINK',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_SHRINK_HELP');
+_print_input_form_part('EACCESS_MANIFEST_ICON',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_MANIFEST_ICON_HELP');
+
+$parameters = array();
+$reshook=$hookmanager->executeHooks('formDesignOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+print $hookmanager->resPrint;
+
+
+
+/*
+ * ACTIVATE MODULES
+ */
 
 _print_title('EACCESS_ACTIVATE_MODULES');
 _print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
@@ -131,15 +159,33 @@ _print_on_off('EACCESS_ACTIVATE_TICKETS',false, 'EACCESS_need_some_rights');
 _print_on_off('EACCESS_ACTIVATE_PROJECTS',false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
+$parameters = array();
+$reshook=$hookmanager->executeHooks('formActivateModuleOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+print $hookmanager->resPrint;
 
+
+_print_title('ConfLinkedToContents');
 _print_input_form_part('EACCESS_LOGIN_EXTRA_HTML',false,'',array(),'textarea');
 if(empty($conf->global->EACCESS_RGPD_MSG)){
     dolibarr_set_const($db,'EACCESS_RGPD_MSG',$langs->trans('EACCESS_RGPD_MSG_default',$conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity) ;
 }
 _print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 
+_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client'), 'tracking_url'=>$langs->trans('TrackingNumberOnlyExpedition')));
 
 print '</table>';
+
+
+/*
+ * Add setup hook
+ */
+
+$parameters = array();
+$reshook=$hookmanager->executeHooks('formMoreOptions', $parameters,$object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+print $hookmanager->resPrint;
+
 
 dol_fiche_end(1);
 
@@ -158,12 +204,29 @@ function _print_title($title="")
     print '</tr>';
 }
 
-function _print_on_off($confkey, $title = false, $desc ='')
+/**
+ * @param $confkey	string	name of conf in llx_const
+ * @param $title	string 	label of conf
+ * @param $desc		string 	description written in small text under title
+ * @param $help		string	text for tooltip
+ */
+function _print_on_off($confkey, $title = false, $desc = '', $help = '')
 {
     global $langs, $conf;
 
-    print '<tr class="oddeven">';
+	print '<tr class="oddeven">';
     print '<td>'.($title?$title:$langs->trans($confkey));
+
+    $form=new Form($db);
+
+	if(empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
+		$help = $confkey . '_HELP';
+	}
+
+	if(!empty($help)){
+		print $form->textwithtooltip('', $langs->trans($help),2,1,img_help(1,''));
+	}
+
     if(!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
@@ -208,6 +271,10 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     print '<tr class="oddeven">';
     print '<td'.$colspan.'>';
 
+	if(empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
+		$help = $confkey . '_HELP';
+	}
+
     if(!empty($help)){
         print $form->textwithtooltip( ($title?$title:$langs->trans($confkey)) , $langs->trans($help),2,1,img_help(1,''));
     }
@@ -233,12 +300,43 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
         $doleditor=new DolEditor($confkey, $conf->global->{$confkey}, '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }
-    else {
-        print '<input '.$metascompil.'  />';
-    }
+	elseif($type=='input'){
+		print '<input '.$metascompil.'  />';
+	}
+	else{
+		// custom
+		print $type;
+	}
 
     print '</td><td class="right">';
     print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
     print '</form>';
     print '</td></tr>';
+}
+
+/**
+ * Function used to print a multiselect
+ * @param $confkey	string	name of conf in llx_const
+ * @param $title	string	label of conf
+ * @param $Tab		array	available values
+ */
+function _print_multiselect($confkey, $title, $Tab) {
+
+	global $langs, $form, $conf;
+
+	print '<tr class="oddeven"><td>';
+	print $title?$title:$langs->trans($confkey);
+	print '</td>';
+	print '<td align="right" width="300">';
+	print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
+	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+	print '<input type="hidden" name="action" value="set_'.$confkey.'">';
+
+	print $form->multiselectarray($confkey, $Tab, unserialize($conf->global->{$confkey}), '', 0, '', 0, '100%');
+
+    print '</td><td class="right">';
+    print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
+    print '</form>';
+    print '</td></tr>';
+
 }

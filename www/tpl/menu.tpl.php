@@ -130,11 +130,23 @@ if(empty($reshook)){
 
     // Sorting
     uasort ( $Tmenu,'menuSortInv');
+
 ?>
 <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top <?php print !empty($context->topMenu->shrink)?'navbar-shrink':''; ?>" id="mainNav" <?php print !empty($context->topMenu->shrink)?'data-defaultshrink="1"':''; ?> >
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="<?php print $context->getRootUrl();  ?>"><?php print !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;  ?></a>
+        <a class="navbar-brand js-scroll-trigger" href="<?php print $context->getRootUrl();  ?>">
+			<?php
+			$brandTitle = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+			if(!empty($conf->global->EACCESS_TOP_MENU_IMG)){
+				print '<img class="logo" id="logo" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . $conf->global->EACCESS_TOP_MENU_IMG . '" />';
+				print '<img class="logo" id="logoshrink" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . (!empty($conf->global->EACCESS_TOP_MENU_IMG_SHRINK)?$conf->global->EACCESS_TOP_MENU_IMG_SHRINK:$conf->global->EACCESS_TOP_MENU_IMG) . '" />';
+			}
+			else{
+				print $brandTitle;
+			}
+			?>
+		</a>
         <button class="navbar-toggler navbar-toggler-right" type="button" data-toggle="collapse" data-target="#navbarResponsive" aria-controls="navbarResponsive" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>

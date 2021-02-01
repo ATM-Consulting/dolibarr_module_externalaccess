@@ -28,6 +28,14 @@ class Context {
 
    public $eventMessages = array();
 
+   public $tokenKey = 'ctoken';
+
+	/**
+	 * Curent object of page
+	 * @var object $object
+	 */
+   public $object;
+
    /**
     * Constructeur de la classe
     *
@@ -56,6 +64,9 @@ class Context {
        if(empty($this->controller)){
            $this->controller = 'default';
        }
+
+	   $this->generateNewToken();
+
 
 	   // Init de l'url de base
        if(!empty($conf->global->EACCESS_ROOT_URL))
@@ -89,29 +100,63 @@ class Context {
 	   $this->controller_found = true;
    }
 
-
-   public function getRootUrl($controller = '', $moreparams = '')
+	/**
+	 * @param string       $controller
+	 * @param string|array $moreParams
+	 * @param bool         $addToken add token hash only if $controller is setted
+	 * @return string
+	 */
+   public function getRootUrl($controller = false, $moreParams = '', $addToken = true)
    {
 		$url = $this->rootUrl;
 
-		if (!empty($controller)){
-			$url .= '?controller='.$controller;
+		if(empty($controller)){
+			// because can be called without params to get only rootUrl
+			return $url;
+		}
 
+		$Tparams = array();
+
+		if (!empty($controller)){
+			$Tparams['controller'] = $controller;
 			// added to remove somme part on iframe calls
 			if(!empty($this->iframe)){
-				$url .= '&iframe=1';
+				$Tparams['iframe'] = 1;
+			}
+
+			if(!empty($addToken)){
+				$Tparams[$this->tokenKey] = $this->newToken();
 			}
 		}
 
-		if (!empty($moreparams))
-		{
-			if (empty($controller))
-			{
-				if ($moreparams[0] !== '?') $url .= '?';
-				if ($moreparams[0] === '&') $moreparams = substr($moreparams, 1);
+	   // if $moreParams is an array
+	   if (!empty($moreParams) && is_array($moreParams)){
+			if (isset($moreParams['controller'])) unset($moreParams['controller']);
+			if(!empty($moreParams)){
+				foreach ($moreParams as $paramKey => $paramVal){
+					$Tparams[$paramKey] = $paramVal;
+				}
 			}
-			$url .= $moreparams;
-		}
+	   }
+
+	   if(!empty($Tparams)){
+		   $TCompiledAttr = array();
+		   foreach ($Tparams as $key => $value) {
+			   $TCompiledAttr[] = $key.'='.$value;
+		   }
+		   $url .= '?'.implode("&", $TCompiledAttr);
+	   }
+
+	   // if $moreParams is a string
+	   if (!empty($moreParams) && !is_array($moreParams))
+	   {
+		   if (empty($Tparams))
+		   {
+			   if ($moreParams[0] !== '?') $url .= '?';
+			   if ($moreParams[0] === '&') $moreParams = substr($moreParams, 1);
+		   }
+		   $url .= $moreParams;
+	   }
 
 		return $url;
    }
@@ -228,6 +273,119 @@ class Context {
 	{
 		unset($_SESSION['EA_events']);
 		$this->eventMessages = array();
+	}
+
+	/**
+	 * Return the value of token currently saved into session with name 'newToken'.
+	 * This token must be send by any POST as it will be used by next page for comparison with value in session.
+	 * This token depend of controller
+	 *
+	 * @param false|string $controller
+	 * @param bool         $generateIfNull
+	 * @return  string
+	 */
+	function newToken($controller = false, $generateIfNull = true)
+	{
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+
+		if(!isset($_SESSION['controllers_tokens'][$controller]['newToken'])
+			&& $generateIfNull){
+			$this->generateNewToken($controller);
+		}
+
+		return !empty($_SESSION['controllers_tokens'][$controller]['newToken'])?$_SESSION['controllers_tokens'][$controller]['newToken']:'';
+	}
+
+	/**
+	 * generate new token.
+	 *
+	 * @param false|string $controller
+	 * @return  string
+	 */
+	protected function generateNewToken($controller = false)
+	{
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+
+
+		if(empty($_SESSION['controllers_tokens'])){$_SESSION['controllers_tokens'] = array();}
+		if(empty($_SESSION['controllers_tokens'][$controller])){$_SESSION['controllers_tokens'][$controller] = array();}
+
+
+		// Creation of a token against CSRF vulnerabilities
+		if (!defined('NOTOKENRENEWAL')) {
+
+			// Rolling token at each call ($_SESSION['token'] contains token of previous page)
+			if (isset($_SESSION['controllers_tokens'][$controller]['newToken'])) {
+				$_SESSION['controllers_tokens'][$controller]['token'] = $_SESSION['controllers_tokens'][$controller]['newToken'];
+			}
+
+
+			// Save what will be next token. Into forms, we will add param $context->newToken();
+			$token = dol_hash(uniqid(mt_rand(), TRUE)); // Generat
+			$_SESSION['controllers_tokens'][$controller]['newToken'] = $token;
+
+			return $token;
+
+		}
+		else{
+			return newToken($controller, false);
+		}
+	}
+
+	/**
+	 * Return the value of token currently saved into session with name 'token'.
+	 *
+	 * @return  string
+	 */
+	function currentToken($controller = false)
+	{
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		return isset($_SESSION['controllers_tokens'][$controller]['token'])?$_SESSION['controllers_tokens'][$controller]['token']:false;
+	}
+
+	/**
+	 * @param false $controller
+	 * @param bool  $erase
+	 * @return bool
+	 */
+	function validateToken($controller = false, $erase = true){
+
+		$token = GETPOST($this->tokenKey, 'aZ09');
+
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		$currentToken = $this->currentToken($controller);
+		if(empty($currentToken)) return false;
+		if(empty($token)) return false;
+		if($currentToken === $token){
+			if($erase){
+				unset($_SESSION['controllers_tokens'][$controller]['token']);
+			}
+			return true;
+		}
+	}
+
+	/**
+	 * @param false|string $controller
+	 * @return string|null
+	 */
+	function getUrlToken($controller = false){
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		$token = $this->newToken($controller);
+		if($token){
+			return '&'.$this->tokenKey.'='.$this->newToken($controller);
+		}
+	}
+
+	/**
+	 * @param false|string $controller
+	 * @return string|null
+	 */
+	function getFormToken($controller = false){
+		if(empty($controller)){ $controller = !empty($this->controller)?$this->controller:'default'; }
+		$token = $this->newToken($controller);
+		if($token) {
+			return '<input type="hidden" name="' . $this->tokenKey . '" value="' . $this->newToken($controller) . '" />';
+		}
 	}
 }
 

@@ -59,6 +59,8 @@ function print_ticketTable($socId = 0)
 					"language": {
 						"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
 					},
+                    'order': [[1, 'desc']], // 1 = 2e colonne
+
 					responsive: true,
 					columnDefs: [{
 						orderable: false,
@@ -612,6 +614,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						$footer.= '</span>';
 					}
 					$footer.= '</div>';
+				}
+
+				if(!empty($footer)){
+					$out.='<div class="timeline-footer">'.$footer.'</div>';
 				}
 
 				$out.= '</div>';

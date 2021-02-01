@@ -1,0 +1,41 @@
+
+#
+# MISSING TRANSLATION FROM fr_FR
+#
+NewTicket=Nouveau ticket
+NewTicketTitle=Nouveau ticket
+NewTicketTitleDesc=Ouverture d'un ticket d'assistance
+TicketNotFound=Ticket introuvable ou inexistant
+TicketSubjectHere=Saisissez le sujet du ticket
+TicketSubjectHelp=Ecrivez un résumé claire et concis permettant de retrouver facilement ce ticket
+TicketSubject=Sujet du ticket
+TicketMessage=Description
+TicketBtnSubmitCreate=Ouvrir un ticket
+TicketBtnSubmitSave=Enregister
+InitialMessage=Description
+Severity=Niveau
+Unread=Non lu
+AnErrorOccurredDuringTicketSave=Une erreur c'est produite lors de la sauvegarde
+MessageIsEmpty=La description est vide
+SubjectIsEmpty=Le sujet est vide
+SocIsEmpty=Société inconue
+SendMessage=Envoyer le message
+SendMessageHelp=Vous permet d'ajouter un complément d'information
+SendMessageOnClosedStatus=Envoyer message de remerciment
+SendMessageOnClosedStatusHelp=Vous permet d'ajouter un message à l'attention de la personne qui a résolu votre ticket (ex: remerciments) sans renvoyer le ticket pour analyse.
+SendMessageAndReopen=Envoyer le message et rouvrir le ticket
+SendMessageAndReopenHelp=Le ticket sera de nouveau soumis pour analyse
+SendAnswerMessageAndClose=Répondre et clôturer
+SendAnswerMessage=Répondre
+SendAnswerMessageHelp=Le ticket sera de nouveau soumis pour analyse avec votre complement d'information
+AddMessage=Ajouter un message / répondre
+YourCommentHere=Saisissez votre commentaire
+TicketMessagesList=Liste des messages
+TicketCommentMissing=Vous devez ajouter un message !
+SendFile=Envoyer le fichier
+AddFileToComment=Ajouter le fichier
+SendCommentOtherActions=choisir une autre action
+SortMessagesDesc=Trier les messages du dernier au premier
+SortMessagesAsc=Trier les messages du premier au dernier
+ErrorNoRightToCreateTicket=Droit insuffisant, vous ne pouvez pas créer de ticket
+ErrorNoRightToDoThisAction=Désolé, votre compte utilisateur ne dispose pas du droit pour effectuer cette action.

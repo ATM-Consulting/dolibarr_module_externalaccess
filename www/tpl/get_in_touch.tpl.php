@@ -7,6 +7,30 @@ if (empty($context) || ! is_object($context))
 }
 
 global $langs;
+
+$signature = '';
+if(!empty($user->socid) && !empty($conf->global->EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE)) {
+
+	require_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
+	$soc = new Societe($db);
+	$soc->fetch($user->socid);
+	$TSalesRep = $soc->getSalesRepresentatives($user);
+
+	if(!empty($TSalesRep)) {
+
+		$signature = $langs->trans('YourSalesRep', $conf->global->MAIN_INFO_SOCIETE_NOM).'<br />';
+		if(count($TSalesRep) > 1) $signature = $langs->trans('YourSalesRepMultiple', $conf->global->MAIN_INFO_SOCIETE_NOM).'<br />';
+
+		foreach ($TSalesRep as $TData) {
+			$u = new User($db);
+			$u->fetch($TData['id']);
+			$signature.= nl2br(strip_tags($u->signature)).'<br /><br />';
+		}
+
+	}
+
+}
+
 ?>
 
 	 <section id="contact" class="bg-dark text-white">
@@ -15,7 +39,12 @@ global $langs;
           <div class="col-lg-8 mx-auto text-center">
             <h2 class="section-heading"><?php echo $langs->trans('GetInTouch'); ?></h2>
             <hr class="my-4">
-            <p class="mb-5"><?php echo $langs->trans('GetInTouchDesc'); ?></p>
+            <p class="mb-5">
+				<?php
+					if (!empty($signature)) print $signature;
+					echo $langs->trans('GetInTouchDesc');
+				?>
+			</p>
           </div>
         </div>
         <div class="row">
