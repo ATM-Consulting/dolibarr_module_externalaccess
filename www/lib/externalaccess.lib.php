@@ -310,6 +310,59 @@ function outputProductImg($searchProductId, $size = false)
 	}
 }
 
+
+/**
+ * @param       $fk_ecm
+ * @param mixed $size
+ * @param @param mixed $size see getProductImgFileInfos
+ */
+function outputPublicEcmFile($fk_ecm, $share = false, $byPassOptionalSecurity = false)
+{
+	global $user, $db, $conf;
+
+	include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
+
+	$ecm = new EcmFiles($db);
+	if($ecm->fetch($fk_ecm)){
+
+		if(!$byPassOptionalSecurity){
+			/*
+			$canRead = false;
+
+			// Optional security
+			$object = externalAccessObjectAutoLoad($ecm->src_object_type, $db);
+			if($object->fetch(intval($ecm->src_object_id)) > 0){
+				// TODO : for more security restriction we can add an object access check : could be a good thing to be sure public link not scrolled by google (Dolibarr not go so far... that why I said optional)
+			}
+
+			if(!$canRead){
+			//403 - Forbidden but to prevent bot sniff say 404
+				http_response_code(404);
+				// TODO include('404.php'); // provide your own HTML for the error page
+				exit();
+			}
+			*/
+		}
+
+		if(!empty($ecm->share) && !empty($share) && $share === $ecm->share){
+			$file = $ecm->filepath . '/' . $ecm->filename;
+			if(file_exists($file))
+			{
+				$type = mime_content_type($file);
+				header('Content-Type:'.$type);
+				header('Content-Length: ' . filesize($file));
+				readfile($file);
+				exit();
+			}
+		}
+	}
+	else{
+		http_response_code(404);
+		// TODO include('404.php'); // provide your own HTML for the error page
+		exit();
+	}
+}
+
 /**
  * @param        $searchProductId
  * @param string $format
@@ -350,4 +403,149 @@ function getConfirmDialogsTags($msg, $url, $title = '', $confirmText='Confirm', 
 	}
 
 	return !empty($TCompiledAttr) ?implode(' ', $TCompiledAttr) : '';
+}
+
+
+
+/**
+ * Return an object
+ *
+ * @param string $objecttype Type of object ('invoice', 'order', 'expedition_bon', 'myobject@mymodule', ...)
+ * @param $db
+ * @return int object of $objecttype
+ */
+function externalAccessObjectAutoLoad($objecttype, &$db)
+{
+	global $conf, $langs;
+
+	$ret = -1;
+	$regs = array();
+
+	// Parse $objecttype (ex: project_task)
+	$module = $myobject = $objecttype;
+
+	// If we ask an resource form external module (instead of default path)
+	if (preg_match('/^([^@]+)@([^@]+)$/i', $objecttype, $regs)) {
+		$myobject = $regs[1];
+		$module = $regs[2];
+	}
+
+
+	if (preg_match('/^([^_]+)_([^_]+)/i', $objecttype, $regs))
+	{
+		$module = $regs[1];
+		$myobject = $regs[2];
+	}
+
+	// Generic case for $classpath
+	$classpath = $module.'/class';
+
+	// Special cases, to work with non standard path
+	if ($objecttype == 'facture' || $objecttype == 'invoice') {
+		$classpath = 'compta/facture/class';
+		$module='facture';
+		$myobject='facture';
+	}
+	elseif ($objecttype == 'commande' || $objecttype == 'order') {
+		$classpath = 'commande/class';
+		$module='commande';
+		$myobject='commande';
+	}
+	elseif ($objecttype == 'propal')  {
+		$classpath = 'comm/propal/class';
+	}
+	elseif ($objecttype == 'supplier_proposal')  {
+		$classpath = 'supplier_proposal/class';
+	}
+	elseif ($objecttype == 'shipping') {
+		$classpath = 'expedition/class';
+		$myobject = 'expedition';
+		$module = 'expedition_bon';
+	}
+	elseif ($objecttype == 'delivery') {
+		$classpath = 'livraison/class';
+		$myobject = 'livraison';
+		$module = 'livraison_bon';
+	}
+	elseif ($objecttype == 'contract') {
+		$classpath = 'contrat/class';
+		$module='contrat';
+		$myobject='contrat';
+	}
+	elseif ($objecttype == 'member') {
+		$classpath = 'adherents/class';
+		$module='adherent';
+		$myobject='adherent';
+	}
+	elseif ($objecttype == 'cabinetmed_cons') {
+		$classpath = 'cabinetmed/class';
+		$module='cabinetmed';
+		$myobject='cabinetmedcons';
+	}
+	elseif ($objecttype == 'fichinter') {
+		$classpath = 'fichinter/class';
+		$module='ficheinter';
+		$myobject='fichinter';
+	}
+	elseif ($objecttype == 'task') {
+		$classpath = 'projet/class';
+		$module='projet';
+		$myobject='task';
+	}
+	elseif ($objecttype == 'stock') {
+		$classpath = 'product/stock/class';
+		$module='stock';
+		$myobject='stock';
+	}
+	elseif ($objecttype == 'inventory') {
+		$classpath = 'product/inventory/class';
+		$module='stock';
+		$myobject='inventory';
+	}
+	elseif ($objecttype == 'mo') {
+		$classpath = 'mrp/class';
+		$module='mrp';
+		$myobject='mo';
+	}
+
+	// Generic case for $classfile and $classname
+	$classfile = strtolower($myobject); $classname = ucfirst($myobject);
+	//print "objecttype=".$objecttype." module=".$module." subelement=".$subelement." classfile=".$classfile." classname=".$classname;
+
+	if ($objecttype == 'invoice_supplier') {
+		$classfile = 'fournisseur.facture';
+		$classname = 'FactureFournisseur';
+		$classpath = 'fourn/class';
+		$module = 'fournisseur';
+	}
+	elseif ($objecttype == 'order_supplier') {
+		$classfile = 'fournisseur.commande';
+		$classname = 'CommandeFournisseur';
+		$classpath = 'fourn/class';
+		$module = 'fournisseur';
+	}
+	elseif ($objecttype == 'stock') {
+		$classpath = 'product/stock/class';
+		$classfile = 'entrepot';
+		$classname = 'Entrepot';
+	}
+	elseif ($objecttype == 'dolresource') {
+		$classpath = 'resource/class';
+		$classfile = 'dolresource';
+		$classname = 'Dolresource';
+		$module = 'resource';
+	}
+
+
+	if (!empty($conf->$module->enabled))
+	{
+		$res = dol_include_once('/'.$classpath.'/'.$classfile.'.class.php');
+		if ($res)
+		{
+			if (class_exists($classname)) {
+				return new $classname($db);
+			}
+		}
+	}
+	return $ret;
 }
