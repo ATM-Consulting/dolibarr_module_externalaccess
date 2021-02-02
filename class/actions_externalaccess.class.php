@@ -614,7 +614,7 @@ class Actionsexternalaccess
 					$Terrors = array();
 					// TODO remove not uploaded file from $listofnames.
 					// TODO Il ne faudrait pas rendre un fichier de ce ticket public juste parceque l'utilisateur a tenté d'envoyer un fichier avec le même nom...
-					updateFileUploadedToBePublic($ticket, $listofnames, $Terrors);
+					if(! empty($conf->global->EACCESS_SET_UPLOADED_FILES_AS_PUBLIC)) updateFileUploadedToBePublic($ticket, $listofnames, $Terrors);
 
 					header('Location: '.$context->getRootUrl('ticket_card', '&id='.$ticket->id.'#lastcomment'));
 					exit();
