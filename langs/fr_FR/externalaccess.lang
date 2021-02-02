@@ -136,7 +136,8 @@ EACCESS_TOP_MENU_IMG_SHRINK_HELP = Si défini, le logo de substitution remplace 
 EACCESS_MANIFEST_ICON = Url de l'icône d'application
 EACCESS_MANIFEST_ICON_HELP = Sur certains smartphones, les utilisateurs peuvent ajouter le portail client à leur écran d'accueil, le portail client apparaît alors comme une apllication mobile. Cette option permet de définir l'icône représentant cette application. l'image doit être au format png de taille 256x256 pixels.
 EACCESS_NO_FULL_HEADBAR_FOR_HOME = Activer la vue simple sur la page d'accueil
-EACCESS_SET_UPLOADED_FILES_AS_PUBLIC = Rendre toutes les pièces jointes publiques
+EACCESS_SET_UPLOADED_FILES_AS_PUBLIC = Tickets : Lors de l'ajout de pièces jointes depuis le portail, générer un lien de parage sur ces fichiers.
+EACCESS_SET_UPLOADED_FILES_AS_PUBLIC_HELP = Les documents envoyés sont ainsi consultables depuis le portail
 
 # INDEX
 Quotations=Devis
