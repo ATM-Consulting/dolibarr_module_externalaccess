@@ -19,6 +19,7 @@ ___
 
 - FIX : Missing translation keys [2020-12-15]
 - FIX : Login page title [2020-12-16]
+- FIX : WIP ticket file sharing (experimental conf) [2021-02-02]
 ___
 ## RELEASE 1.3 - 2020-12-01
 
