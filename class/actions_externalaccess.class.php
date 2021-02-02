@@ -655,6 +655,7 @@ class Actionsexternalaccess
 				if(empty($errors)){
 					$ticket->ref = $ticket->getDefaultRef();
 					$ticket->datec = time();
+					$ticket->fk_statut = Ticket::STATUS_NOT_READ;
 
 					$res = $ticket->create($user);
 
