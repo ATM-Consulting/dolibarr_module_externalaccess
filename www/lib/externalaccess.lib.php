@@ -328,7 +328,6 @@ function outputEcmFile($fk_ecm = '', $hashforshare = '', $byPassSecurity = false
 		$auth = true;
 
 		if(!$byPassSecurity){
-
 			if(empty($fk_ecm) && ($hashforshare !== $ecm->share || empty($ecm->share)) ){
 				$auth = false;
 			}

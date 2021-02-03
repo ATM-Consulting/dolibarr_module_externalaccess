@@ -24,6 +24,6 @@ if (empty($reshook))
 	}
 
 	if($context->action == 'get-file'){
-		outputEcmFile(GETPOST('f','int'));
+		outputEcmFile(GETPOST('f','int'), GETPOST('share','none'));
 	}
 }

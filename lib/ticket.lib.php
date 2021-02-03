@@ -352,6 +352,45 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					</div>
 	 */
 
+
+	$documents = getTicketEcmList($object, true);
+	$ticketFooter = '';
+	if(!empty($documents))
+	{
+		$ticketFooter.= '<div class="panel-footer">';
+		foreach ($documents as $doc)
+		{
+			$ticketFooter.= '<span id="document_'.$doc->id.'" class="timeline-documents" ';
+			$ticketFooter.= ' data-id="'.$doc->id.'" ';
+			$ticketFooter.= ' data-path="'.$doc->filepath.'"';
+			$ticketFooter.= ' data-filename="'.dol_escape_htmltag($doc->filename).'" ';
+			$ticketFooter.= '>';
+
+			$filePath = DOL_DATA_ROOT . '/'. $doc->filepath . '/'. $doc->filename;
+			$mime = dol_mimetype($filePath);
+			$file = $object->id.'/'.$doc->filename;
+
+			$mimeAttr = ' mime="'.$mime.'" ';
+			$class = '';
+			if(in_array($mime, array('image/png', 'image/jpeg', 'application/pdf'))){
+				$class.= ' documentpreview';
+			}
+
+			if(!empty($doc->share)){
+				$doclink = $context->getRootUrl(false, array('action'=> 'get-file', 'share' => $doc->share)).'script/interface.php?action=get-file&amp;share='.$doc->share;
+				$ticketFooter.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
+				$ticketFooter.= img_mime($filePath).' '.$doc->filename;
+				$ticketFooter.= '</a>';
+			}
+			else{
+				$ticketFooter.= img_mime($filePath).' '.$doc->filename;
+			}
+
+			$ticketFooter.= '</span>';
+		}
+		$ticketFooter.= '</div>';
+	}
+
 	$out.= '
 		<div class="container px-0">
 			<h5>'.$langs->trans('Ticket').' '.$object->ref.'</h5>
@@ -386,13 +425,13 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						<div class="col-md-8">'.$object->message.'</div>
 					</div>
 				</div>
+				'.$ticketFooter.'
 			</div>
 		</div>';
 
 	// get list of messages for the ticket
 	$object->loadCacheMsgsTicket();
 	//var_dump($object->cache_msgs_ticket);
-
 
 
 	if (!empty($object->cache_msgs_ticket))
@@ -554,7 +593,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 				$out.= '<div class="timeline-body">'.$value['message'].'</div>';
 
 				$footer = ''; // init footer as empty
-				$documents = getTicketActionCommEcmList($actionstatic) ;
+				$documents = getTicketActionCommEcmList($actionstatic, true) ;
 				if(!empty($documents))
 				{
 					$footer.= '<div class="timeline-documents-container">';
@@ -569,11 +608,6 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						$filePath = DOL_DATA_ROOT . '/'. $doc->filepath . '/'. $doc->filename;
 						$mime = dol_mimetype($filePath);
 						$file = $actionstatic->id.'/'.$doc->filename;
-						$thumb = $actionstatic->id.'/thumbs/'.substr($doc->filename, 0, strrpos($doc->filename, '.')).'_mini'.substr($doc->filename, strrpos($doc->filename, '.'));
-
-						// TODO : make a document.php and viewimage.php external access version
-						//$doclink = dol_buildpath('document.php', 1).'?modulepart=actions&attachment=0&file='.urlencode($file).'&entity='.$conf->entity;
-						//$viewlink = dol_buildpath('viewimage.php', 1).'?modulepart=actions&file='.urlencode($thumb).'&entity='.$conf->entity;
 
 						$mimeAttr = ' mime="'.$mime.'" ';
 						$class = '';
@@ -581,10 +615,15 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 							$class.= ' documentpreview';
 						}
 
-						// TODO : uncomment link when we have a secured display document syteme
-						//$footer.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
-						$footer.= img_mime($filePath).' '.$doc->filename;
-						//$footer.= '</a>';
+						if(!empty($doc->share)){
+							$doclink = $context->getRootUrl(false, array('action'=> 'get-file', 'share' => $doc->share));
+							$footer.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
+							$footer.= img_mime($filePath).' '.$doc->filename;
+							$footer.= '</a>';
+						}
+						else{
+							$footer.= img_mime($filePath).' '.$doc->filename;
+						}
 
 						$footer.= '</span>';
 					}
