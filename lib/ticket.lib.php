@@ -81,7 +81,7 @@ function print_ticketTable($socId = 0)
 	}
 }
 
-function print_ticketCard($ticketId = 0, $socId = 0, $action = ''){
+function print_ticket_card($ticketId = 0, $socId = 0, $action = ''){
 	global $user, $langs;
 	dol_include_once('ticket/class/ticket.class.php');
 	$context = Context::getInstance();

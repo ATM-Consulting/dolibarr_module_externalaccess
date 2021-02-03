@@ -372,7 +372,7 @@ class Actionsexternalaccess
     public function print_ticketCard($ticketId = 0, $socId = 0)
     {
         print '<section id="section-ticket-card" class="type-content"><div class="container">';
-        print_ticketCard($ticketId, $socId, GETPOST('action', 'none'));
+        print_ticket_card($ticketId, $socId, GETPOST('action', 'none'));
         print '</div></section>';
     }
 
