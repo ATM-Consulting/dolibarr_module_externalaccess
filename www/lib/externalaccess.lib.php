@@ -312,48 +312,66 @@ function outputProductImg($searchProductId, $size = false)
 
 
 /**
- * @param       $fk_ecm
- * @param mixed $size
- * @param @param mixed $size see getProductImgFileInfos
+ * @param string $fk_ecm
+ * @param string $hashforshare
+ * @param bool   $byPassSecurity
  */
-function outputPublicEcmFile($fk_ecm, $share = false, $byPassOptionalSecurity = false)
+function outputEcmFile($fk_ecm = '', $hashforshare = '', $byPassSecurity = false, $forceDownload = false)
 {
 	global $user, $db, $conf;
 
 	include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
 
 	$ecm = new EcmFiles($db);
-	if($ecm->fetch($fk_ecm)){
+	if($ecm->fetch($fk_ecm, $ref = '', '', '', $hashforshare) > 0){
 
-		if(!$byPassOptionalSecurity){
-			/*
-			$canRead = false;
+		$auth = true;
 
-			// Optional security
-			$object = externalAccessObjectAutoLoad($ecm->src_object_type, $db);
-			if($object->fetch(intval($ecm->src_object_id)) > 0){
-				// TODO : for more security restriction we can add an object access check : could be a good thing to be sure public link not scrolled by google (Dolibarr not go so far... that why I said optional)
+		if(!$byPassSecurity){
+
+			if(empty($fk_ecm) && ($hashforshare !== $ecm->share || empty($ecm->share)) ){
+				$auth = false;
 			}
 
-			if(!$canRead){
-			//403 - Forbidden but to prevent bot sniff say 404
-				http_response_code(404);
-				// TODO include('404.php'); // provide your own HTML for the error page
-				exit();
+			if(!empty($fk_ecm)){
+				$auth = false; // if $fk_ecm is provided so default state is not auth
+
+				if(!empty($user->id)){ // to check if user is logged
+
+					// Optional security
+					$object = externalAccessObjectAutoLoad($ecm->src_object_type, $db);
+					if($object->fetch(intval($ecm->src_object_id)) > 0){
+						// TODO add a test for all document type to check is current user can download file
+						if($object->element_type == 'ticket'){
+							// TODO : check access
+						}
+					}
+				}
 			}
-			*/
 		}
 
-		if(!empty($ecm->share) && !empty($share) && $share === $ecm->share){
-			$file = $ecm->filepath . '/' . $ecm->filename;
-			if(file_exists($file))
-			{
-				$type = mime_content_type($file);
-				header('Content-Type:'.$type);
-				header('Content-Length: ' . filesize($file));
-				readfile($file);
-				exit();
+		if(!$auth){
+			http_response_code(401);
+			// TODO include('401.php'); // provide your own HTML for the error page
+			exit();
+		}
+
+		$file = DOL_DATA_ROOT . '/'.$ecm->filepath . '/' . $ecm->filename;
+		if(file_exists($file))
+		{
+			$type = mime_content_type($file);
+
+			header('Content-Type:'.$type);
+			header('Content-Length: ' . filesize($file));
+
+			if(!in_array($type, array()) && !$forceDownload){
+				header('Content-Description: File Transfer');
+				header('Cache-Control: must-revalidate');
+				header('Content-Disposition: attachment; filename="'.$ecm->filename.'"');
 			}
+
+			readfile($file);
+			exit();
 		}
 	}
 	else{

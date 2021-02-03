@@ -1,5 +1,9 @@
 <?php
 
+/********************************** **/
+/**   HERE USER MUST BE CONNECTED   **/
+/********************************** **/
+
 require __DIR__ .'/../config.php';
 
 
@@ -20,6 +24,6 @@ if (empty($reshook))
 	}
 
 	if($context->action == 'get-file'){
-		outputPublicEcmFile(GETPOST('f','int'), GETPOST('token','aZ'));
+		outputEcmFile(GETPOST('f','int'));
 	}
 }

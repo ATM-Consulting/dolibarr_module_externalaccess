@@ -1,5 +1,9 @@
 <?php
 
+/************************************** **/
+/** HERE USER DONT NEED TO BE CONNECTED **/
+/************************************** **/
+
 define('INC_FROM_SCRIPT', 1);
 require __DIR__ .'/../config.php';
 
@@ -35,4 +39,8 @@ if($action === 'getlogo')
 
         readfile($fullpath_original_file_osencoded);
     }
+}
+
+if($action == 'get-public-file'){
+	outputEcmFile('', GETPOST('hash','aZ09'));
 }
