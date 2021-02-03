@@ -4,6 +4,17 @@ ___
 
 ## [Unreleased]
 
+### Added
+
+- NEW : Add public file downloader [2021-02-03]
+
+- NEW : Add get public ecm file to interface [2021-02-03]
+
+### Changed
+
+- FIX : download file [2021-02-03]
+
+
 ___
 ## RELEASE 1.6 - 2021-01-20
 - NEW : Add product photo display possibility [2021-01-14]
