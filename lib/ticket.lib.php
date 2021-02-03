@@ -434,6 +434,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	//var_dump($object->cache_msgs_ticket);
 
 
+
 	if (!empty($object->cache_msgs_ticket))
 	{
 		require_once DOL_DOCUMENT_ROOT.'/comm/action/class/actioncomm.class.php';
@@ -582,6 +583,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					// $out .= $langs->trans('TicketNewMessage');
 				}
 				elseif($actionstatic->code == 'TICKET_MSG_PRIVATE') {
+					// n'est pas censé arrivé
 					// $out .= $langs->trans('TicketNewMessage');
 					$out .= ' <em>('.$langs->trans('Private').')</em>';
 				}
@@ -618,7 +620,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						if(!empty($doc->share)){
 							$doclink = $context->getRootUrl(false, array('action'=> 'get-file', 'share' => $doc->share));
 							$footer.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
-							$footer.= img_mime($filePath).' '.$doc->filename;
+						$footer.= img_mime($filePath).' '.$doc->filename;
 							$footer.= '</a>';
 						}
 						else{
@@ -752,4 +754,146 @@ function ticketLibStatut(Ticket $ticket, $mode = 2)
 	}
 
 	return dolGetStatus($langs->trans($labelStatus), $langs->trans($labelStatusShort), '', $statusType, $mode);
+}
+
+
+/**
+ * @param Ticket $ticket
+ * @return array
+ */
+function getTicketPublicFiles(Ticket $ticket)
+{
+	global $conf, $db, $user, $dolibarr_main_url_root;
+
+	if(empty($ticket->ref)) return false;
+
+	$relativedir = 'ticket/'.$ticket->ref;
+
+	include_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmfiles.class.php';
+	require_once DOL_DOCUMENT_ROOT.'/core/lib/security2.lib.php';
+	$TPublicFiles = array();
+
+	$filearrayindatabase = dol_dir_list_in_database($relativedir, '', null, 'name', SORT_ASC);
+
+	// Define $urlwithroot
+	$urlwithouturlroot = preg_replace('/'.preg_quote(DOL_URL_ROOT, '/').'$/i', '', trim($dolibarr_main_url_root));
+	$urlwithroot = $urlwithouturlroot.DOL_URL_ROOT; // This is to use external domain name found into config file
+	//$urlwithroot=DOL_MAIN_URL_ROOT;				// This is to use same domain name than current
+
+
+	// Search if it exists into $filearrayindatabase
+	foreach ($filearrayindatabase as $file)
+	{
+		if(!empty($file['rowid']) && !empty($file['share'])){
+			$paramlink = '';
+			if (!empty($file['share'])) $paramlink .= ($paramlink ? '&' : '').'hashp='.$file['share']; // Hash for public share
+			$file['fulllink'] = $urlwithroot.'/document.php'.($paramlink ? '?'.$paramlink : '');
+			$TPublicFiles[] = $file;
+		}
+	}
+
+	return $TPublicFiles;
+}
+
+/**
+ * @param Ticket $ticket
+ * @param array  $listOfFileNames Array of files name
+ * @param array  $TErrors
+ * @return void
+ * @throws Exception
+ */
+function updateFileUploadedToBePublic(Ticket $ticket, &$listOfFileNames, &$TErrors = array())
+{
+	global $conf, $db, $user;
+
+	include_once DOL_DOCUMENT_ROOT.'/ecm/class/ecmfiles.class.php';
+	require_once DOL_DOCUMENT_ROOT.'/core/lib/security2.lib.php';
+
+	$relativedir = 'ticket/'.$ticket->ref;
+
+	$filearrayindatabase = dol_dir_list_in_database($relativedir, '', null, 'name', SORT_ASC);
+
+	$TErrors = array();
+	// Complete filearray with properties found into $filearrayindatabase
+	foreach ($listOfFileNames as $key => $val)
+	{
+		$tmpfilename = preg_replace('/\.noexe$/', '', $val);
+
+		$found = false;
+		// Search if it exists into $filearrayindatabase
+		foreach ($filearrayindatabase as $key2 => $val2)
+		{
+			if ($val2['name'] == $tmpfilename)
+			{
+				$found = true;
+
+				if(!empty($val2['rowid']) && empty($val2['share'])){
+					$ecmfile = new EcmFiles($db);
+					$res = $ecmfile->fetch($val2['rowid']);
+					if($res>0){
+						$ecmfile->share = getRandomPassword(true);
+						if(empty($ecmfile->src_object_type)){
+							$ecmfile->src_object_type = $ticket->element;
+							$ecmfile->src_object_id =$ticket->id;
+						}
+
+						if($ecmfile->gen_or_uploaded == 'unknown'){
+							$ecmfile->gen_or_uploaded = 'uploaded';
+							$ecmfile->description = 'Added by external access module'; // indexed content
+						}
+
+						$result = $ecmfile->update($user);
+						if ($result < 0)
+						{
+							$TErrors[$ecmfile->filename] = new stdClass();
+							$TErrors[$ecmfile->filename]->error = $ecmfile->error;
+							$TErrors[$ecmfile->filename]->errors = $ecmfile->errors;
+						}
+					}
+				}
+
+				break;
+			}
+		}
+
+		// File not found in database
+		// it's probably because of adding file by externalaccess form
+		// so we add it as public
+		if (!$found)    // This happen in transition toward version 6, or if files were added manually into os dir.
+		{
+			$rel_filename = $relativedir.'/'.$val;
+			if (!preg_match('/([\\/]temp[\\/]|[\\/]thumbs|\.meta$)/', $rel_filename))     // If not a tmp file
+			{
+				dol_syslog("list_of_documents We found a file called '".$val."' not indexed into database. We add it");
+				$ecmfile = new EcmFiles($db);
+
+				// Add entry into database
+				$filename = basename($rel_filename);
+				$rel_dir = dirname($rel_filename);
+				$rel_dir = preg_replace('/[\\/]$/', '', $rel_dir);
+				$rel_dir = preg_replace('/^[\\/]/', '', $rel_dir);
+
+				$ecmfile->filepath = $rel_dir;
+				$ecmfile->filename = $filename;
+				$ecmfile->label = md5_file(dol_osencode($relativedir.'/'.$val)); // $destfile is a full path to file
+				$ecmfile->fullpath_orig = $relativedir.'/'.$val;
+				$ecmfile->gen_or_uploaded = 'uploaded';
+				$ecmfile->description = 'Added by external access module'; // indexed content
+				$ecmfile->keyword = ''; // keyword content
+				$ecmfile->src_object_type = $ticket->element;
+				$ecmfile->src_object_id =$ticket->id;
+
+				require_once DOL_DOCUMENT_ROOT.'/core/lib/security2.lib.php';
+				$ecmfile->share = getRandomPassword(true);
+
+				$result = $ecmfile->create($user);
+				if ($result < 0)
+				{
+					$TErrors[$ecmfile->filename] = new stdClass();
+					$TErrors[$ecmfile->filename]->error = $ecmfile->error;
+					$TErrors[$ecmfile->filename]->errors = $ecmfile->errors;
+				}
+			}
+		}
+	}
 }

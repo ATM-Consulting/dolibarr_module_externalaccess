@@ -174,6 +174,9 @@ _print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 
 _print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client'), 'tracking_url'=>$langs->trans('TrackingNumberOnlyExpedition')));
 
+_print_title('Experimental');
+_print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
+
 print '</table>';
 
 
