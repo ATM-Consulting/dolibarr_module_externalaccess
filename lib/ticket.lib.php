@@ -592,7 +592,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 				$out .= '</h3>';
 
-				$out.= '<div class="timeline-body">'.$value['message'].'</div>';
+				$out.= '<div class="timeline-body">'.nl2br($value['message']).'</div>';
 
 				$footer = ''; // init footer as empty
 				$documents = externalAccessGetTicketActionCommEcmList($actionstatic, true) ;
