@@ -64,7 +64,7 @@ if($context->userIsLog())
         );
     }
 
-    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets) && !empty($conf->ticket->enabled))
+    if(!empty($conf->ticket->enabled) && $conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
     {
         $Tmenu['tickets'] = array(
             'id' => 'tickets',

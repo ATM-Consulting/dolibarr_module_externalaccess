@@ -47,12 +47,12 @@ if(empty($reshook)){
 		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-    if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices)){
+    if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($conf->facture->enabled) && !empty($user->rights->externalaccess->view_invoices)){
         $link = $context->getRootUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
 
-    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets)){
+    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($conf->ticket->enabled) && !empty($user->rights->externalaccess->view_tickets)){
         $link = $context->getRootUrl('tickets');
         printService($langs->trans('Tickets'),'fa-ticket',$link);
     }
