@@ -313,22 +313,23 @@ function outputProductImg($searchProductId, $size = false)
 
 /**
  * @param string $fk_ecm
- * @param string $hashforshare
+ * @param string $hashForShare
  * @param bool   $byPassSecurity
+ * @param bool   $forceDownload
  */
-function outputEcmFile($fk_ecm = '', $hashforshare = '', $byPassSecurity = false, $forceDownload = false)
+function outputEcmFile($fk_ecm = '', $hashForShare = '', $byPassSecurity = false, $forceDownload = false)
 {
 	global $user, $db, $conf;
 
 	include_once DOL_DOCUMENT_ROOT . '/ecm/class/ecmfiles.class.php';
 
 	$ecm = new EcmFiles($db);
-	if($ecm->fetch($fk_ecm, $ref = '', '', '', $hashforshare) > 0){
+	if($ecm->fetch($fk_ecm, $ref = '', '', '', $hashForShare) > 0){
 
 		$auth = true;
 
 		if(!$byPassSecurity){
-			if(empty($fk_ecm) && ($hashforshare !== $ecm->share || empty($ecm->share)) ){
+			if(empty($fk_ecm) && ($hashForShare !== $ecm->share || empty($ecm->share)) ){
 				$auth = false;
 			}
 
@@ -428,8 +429,8 @@ function getConfirmDialogsTags($msg, $url, $title = '', $confirmText='Confirm', 
  * Return an object
  *
  * @param string $objecttype Type of object ('invoice', 'order', 'expedition_bon', 'myobject@mymodule', ...)
- * @param $db
- * @return int object of $objecttype
+ * @param DoliDB $db
+ * @return int|object of $objecttype
  */
 function externalAccessObjectAutoLoad($objecttype, &$db)
 {
