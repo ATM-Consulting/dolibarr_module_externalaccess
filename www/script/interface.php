@@ -1,6 +1,10 @@
-<?php 
+<?php
 
-require __DIR__ .'/../config.php'; 
+/********************************** **/
+/**   HERE USER MUST BE CONNECTED   **/
+/********************************** **/
+
+require __DIR__ .'/../config.php';
 
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
@@ -17,5 +21,9 @@ if (empty($reshook))
 {
 	if($context->action == 'productimg'){
 		outputProductImg(GETPOST('p','int'), GETPOST('f','aZ'));
+	}
+
+	if($context->action == 'get-file'){
+		outputEcmFile(GETPOST('f','int'), GETPOST('share','none'));
 	}
 }

@@ -98,14 +98,14 @@ AbricotWiki=Consulter la page d'information du module abricot.
 EACCESS_ROOT_URL=Url d'accès  public
 EACCESS_ROOT_URL_HELP=Si vous utilisez un virtual host
 EACCESS_TITLE=Titre de l'accès extérieur
-EACCESS_TITLE_HELP=Le titre qui apparait sur les moteurs de recherches et sur les onglets du nagigateur, il est aussi visible sur le menu du haut si aucun logo pour le menu n'est défini
+EACCESS_TITLE_HELP=Le titre qui apparaît sur les moteurs de recherche et sur les onglets du navigateur. Il est aussi visible sur le menu du haut si aucun logo pour le menu n'est défini
 EACCESS_GOBACK_URL=Url du lien de retour
-EACCESS_GOBACK_URL_HELP=Si l'URL est renseignée, celà ajoute un lien "retour vers le site" dans le menu du haut
+EACCESS_GOBACK_URL_HELP=Si l'URL est renseignée, cela ajoute un lien "retour vers le site" dans le menu du haut
 EACCESS_PRIMARY_COLOR=Couleur principale du thème
 EACCESS_PRIMARY_COLOR_HELP=Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
 EACCESS_PHONE=Téléphone de contact
 EACCESS_EMAIL=Email de contact
-EACCESS_EMAIL_HELP=Cet adresse email est visible dans le pied de page, il est possible de fournir une url vers un formulaire de contact
+EACCESS_EMAIL_HELP=Cette adresse email est visible dans le pied de page. Il est possible de fournir une url vers un formulaire de contact
 EACCESS_ACTIVATE_MODULES=Modules accessibles
 EACCESS_ACTIVATE_INVOICES= Factures
 EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
@@ -116,7 +116,7 @@ EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser
 AccessToCustomerGate=Consulter le portail client
 EACCESS_LOGIN_EXTRA_HTML=Texte supplémentaire affiché sur la page de connexion.
 EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
-EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
+EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
 EACCESS_ACTIVATE_EXPEDITIONS= Expéditions
 EACCESS_ACTIVATE_TICKETS = Tickets
 EACCESS_ACTIVATE_PROJECTS = Projets
@@ -128,13 +128,13 @@ ConfLinkedToContents = Paramètres liés au contenu
 ConfLinkedToContactInfos = Paramètres liés au contact
 ConfLinkedToDesign = Paramètres liés à l'apparence
 EACCESS_LOGIN_IMG = Url du logo
-EACCESS_LOGIN_IMG_HELP = Cette image apparait sur la page de connexion du portail. Laisser vide pour utiliser le logo configuré dans les paramètres de votre société.
+EACCESS_LOGIN_IMG_HELP = Cette image apparaît sur la page de connexion du portail. Laisser vide pour utiliser le logo configuré dans les paramètres de votre société.
 EACCESS_TOP_MENU_IMG = Url du logo pour le menu
 EACCESS_TOP_MENU_IMG_HELP = Laisser vide pour utiliser le "Titre de l'accès extérieur"
 EACCESS_TOP_MENU_IMG_SHRINK = Url du logo de substitution
-EACCESS_TOP_MENU_IMG_SHRINK_HELP = Si défini, le logo de substitution remplace le logo de menu par celui-ci lorsque le menu change "d'état" durant le défilement de la page. Celà permet par exemple d'utiliser une image de logo transparente avec des textes blanc et lors du changement d'etat du menu d'utiliser un logo compatible au format.
+EACCESS_TOP_MENU_IMG_SHRINK_HELP = Si défini, le logo de substitution remplace le logo de menu par celui-ci lorsque le menu change "d'état" durant le défilement de la page. Cela permet par exemple d'utiliser une image de logo transparente avec des textes blancs et, lors du changement d'état du menu, d'utiliser un logo compatible au format.
 EACCESS_MANIFEST_ICON = Url de l'icône d'application
-EACCESS_MANIFEST_ICON_HELP = Sur certains smartphones, les utilisateurs peuvent ajouter le portail client à leur écran d'accueil, le portail client apparaît alors comme une apllication mobile. Cette option permet de définir l'icône représentant cette application. l'image doit être au format png de taille 256x256 pixels.
+EACCESS_MANIFEST_ICON_HELP = Sur certains smartphones, les utilisateurs peuvent ajouter le portail client à leur écran d'accueil, le portail client apparaît alors comme une apllication mobile. Cette option permet de définir l'icône représentant cette application. L'image doit être au format png de taille 256x256 pixels.
 EACCESS_NO_FULL_HEADBAR_FOR_HOME = Activer la vue simple sur la page d'accueil
 EACCESS_SET_UPLOADED_FILES_AS_PUBLIC = Tickets : Lors de l'ajout de pièces jointes depuis le portail, générer un lien de partage sur ces fichiers.
 EACCESS_SET_UPLOADED_FILES_AS_PUBLIC_HELP = Les documents envoyés sont ainsi consultables depuis le portail
@@ -158,8 +158,8 @@ ForgotThePassword=Mot de passe oublié ?
 ForgotPassword=Mot de passe oublié ?
 Rememberme=Se souvenir de moi.
 SignIn=Connexion
-YouCanResetYourPasswordHere=Vous pouvez le renouveller ici
-Renew=Renouveller
+YouCanResetYourPasswordHere=Vous pouvez le renouveler ici
+Renew=Renouveler
 
 # FOOTER
 GetInTouch=Restons en contact
@@ -182,13 +182,13 @@ Saved=Sauvegardé
 Company=Société
 
 # 404 tpl 
-SorryThereIsNothingHere=Désolé il n'y a rien ici
+SorryThereIsNothingHere=Désolé, il n'y a rien ici
 
 # Commercial du client
 YourSalesRep=Votre contact chez %s :
 YourSalesRepMultiple=Vos contacts chez %s :
 
-EACCESS_Nothing=Actuellement il n'y a rien ici, patience, vos documents seront disponibles prochainement
+EACCESS_Nothing=Actuellement, il n'y a rien ici. Patience, vos documents seront disponibles prochainement
 
 Amount_HT=Montant HT
 Amount_TTC=Montant TTC

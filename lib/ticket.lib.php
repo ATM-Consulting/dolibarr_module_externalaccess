@@ -352,28 +352,44 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					</div>
 	 */
 
-	$listOfFileNames = array();
-	$TPublicFiles = getTicketPublicFiles($object);
-	$panelFooter = '';
-	if($TPublicFiles){
 
-		$panelFooter.= '<div class="panel-footer">';
-		foreach ($TPublicFiles as $doc){
-			$panelFooter.= '<span class="timeline-documents" >';
+	$documents = externalAccessGetTicketEcmList($object, true);
+	$ticketFooter = '';
+	if(!empty($documents))
+	{
+		$ticketFooter.= '<div class="panel-footer">';
+		foreach ($documents as $doc)
+		{
+			$ticketFooter.= '<span id="document_'.$doc->id.'" class="timeline-documents" ';
+			$ticketFooter.= ' data-id="'.$doc->id.'" ';
+			$ticketFooter.= ' data-path="'.$doc->filepath.'"';
+			$ticketFooter.= ' data-filename="'.dol_escape_htmltag($doc->filename).'" ';
+			$ticketFooter.= '>';
 
-			$panelFooter.= '<a href="'.$doc['fulllink'].'" class="btn btn-sm btn-secondary" target="_blank" >';
+			$filePath = DOL_DATA_ROOT . '/'. $doc->filepath . '/'. $doc->filename;
+			$mime = dol_mimetype($filePath);
+			$file = $object->id.'/'.$doc->filename;
 
-			$mimefa = dol_mimetype($doc['name'] , '', 4);
-			$panelFooter.= '<i class="fa fa-'.$mimefa.' paddingright" ></i>&nbsp;';
-			$panelFooter.= $doc['name'] ;
-			$panelFooter.= '</a>';
+			$mimeAttr = ' mime="'.$mime.'" ';
+			$class = '';
+			if(in_array($mime, array('image/png', 'image/jpeg', 'application/pdf'))){
+				$class.= ' documentpreview';
+			}
 
-			$panelFooter.= '</span>';
+			if(!empty($doc->share)){
+				$doclink = $context->getRootUrl(false, array('action'=> 'get-file', 'share' => $doc->share)).'script/interface.php?action=get-file&amp;share='.$doc->share;
+				$ticketFooter.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
+				$ticketFooter.= img_mime($filePath).' '.$doc->filename;
+				$ticketFooter.= '</a>';
+			}
+			else{
+				$ticketFooter.= img_mime($filePath).' '.$doc->filename;
+			}
+
+			$ticketFooter.= '</span>';
 		}
-		$panelFooter.= '</div>';
+		$ticketFooter.= '</div>';
 	}
-
-
 
 	$out.= '
 		<div class="container px-0">
@@ -409,7 +425,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						<div class="col-md-8">'.$object->message.'</div>
 					</div>
 				</div>
-				'.$panelFooter.'
+				'.$ticketFooter.'
 			</div>
 		</div>';
 
@@ -576,10 +592,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 				$out .= '</h3>';
 
-				$out.= '<div class="timeline-body">'.$value['message'].'</div>';
+				$out.= '<div class="timeline-body">'.nl2br($value['message']).'</div>';
 
 				$footer = ''; // init footer as empty
-				$documents = getTicketActionCommEcmList($actionstatic) ;
+				$documents = externalAccessGetTicketActionCommEcmList($actionstatic, true) ;
 				if(!empty($documents))
 				{
 					$footer.= '<div class="timeline-documents-container">';
@@ -594,11 +610,6 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						$filePath = DOL_DATA_ROOT . '/'. $doc->filepath . '/'. $doc->filename;
 						$mime = dol_mimetype($filePath);
 						$file = $actionstatic->id.'/'.$doc->filename;
-						$thumb = $actionstatic->id.'/thumbs/'.substr($doc->filename, 0, strrpos($doc->filename, '.')).'_mini'.substr($doc->filename, strrpos($doc->filename, '.'));
-
-						// TODO : make a document.php and viewimage.php external access version
-						//$doclink = dol_buildpath('document.php', 1).'?modulepart=actions&attachment=0&file='.urlencode($file).'&entity='.$conf->entity;
-						//$viewlink = dol_buildpath('viewimage.php', 1).'?modulepart=actions&file='.urlencode($thumb).'&entity='.$conf->entity;
 
 						$mimeAttr = ' mime="'.$mime.'" ';
 						$class = '';
@@ -606,10 +617,15 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 							$class.= ' documentpreview';
 						}
 
-						// TODO : uncomment link when we have a secured display document syteme
-						//$footer.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
+						if(!empty($doc->share)){
+							$doclink = $context->getRootUrl(false, array('action'=> 'get-file', 'share' => $doc->share));
+							$footer.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
 						$footer.= img_mime($filePath).' '.$doc->filename;
-						//$footer.= '</a>';
+							$footer.= '</a>';
+						}
+						else{
+							$footer.= img_mime($filePath).' '.$doc->filename;
+						}
 
 						$footer.= '</span>';
 					}
@@ -880,4 +896,74 @@ function updateFileUploadedToBePublic(Ticket $ticket, &$listOfFileNames, &$TErro
 			}
 		}
 	}
+}
+
+
+/**
+ * externalAccessGetTicketActionCommEcmList
+ *
+ * @param ActionComm $object Object ActionComm
+ * @param bool       $pulicOnly
+ * @return    array                            Array of documents in index table
+ */
+function externalAccessGetTicketActionCommEcmList($object, $pulicOnly = true)
+{
+	global $conf, $db;
+
+	$documents = array();
+
+	$sql = 'SELECT ecm.rowid as id, ecm.src_object_type, ecm.src_object_id, ecm.filepath, ecm.filename, ecm.share';
+	$sql.= ' FROM '.MAIN_DB_PREFIX.'ecm_files ecm';
+	$sql.= ' WHERE ecm.filepath = \'agenda/'.$object->id.'\'';
+	if($pulicOnly){ $sql.= ' AND ecm.share IS NOT NULL '; }
+	//$sql.= ' ecm.src_object_type = \''.$object->element.'\' AND ecm.src_object_id = '.$object->id; // Actually upload file doesn't add type
+	$sql.= ' ORDER BY ecm.position ASC';
+
+	$resql= $db->query($sql);
+	if ($resql) {
+		if ($db->num_rows($resql)) {
+			while ($obj = $db->fetch_object($resql)) {
+				$documents[$obj->id] = $obj;
+			}
+		}
+	}
+
+	return $documents;
+}
+
+
+/**
+ * externalAccessGetTicketEcmList
+ *
+ * @param ActionComm $object Object ActionComm
+ * @param bool       $pulicOnly
+ * @return    array                            Array of documents in index table
+ */
+function externalAccessGetTicketEcmList($object, $pulicOnly = true)
+{
+	global $conf, $db;
+
+	$documents = array();
+
+	$sql = 'SELECT ecm.rowid as id, ecm.src_object_type, ecm.src_object_id, ecm.filepath, ecm.filename, ecm.share';
+	$sql.= ' FROM '.MAIN_DB_PREFIX.'ecm_files ecm';
+	$sql.= ' WHERE ((ecm.src_object_type = \'ticket\' ';
+	$sql.= ' AND  ecm.src_object_id = '.intval($object->id).') ';
+	$sql.= ' OR  ecm.filepath = \''.$db->escape('ticket/'.$object->ref).'\' )';
+	if($pulicOnly){ $sql.= ' AND ecm.share IS NOT NULL '; }
+
+	$sql.= ' AND ecm.entity = '.intval($conf->entity).' ';
+	//$sql.= ' ecm.src_object_type = \''.$object->element.'\' AND ecm.src_object_id = '.$object->id; // Actually upload file doesn't add type
+	$sql.= ' ORDER BY ecm.position ASC';
+
+	$resql= $db->query($sql);
+	if ($resql) {
+		if ($db->num_rows($resql)) {
+			while ($obj = $db->fetch_object($resql)) {
+				$documents[$obj->id] = $obj;
+			}
+		}
+	}
+
+	return $documents;
 }
