@@ -116,19 +116,35 @@ function downloadFile($filename, $forceDownload = 0)
 
 function print_invoiceTable($socId = 0)
 {
-    global $langs, $db, $conf;
+    global $langs, $db, $conf, $hookmanager;
     $context = Context::getInstance();
 
     dol_include_once('compta/facture/class/facture.class.php');
 
     $langs->load('factures');
 
+	$parameters = array("socId" => $socId);
 
     $sql = 'SELECT rowid ';
+
+	// Add fields from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
+
+	// Add From from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
     $sql.= ' AND entity IN ('.getEntity("invoice").')'; //Compatibility with Multicompany
+
+	// Add where from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' ORDER BY f.datef DESC';
 
     $tableItems = $context->dbTool->executeS($sql);
@@ -253,18 +269,34 @@ function print_invoiceTable($socId = 0)
 
 function print_projetsTable($socId = 1)
 {
-    global $langs,$db;
+    global $langs,$db,$hookmanager;
     $context = Context::getInstance();
 
     //dol_include_once('compta/facture/class/facture.class.php');
     dol_include_once('projet/class/project.class.php');
     $langs->load('projet');
 
+	$parameters = array("socId" => $socId);
 
     $sql = 'SELECT rowid ';
+
+	// Add fields from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'projet` projet';
+
+	// Add From from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
+
+	// Add where from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' ORDER BY projet.datec DESC';
 
     $tableItems = $context->dbTool->executeS($sql);
@@ -356,18 +388,34 @@ function print_projetsTable($socId = 1)
 
 function print_propalTable($socId = 0)
 {
-    global $langs,$db,$conf;
+    global $langs,$db,$conf,$hookmanager;
     $context = Context::getInstance();
 
     dol_include_once('comm/propal/class/propal.class.php');
 
 
+	$parameters = array("socId" => $socId);
 
     $sql = 'SELECT rowid ';
+
+	// Add fields from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+
+	// Add From from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
     $sql.= ' AND entity IN ('.getEntity("propal").')';//Compatibility with Multicompany
+
+	// Add where from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' ORDER BY p.datep DESC';
 
     $tableItems = $context->dbTool->executeS($sql);
@@ -406,7 +454,7 @@ function print_propalTable($socId = 0)
         {
             $object = new Propal($db);
             $object->fetch($item->rowid);
-	    load_last_main_doc($object);
+	    	load_last_main_doc($object);
             $downloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
 
 
@@ -481,19 +529,35 @@ function print_propalTable($socId = 0)
 
 function print_orderListTable($socId = 0)
 {
-    global $langs,$db,$conf;
+    global $langs, $db, $conf, $hookmanager;
     $context = Context::getInstance();
 
     dol_include_once('commande/class/commande.class.php');
 
     $langs->load('orders');
 
+	$parameters = array("socId" => $socId);
 
     $sql = 'SELECT rowid ';
+
+	// Add fields from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
+
+	// Add From from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
     $sql.= ' AND entity IN ('.getEntity("order").')';//Compatibility with Multicompany
+
+	// Add where from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' ORDER BY c.date_commande DESC';
 
     $tableItems = $context->dbTool->executeS($sql);
@@ -608,7 +672,7 @@ function print_orderListTable($socId = 0)
 
 function print_expeditionTable($socId = 0)
 {
-	global $langs,$db,$conf;
+	global $langs, $db, $conf, $hookmanager;
 	$context = Context::getInstance();
 
 	include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
@@ -618,10 +682,28 @@ function print_expeditionTable($socId = 0)
 
 
 	$sql = 'SELECT rowid ';
+
+	// Add fields from hooks
+	$parameters = array();
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
 	$sql.= ' FROM `'.MAIN_DB_PREFIX.'expedition` ';
+
+	// Add From from hooks
+	$parameters = array();
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
 	$sql.= ' WHERE fk_soc = '. intval($socId);
 	$sql.= ' AND fk_statut > 0';
-    	$sql.= ' AND entity IN ('.getEntity("expedition").')';//Compatibility with Multicompany
+	$sql.= ' AND entity IN ('.getEntity("expedition").')';//Compatibility with Multicompany
+
+	// Add where from hooks
+	$parameters = array();
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
 	$sql.= ' ORDER BY date_expedition DESC';
 
 	$tableItems = $context->dbTool->executeS($sql);
@@ -969,16 +1051,33 @@ function menuSort($a, $b) {
  */
 function print_invoiceList($socId = 0)
 {
-    global $langs,$db;
+    global $langs, $db, $hookmanager;
     $context = Context::getInstance();
 
     dol_include_once('compta/facture/class/facture.class.php');
 
+	$parameters = array("socId" => $socId);
+
     $sql = 'SELECT COUNT(*) ';
+
+	// Add fields from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'facture` f';
+
+	// Add From from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
     $sql.= ' AND entity IN ('.getEntity("invoice").')';//Compatibility with Multicompany
+
+	// Add where from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' ORDER BY f.datef DESC';
 
     $countItems = $context->dbTool->getvalue($sql);
@@ -1113,14 +1212,31 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
  */
 function print_orderList($socId = 0)
 {
-    global $langs,$db;
+    global $langs, $db, $hookmanager;
     $context = Context::getInstance();
 
+	$parameters = array("socId" => $socId);
+
     $sql = 'SELECT COUNT(*) ';
+
+	// Add fields from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' FROM `'.MAIN_DB_PREFIX.'commande` c';
+
+	// Add From from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
     $sql.= ' AND entity IN ('.getEntity("order").')';//Compatibility with Multicompany
+
+	// Add where from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' ORDER BY c.date_commande DESC';
 
     $countItems = $context->dbTool->getvalue($sql);
@@ -1255,16 +1371,33 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
  */
 function print_propalList($socId = 0)
 {
-    global $langs,$db;
+    global $langs, $db, $hookmanager;
     $context = Context::getInstance();
 
     dol_include_once('comm/propal/class/propal.class.php');
 
+	$parameters = array("socId" => $socId);
+
     $sql = 'SELECT COUNT(*) ';
-    $sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+
+	// Add fields from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
+	$sql.= ' FROM `'.MAIN_DB_PREFIX.'propal` p';
+
+	// Add From from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' WHERE fk_soc = '. intval($socId);
     $sql.= ' AND fk_statut > 0';
     $sql.= ' AND entity IN ('.getEntity('propal').')';//Compatibility with Multicompany
+
+	// Add where from hooks
+	$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
+	$sql .= $hookmanager->resPrint;
+
     $sql.= ' ORDER BY p.datep DESC';
 
     $countItems = $context->dbTool->getvalue($sql);
