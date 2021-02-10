@@ -4,6 +4,8 @@ ___
 
 ## [Unreleased]
 
+- NEW : Hooks for queries [2021-02-08]
+
 ### Added
 
 - NEW : Add public file downloader [2021-02-03]
