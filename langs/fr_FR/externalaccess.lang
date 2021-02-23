@@ -123,6 +123,7 @@ EACCESS_ACTIVATE_PROJECTS = Projets
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP=Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie
 EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
+EACCESS_LIST_ADDED_COLUMNS_SHIPPING=Colonnes supplémentaires à afficher sur les listes d'expeditions
 TrackingNumberOnlyExpedition=Numéro de suivi (liste expéditions uniquement)
 ConfLinkedToContents = Paramètres liés au contenu
 ConfLinkedToContactInfos = Paramètres liés au contact
@@ -152,6 +153,7 @@ MySpace=Consulter mon espace
 ref_client=Réf. client
 ref_customer=Réf. client
 tracking_url=Numéro de suivi
+shipping_method_id=Méthode d'expédition
 
 
 ForgotThePassword=Mot de passe oublié ?
