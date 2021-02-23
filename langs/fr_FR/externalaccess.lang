@@ -152,7 +152,7 @@ MySpace=Consulter mon espace
 # Traductions par attribut d'objet
 ref_client=Réf. client
 ref_customer=Réf. client
-tracking_url=Numéro de suivi
+tracking_number=Numéro de suivi
 shipping_method_id=Méthode d'expédition
 
 
