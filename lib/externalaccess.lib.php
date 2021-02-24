@@ -797,7 +797,10 @@ function print_expeditionTable($socId = 0)
 							$code=$langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
 							$field_label = $langs->trans("SendingMethod".strtoupper($code));
 							print ' <td data-search="' . strip_tags($field_label) . '" data-order="' . strip_tags($field_label) . '" >' . $field_label . '</td>';
-						} else {
+						} elseif ($field === 'tracking_number' && $conf->global->EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER) {
+							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field}.img_picto($conf->global->EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER, 'help') . '</td>';
+						}
+						else {
 							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
 						}
 					}
