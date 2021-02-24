@@ -153,7 +153,7 @@ ref_client=Réf. client
 ref_customer=Réf. client
 tracking_number=Numéro de suivi
 shipping_method_id=Méthode d'expédition
-
+linked-delivery-date_delivery-timestamp=Date réelle de réception
 
 ForgotThePassword=Mot de passe oublié ?
 ForgotPassword=Mot de passe oublié ?

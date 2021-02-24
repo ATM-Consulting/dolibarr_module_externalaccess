@@ -711,7 +711,6 @@ function print_expeditionTable($socId = 0)
 	if(!empty($tableItems))
 	{
 
-
 		$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 		if(empty($TOther_fields_all)) $TOther_fields_all = array();
 
@@ -726,10 +725,14 @@ function print_expeditionTable($socId = 0)
 
 		print '<tr>';
 		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
 				if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
-				if(property_exists('Expedition', $field)) print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
+				if(property_exists('Expedition', $field) || strstr($field ,'linked'))
+				{
+					print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
+				}
 			}
 		}
 		print ' <th class="reftoshow_title text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
@@ -745,6 +748,8 @@ function print_expeditionTable($socId = 0)
 		{
 			$object = new Expedition($db);
 			$object->fetch($item->rowid);
+			$object->fetchObjectLinked();
+
 			load_last_main_doc($object);
 			$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
 
@@ -772,8 +777,6 @@ function print_expeditionTable($socId = 0)
 					$reftosearch.= $linkedobject["ref_value"];
 				}
 			}
-
-
 			print '<tr>';
 			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
 			$total_more_fields = 0;
@@ -788,7 +791,26 @@ function print_expeditionTable($socId = 0)
 							print ' <td class="'.$field.'_value" data-search="' . strip_tags($field_label) . '" data-order="' . strip_tags($field_label) . '" >' . $field_label . '</td>';
 						} else {
 							print ' <td class="'.$field.'_value" data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
-						}					}
+						}
+					}
+					elseif (strstr($field ,'linked')) {
+						$Tfield_parts = explode('-', $field);
+
+						$linkedobject_class=$Tfield_parts[1];
+						$linkedobject_field=$Tfield_parts[2];
+						$linkedobject_field_type=$Tfield_parts[3];
+
+						$TLinkedObjects = $object->linkedObjects[$linkedobject_class];
+
+						print ' <td class="'.$field.'_value" >';
+						if(!empty($TLinkedObjects)) {
+							foreach ($TLinkedObjects as $id=>$objectlinked) {
+								if($linkedobject_field_type == 'timestamp') print date('d-m-Y', $objectlinked->{$linkedobject_field} ). ' ';
+								else print $objectlinked->{$linkedobject_field} . ' ';
+							}
+						}
+						print '</td>';
+					}
 				}
 			}
 			print ' <td class="reftoshow_value data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
