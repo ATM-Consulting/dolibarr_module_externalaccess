@@ -8,11 +8,15 @@ ___
 
 ### Added
 
+- NEW : Add column "shipping method" in shipping list (conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING) [2021-02-24]
+
 - NEW : Add public file downloader [2021-02-03]
 
 - NEW : Add get public ecm file to interface [2021-02-03]
 
 ### Changed
+
+- FIX : tracking_number and no tracking_url in shipping list [2021-02-24]
 
 - FIX : download file [2021-02-03]
 
