@@ -794,13 +794,10 @@ function print_expeditionTable($socId = 0)
 					if(property_exists('Expedition', $field)) {
 						$total_more_fields+=1;
 						if($field =='shipping_method_id') {
-							$code=$langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
-							$field_label = $langs->trans("SendingMethod".strtoupper($code));
+							$code = $langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
+							$field_label = $langs->trans("SendingMethod" . strtoupper($code));
 							print ' <td data-search="' . strip_tags($field_label) . '" data-order="' . strip_tags($field_label) . '" >' . $field_label . '</td>';
-						} elseif ($field === 'tracking_number' && $conf->global->EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER) {
-							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field}.img_picto($conf->global->EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER, 'help') . '</td>';
-						}
-						else {
+						} else {
 							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
 						}
 					}

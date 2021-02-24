@@ -174,28 +174,11 @@ _print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 
 _print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
 _print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, array('shipping_method_id'=>$langs->trans('shipping_method_id'), 'tracking_number'=>$langs->trans('tracking_number')));
-_print_input_form_part('EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER',false,'',array('size'=> 50),'input');
 
 _print_title('Experimental');
 _print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
 
 print '</table>';
-
-print ' <script type="text/javascript">
-
- 			 $(document).ready(function() {
-
-						$("#EACCESS_LIST_ADDED_COLUMNS_SHIPPING :selected").each(function() {
-							if(this.value == "tracking_number"){
-								$(\'input[name="EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER"]\').parent().closest(\'tr\').show();
-							} else {
-								   $(\'input[name="EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER"]\').parent().closest(\'tr\').hide();
-							}
-						});
-			});
-
-						</script>';
-
 
 /*
  * Add setup hook

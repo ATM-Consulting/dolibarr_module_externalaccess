@@ -138,7 +138,6 @@ EACCESS_MANIFEST_ICON_HELP = Sur certains smartphones, les utilisateurs peuvent 
 EACCESS_NO_FULL_HEADBAR_FOR_HOME = Activer la vue simple sur la page d'accueil
 EACCESS_SET_UPLOADED_FILES_AS_PUBLIC = Tickets : Lors de l'ajout de pièces jointes depuis le portail, générer un lien de partage sur ces fichiers.
 EACCESS_SET_UPLOADED_FILES_AS_PUBLIC_HELP = Les documents envoyés sont ainsi consultables depuis le portail
-EACCESS_TOOLTIPHELP_TEXT_TRACKINGNUMBER = Texte info bulle du numéro de suivi
 
 # INDEX
 Quotations=Devis
