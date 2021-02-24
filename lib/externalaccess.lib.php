@@ -732,7 +732,7 @@ function print_expeditionTable($socId = 0)
 				if(property_exists('Expedition', $field)) print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
 			}
 		}
-		print ' <th class="text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
+		print ' <th class="reftoshow_title text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
 		print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
 		print ' <th class="statut_title text-center" >'.$langs->trans('Status').'</th>';
 		print ' <th class="downloadlink_title text-center" ></th>';
@@ -791,7 +791,7 @@ function print_expeditionTable($socId = 0)
 						}					}
 				}
 			}
-			print ' <td data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
+			print ' <td class="reftoshow_value data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
 			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
 			print ' <td class="statut_value text-center" >'.$object->getLibStatut(0).'</td>';
 
