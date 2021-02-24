@@ -16,6 +16,8 @@ ___
 
 ### Changed
 
+- FIX : Ajout de l'option "tracking_number" dans la conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING plutôt que la conf EACCESS_LIST_ADDED_COLUMNS  [2021-02-24]
+
 - FIX : tracking_number and no tracking_url in shipping list [2021-02-24]
 
 - FIX : download file [2021-02-03]
