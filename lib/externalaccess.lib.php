@@ -805,7 +805,7 @@ function print_expeditionTable($socId = 0)
 						print ' <td class="'.$field.'_value" >';
 						if(!empty($TLinkedObjects)) {
 							foreach ($TLinkedObjects as $id=>$objectlinked) {
-								if($linkedobject_field_type == 'timestamp') print date('d-m-Y', $objectlinked->{$linkedobject_field} ). ' ';
+								if($linkedobject_field_type == 'timestamp') print dol_print_date($objectlinked->{$linkedobject_field}). ' ';
 								else print $objectlinked->{$linkedobject_field} . ' ';
 							}
 						}
