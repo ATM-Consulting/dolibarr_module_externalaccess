@@ -715,6 +715,25 @@ function print_expeditionTable($socId = 0)
 
 	if(!empty($tableItems))
 	{
+		//TODO : ajouter la variable $dataTableConf en paramètre du hook => résoudre le souci de "order"
+//		$dataTableConf = array(
+//			'language' => array(
+//				'url' => $context->getRootUrl() . 'vendor/data-tables/french.json',
+//			),
+//			'order' => array(),
+//			'responsive' => true,
+//			'columnDefs' => array(
+//				array(
+//					'orderable' => false,
+//					'aTargets' => array(-1),
+//				),
+//				array(
+//					'bSearchable' => false,
+//					'aTargets' => array(-1, -2),
+//				),
+//			),
+//		);
+
 		$TFieldsCols = array(
 			'ref' => array('status' => true),
 			'reftoshow' => array('status' => true),
@@ -882,7 +901,8 @@ function print_expeditionTable($socId = 0)
 		?>
         <script type="text/javascript" >
             $(document).ready(function(){
-                $("#expedition-list").DataTable({
+				//$("#expedition-list").DataTable(<?php //echo json_encode($dataTableConf) ?>//);
+				$("#expedition-list").DataTable({
                     "language": {
                         "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
                     },
