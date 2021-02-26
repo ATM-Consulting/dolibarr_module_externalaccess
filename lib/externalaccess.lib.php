@@ -720,22 +720,22 @@ function print_expeditionTable($socId = 0)
 
 		$parameters = array(
 			'socId' => $socId,
-			'tableItems' => $tableItems,
-			'TFieldsCols' => $TFieldsCols
+			'tableItems' =>& $tableItems,
+			'TFieldsCols' =>& $TFieldsCols
 		);
 
-		$reshook = $hookmanager->executeHooks('listColumnField', $parameters, $this); // Note that $object may have been modified by hook
+		$reshook = $hookmanager->executeHooks('listColumnField', $parameters, $context); // Note that $object may have been modified by hook
 		if ($reshook < 0)
 		{
 			$context->setEventMessages($hookmanager->errors, 'errors');
 		}
 		elseif (empty($reshook))
 		{
-			$this->cols = array_replace($this->cols, $hookmanager->resArray); // array_replace is used to preserve keys
+			$TFieldsCols = array_replace($this->cols, $hookmanager->resArray); // array_replace is used to preserve keys
 		}
 		else
 		{
-			$this->cols = $hookmanager->resArray;
+			$TFieldsCols = $hookmanager->resArray;
 		}
 
 
