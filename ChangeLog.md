@@ -8,6 +8,8 @@ ___
 
 ### Added
 
+- NEW : Add column linked object in shipping list with key format linked-(classname)-(fieldname)-(fieldtype) (conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING) [2021-02-25]
+  
 - NEW : Add column "shipping method" in shipping list (conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING) [2021-02-24]
 
 - NEW : Add public file downloader [2021-02-03]
@@ -15,6 +17,8 @@ ___
 - NEW : Add get public ecm file to interface [2021-02-03]
 
 ### Changed
+
+- FIX : Ajout de l'option "tracking_number" dans la conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING plutôt que la conf EACCESS_LIST_ADDED_COLUMNS  [2021-02-24]
 
 - FIX : tracking_number and no tracking_url in shipping list [2021-02-24]
 

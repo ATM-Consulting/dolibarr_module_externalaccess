@@ -172,14 +172,13 @@ if(empty($conf->global->EACCESS_RGPD_MSG)){
 }
 _print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
 
-_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client'), 'tracking_number'=>$langs->trans('TrackingNumberOnlyExpedition')));
-_print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, array('shipping_method_id'=>$langs->trans('shipping_method_id')));
+_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
+_print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, array('shipping_method_id'=>$langs->trans('shipping_method_id'), 'tracking_number'=>$langs->trans('tracking_number'), 'linked-delivery-date_delivery-timestamp'=>$langs->trans('linked-delivery-date_delivery-timestamp')));
 
 _print_title('Experimental');
 _print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
 
 print '</table>';
-
 
 /*
  * Add setup hook

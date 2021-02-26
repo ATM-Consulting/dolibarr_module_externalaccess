@@ -711,12 +711,13 @@ function print_expeditionTable($socId = 0)
 	if(!empty($tableItems))
 	{
 
-
-		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
-		if(empty($TOther_fields)) $TOther_fields = array();
+		$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+		if(empty($TOther_fields_all)) $TOther_fields_all = array();
 
 		$TOther_fields_shipping = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_SHIPPING);
 		if(empty($TOther_fields_shipping)) $TOther_fields_shipping = array();
+
+		$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_shipping);
 
 		print '<table id="expedition-list" class="table table-striped" >';
 
@@ -724,21 +725,20 @@ function print_expeditionTable($socId = 0)
 
 		print '<tr>';
 		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
 				if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
-				if(property_exists('Expedition', $field)) print ' <th class="text-center" >'.$langs->trans($field).'</th>';
+				if(property_exists('Expedition', $field) || strstr($field ,'linked'))
+				{
+					print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
+				}
 			}
 		}
-		if(!empty($TOther_fields_shipping)) {
-			foreach ($TOther_fields_shipping as $field) {
-				if(property_exists('Expedition', $field)) print ' <th class="text-center" >'.$langs->trans($field).'</th>';
-			}
-		}
-		print ' <th class="text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
+		print ' <th class="reftoshow_title text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
 		print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
-		print ' <th class="text-center" ></th>';
+		print ' <th class="statut_title text-center" >'.$langs->trans('Status').'</th>';
+		print ' <th class="downloadlink_title text-center" ></th>';
 		print '</tr>';
 
 		print '</thead>';
@@ -748,6 +748,8 @@ function print_expeditionTable($socId = 0)
 		{
 			$object = new Expedition($db);
 			$object->fetch($item->rowid);
+			$object->fetchObjectLinked();
+
 			load_last_main_doc($object);
 			$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
 
@@ -775,8 +777,6 @@ function print_expeditionTable($socId = 0)
 					$reftosearch.= $linkedobject["ref_value"];
 				}
 			}
-
-
 			print '<tr>';
 			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
 			$total_more_fields = 0;
@@ -785,29 +785,39 @@ function print_expeditionTable($socId = 0)
 					if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
 					if(property_exists('Expedition', $field)) {
 						$total_more_fields+=1;
-						print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
-					}
-				}
-			}
-			if(!empty($TOther_fields_shipping)) {
-				foreach ($TOther_fields_shipping as $field) {
-					if(property_exists('Expedition', $field)) {
-						$total_more_fields+=1;
 						if($field =='shipping_method_id') {
-							$code=$langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
-							$field_label = $langs->trans("SendingMethod".strtoupper($code));
-							print ' <td data-search="' . strip_tags($field_label) . '" data-order="' . strip_tags($field_label) . '" >' . $field_label . '</td>';
+							$code = $langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
+							$field_label = $langs->trans("SendingMethod" . strtoupper($code));
+							print ' <td class="'.$field.'_value" data-search="' . strip_tags($field_label) . '" data-order="' . strip_tags($field_label) . '" >' . $field_label . '</td>';
 						} else {
-							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+							print ' <td class="'.$field.'_value" data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
 						}
 					}
+					elseif (strstr($field ,'linked')) {
+						$Tfield_parts = explode('-', $field);
+
+						$linkedobject_class=$Tfield_parts[1];
+						$linkedobject_field=$Tfield_parts[2];
+						$linkedobject_field_type=$Tfield_parts[3];
+
+						$TLinkedObjects = $object->linkedObjects[$linkedobject_class];
+
+						print ' <td class="'.$field.'_value" >';
+						if(!empty($TLinkedObjects)) {
+							foreach ($TLinkedObjects as $id=>$objectlinked) {
+								if($linkedobject_field_type == 'timestamp') print dol_print_date($objectlinked->{$linkedobject_field}). ' ';
+								else print $objectlinked->{$linkedobject_field} . ' ';
+							}
+						}
+						print '</td>';
+					}
 				}
 			}
-			print ' <td data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
+			print ' <td class="reftoshow_value data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
 			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
-			print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
+			print ' <td class="statut_value text-center" >'.$object->getLibStatut(0).'</td>';
 
-			print ' <td class="text-right" >'.$downloadLink.'</td>';
+			print ' <td class="downloadlink_value text-right" >'.$downloadLink.'</td>';
 
 
 			print '</tr>';
