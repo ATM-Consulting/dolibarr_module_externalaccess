@@ -710,6 +710,34 @@ function print_expeditionTable($socId = 0)
 
 	if(!empty($tableItems))
 	{
+		$TFieldsCols = array(
+			'ref' => array('status' => true),
+			'reftoshow' => array('status' => true),
+			'delivery_date' => array('status' => true),
+			'status' => array('status' => true),
+			'downloadlink' => array('status' => true),
+		);
+
+		$parameters = array(
+			'socId' => $socId,
+			'tableItems' => $tableItems,
+			'TFieldsCols' => $TFieldsCols
+		);
+
+		$reshook = $hookmanager->executeHooks('listColumnField', $parameters, $this); // Note that $object may have been modified by hook
+		if ($reshook < 0)
+		{
+			$context->setEventMessages($hookmanager->errors, 'errors');
+		}
+		elseif (empty($reshook))
+		{
+			$this->cols = array_replace($this->cols, $hookmanager->resArray); // array_replace is used to preserve keys
+		}
+		else
+		{
+			$this->cols = $hookmanager->resArray;
+		}
+
 
 		$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 		if(empty($TOther_fields_all)) $TOther_fields_all = array();
@@ -724,7 +752,10 @@ function print_expeditionTable($socId = 0)
 		print '<thead>';
 
 		print '<tr>';
-		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+
+		if(!empty($TFieldsCols['ref']['status'])){
+			print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+		}
 
 		if(!empty($TOther_fields)) {
 			foreach ($TOther_fields as $field) {
@@ -735,10 +766,18 @@ function print_expeditionTable($socId = 0)
 				}
 			}
 		}
-		print ' <th class="reftoshow_title text-center" >'.$langs->trans('pdfLinkedDocuments').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('DateLivraison').'</th>';
-		print ' <th class="statut_title text-center" >'.$langs->trans('Status').'</th>';
-		print ' <th class="downloadlink_title text-center" ></th>';
+		if(!empty($TFieldsCols['reftoshow']['status'])) {
+			print ' <th class="reftoshow_title text-center" >' . $langs->trans('pdfLinkedDocuments') . '</th>';
+		}
+		if(!empty($TFieldsCols['delivery_date']['status'])) {
+			print ' <th class="text-center delivery_date" >' . $langs->trans('DateLivraison') . '</th>';
+		}
+		if(!empty($TFieldsCols['status']['status'])) {
+			print ' <th class="statut_title text-center" >' . $langs->trans('Status') . '</th>';
+		}
+		if(!empty($TFieldsCols['downloadlink']['status'])) {
+			print ' <th class="downloadlink_title text-center" ></th>';
+		}
 		print '</tr>';
 
 		print '</thead>';
@@ -778,7 +817,9 @@ function print_expeditionTable($socId = 0)
 				}
 			}
 			print '<tr>';
-			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+			if(!empty($TFieldsCols['ref']['status'])) {
+				print ' <td data-search="' . $object->ref . '" data-order="' . $object->ref . '"  >' . $viewLink . '</td>';
+			}
 			$total_more_fields = 0;
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
@@ -813,7 +854,9 @@ function print_expeditionTable($socId = 0)
 					}
 				}
 			}
-			print ' <td class="reftoshow_value data-search="'.$reftosearch.'" data-order="'.$reftosearch.'"  >'.$reftoshow.'</td>';
+			if(!empty($TFieldsCols['reftoshow']['status'])) {
+				print ' <td class="reftoshow_value data-search="' . $reftosearch . '" data-order="' . $reftosearch . '"  >' . $reftoshow . '</td>';
+			}
 			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
 			print ' <td class="statut_value text-center" >'.$object->getLibStatut(0).'</td>';
 
