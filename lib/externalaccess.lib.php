@@ -731,7 +731,7 @@ function print_expeditionTable($socId = 0)
 		}
 		elseif (empty($reshook))
 		{
-			$TFieldsCols = array_replace($this->cols, $hookmanager->resArray); // array_replace is used to preserve keys
+			$TFieldsCols = array_replace($TFieldsCols, $hookmanager->resArray); // array_replace is used to preserve keys
 		}
 		else
 		{
@@ -820,6 +820,7 @@ function print_expeditionTable($socId = 0)
 			if(!empty($TFieldsCols['ref']['status'])) {
 				print ' <td data-search="' . $object->ref . '" data-order="' . $object->ref . '"  >' . $viewLink . '</td>';
 			}
+
 			$total_more_fields = 0;
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
@@ -854,15 +855,19 @@ function print_expeditionTable($socId = 0)
 					}
 				}
 			}
+
 			if(!empty($TFieldsCols['reftoshow']['status'])) {
 				print ' <td class="reftoshow_value data-search="' . $reftosearch . '" data-order="' . $reftosearch . '"  >' . $reftoshow . '</td>';
 			}
-			print ' <td data-search="'.dol_print_date($object->date_delivery).'" data-order="'.$object->date_delivery.'" >'.dol_print_date($object->date_delivery).'</td>';
-			print ' <td class="statut_value text-center" >'.$object->getLibStatut(0).'</td>';
-
-			print ' <td class="downloadlink_value text-right" >'.$downloadLink.'</td>';
-
-
+			if(!empty($TFieldsCols['delivery_date']['status'])) {
+				print ' <td data-search="' . dol_print_date($object->date_delivery) . '" data-order="' . $object->date_delivery . '" >' . dol_print_date($object->date_delivery) . '</td>';
+			}
+			if(!empty($TFieldsCols['status']['status'])) {
+				print ' <td class="statut_value text-center" >' . $object->getLibStatut(0) . '</td>';
+			}
+			if(!empty($TFieldsCols['downloadlink']['status'])) {
+				print ' <td class="downloadlink_value text-right" >' . $downloadLink . '</td>';
+			}
 			print '</tr>';
 
 		}
