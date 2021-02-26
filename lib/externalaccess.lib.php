@@ -152,6 +152,7 @@ function print_invoiceTable($socId = 0)
     if(!empty($tableItems))
     {
 
+		//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
 		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 		if(empty($TOther_fields)) $TOther_fields = array();
@@ -304,7 +305,9 @@ function print_projetsTable($socId = 1)
     if(!empty($tableItems))
     {
 
-        print '<table id="projet-list" class="table table-striped" >';
+		//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
+
+		print '<table id="projet-list" class="table table-striped" >';
 
         print '<thead>';
 
@@ -423,6 +426,7 @@ function print_propalTable($socId = 0)
     if(!empty($tableItems))
     {
 
+		//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
 		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 		if(empty($TOther_fields)) $TOther_fields = array();
@@ -565,6 +569,7 @@ function print_orderListTable($socId = 0)
     if(!empty($tableItems))
     {
 
+		//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
 		$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 		if(empty($TOther_fields)) $TOther_fields = array();
