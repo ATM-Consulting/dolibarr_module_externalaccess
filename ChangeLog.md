@@ -26,6 +26,8 @@ ___
 
 - FIX : download file [2021-02-03]
 
+- FIX : V13 compatibility object "livraison" has been renamed into "delivery" [2021-03-04]
+
 
 ___
 ## RELEASE 1.6 - 2021-01-20
