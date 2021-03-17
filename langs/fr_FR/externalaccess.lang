@@ -20,6 +20,7 @@ external_access_projets = Consulter ses projets
 
 # MENU
 TopMenuexternalaccess=Portail client
+GroupMenuAdministrative = Administratif
 
 # STATUS
 externalaccessStatusDraft=Brouillon (à valider)
