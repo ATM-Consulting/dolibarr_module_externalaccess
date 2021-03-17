@@ -21,6 +21,7 @@ external_access_projets = Consulter ses projets
 # MENU
 TopMenuexternalaccess=Portail client
 GroupMenuAdministrative = Administratif
+GroupMenuTechnical = Technique
 
 # STATUS
 externalaccessStatusDraft=Brouillon (à valider)
@@ -139,6 +140,8 @@ EACCESS_MANIFEST_ICON_HELP = Sur certains smartphones, les utilisateurs peuvent 
 EACCESS_NO_FULL_HEADBAR_FOR_HOME = Activer la vue simple sur la page d'accueil
 EACCESS_SET_UPLOADED_FILES_AS_PUBLIC = Tickets : Lors de l'ajout de pièces jointes depuis le portail, générer un lien de partage sur ces fichiers.
 EACCESS_SET_UPLOADED_FILES_AS_PUBLIC_HELP = Les documents envoyés sont ainsi consultables depuis le portail
+EACCESS_MAX_TOP_MENU = Regroupement automatique des entrées du menu du haut dans des groupes si le nombre d'éléments affichés dépasse la valeur suivante :
+EACCESS_MAX_TOP_MENU_HELP = Exemple : Administratif / Technique.<br/>Laisser vide (ou 0) pour désactiver le comportement.
 
 # INDEX
 Quotations=Devis

@@ -131,6 +131,7 @@ _print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_AD
  * DESIGN
  */
 _print_title('ConfLinkedToDesign');
+_print_input_form_part('EACCESS_MAX_TOP_MENU', false, '', array('type'=>'number', 'min' => 0, 'step' => 1));
 _print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
 _print_on_off('EACCESS_NO_FULL_HEADBAR_FOR_HOME');
 _print_input_form_part('EACCESS_HEADER_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
@@ -143,7 +144,6 @@ $parameters = array();
 $reshook=$hookmanager->executeHooks('formDesignOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
 if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
 print $hookmanager->resPrint;
-
 
 
 /*

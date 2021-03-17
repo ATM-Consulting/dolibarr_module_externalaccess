@@ -154,7 +154,7 @@ if(empty($reshook)){
 		// Sorting
 		uasort ( $Tmenu,'menuSortInv');
 
-		if($conf->global->EACCESS_MAX_TOP_MENU < count($Tmenu)){
+		if(!empty($maxTopMenu) && $maxTopMenu < count($Tmenu)){
 
 			// AFFECT MENU ITEMS TO GROUPS
 			foreach ($Tmenu as $menuId => $menuItem){
