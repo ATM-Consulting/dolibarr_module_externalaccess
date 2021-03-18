@@ -9,8 +9,9 @@ if (empty($context) || ! is_object($context))
 
 global $conf,$user;
 
-$Tmenu=array();
+$Tmenu=$TGroupMenu=array();
 
+$maxTopMenu = !empty($conf->global->EACCESS_MAX_TOP_MENU)?$conf->global->EACCESS_MAX_TOP_MENU:0;
 
 if($context->userIsLog())
 {
@@ -21,6 +22,7 @@ if($context->userIsLog())
             'rank' => 10,
             'url' => $context->getRootUrl('projects'),
             'name' => $langs->trans('EALINKNAME_projects'),
+			'group' => 'administrative' // group identifier for the group if necessary
         );
     }
 
@@ -31,6 +33,7 @@ if($context->userIsLog())
             'rank' => 10,
             'url' => $context->getRootUrl('propals'),
             'name' => $langs->trans('EALINKNAME_propals'),
+			'group' => 'administrative' // group identifier for the group if necessary
         );
     }
 
@@ -41,6 +44,7 @@ if($context->userIsLog())
 			'rank' => 20,
 			'url' => $context->getRootUrl('orders'),
 			'name' => $langs->trans('EALINKNAME_orders'),
+			'group' => 'administrative' // group identifier for the group if necessary
 		);
 	}
 
@@ -51,6 +55,7 @@ if($context->userIsLog())
 			'rank' => 20,
 			'url' => $context->getRootUrl('expeditions'),
 			'name' => $langs->trans('EALINKNAME_expeditions'),
+			'group' => 'administrative' // group identifier for the group if necessary
 		);
 	}
 
@@ -61,6 +66,7 @@ if($context->userIsLog())
             'rank' => 40,
             'url' => $context->getRootUrl('invoices'),
             'name' => $langs->trans('EALINKNAME_invoices'),
+			'group' => 'administrative' // group identifier for the group if necessary
         );
     }
 
@@ -71,9 +77,9 @@ if($context->userIsLog())
             'rank' => 50,
             'url' => $context->getRootUrl('tickets'),
             'name' => $langs->trans('EALINKNAME_tickets'),
+			'group' => 'technical' // group identifier for the group if necessary
         );
     }
-
 
 
     $Tmenu['user'] = array(
@@ -111,11 +117,29 @@ if(!empty($conf->global->EACCESS_GOBACK_URL)){
 }
 
 
-
+// GROUP MENU
+$TGroupMenu = array(
+	'administrative' => array(
+		'id' => 'administrative',
+		'rank' => -1, // negative value for undefined, it will be set by the min item rank for this group
+		'url' => '',
+		'name' => $langs->trans('GroupMenuAdministrative'),
+		'children' => array()
+	),
+	'technical' => array(
+		'id' => 'technical',
+		'rank' => -1, // negative value for undefined, it will be set by the min item rank for this group
+		'url' => '',
+		'name' => $langs->trans('GroupMenuTechnical'),
+		'children' => array()
+	),
+);
 
 $parameters=array(
     'controller' => $context->controller,
     'Tmenu' =>& $Tmenu,
+    'TGroupMenu' =>& $TGroupMenu,
+	'maxTopMenu' =>& $maxTopMenu
 );
 $reshook=$hookmanager->executeHooks('PrintTopMenu',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
 if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
@@ -127,11 +151,48 @@ if(empty($reshook)){
 
     if(!empty($Tmenu)){
 
+		// Sorting
+		uasort ( $Tmenu,'menuSortInv');
 
-    // Sorting
-    uasort ( $Tmenu,'menuSortInv');
+		if($conf->global->EACCESS_MAX_TOP_MENU < count($Tmenu)){
 
-?>
+			// AFFECT MENU ITEMS TO GROUPS
+			foreach ($Tmenu as $menuId => $menuItem){
+				// affectation des items de menu au groupement
+				if(!empty($menuItem['group']) && !empty($TGroupMenu[$menuItem['group']])){
+					$goupId = $menuItem['group'];
+
+					// Affectation de l'item au groupe
+					$TGroupMenu[$goupId]['children'][$menuId] = $menuItem;
+
+					// Application du rang
+					if(!empty($TGroupMenu[$goupId]['rank']) && $TGroupMenu[$goupId]['rank']>0){
+						// le rang mini des items du groupe défini le rang du groupe
+						$TGroupMenu[$goupId]['rank'] = min(abs($TGroupMenu[$goupId]['rank']), abs($menuItem['rank']));
+					}
+				}
+			}
+
+			// INSERTION DES GROUPES DANS LE MENU
+			foreach ($TGroupMenu as $groupId => $groupItem){
+				// If group have more than 1 item, group is valid
+				if(!empty($groupItem['children']) && count($groupItem['children']) > 1){
+
+					// ajout du group au menu
+					$Tmenu[$groupId] = $groupItem;
+
+					// suppression des items enfant du group du menu
+					foreach ($groupItem['children'] as $menuId => $menuItem){
+						if(isset($Tmenu[$menuId])){ unset($Tmenu[$menuId]); }
+					}
+				}
+			}
+
+			// final sorting
+			uasort ( $Tmenu,'menuSortInv');
+		}
+
+		?>
 <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top <?php print !empty($context->topMenu->shrink)?'navbar-shrink':''; ?>" id="mainNav" <?php print !empty($context->topMenu->shrink)?'data-defaultshrink="1"':''; ?> >
       <div class="container">
@@ -153,7 +214,7 @@ if(empty($reshook)){
         <div class="collapse navbar-collapse" id="navbarResponsive">
           <ul class="navbar-nav ml-auto">
             <?php
-                print printNav($Tmenu);
+                print getNav($Tmenu);
             ?>
           </ul>
         </div>

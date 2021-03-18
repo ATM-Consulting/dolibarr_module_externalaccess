@@ -962,72 +962,93 @@ function printService($label='',$icon='',$link='',$desc='')
     print getService($label,$icon,$link,$desc);
 }
 
-function printNav($Tmenu)
+/**
+ * @param array $Tmenu
+ * @return string
+ */
+function getNav($Tmenu)
 {
-    $context = Context::getInstance();
-
     $menu = '';
 
-    $itemDefault=array(
-        'active' => false,
-        'separator' => false,
-    );
-
     foreach ($Tmenu as $item){
-
-        $item = array_replace($itemDefault, $item); // applique les valeurs par default
-
-
-        if($context->menuIsActive($item['id'])){
-            $item['active'] = true;
-        }
-
-
-        if(!empty($item['overrride'])){
-            $menu.= $item['overrride'];
-        }
-        elseif(!empty($item['children']))
-        {
-
-            $menuChildren='';
-            $haveChildActive=false;
-
-            foreach($item['children'] as $child){
-
-                $item = array_replace($itemDefault, $item); // applique les valeurs par default
-
-                if(!empty($child['separator'])){
-                    $menuChildren.='<li role="separator" class="divider"></li>';
-                }
-
-                if($context->menuIsActive($child['id'])){
-                    $child['active'] = true;
-                    $haveChildActive=true;
-                }
-
-
-                $menuChildren.='<li class="dropdown-item" ><a href="'.$child['url'].'" class="'.($child['active']?'active':'').'" ">'. $child['name'].'</a></li>';
-
-            }
-
-            $active ='';
-            if($haveChildActive || $item['active']){
-                $active = 'active';
-            }
-
-            $menu.= '<li class="nav-item dropdown">';
-            $menu.= '<a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'. $item['name'].' <span class="caret"></span></a>';
-            $menu.= '<ul class="dropdown-menu">'.$menuChildren.'</ul>';
-            $menu.= '</li>';
-
-        }
-        else {
-            $menu.= '<li class="nav-item"><a href="'.$item['url'].'" class="nav-link '.($item['active']?'active':'').'" >'. $item['name'].'</a></li>';
-        }
-
+		$menu.= getNavItem($item);
     }
 
     return $menu;
+}
+
+
+/**
+ * @param array $item
+ * @param int   $deep
+ * @return string
+ */
+function getNavItem($item, $deep = 0)
+{
+	$context = Context::getInstance();
+
+	$menu = '';
+
+	$itemDefault=array(
+		'active' => false,
+		'separator' => false,
+	);
+
+	$item = array_replace($itemDefault, $item); // applique les valeurs par default
+
+	if($context->menuIsActive($item['id'])){
+		$item['active'] = true;
+	}
+
+	if(!empty($item['overrride'])){
+		$menu.= $item['overrride'];
+	}
+	elseif(!empty($item['children']))
+	{
+
+		$menuChildren='';
+		$haveChildActive=false;
+
+		foreach($item['children'] as $child){
+
+			$item = array_replace($itemDefault, $item); // applique les valeurs par default
+
+			if(!empty($child['separator'])){
+				$menuChildren.='<li role="separator" class="divider"></li>';
+			}
+
+			if($context->menuIsActive($child['id'])){
+				$child['active'] = true;
+				$haveChildActive=true;
+			}
+
+			if(!empty($child['children'])){
+				$menuChildren.= "\n\r".'<!-- print sub menu -->'."\n\r";
+				$menuChildren.= getNavItem($child, $deep+1);
+				$menuChildren.= "\n\r".'<!-- print sub menu -->'."\n\r";
+			}
+			else{
+				$menuChildren.='<li class="dropdown-item" data-deep="'.$deep.'" ><a href="'.$child['url'].'" class="'.($child['active']?'active':'').'" ">'. $child['name'].'</a></li>';
+			}
+
+		}
+
+		$active ='';
+		if($haveChildActive || $item['active']){
+			$active = 'active';
+		}
+
+		$menu.= '<li data-deep="'.$deep.'" class="dropdown '.($deep>0?'dropdown-item dropdown-submenu':'nav-item').'  '.$active.'">';
+		$menu.= '<a href="#" class="'.($deep>0?'':'nav-link').' dropdown-toggle" data-toggle="dropdown" role="button" aria-haspopup="true" aria-expanded="false">'. $item['name'].' <span class="caret"></span></a>';
+		$menu.= '<ul class="dropdown-menu ">'.$menuChildren.'</ul>';
+		$menu.= '</li>';
+
+	}
+	else {
+		$menu.= '<li data-deep="'.$deep.'" class="'.($deep>0?'dropdown-item':'nav-item ').' '.($item['active']?'active':'').'"><a  href="'.$item['url'].'" class="'.($deep>0?'':'nav-link').'" >'. $item['name'].'</a></li>';
+	}
+
+	return $menu;
 }
 
 function printSection($content = '', $id = '', $class = '')
