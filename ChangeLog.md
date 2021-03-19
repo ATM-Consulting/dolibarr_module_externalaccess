@@ -4,29 +4,21 @@ ___
 
 ## Unreleased
 
+## RELEASE 1.13 - 2021-03-19
+
 - NEW : Hooks for queries *2021-02-08*
 - NEW : Add top menu group possibility *2021-03-17*
 
-### Added
+## RELEASE 1.12 - 2021-02-26
 
 - NEW : Add Hook "listColumnField" in expedition list *2021-02-26*
-
 - NEW : Add column linked object in shipping list with key format linked-(classname)-(fieldname)-(fieldtype) (conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING) *2021-02-25*
-  
 - NEW : Add column "shipping method" in shipping list (conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING) *2021-02-24*
-
 - NEW : Add public file downloader *2021-02-03*
-
 - NEW : Add get public ecm file to interface *2021-02-03*
-
-### Changed
-
 - FIX : Ajout de l'option "tracking_number" dans la conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING plutôt que la conf EACCESS_LIST_ADDED_COLUMNS  *2021-02-24*
-
 - FIX : tracking_number and no tracking_url in shipping list *2021-02-24*
-
 - FIX : download file *2021-02-03*
-
 - FIX : V13 compatibility object "livraison" has been renamed into "delivery" [2021-03-04]
 
 
