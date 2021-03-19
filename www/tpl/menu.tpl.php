@@ -22,7 +22,7 @@ if($context->userIsLog())
             'rank' => 10,
             'url' => $context->getRootUrl('projects'),
             'name' => $langs->trans('EALINKNAME_projects'),
-			'group' => 'administrative' // group identifier for the group if necessary
+			'group' => 'technical' // group identifier for the group if necessary
         );
     }
 
