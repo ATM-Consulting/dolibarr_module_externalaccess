@@ -8,6 +8,7 @@ ___
 
 - NEW : Hooks for queries *2021-02-08*
 - NEW : Add top menu group possibility *2021-03-17*
+- FIX : V13 compatibility object "livraison" has been renamed into "delivery" *2021-03-04*
 
 ## RELEASE 1.12 - 2021-02-26
 
@@ -19,7 +20,6 @@ ___
 - FIX : Ajout de l'option "tracking_number" dans la conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING plutôt que la conf EACCESS_LIST_ADDED_COLUMNS  *2021-02-24*
 - FIX : tracking_number and no tracking_url in shipping list *2021-02-24*
 - FIX : download file *2021-02-03*
-- FIX : V13 compatibility object "livraison" has been renamed into "delivery" [2021-03-04]
 
 
 ___
