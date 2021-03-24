@@ -6,6 +6,7 @@ ___
 
 ## RELEASE 1.13 - 2021-03-19
 
+- FIX : V13 compatibility for user socid *2021-03-24* - 1.13.2
 - NEW : Hooks for queries *2021-02-08*
 - NEW : Add top menu group possibility *2021-03-17*
 - FIX : V13 compatibility object "livraison" has been renamed into "delivery" *2021-03-04*
