@@ -142,6 +142,8 @@ EACCESS_SET_UPLOADED_FILES_AS_PUBLIC = Tickets : Lors de l'ajout de pièces join
 EACCESS_SET_UPLOADED_FILES_AS_PUBLIC_HELP = Les documents envoyés sont ainsi consultables depuis le portail
 EACCESS_MAX_TOP_MENU = Regroupement automatique des entrées du menu du haut dans des groupes si le nombre d'éléments affichés dépasse la valeur suivante :
 EACCESS_MAX_TOP_MENU_HELP = Exemple : Administratif / Technique.<br/>Laisser vide (ou 0) pour désactiver le comportement.
+EACCESS_FAVICON_URL = Url de la favicon
+EACCESS_FAVICON_URL_HELP = Utiliser une image carré de 16x16 pixels minimum ou 32x32 pixels. <br/>Une favicon est une icône mise à disposition par un site Web pour enjoliver, en particulier dans les navigateurs Web, les endroits où ce site est mentionné. Cette icône pourra être utilisée dans la barre d'adresses ou de titre, les favoris (le terme est d'ailleurs un mot-valise né de la contraction de « favorites » et « icon »), les onglets, ou autres raccourcis.
 
 # INDEX
 Quotations=Devis
