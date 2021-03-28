@@ -299,7 +299,7 @@ class Actionsexternalaccess
                 $context->setControllerFound();
                 if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
                 {
-                    $this->print_ticketList($user->societe_id);
+                    $this->print_ticketList($user->socid);
                 }
                 return 1;
             }
@@ -387,17 +387,22 @@ class Actionsexternalaccess
 	private function _downloadInvoice(){
 
 	    global $langs, $db, $conf, $user;
+
+		if(empty($user->socid)){
+			$user->socid = $user->societe_id; // For compatibility support
+		}
+
 	    $filename=false;
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-		if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+		if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
 	    {
 	        dol_include_once('compta/facture/class/facture.class.php');
 	        $object = new Facture($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut>=Facture::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            if($object->statut>=Facture::STATUS_VALIDATED && $object->socid==$user->socid)
 	            {
 			load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
@@ -419,18 +424,22 @@ class Actionsexternalaccess
 
 	    global $langs, $db, $conf, $user;
 
+		if(empty($user->socid)){
+			$user->socid = $user->societe_id; // For compatibility support
+		}
+
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+	    if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
 	    {
 	        dol_include_once('comm/propal/class/propal.class.php');
 	        $object = new Propal($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut>=Propal::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            if($object->statut>=Propal::STATUS_VALIDATED && $object->socid==$user->socid)
 	            {
-			load_last_main_doc($object);
+					load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 
 	                if(!empty($object->last_main_doc)){
@@ -451,18 +460,22 @@ class Actionsexternalaccess
 
 	    global $langs, $db, $conf, $user;
 
+		if(empty($user->socid)){
+			$user->socid = $user->societe_id; // For compatibility support
+		}
+
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($user->societe_id) && $conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	    if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	    {
 	        dol_include_once('commande/class/commande.class.php');
 	        $object = new Commande($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut>=Commande::STATUS_VALIDATED && $object->socid==$user->societe_id)
+	            if($object->statut>=Commande::STATUS_VALIDATED && $object->socid==$user->socid)
 	            {
-			load_last_main_doc($object);
+					load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 
 	                downloadFile($filename, $forceDownload);
