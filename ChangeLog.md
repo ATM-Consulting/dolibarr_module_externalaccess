@@ -4,6 +4,8 @@ ___
 
 ## Unreleased
 
+- NEW : Option to set favicon
+
 ## RELEASE 1.13 - 2021-03-19
 
 - FIX : V13 compatibility for user socid *2021-03-24* - 1.13.2

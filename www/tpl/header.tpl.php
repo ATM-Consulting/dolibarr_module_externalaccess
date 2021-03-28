@@ -76,8 +76,13 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
 	<script src="<?php print $context->getRootUrl(); ?>vendor/ckeditor/ckeditor.js"></script>
 
 <?php
-    if (! empty($conf->global->MAIN_FAVICON_URL)){
-        $favicon=$conf->global->MAIN_FAVICON_URL;
+
+	$favicon = $conf->global->EACCESS_FAVICON_URL;
+	if (empty($favicon) && ! empty($conf->global->MAIN_FAVICON_URL)){
+		$favicon=$conf->global->MAIN_FAVICON_URL;
+	}
+
+    if (! empty($favicon)){
         print '	<link rel="icon" type="image/png" href="'.$favicon.'">' . "\r\n";
     }
 

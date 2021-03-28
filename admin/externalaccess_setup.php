@@ -139,6 +139,7 @@ _print_input_form_part('EACCESS_LOGIN_IMG',false,'', array('size'=> 50, 'placeho
 _print_input_form_part('EACCESS_TOP_MENU_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_HELP');
 _print_input_form_part('EACCESS_TOP_MENU_IMG_SHRINK',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_SHRINK_HELP');
 _print_input_form_part('EACCESS_MANIFEST_ICON',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_MANIFEST_ICON_HELP');
+_print_input_form_part('EACCESS_FAVICON_URL',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_FAVICON_URL_HELP');
 
 $parameters = array();
 $reshook=$hookmanager->executeHooks('formDesignOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
