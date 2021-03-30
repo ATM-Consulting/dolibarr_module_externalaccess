@@ -159,7 +159,7 @@ function print_invoiceTable($socId = 0)
             $totaldeposits = $object->getSumDepositsUsed();
             $resteapayer = price2num($object->total_ttc - $totalpaye - $totalcreditnotes - $totaldeposits, 'MT');
 
-            if(!empty($object->last_main_doc)){
+            if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
                 $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
@@ -269,7 +269,7 @@ function print_propalTable($socId = 0)
             $downloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
 
 
-            if(!empty($object->last_main_doc)){
+            if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
                 $viewLink = '<a href="'.$downloadUrl.'" target="_blank" >'.$object->ref.'</a>';
                 $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$downloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
@@ -375,7 +375,7 @@ function print_orderListTable($socId = 0)
 	    load_last_main_doc($object);
             $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
 
-            if(!empty($object->last_main_doc)){
+            if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
                 $viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
                 $downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
             }
@@ -485,7 +485,7 @@ function print_expeditionTable($socId = 0)
 			load_last_main_doc($object);
 			$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
 
-			if(!empty($object->last_main_doc)){
+			if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
 				$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
 				$downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
 			}
