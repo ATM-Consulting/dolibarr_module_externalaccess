@@ -83,9 +83,10 @@ Permet par exemple de mettre un lien vers la page de contact du site vitrine de 
 Fix an issue that show all documents available in DOLIBARR when Multicompany module activated.
 Now, it will show only the documents created by the Portal owner company.
 
-### Changed
+#### Changed
 
 #### FIX : Divers
+- FIX : Vérification de l'existance des fichier pour affichage du lien de téléchargement
 - FIX : Modification du comportement d'affichage des éléments du footer si pas de téléphone ou pas de mail de contact, il ne sont pas affichés
 - FIX : changement de librairie et autre dom déprécié
 - FIX : Add good practice for css : déplacement de style css vers un fichier dédié.
