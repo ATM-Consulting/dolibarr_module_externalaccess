@@ -15,6 +15,7 @@ ___
 
 ## RELEASE 1.12 - 2021-02-26
 
+- FIX : retour du tracking_url au lieu du tracking number *2021-04-15* v1.12.2
 - NEW : Add Hook "listColumnField" in expedition list *2021-02-26*
 - NEW : Add column linked object in shipping list with key format linked-(classname)-(fieldname)-(fieldtype) (conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING) *2021-02-25*
 - NEW : Add column "shipping method" in shipping list (conf EACCESS_LIST_ADDED_COLUMNS_SHIPPING) *2021-02-24*
