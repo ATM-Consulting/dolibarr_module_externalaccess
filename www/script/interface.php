@@ -3,6 +3,7 @@
 /********************************** **/
 /**   HERE USER MUST BE CONNECTED   **/
 /********************************** **/
+if (!defined('NOTOKENRENEWAL')) define('NOTOKENRENEWAL', '1'); // Disable token renewal
 
 require __DIR__ .'/../config.php';
 

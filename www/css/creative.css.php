@@ -25,6 +25,7 @@
  */
 
 
+if (!defined('NOTOKENRENEWAL')) define('NOTOKENRENEWAL', '1'); // Disable token renewal
 
 define('INC_FROM_CRON_SCRIPT',1);
 define('ISLOADEDBYSTEELSHEET',1);
