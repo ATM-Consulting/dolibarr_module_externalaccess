@@ -10,12 +10,13 @@ externalaccessAbout = Über das Kundenportalmodul
 externalaccess=Kundenportalmodul
 
 # DROITS
-external_access_invoices=Kann Rechnungen anzeigen
-external_access_propals=Kann Angebote anzeigen
-external_access_orders=Kann Bestellungen anzeigen
-external_access_expeditions=Kann Sendungen anzeigen
-external_access_tickets=Kann Tickets anzeigen
-external_access_userinfos_edit=Kann persönliche Informationen ändern
+external_access_invoices = kann Rechnungen anzeigen
+external_access_propals = kann Angebote anzeigen
+external_access_orders = kann Bestellungen anzeigen
+external_access_expeditions = kann Sendungen anzeigen
+external_access_tickets = kann Tickets anzeigen
+external_access_projets = kann Projekte anzeigen
+external_access_userinfos_edit = kann persönliche Informationen ändern
 
 # MENU
 TopMenuexternalaccess=Kundenportalmodul
@@ -81,6 +82,11 @@ ViewTickets=Tickets
 ViewTicketsDesc=Finden Sie einfach alle Ihre Tickets
 EALINKNAME_tickets=Tickets
 
+ViewProjects = Projekte
+ViewProjectsDesc = Finden Sie leicht Ihre Projekte
+EALINKNAME_projects = Projekte
+
+
 PersonalInformations=Persönliche Informationen
 
 # PAGE TITLE
@@ -112,7 +118,8 @@ EACCESS_LOGIN_EXTRA_HTML=Zusätzlicher Text wird auf der Anmeldeseite angezeigt.
 EACCESS_RGPD_MSG=GDPR-Nachricht auf dem Formular für persönliche Informationen
 EACCESS_RGPD_MSG_default=Sie können die Berichtigung ungenauer oder unvollständiger Informationen über Sie beantragen. Durch das Ändern und Senden dieses Formulars akzeptiere ich, dass die eingegebenen Daten von% s verwendet werden, damit das daraus resultierende Vertragsverhältnis gelesen und gegebenenfalls verwaltet werden kann.
 EACCESS_ACTIVATE_EXPEDITIONS=Sendungen herunterladen
-EACCESS_ACTIVATE_TICKETS=Tickets herunterladen
+EACCESS_ACTIVATE_TICKETS = Tickets herunterladen
+EACCESS_ACTIVATE_PROJECTS = Projekte herunterladen
 
 # INDEX
 Quotations=Zitat
@@ -168,12 +175,9 @@ EaBack=Rückkehr
 #
 # MISSING TRANSLATION FROM fr_FR
 #
-external_access_projets=Consulter ses projets
-ViewProjects=Projets
-ViewProjectsDesc=Retrouvez facilement vos projets
-EALINKNAME_projects=Projets
+
 AbricotWiki=Consulter la page d'information du module abricot.
-EACCESS_ACTIVATE_PROJECTS=Projets
+
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP=Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie
 EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
