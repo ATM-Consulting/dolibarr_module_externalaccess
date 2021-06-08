@@ -14,12 +14,20 @@ BackToModuleList = Back to the list of modules
 
 externalaccess = ExternalAccess
 
+
+EACCESS_ACTIVATE_EXPEDITIONS = Expéditions
+EACCESS_ACTIVATE_TICKETS = Tickets
+EACCESS_ACTIVATE_PROJECTS = Projets
+
+
+
 # RIGHTS 
 external_access_invoices = can view invoices
 external_access_propals = can view propals
 external_access_orders = can view orders
 external_access_expeditions = can view shipments 
 external_access_tickets = can view tickets 
+external_access_projets = can view projects
 external_access_userinfos_edit = can modify personal information
 
 # MENU 
@@ -50,7 +58,7 @@ ErrorDetected = Error(s) detected, please check the form
 Save = save
 CreateDraft = create draft
 Cancel = cancel
-Validate = valitade
+Validate = validate
 Modify = modify
 Reopen = reopen
 ToClone = clone
@@ -69,27 +77,56 @@ OrSeparator = or
 Welcome = Welcome
 WelcomeDesc = Welcome to our Client Portal
 
-external_access_projets = View his projects
+PersonalInformations = Personal information
+
 EALINKNAME_gobackurl = Back to website
+
 ViewInvoices = Invoices
 ViewInvoicesDesc = Easily find all your invoices
 EALINKNAME_invoices = Invoices
+
 ViewPropals = Quotations
 ViewPropalsDesc = Easily find all your quotations
 EALINKNAME_propals = Quotations
+
 ViewOrders = Orders
 ViewOrdersDesc = Easily find all your orders
 EALINKNAME_orders = Orders
+
 ViewExpeditions = Deliveries
 ViewExpeditionsDesc = Easily find all your orders deliveries
 EALINKNAME_expeditions = Deliveries
+
 ViewTickets = Tickets
 ViewTicketsDesc = Easily find all your tickets
 EALINKNAME_tickets = Tickets
+
 ViewProjects = Projects
 ViewProjectsDesc = Easily find all your projects
 EALINKNAME_projects = Projects
-PersonalInformations = Personal information
+
+
+
+
+firstname = First Name
+lastname = Name
+address = Address
+addresszip = postal code 
+town = Town
+exa_Edit = modify
+User_mobile = mobile phone
+Office_phone = office phone
+Office_fax = Fax
+Saved = saved
+Company = Company
+
+
+Quotations = Quotations
+Orders = Orders
+Invoices = Invoices
+
+Renew = Renew
+
 
 #
 # MISSING TRANSLATION FROM fr_FR
@@ -119,9 +156,6 @@ AccessToCustomerGate = Consulter le portail client
 EACCESS_LOGIN_EXTRA_HTML = Texte supplémentaire affiché sur la page de connexion.
 EACCESS_RGPD_MSG = Message RGPD sur le formulaire des informations personnelles
 EACCESS_RGPD_MSG_default = Vous pouvez demander la rectification des informations inexactes ou incomplètes vous concernant. En modifiant et soumettant ce formulaire, j'accepte que les données saisies soient utilisées par %s afin qu'elle puisse, lire et, si nécessaire, gérer la relation contractuelle qui pourrait en résulter.
-EACCESS_ACTIVATE_EXPEDITIONS = Expéditions
-EACCESS_ACTIVATE_TICKETS = Tickets
-EACCESS_ACTIVATE_PROJECTS = Projets
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE = Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP = Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie
 EACCESS_LIST_ADDED_COLUMNS = Colonnes supplémentaires à afficher sur les listes
@@ -135,32 +169,19 @@ EACCESS_TOP_MENU_IMG = Url du logo pour le menu
 EACCESS_TOP_MENU_IMG_HELP = Laisser vide pour utiliser le "Titre de l'accès extérieur"
 EACCESS_TOP_MENU_IMG_SHRINK = Url du logo de substitution
 EACCESS_TOP_MENU_IMG_SHRINK_HELP = Si défini, le logo de substitution remplace le logo de menu par celui-ci lorsque le menu change "d'état" durant le défilement de la page. Cela permet par exemple d'utiliser une image de logo transparente avec des textes blancs et, lors du changement d'état du menu, d'utiliser un logo compatible au format.
-Quotations = Devis
-Orders = Commandes
-Invoices = Factures
+
 MySpace = Consulter mon espace
-ref_client = Réf. client
-ref_customer = Réf. client
+ref_client = Ref. client
+ref_customer = Ref. client
 tracking_url = Numéro de suivi
 ForgotPassword = Mot de passe oublié ?
 YouCanResetYourPasswordHere = Vous pouvez le renouveler ici
-Renew = Renouveler
+
 GetInTouch = Restons en contact
 GetInTouchDesc = Prêt à commencer votre prochain projet avec nous? Appelez-nous ou envoyez-nous un courriel et nous vous répondrons dans les plus brefs délais!
 MyPersonalInfos = Mes infos
 UserInfosDesc = Vos informations personnelles
-YourPersonnalInformations = Vos informations personnelles
-firstname = Prénom
-lastname = Nom
-address = Adresse
-addresszip = Code postal
-town = Ville
-exa_Edit = Modifier
-User_mobile = Téléphone mobile
-Office_phone = Téléphone bureau
-Office_fax = Fax
-Saved = Sauvegardé
-Company = Société
+YourPersonnalInformations = your personnal Information
 SorryThereIsNothingHere = Désolé, il n'y a rien ici
 YourSalesRep = Votre contact chez %s :
 YourSalesRepMultiple = Vos contacts chez %s :
