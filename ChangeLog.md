@@ -4,6 +4,7 @@ ___
 
 ## Unreleased
 
+- FIX - Compatibility V14 : Edit the descriptor: $this->family - *2021-06-10* - 1.14.4
 - NEW : Option to set favicon
 
 ## RELEASE 1.13 - 2021-03-19
