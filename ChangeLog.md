@@ -4,6 +4,7 @@ ___
 
 ## Unreleased
 
+- NEW : support supplier invoices - *2021-06-16* - 1.15.0
 - FIX - Compatibility V14 : Edit the descriptor: $this->family - *2021-06-10* - 1.14.4
 - NEW : Option to set favicon
 
