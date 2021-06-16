@@ -15,6 +15,16 @@ $maxTopMenu = !empty($conf->global->EACCESS_MAX_TOP_MENU)?$conf->global->EACCESS
 
 if($context->userIsLog())
 {
+    if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
+    {
+        $Tmenu['supplier_invoices'] = array(
+            'id' => 'supplier_invoices',
+            'rank' => 10,
+            'url' => $context->getRootUrl('supplier_invoices'),
+            'name' => $langs->trans('EALINKNAME_supplier_invoices'),
+			'group' => 'technical' // group identifier for the group if necessary
+        );
+    }
     if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
     {
         $Tmenu['projects'] = array(
