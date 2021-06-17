@@ -27,6 +27,10 @@ ___
 - Ajout colonne Réf client sur toutes les listes (soumis à configuration)
 - Ajout signature commercial associé au tiers de l'utilisateur externe
 
+## Changed
+
+### FIX : Expedition's PDF download link on external access
+Correction of the path when there is a "/" in the reference of a shipment
 ___
 ## RELEASE 1.2 - 2020-12-01
 
