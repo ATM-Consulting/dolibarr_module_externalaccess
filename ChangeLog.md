@@ -45,8 +45,7 @@ ___
 
 ## Changed
 
-### FIX : Expedition's PDF download link on external access
-Correction of the path when there is a "/" in the reference of a shipment
+- FIX : Expedition's PDF download link on external access. Correction of the path when there is a "/" in the reference of a shipment
 ___
 ## RELEASE 1.2 - 2020-12-01
 
