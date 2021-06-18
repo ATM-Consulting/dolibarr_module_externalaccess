@@ -263,7 +263,8 @@ class Actionsexternalaccess
 				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
 	            {
-	                $this->print_supplierinvoiceList($user->socid);
+	            	$socid = !empty($user->societe_id) ? $user->societe_id : $user->socid;
+	                $this->print_supplierinvoiceList($socid);
 	            }
 	            return 1;
 	        }
