@@ -133,6 +133,9 @@ class Context {
 		$this->addControllerDefinition('invoices', $defaultControllersPath.'invoices.controller.php', 'InvoicesController');
 		$this->addControllerDefinition('orders', $defaultControllersPath.'orders.controller.php', 'OrdersController');
 		$this->addControllerDefinition('propals', $defaultControllersPath.'propals.controller.php', 'PropalsController');
+		$this->addControllerDefinition('projects', $defaultControllersPath.'projects.controller.php', 'ProjectsController');
+		$this->addControllerDefinition('expeditions', $defaultControllersPath.'expeditions.controller.php', 'ExpeditionsController');
+		$this->addControllerDefinition('supplier_invoices', $defaultControllersPath.'supplier_invoices.controller.php', 'SupplierInvoicesController');
 
 		// Appel des triggers
 		include_once DOL_DOCUMENT_ROOT . '/core/class/interfaces.class.php';

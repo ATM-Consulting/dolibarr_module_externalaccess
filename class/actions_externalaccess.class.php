@@ -68,13 +68,7 @@ class Actionsexternalaccess
 		{
 		    $context = Context::getInstance();
 
-		    if($context->controller == 'expeditions')
-			{
-				$context->title = $langs->trans('ViewExpeditions');
-				$context->desc = $langs->trans('ViewExpeditionsDesc');
-				$context->menu_active[] = 'expeditions';
-			}
-            elseif($context->controller == 'tickets' && !empty($conf->ticket->enabled))
+		    if($context->controller == 'tickets' && !empty($conf->ticket->enabled))
             {
                 $context->title = $langs->trans('ViewTickets');
                 $context->desc = $langs->trans('ViewTicketsDesc');
@@ -84,19 +78,6 @@ class Actionsexternalaccess
             {
 				$this->actionTicketCard($parameters, $object, $action, $hookmanager);
             }
-            elseif($context->controller == 'projects')
-		    {
-		        $context->title = $langs->trans('ViewProjects');
-		        $context->desc = $langs->trans('ViewProjectsDesc');
-		        $context->menu_active[] = 'projects';
-		    }
-			elseif($context->controller == 'default')
-			{
-				$context->title = $langs->trans('Welcome');
-				$context->desc = $langs->trans('WelcomeDesc');
-				//$context->topMenu->shrink = 1; // no transparency menu
-				$context->doNotDisplayHeaderBar=1;// hide default header
-			}
 		}
 
 	}
@@ -186,35 +167,7 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        if($context->controller == 'supplier_invoices')
-	        {
-				$context->setControllerFound();
-	            if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
-	            {
-	            	$socid = !empty($user->societe_id) ? $user->societe_id : $user->socid;
-	                $this->print_supplierinvoiceList($socid);
-	            }
-	            return 1;
-	        }
-			elseif($context->controller == 'projects' && !empty($conf->projet->enabled))
-			{
-				$context->setControllerFound();
-				if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
-				{
-					$this->print_projectList($user->socid);
-				}
-				return 1;
-			}
-	        elseif($context->controller == 'expeditions')
-			{
-				$context->setControllerFound();
-				if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
-				{
-					$this->print_expeditionList($user->socid);
-				}
-				return 1;
-			}
-            elseif($context->controller == 'tickets' && !empty($conf->ticket->enabled))
+	        if($context->controller == 'tickets' && !empty($conf->ticket->enabled))
             {
                 $context->setControllerFound();
                 if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
@@ -238,26 +191,6 @@ class Actionsexternalaccess
 		return 0;
 	}
 
-	public function print_projectList($socId = 0)
-	{
-		print '<section id="section-project"><div class="container">';
-		print_projetsTable($socId);
-		print '</div></section>';
-	}
-
-	public function print_supplierinvoiceList($socId = 0)
-	{
-	    print '<section id="section-invoice"><div class="container">';
-	    print_supplierinvoiceTable($socId);
-	    print '</div></section>';
-	}
-
-	public function print_expeditionList($socId = 0)
-	{
-		print '<section id="section-expedition"><div class="container">';
-		print_expeditionTable($socId);
-		print '</div></section>';
-	}
 
     public function print_ticketList($socId = 0)
     {
