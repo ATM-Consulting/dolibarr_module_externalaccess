@@ -6,7 +6,8 @@ ___
 
 - NEW : **CONTROLLER SYSTEM** - *20/07/2021* - 1.16.0
   The controller system was missing but now we can use it and make very cool stuffs
-
+- FIX : Supplier invoices menu group - *20/07/2021* - 1.15.2
+- FIX : Missing title and desc for supplier invoices - *20/07/2021* - 1.15.1
 - NEW : support supplier invoices - *2021-06-16* - 1.15.0
 - FIX : Add contact to ticket on creation - *2021-06-20* - 1.14.4
 - FIX : V14 compatibility : Edit the descriptor: $this->family - *2021-06-10* - 1.14.4
