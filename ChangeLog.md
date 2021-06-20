@@ -4,7 +4,8 @@ ___
 
 ## Unreleased
 
-- FIX - Compatibility V14 : Edit the descriptor: $this->family - *2021-06-10* - 1.14.4
+- FIX : Add contact to ticket on creation - *2021-06-20* - 1.14.4
+- FIX : V14 compatibility : Edit the descriptor: $this->family - *2021-06-10* - 1.14.4
 - NEW : Option to set favicon
 
 ## RELEASE 1.13 - 2021-03-19
