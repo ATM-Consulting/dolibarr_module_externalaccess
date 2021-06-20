@@ -4,8 +4,11 @@ ___
 
 ## Unreleased
 
+
 - NEW : support supplier invoices - *2021-06-16* - 1.15.0
-- FIX - Compatibility V14 : Edit the descriptor: $this->family - *2021-06-10* - 1.14.4
+- FIX : Add contact to ticket on creation - *2021-06-20* - 1.14.4
+- FIX : V14 compatibility : Edit the descriptor: $this->family - *2021-06-10* - 1.14.4
+
 - NEW : Option to set favicon
 
 ## RELEASE 1.13 - 2021-03-19
@@ -53,6 +56,10 @@ ___
 - Ajout colonne Réf client sur toutes les listes (soumis à configuration)
 - Ajout signature commercial associé au tiers de l'utilisateur externe
 
+## Changed
+
+### FIX : Expedition's PDF download link on external access
+Correction of the path when there is a "/" in the reference of a shipment
 ___
 ## RELEASE 1.2 - 2020-12-01
 

@@ -1804,13 +1804,14 @@ function load_last_main_doc(&$object) {
 	global $conf;
 
 	if(empty($object->last_main_doc)) {
-		$last_main_doc = $object->element.'/'.$object->ref.'/'.$object->ref.'.pdf';
+		$ref = dol_sanitizeFileName($object->ref);
+		$last_main_doc = $object->element.'/'.$ref.'/'.$ref.'.pdf';
 
 		if($object->element == 'propal'){
-			$last_main_doc = 'propale/'.$object->ref.'/'.$object->ref.'.pdf';
+			$last_main_doc = 'propale/'.$ref.'/'.$ref.'.pdf';
         }
 		elseif($object->element == 'shipping'){
-            $last_main_doc =  'expedition/sending/'.$object->ref.'/'.$object->ref.'.pdf';
+            $last_main_doc =  'expedition/sending/'.$ref.'/'.$ref.'.pdf';
         }
 
 		if(is_readable(DOL_DATA_ROOT.'/'.$last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$last_main_doc )) $object->last_main_doc = $last_main_doc;
