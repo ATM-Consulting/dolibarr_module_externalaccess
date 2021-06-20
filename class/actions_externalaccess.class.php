@@ -68,25 +68,7 @@ class Actionsexternalaccess
 		{
 		    $context = Context::getInstance();
 
-		    if($context->controller == 'invoices')
-		    {
-		        $context->title = $langs->trans('ViewInvoices');
-		        $context->desc = $langs->trans('ViewInvoicesDesc');
-		        $context->menu_active[] = 'invoices';
-		    }
-		    elseif($context->controller == 'orders')
-		    {
-		        $context->title = $langs->trans('ViewOrders');
-		        $context->desc = $langs->trans('ViewOrdersDesc');
-		        $context->menu_active[] = 'orders';
-		    }
-		    elseif($context->controller == 'propals')
-		    {
-	            $context->title = $langs->trans('ViewPropals');
-	            $context->desc = $langs->trans('ViewPropalsDesc');
-	            $context->menu_active[] = 'propals';
-		    }
-			elseif($context->controller == 'expeditions')
+		    if($context->controller == 'expeditions')
 			{
 				$context->title = $langs->trans('ViewExpeditions');
 				$context->desc = $langs->trans('ViewExpeditionsDesc');
@@ -115,39 +97,6 @@ class Actionsexternalaccess
 				//$context->topMenu->shrink = 1; // no transparency menu
 				$context->doNotDisplayHeaderBar=1;// hide default header
 			}
-		    elseif($context->controller == 'personalinformations')
-		    {
-		        global $user;
-		        $context->title = $langs->trans('UserInfosDesc') ; //$user->firstname .' '. $user->lastname;
-		        $context->desc = $user->firstname .' '. $user->lastname;; //$langs->trans('UserInfosDesc');
-		        $context->meta_title = $user->firstname .' '. $user->lastname .' - '. $langs->trans('UserInfosDesc');
-		        //$context->doNotDisplayHeaderBar=1;// hide default header
-
-		        if($context->action == 'save'){
-		            // TODO: need to check all send informations to prevent and verbose errors
-		            $user->firstname = GETPOST('firstname', 'none');
-		            $user->lastname = GETPOST('lastname', 'none');
-		            $user->address = GETPOST('address', 'none');
-		            $user->zip = GETPOST('addresszip', 'none');
-		            $user->town = GETPOST('town', 'none');
-		            $user->user_mobile = GETPOST('user_mobile', 'none');
-		            $user->office_phone = GETPOST('office_phone', 'none');
-		            $user->office_fax = GETPOST('office_fax', 'none');
-		            if(floatval(DOL_VERSION) > 4){
-		               $user->email = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
-		            } else {
-				        $user->email = GETPOST('email', 'none');
-			        }
-
-		            if($user->update($user)>0)
-		            {
-		                header('Location: '.$context->getRootUrl('personalinformations').'&action=saved');
-		            }
-		            else {
-		                $context->action == 'saveError';
-		            }
-		        }
-		    }
 		}
 
 	}
@@ -237,34 +186,7 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        if($context->controller == 'invoices')
-	        {
-				$context->setControllerFound();
-	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
-	            {
-	                $this->print_invoiceList($user->socid);
-	            }
-	            return 1;
-	        }
-	        elseif($context->controller == 'orders')
-	        {
-				$context->setControllerFound();
-	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
-	            {
-	                $this->print_orderList($user->socid);
-	            }
-	            return 1;
-	        }
-			elseif($context->controller == 'propals')
-			{
-				$context->setControllerFound();
-				if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
-				{
-					$this->print_propalList($user->socid);
-				}
-				return 1;
-			}
-			elseif($context->controller == 'projects' && !empty($conf->projet->enabled))
+	        if($context->controller == 'projects' && !empty($conf->projet->enabled))
 			{
 				$context->setControllerFound();
 				if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
@@ -301,39 +223,9 @@ class Actionsexternalaccess
                 }
                 return 1;
             }
-	        elseif($context->controller == 'personalinformations')
-	        {
-				$context->setControllerFound();
-	            if($context->userIslog())
-	            {
-	                $this->print_personalinformations();
-	            }
-	            return 1;
-	        }
 	    }
 
 		return 0;
-	}
-
-	public function print_invoiceList($socId = 0)
-	{
-	    print '<section id="section-invoice"><div class="container">';
-	    print_invoiceTable($socId);
-	    print '</div></section>';
-	}
-
-	public function print_orderList($socId = 0)
-	{
-	    print '<section id="section-order"><div class="container">';
-	    print_orderListTable($socId);
-	    print '</div></section>';
-	}
-
-	public function print_propalList($socId = 0)
-	{
-		print '<section id="section-propal"><div class="container">';
-		print_propalTable($socId);
-		print '</div></section>';
 	}
 
 	public function print_projectList($socId = 0)
@@ -363,14 +255,6 @@ class Actionsexternalaccess
         print_ticketCard($ticketId, $socId, GETPOST('action', 'none'));
         print '</div></section>';
     }
-
-	public function print_personalinformations()
-	{
-	    global $langs,$db,$user;
-	    $context = Context::getInstance();
-
-	    include $context->tplPath.'/userinfos.tpl.php';
-	}
 
 	private function _downloadInvoice(){
 

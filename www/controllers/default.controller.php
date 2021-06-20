@@ -4,7 +4,11 @@
 class DefaultController extends Controller
 {
 
+	public function __construct() {
+		parent::__construct();
 
+		$this->accessRight = true;
+	}
 
 	/**
 	 * action method is called before html output
@@ -38,17 +42,14 @@ class DefaultController extends Controller
 
 		$this->loadTemplate('header');
 
-		$hookRes = $this->hookDoAction();
+		$hookRes = $this->hookPrintPageView();
 		if(empty($hookRes)){
 			if(!empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){
 				$this->loadTemplate('headbar');
-			}
-			else{
+			} else {
 				$this->loadTemplate('headbar_full');
 			}
 			$this->loadTemplate('services');
-
-			$this->hookPrintPageView();
 		}
 
 		$this->loadTemplate('footer');

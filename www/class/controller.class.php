@@ -3,6 +3,26 @@
 
 class Controller {
 
+
+	/**
+	 * if this controller need logged user or not
+	 * @var bool
+	 */
+	public $accessNeedLoggedUser = true;
+
+	/**
+	 * define current user access
+	 * @var bool
+	 */
+	public $accessRight = false;
+
+	/**
+	 * If controller is active
+	 * @var bool
+	 */
+	public $controllerStatus = true;
+
+
 	/**
 	 * Constructeur de la classe
 	 *
@@ -28,6 +48,28 @@ class Controller {
 
 
 	/**
+	 * check current access to controller
+	 *
+	 * @param void
+	 * @return  bool
+	 */
+	public function checkAccess() {
+
+		$context = Context::getInstance();
+
+		if(!$this->accessRight){
+			return false;
+		}
+
+		if($this->accessNeedLoggedUser){
+			if (! $context->userIslog()) return false;
+		}
+
+		return true;
+	}
+
+
+	/**
 	 *
 	 * @param void
 	 * @return void
@@ -38,6 +80,21 @@ class Controller {
 		$this->loadTemplate('header');
 
 		$this->hookPrintPageView();
+
+		if(!$context->controller_found) $this->loadTemplate('404');
+
+		$this->loadTemplate('footer');
+	}
+
+	/**
+	 *
+	 * @param void
+	 * @return void
+	 */
+	public function display404(){
+		$context = Context::getInstance();
+
+		$this->loadTemplate('header');
 
 		if(!$context->controller_found) $this->loadTemplate('404');
 
@@ -87,7 +144,7 @@ class Controller {
 	}
 
 	public function loadTemplate($templateName){
-		global $conf, $langs, $hookmanager; // load for tpl
+		global $conf, $langs, $hookmanager, $db; // load for tpl
 		$context = Context::getInstance(); // load for tpl
 
 		if(!ctype_alnum($templateName)){ return; }

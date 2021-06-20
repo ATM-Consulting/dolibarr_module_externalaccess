@@ -129,6 +129,10 @@ class Context {
 
 		// define controllers definition
 		$this->addControllerDefinition('default', $defaultControllersPath.'default.controller.php', 'DefaultController');
+		$this->addControllerDefinition('personalinformations', $defaultControllersPath.'personalinformations.controller.php', 'PersonalInformationsController');
+		$this->addControllerDefinition('invoices', $defaultControllersPath.'invoices.controller.php', 'InvoicesController');
+		$this->addControllerDefinition('orders', $defaultControllersPath.'orders.controller.php', 'OrdersController');
+		$this->addControllerDefinition('propals', $defaultControllersPath.'propals.controller.php', 'PropalsController');
 
 		// Appel des triggers
 		include_once DOL_DOCUMENT_ROOT . '/core/class/interfaces.class.php';

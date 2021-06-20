@@ -1,16 +1,14 @@
 <?php
 require __DIR__ .'/config.php';
 
-
+/** @var Context $context */
 
 /*
  * Action
  */
 
-/** @var Context $context */
+
 $context->controllerInstance->action();
-
-
 
 /*
  * View
