@@ -237,19 +237,7 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        if($context->controller == 'default')
-	        {
-				$context->setControllerFound();
-				if(!empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){
-					include $context->tplPath .'/headbar.tpl.php';
-				}
-				else{
-					include $context->tplPath .'/headbar_full.tpl.php';
-				}
-	            include $context->tplPath .'/services.tpl.php';
-	            return 1;
-	        }
-	        elseif($context->controller == 'invoices')
+	        if($context->controller == 'invoices')
 	        {
 				$context->setControllerFound();
 	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))

@@ -1,37 +1,21 @@
-<?php 
-require __DIR__ .'/config.php'; 
-
-
-// Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
-$hookmanager->initHooks(array('externalaccesspage','externalaccess'));
+<?php
+require __DIR__ .'/config.php';
 
 
 
 /*
- * Use $context singleton to modify menu, 
+ * Action
  */
-$parameters=array(
-    'controller' => $context->controller
-);
-$reshook=$hookmanager->executeHooks('doActions',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+
+/** @var Context $context */
+$context->controllerInstance->action();
 
 
 
 /*
- * View 
+ * View
  */
-include __DIR__ .'/tpl/header.tpl.php';
+
+$context->controllerInstance->display();
 
 
-
-
-$parameters=array(
-    'controller' => $context->controller, // $context->controller is get by $context->construct()
-);
-$reshook=$hookmanager->executeHooks('PrintPageView',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
-
-if(!$context->controller_found) include __DIR__ .'/tpl/404.tpl.php';
-
-include __DIR__ .'/tpl/footer.tpl.php';

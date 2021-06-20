@@ -7,7 +7,7 @@ if (empty($context) || ! is_object($context))
 
 
 
-global $conf,$user;
+global $conf,$user,$langs;
 
 $Tmenu=$TGroupMenu=array();
 
