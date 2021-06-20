@@ -186,7 +186,17 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        if($context->controller == 'projects' && !empty($conf->projet->enabled))
+	        if($context->controller == 'supplier_invoices')
+	        {
+				$context->setControllerFound();
+	            if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
+	            {
+	            	$socid = !empty($user->societe_id) ? $user->societe_id : $user->socid;
+	                $this->print_supplierinvoiceList($socid);
+	            }
+	            return 1;
+	        }
+			elseif($context->controller == 'projects' && !empty($conf->projet->enabled))
 			{
 				$context->setControllerFound();
 				if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
@@ -195,7 +205,7 @@ class Actionsexternalaccess
 				}
 				return 1;
 			}
-			elseif($context->controller == 'expeditions')
+	        elseif($context->controller == 'expeditions')
 			{
 				$context->setControllerFound();
 				if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
@@ -233,6 +243,13 @@ class Actionsexternalaccess
 		print '<section id="section-project"><div class="container">';
 		print_projetsTable($socId);
 		print '</div></section>';
+	}
+
+	public function print_supplierinvoiceList($socId = 0)
+	{
+	    print '<section id="section-invoice"><div class="container">';
+	    print_supplierinvoiceTable($socId);
+	    print '</div></section>';
 	}
 
 	public function print_expeditionList($socId = 0)
@@ -548,6 +565,9 @@ class Actionsexternalaccess
 
 					if($res>0)
 					{
+						// Add contact to the ticket
+						$ticket->add_contact($user->contactid, "SUPPORTCLI", 'external', 0);
+
 						header('Location: '.$context->getRootUrl('ticket_card', '&id='.$res));
 						exit();
 					}else{
