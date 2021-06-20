@@ -676,6 +676,9 @@ class Actionsexternalaccess
 
 					if($res>0)
 					{
+						// Add contact to the ticket
+						$ticket->add_contact($user->contactid, "SUPPORTCLI", 'external', 0);
+
 						header('Location: '.$context->getRootUrl('ticket_card', '&id='.$res));
 						exit();
 					}else{
