@@ -258,6 +258,16 @@ class Actionsexternalaccess
 	            }
 	            return 1;
 	        }
+	        elseif($context->controller == 'supplier_invoices')
+	        {
+				$context->setControllerFound();
+	            if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
+	            {
+	            	$socid = !empty($user->societe_id) ? $user->societe_id : $user->socid;
+	                $this->print_supplierinvoiceList($socid);
+	            }
+	            return 1;
+	        }
 	        elseif($context->controller == 'orders')
 	        {
 				$context->setControllerFound();
@@ -331,6 +341,13 @@ class Actionsexternalaccess
 	{
 	    print '<section id="section-invoice"><div class="container">';
 	    print_invoiceTable($socId);
+	    print '</div></section>';
+	}
+
+	public function print_supplierinvoiceList($socId = 0)
+	{
+	    print '<section id="section-invoice"><div class="container">';
+	    print_supplierinvoiceTable($socId);
 	    print '</div></section>';
 	}
 
