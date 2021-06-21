@@ -3,7 +3,7 @@
 /**   HERE USER MUST BE CONNECTED   **/
 /********************************** **/
 if (!defined('NOTOKENRENEWAL')) define('NOTOKENRENEWAL', '1'); // Disable token renewal
-if (!defined("NOCSRFCHECK")) define("NOSCRFCHECK", 1);
+if (!defined("NOCSRFCHECK")) define("NOCSRFCHECK", 1);
 
 require __DIR__ .'/../config.php';
 
