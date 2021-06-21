@@ -26,6 +26,7 @@
 
 
 if (!defined('NOTOKENRENEWAL')) define('NOTOKENRENEWAL', '1'); // Disable token renewal
+if (!defined("NOCSRFCHECK")) define("NOSCRFCHECK", 1);
 
 define('INC_FROM_CRON_SCRIPT',1);
 define('ISLOADEDBYSTEELSHEET',1);
