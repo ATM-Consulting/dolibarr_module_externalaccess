@@ -50,7 +50,7 @@ class ExpeditionsController extends Controller
 		$hookRes = $this->hookPrintPageView();
 		if(empty($hookRes)){
 			print '<section id="section-expedition"><div class="container">';
-			self::print_expeditionTable($user->socid);
+			$this->print_expeditionTable($user->socid);
 			print '</div></section>';
 		}
 
