@@ -50,7 +50,7 @@ class ProjectsController extends Controller
 		$hookRes = $this->hookPrintPageView();
 		if(empty($hookRes)){
 			print '<section id="section-project"><div class="container">';
-			self::print_projetsTable($user->socid);
+			$this->print_projetsTable($user->socid);
 			print '</div></section>';
 		}
 
@@ -59,7 +59,7 @@ class ProjectsController extends Controller
 
 
 
-	function print_projetsTable($socId = 1)
+	public function print_projetsTable($socId = 1)
 	{
 		global $langs,$db,$hookmanager;
 		$context = Context::getInstance();

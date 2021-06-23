@@ -50,7 +50,7 @@ class SupplierInvoicesController extends Controller
 		$hookRes = $this->hookPrintPageView();
 		if(empty($hookRes)){
 			print '<section id="section-invoice"><div class="container">';
-			self::print_supplierinvoiceTable($user->socid);
+			$this->print_supplierinvoiceTable($user->socid);
 			print '</div></section>';
 		}
 
@@ -59,7 +59,7 @@ class SupplierInvoicesController extends Controller
 
 
 
-	function print_supplierinvoiceTable($socId = 0)
+	public function print_supplierinvoiceTable($socId = 0)
 	{
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();

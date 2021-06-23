@@ -50,7 +50,7 @@ class OrdersController extends Controller
 		$hookRes = $this->hookPrintPageView();
 		if(empty($hookRes)){
 			print '<section id="section-order"><div class="container">';
-			self::print_orderListTable($user->socid);
+			$this->print_orderListTable($user->socid);
 			print '</div></section>';
 		}
 
@@ -58,7 +58,7 @@ class OrdersController extends Controller
 	}
 
 
-	static public function print_orderListTable($socId = 0)
+	public function print_orderListTable($socId = 0)
 	{
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
