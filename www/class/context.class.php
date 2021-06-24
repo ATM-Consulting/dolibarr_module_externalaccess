@@ -408,7 +408,7 @@ class Context {
 
 		}
 		else{
-			return newToken($controller, false);
+			return $this->newToken($controller, false);
 		}
 	}
 
