@@ -32,5 +32,7 @@ if (empty($conf->externalaccess->enabled))
 	exit;
 }
 
+require __DIR__.'/lib/retroCompatibility.lib.php';
+
 $context = Context::getInstance();
 
