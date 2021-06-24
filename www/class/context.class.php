@@ -1,6 +1,7 @@
 <?php
 
 require_once __DIR__ . '/dbtool.class.php';
+require_once __DIR__ . '/controller.class.php';
 
 class Context {
 
@@ -19,6 +20,22 @@ class Context {
 
    public $controller;
    public $controller_found = false;
+
+	/**
+	 * @var stdClass[]
+	*/
+   private $controllers = array();
+
+   /**
+	 * @var Controller $controllerInstance
+	*/
+   public $controllerInstance;
+
+	/**
+	* for internal error msg
+	* @var string error
+	*/
+   public $error;
 
    public $action;
 
@@ -45,6 +62,11 @@ class Context {
    private function __construct() {
        global $db, $conf, $user;
 
+       // small retrocompatibility fix hack TODO : remove it when external access will be min version of Dolibarr 12
+	   if(empty($user->socid)){
+		   $user->socid = $user->societe_id; // For compatibility support
+	   }
+
        $this->dbTool = new ExternalDbTool($db) ;
 
        $this->tplDir = __DIR__.'/../';
@@ -67,6 +89,7 @@ class Context {
 
 	   $this->generateNewToken();
 
+       $this->initController();
 
 	   // Init de l'url de base
        if(!empty($conf->global->EACCESS_ROOT_URL))
@@ -79,6 +102,7 @@ class Context {
            $this->rootUrl = dol_buildpath('/externalaccess/www/',2);
        }
    }
+
 
    /**
     * Méthode qui crée l'unique instance de la classe
@@ -94,6 +118,62 @@ class Context {
      }
      return self::$_instance;
    }
+
+	/**
+	 * @return bool
+	 */
+	public function initController() {
+		global $db, $conf, $user, $langs;
+
+		$defaultControllersPath = __DIR__ . '/../controllers/';
+
+		// define controllers definition
+		$this->addControllerDefinition('default', $defaultControllersPath.'default.controller.php', 'DefaultController');
+		$this->addControllerDefinition('personalinformations', $defaultControllersPath.'personalinformations.controller.php', 'PersonalInformationsController');
+		$this->addControllerDefinition('invoices', $defaultControllersPath.'invoices.controller.php', 'InvoicesController');
+		$this->addControllerDefinition('orders', $defaultControllersPath.'orders.controller.php', 'OrdersController');
+		$this->addControllerDefinition('propals', $defaultControllersPath.'propals.controller.php', 'PropalsController');
+		$this->addControllerDefinition('projects', $defaultControllersPath.'projects.controller.php', 'ProjectsController');
+		$this->addControllerDefinition('expeditions', $defaultControllersPath.'expeditions.controller.php', 'ExpeditionsController');
+		$this->addControllerDefinition('supplier_invoices', $defaultControllersPath.'supplier_invoices.controller.php', 'SupplierInvoicesController');
+
+		// Appel des triggers
+		include_once DOL_DOCUMENT_ROOT . '/core/class/interfaces.class.php';
+		$interface=new Interfaces($db);
+		$interface->run_triggers('externalAccessInitController', $this, $user, $langs, $conf);
+		// Fin appel triggers
+
+		// search for controller
+
+		$this->controllerInstance = new Controller();
+		if(isset($this->controllers[$this->controller]) && file_exists($this->controllers[$this->controller]->path)){
+
+			require_once $this->controllers[$this->controller]->path;
+
+			if(class_exists($this->controllers[$this->controller]->class)){
+				$this->controllerInstance = new $this->controllers[$this->controller]->class();
+				$this->setControllerFound();
+			}
+		}
+	}
+
+	public function addControllerDefinition($controller, $path, $className){
+
+		$fileName = basename($path);
+		$needle = '.controller.php';
+		$length = strlen($needle);
+		$isControllerFile = $length > 0 ? substr($fileName, -$length) === $needle : true;
+		if(!$isControllerFile){
+			$this->setError('Error: controller definition '.$fileName);
+			return false;
+		}
+
+		$this->controllers[$controller] = new stdClass();
+		$this->controllers[$controller]->path = $path;
+		$this->controllers[$controller]->class = $className;
+
+		return true;
+	}
 
 
    public function setControllerFound() {
@@ -328,7 +408,7 @@ class Context {
 
 		}
 		else{
-			return newToken($controller, false);
+			return $this->newToken($controller, false);
 		}
 	}
 

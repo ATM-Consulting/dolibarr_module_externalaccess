@@ -7,7 +7,7 @@ if (empty($context) || ! is_object($context))
 
 
 
-global $conf,$user;
+global $conf,$user,$langs;
 
 $Tmenu=$TGroupMenu=array();
 
@@ -15,16 +15,6 @@ $maxTopMenu = !empty($conf->global->EACCESS_MAX_TOP_MENU)?$conf->global->EACCESS
 
 if($context->userIsLog())
 {
-    if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
-    {
-        $Tmenu['supplier_invoices'] = array(
-            'id' => 'supplier_invoices',
-            'rank' => 10,
-            'url' => $context->getRootUrl('supplier_invoices'),
-            'name' => $langs->trans('EALINKNAME_supplier_invoices'),
-			'group' => 'technical' // group identifier for the group if necessary
-        );
-    }
     if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
     {
         $Tmenu['projects'] = array(
@@ -40,7 +30,7 @@ if($context->userIsLog())
     {
         $Tmenu['propals'] = array(
             'id' => 'propals',
-            'rank' => 10,
+            'rank' => 20,
             'url' => $context->getRootUrl('propals'),
             'name' => $langs->trans('EALINKNAME_propals'),
 			'group' => 'administrative' // group identifier for the group if necessary
@@ -51,7 +41,7 @@ if($context->userIsLog())
 	{
 		$Tmenu['orders'] = array(
 			'id' => 'orders',
-			'rank' => 20,
+			'rank' => 30,
 			'url' => $context->getRootUrl('orders'),
 			'name' => $langs->trans('EALINKNAME_orders'),
 			'group' => 'administrative' // group identifier for the group if necessary
@@ -62,7 +52,7 @@ if($context->userIsLog())
 	{
 		$Tmenu['expeditions'] = array(
 			'id' => 'expeditions',
-			'rank' => 20,
+			'rank' => 40,
 			'url' => $context->getRootUrl('expeditions'),
 			'name' => $langs->trans('EALINKNAME_expeditions'),
 			'group' => 'administrative' // group identifier for the group if necessary
@@ -73,18 +63,29 @@ if($context->userIsLog())
     {
         $Tmenu['invoices'] = array(
             'id' => 'invoices',
-            'rank' => 40,
+            'rank' => 50,
             'url' => $context->getRootUrl('invoices'),
             'name' => $langs->trans('EALINKNAME_invoices'),
 			'group' => 'administrative' // group identifier for the group if necessary
         );
     }
 
+	if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
+	{
+		$Tmenu['supplier_invoices'] = array(
+			'id' => 'supplier_invoices',
+			'rank' => 60,
+			'url' => $context->getRootUrl('supplier_invoices'),
+			'name' => $langs->trans('EALINKNAME_supplier_invoices'),
+			'group' => 'administrative' // group identifier for the group if necessary
+		);
+	}
+
     if(!empty($conf->ticket->enabled) && $conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
     {
         $Tmenu['tickets'] = array(
             'id' => 'tickets',
-            'rank' => 50,
+            'rank' => 70,
             'url' => $context->getRootUrl('tickets'),
             'name' => $langs->trans('EALINKNAME_tickets'),
 			'group' => 'technical' // group identifier for the group if necessary

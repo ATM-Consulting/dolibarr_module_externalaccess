@@ -68,31 +68,7 @@ class Actionsexternalaccess
 		{
 		    $context = Context::getInstance();
 
-		    if($context->controller == 'invoices')
-		    {
-		        $context->title = $langs->trans('ViewInvoices');
-		        $context->desc = $langs->trans('ViewInvoicesDesc');
-		        $context->menu_active[] = 'invoices';
-		    }
-		    elseif($context->controller == 'orders')
-		    {
-		        $context->title = $langs->trans('ViewOrders');
-		        $context->desc = $langs->trans('ViewOrdersDesc');
-		        $context->menu_active[] = 'orders';
-		    }
-		    elseif($context->controller == 'propals')
-		    {
-	            $context->title = $langs->trans('ViewPropals');
-	            $context->desc = $langs->trans('ViewPropalsDesc');
-	            $context->menu_active[] = 'propals';
-		    }
-			elseif($context->controller == 'expeditions')
-			{
-				$context->title = $langs->trans('ViewExpeditions');
-				$context->desc = $langs->trans('ViewExpeditionsDesc');
-				$context->menu_active[] = 'expeditions';
-			}
-            elseif($context->controller == 'tickets' && !empty($conf->ticket->enabled))
+		    if($context->controller == 'tickets' && !empty($conf->ticket->enabled))
             {
                 $context->title = $langs->trans('ViewTickets');
                 $context->desc = $langs->trans('ViewTicketsDesc');
@@ -102,52 +78,6 @@ class Actionsexternalaccess
             {
 				$this->actionTicketCard($parameters, $object, $action, $hookmanager);
             }
-            elseif($context->controller == 'projects')
-		    {
-		        $context->title = $langs->trans('ViewProjects');
-		        $context->desc = $langs->trans('ViewProjectsDesc');
-		        $context->menu_active[] = 'projects';
-		    }
-			elseif($context->controller == 'default')
-			{
-				$context->title = $langs->trans('Welcome');
-				$context->desc = $langs->trans('WelcomeDesc');
-				//$context->topMenu->shrink = 1; // no transparency menu
-				$context->doNotDisplayHeaderBar=1;// hide default header
-			}
-		    elseif($context->controller == 'personalinformations')
-		    {
-		        global $user;
-		        $context->title = $langs->trans('UserInfosDesc') ; //$user->firstname .' '. $user->lastname;
-		        $context->desc = $user->firstname .' '. $user->lastname;; //$langs->trans('UserInfosDesc');
-		        $context->meta_title = $user->firstname .' '. $user->lastname .' - '. $langs->trans('UserInfosDesc');
-		        //$context->doNotDisplayHeaderBar=1;// hide default header
-
-		        if($context->action == 'save'){
-		            // TODO: need to check all send informations to prevent and verbose errors
-		            $user->firstname = GETPOST('firstname', 'none');
-		            $user->lastname = GETPOST('lastname', 'none');
-		            $user->address = GETPOST('address', 'none');
-		            $user->zip = GETPOST('addresszip', 'none');
-		            $user->town = GETPOST('town', 'none');
-		            $user->user_mobile = GETPOST('user_mobile', 'none');
-		            $user->office_phone = GETPOST('office_phone', 'none');
-		            $user->office_fax = GETPOST('office_fax', 'none');
-		            if(floatval(DOL_VERSION) > 4){
-		               $user->email = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
-		            } else {
-				        $user->email = GETPOST('email', 'none');
-			        }
-
-		            if($user->update($user)>0)
-		            {
-		                header('Location: '.$context->getRootUrl('personalinformations').'&action=saved');
-		            }
-		            else {
-		                $context->action == 'saveError';
-		            }
-		        }
-		    }
 		}
 
 	}
@@ -237,74 +167,7 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        if($context->controller == 'default')
-	        {
-				$context->setControllerFound();
-				if(!empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){
-					include $context->tplPath .'/headbar.tpl.php';
-				}
-				else{
-					include $context->tplPath .'/headbar_full.tpl.php';
-				}
-	            include $context->tplPath .'/services.tpl.php';
-	            return 1;
-	        }
-	        elseif($context->controller == 'invoices')
-	        {
-				$context->setControllerFound();
-	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
-	            {
-	                $this->print_invoiceList($user->socid);
-	            }
-	            return 1;
-	        }
-	        elseif($context->controller == 'supplier_invoices')
-	        {
-				$context->setControllerFound();
-	            if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
-	            {
-	            	$socid = !empty($user->societe_id) ? $user->societe_id : $user->socid;
-	                $this->print_supplierinvoiceList($socid);
-	            }
-	            return 1;
-	        }
-	        elseif($context->controller == 'orders')
-	        {
-				$context->setControllerFound();
-	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
-	            {
-	                $this->print_orderList($user->socid);
-	            }
-	            return 1;
-	        }
-			elseif($context->controller == 'propals')
-			{
-				$context->setControllerFound();
-				if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
-				{
-					$this->print_propalList($user->socid);
-				}
-				return 1;
-			}
-			elseif($context->controller == 'projects' && !empty($conf->projet->enabled))
-			{
-				$context->setControllerFound();
-				if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
-				{
-					$this->print_projectList($user->socid);
-				}
-				return 1;
-			}
-			elseif($context->controller == 'expeditions')
-			{
-				$context->setControllerFound();
-				if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
-				{
-					$this->print_expeditionList($user->socid);
-				}
-				return 1;
-			}
-            elseif($context->controller == 'tickets' && !empty($conf->ticket->enabled))
+	        if($context->controller == 'tickets' && !empty($conf->ticket->enabled))
             {
                 $context->setControllerFound();
                 if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
@@ -323,61 +186,11 @@ class Actionsexternalaccess
                 }
                 return 1;
             }
-	        elseif($context->controller == 'personalinformations')
-	        {
-				$context->setControllerFound();
-	            if($context->userIslog())
-	            {
-	                $this->print_personalinformations();
-	            }
-	            return 1;
-	        }
 	    }
 
 		return 0;
 	}
 
-	public function print_invoiceList($socId = 0)
-	{
-	    print '<section id="section-invoice"><div class="container">';
-	    print_invoiceTable($socId);
-	    print '</div></section>';
-	}
-
-	public function print_supplierinvoiceList($socId = 0)
-	{
-	    print '<section id="section-invoice"><div class="container">';
-	    print_supplierinvoiceTable($socId);
-	    print '</div></section>';
-	}
-
-	public function print_orderList($socId = 0)
-	{
-	    print '<section id="section-order"><div class="container">';
-	    print_orderListTable($socId);
-	    print '</div></section>';
-	}
-
-	public function print_propalList($socId = 0)
-	{
-		print '<section id="section-propal"><div class="container">';
-		print_propalTable($socId);
-		print '</div></section>';
-	}
-
-	public function print_projectList($socId = 0)
-	{
-		print '<section id="section-project"><div class="container">';
-		print_projetsTable($socId);
-		print '</div></section>';
-	}
-
-	public function print_expeditionList($socId = 0)
-	{
-		print '<section id="section-expedition"><div class="container">';
-		print_expeditionTable($socId);
-		print '</div></section>';
-	}
 
     public function print_ticketList($socId = 0)
     {
@@ -392,14 +205,6 @@ class Actionsexternalaccess
         print_ticketCard($ticketId, $socId, GETPOST('action', 'none'));
         print '</div></section>';
     }
-
-	public function print_personalinformations()
-	{
-	    global $langs,$db,$user;
-	    $context = Context::getInstance();
-
-	    include $context->tplPath.'/userinfos.tpl.php';
-	}
 
 	private function _downloadInvoice(){
 
