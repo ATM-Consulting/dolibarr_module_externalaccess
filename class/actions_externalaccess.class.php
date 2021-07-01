@@ -68,13 +68,7 @@ class Actionsexternalaccess
 		{
 		    $context = Context::getInstance();
 
-		    if($context->controller == 'tickets' && !empty($conf->ticket->enabled))
-            {
-                $context->title = $langs->trans('ViewTickets');
-                $context->desc = $langs->trans('ViewTicketsDesc');
-                $context->menu_active[] = 'tickets';
-            }
-            elseif($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
+		    if($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
             {
 				$this->actionTicketCard($parameters, $object, $action, $hookmanager);
             }
@@ -167,16 +161,7 @@ class Actionsexternalaccess
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        if($context->controller == 'tickets' && !empty($conf->ticket->enabled))
-            {
-                $context->setControllerFound();
-                if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
-                {
-                    $this->print_ticketList($user->socid);
-                }
-                return 1;
-            }
-            elseif($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
+	        if($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
             {
                 $context->setControllerFound();
 				$ticketId = GETPOST('id', 'int');
@@ -191,13 +176,6 @@ class Actionsexternalaccess
 		return 0;
 	}
 
-
-    public function print_ticketList($socId = 0)
-    {
-        print '<section id="section-ticket"><div class="container">';
-        print_ticketTable($socId);
-        print '</div></section>';
-    }
 
     public function print_ticketCard($ticketId = 0, $socId = 0)
     {
@@ -226,7 +204,7 @@ class Actionsexternalaccess
 	        {
 	            if($object->statut>=Facture::STATUS_VALIDATED && $object->socid==$user->socid)
 	            {
-			load_last_main_doc($object);
+					load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 
 	                if(!empty($object->last_main_doc)){

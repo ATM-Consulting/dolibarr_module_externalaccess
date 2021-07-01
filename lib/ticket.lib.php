@@ -1,85 +1,6 @@
 <?php
 
 
-function print_ticketTable($socId = 0)
-{
-	global $langs,$db, $user;
-	$context = Context::getInstance();
-
-	dol_include_once('ticket/class/ticket.class.php');
-	$ticketStatic = new Ticket($context->dbTool->db);
-
-	$langs->load('ticket');
-
-	$sql = 'SELECT rowid ';
-	$sql.= ' FROM `'.MAIN_DB_PREFIX.'ticket` t';
-	$sql.= ' WHERE fk_soc = '. intval($socId);
-	$sql.= ' ORDER BY t.datec DESC';
-	$tableItems = $context->dbTool->executeS($sql);
-
-
-	if(checkUserTicketRight($user, $ticketStatic, 'create')) {
-		print '<div><a href="' . $context->getRootUrl('ticket_card', '&action=create') . '" class="btn btn-primary btn-strong pull-right" >' . $langs->trans('NewTicket') . '</a></div>';
-	}
-
-	if(!empty($tableItems))
-	{
-		print '<table id="ticket-list" class="table table-striped" >';
-		print '<thead>';
-		print '<tr>';
-		print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('Subject').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('TicketSeverity').'</th>';
-		print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
-		print '</tr>';
-		print '</thead>';
-		print '<tbody>';
-		foreach ($tableItems as $item)
-		{
-			$object = new Ticket($db);
-			$object->fetch($item->rowid);
-
-			print '<tr>';
-			print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$context->getRootUrl('ticket_card', '&id='.$item->rowid).'">'.$object->ref.'</a></td>';
-			print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
-			print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
-			print ' <td data-search="'.$object->type_label.'" data-order="'.$object->type_label.'" >'.$object->type_label.'</td>';
-			print ' <td data-search="'.$object->severity_label.'" data-order="'.$object->severity_label.'" >'.$object->severity_label.'</td>';
-			print ' <td class="text-center" >'.$object->getLibStatut(1).'</td>';
-			print '</tr>';
-		}
-		print '</tbody>';
-		print '</table>';
-		?>
-		<script type="text/javascript" >
-			$(document).ready(function(){
-				$("#ticket-list").DataTable({
-					"language": {
-						"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
-					},
-                    'order': [[1, 'desc']], // 1 = 2e colonne
-
-					responsive: true,
-					columnDefs: [{
-						orderable: false,
-						"aTargets": [-1]
-					},{
-						"bSearchable": false,
-						"aTargets": [-1, -2]
-					}]
-				});
-			});
-		</script>
-		<?php
-	}
-	else {
-		print '<div class="info clearboth text-center" >';
-		print  $langs->trans('EACCESS_Nothing');
-		print '</div>';
-	}
-}
 
 function print_ticketCard($ticketId = 0, $socId = 0, $action = ''){
 	global $user, $langs;
@@ -309,7 +230,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 
 function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 {
-	global $langs,$db, $conf, $user;
+	global $langs,$db, $conf, $user, $hookmanager;
 	$context = Context::getInstance();
 	$out = '';
 
@@ -343,7 +264,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	} else {
 		$author.= dol_escape_htmltag($object->origin_email);
 	}
-	$out.= getEaNavbar($context->getRootUrl('tickets', '&save_lastsearch_values=1'));
+	$outEaNavbar = getEaNavbar($context->getRootUrl('tickets', '&save_lastsearch_values=1'));
 
 	/*
 					<div class="row clearfix form-group" id="trackId">
@@ -391,43 +312,64 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		$ticketFooter.= '</div>';
 	}
 
-	$out.= '
+	$ticketMorePanelBodyBottom = $ticketMorePanelBodyTop = '';
+
+	$parameters=array(
+		'controller' => $context->controller,
+		'out' =>& $out,
+		'outEaNavbar' =>& $outEaNavbar,
+		'ticketFooter' =>& $ticketFooter,
+		'ticketMorePanelBodyBottom' =>& $ticketMorePanelBodyBottom,
+		'ticketMorePanelBodyTop' =>& $ticketMorePanelBodyTop,
+	);
+	$reshook=$hookmanager->executeHooks('externalAccessticketCardSummary',$parameters,$object, $context->action);    // Note that $action and $object may have been modified by hook
+	if ($reshook > 0) {
+		$out.= $hookmanager->resPrint;
+	}elseif ($reshook < 0) {
+		$context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+	}
+	else{
+		$out.= $outEaNavbar;
+		$out.= '
 		<div class="container px-0">
 			<h5>'.$langs->trans('Ticket').' '.$object->ref.'</h5>
 			<div class="panel panel-default" id="ticket-summary">
 				<div class="panel-body">
+					'.$ticketMorePanelBodyTop.'
 					<div class="row clearfix form-group" id="subject">
-						<div class="col-md-4">'.$langs->transnoentities('Subject').'</div>
-						<div class="col-md-8">'.$object->subject.'</div>
+						<div class="col-md-2">'.$langs->transnoentities('Subject').'</div>
+						<div class="col-md-10">'.$object->subject.'</div>
 					</div>
 					<div class="row clearfix form-group" id="status">
-						<div class="col-md-4">'.$langs->transnoentities('Status').'</div>
-						<div class="col-md-8">'.ticketLibStatut($object).'</div>
+						<div class="col-md-2">'.$langs->transnoentities('Status').'</div>
+						<div class="col-md-10">'.ticketLibStatut($object).'</div>
 					</div>
 					<div class="row clearfix form-group" id="Type">
-						<div class="col-md-4">'.$langs->transnoentities('Type').'</div>
-						<div class="col-md-8">'.$object->type_label.'</div>
+						<div class="col-md-2">'.$langs->transnoentities('Type').'</div>
+						<div class="col-md-10">'.$object->type_label.'</div>
 					</div>
 					<div class="row clearfix form-group" id="Severity">
-						<div class="col-md-4">'.$langs->transnoentities('Severity').'</div>
+						<div class="col-md-2">'.$langs->transnoentities('Severity').'</div>
 						<div class="col-md-8">'.$object->severity_label.'</div>
 					</div>
 					<div class="row clearfix form-group" id="DateCreation">
-						<div class="col-md-4">'.$langs->transnoentities('DateCreation').'</div>
-						<div class="col-md-8">'.dol_print_date($object->datec, 'dayhour').'</div>
+						<div class="col-md-2">'.$langs->transnoentities('DateCreation').'</div>
+						<div class="col-md-10">'.dol_print_date($object->datec, 'dayhour').'</div>
 					</div>
 					<div class="row clearfix form-group" id="Author">
-						<div class="col-md-4">'.$langs->transnoentities('Author').'</div>
-						<div class="col-md-8">'.$author.'</div>
+						<div class="col-md-2">'.$langs->transnoentities('Author').'</div>
+						<div class="col-md-10">'.$author.'</div>
 					</div>
 					<div class="row clearfix form-group" id="InitialMessage">
-						<div class="col-md-4">'.$langs->transnoentities('InitialMessage').'</div>
-						<div class="col-md-8">'.$object->message.'</div>
+						<div class="col-md-2">'.$langs->transnoentities('InitialMessage').'</div>
+						<div class="col-md-10">'.$object->message.'</div>
 					</div>
+					'.$ticketMorePanelBodyBottom.'
 				</div>
 				'.$ticketFooter.'
 			</div>
 		</div>';
+	}
 
 	// get list of messages for the ticket
 	$object->loadCacheMsgsTicket();
@@ -650,9 +592,23 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	}
 
 	$out.= '<hr/>';
-	$out.= print_ticketCard_comment_form($object);
 
-	print $out;
+	$outCommentForm = print_ticketCard_comment_form($object);
+
+	$parameters=array(
+		'controller' => $context->controller,
+		'out' =>& $out,
+		'outCommentForm' =>& $outCommentForm,
+	);
+	$reshook=$hookmanager->executeHooks('externalAccessticketCard',$parameters,$object, $context->action);    // Note that $action and $object may have been modified by hook
+	if ($reshook > 0) {
+		print $hookmanager->resPrint;
+	}elseif ($reshook < 0) {
+		$context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+	}
+	else{
+		print $out.$outCommentForm;
+	}
 }
 
 /**

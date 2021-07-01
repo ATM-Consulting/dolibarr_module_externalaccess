@@ -4,6 +4,9 @@ ___
 
 ## Unreleased
 
+- NEW : Add hook for ticket's card - *01/07/2021* - 1.17.0
+- NEW : Move tickets list to new CONTROLLER SYSTEM - *01/07/2021* - 1.16.0
+
 # RELEASE 1.16 - 2021-06-24
 
 - NEW : **CONTROLLER SYSTEM** - *20/06/2021* - 1.16.0
