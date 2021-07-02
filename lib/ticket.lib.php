@@ -322,7 +322,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		'ticketMorePanelBodyBottom' =>& $ticketMorePanelBodyBottom,
 		'ticketMorePanelBodyTop' =>& $ticketMorePanelBodyTop,
 	);
-	$reshook=$hookmanager->executeHooks('externalAccessticketCardSummary',$parameters,$object, $context->action);    // Note that $action and $object may have been modified by hook
+	$reshook=$hookmanager->executeHooks('externalAccessTicketCardSummary',$parameters,$object, $context->action);    // Note that $action and $object may have been modified by hook
 	if ($reshook > 0) {
 		$out.= $hookmanager->resPrint;
 	}elseif ($reshook < 0) {
