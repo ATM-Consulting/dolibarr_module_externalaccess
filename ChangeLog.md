@@ -4,8 +4,10 @@ ___
 
 ## Unreleased
 
-- NEW : Add hook for ticket's card - *01/07/2021* - 1.17.0
-- NEW : Move tickets list to new CONTROLLER SYSTEM - *01/07/2021* - 1.16.0
+# RELEASE 1.18 - 2021-07-07
+
+- NEW : Add hook for ticket's card - *01/07/2021* - 1.18.0
+- NEW : Move tickets list to new CONTROLLER SYSTEM - *01/07/2021* - 1.17.0
 
 # RELEASE 1.16 - 2021-06-24
 
