@@ -1,7 +1,7 @@
 <?php
 
 
-
+require_once DOL_DOCUMENT_ROOT . '/core/lib/functions2.lib.php';
 
 
 
