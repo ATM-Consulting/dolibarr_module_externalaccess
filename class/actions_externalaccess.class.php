@@ -477,7 +477,10 @@ class Actionsexternalaccess
 					if($res>0)
 					{
 						// Add contact to the ticket
-						$ticket->add_contact($user->contactid, "SUPPORTCLI", 'external', 0);
+						if(empty($user->contact_id)){
+							$user->contact_id = $user->contactid; // Dolibarr < 13 retrocompatibility
+						}
+						$ticket->add_contact($user->contact_id, "SUPPORTCLI", 'external', 0);
 
 						header('Location: '.$context->getRootUrl('ticket_card', '&id='.$res));
 						exit();
