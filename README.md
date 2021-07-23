@@ -13,6 +13,10 @@ See the [COPYING](https://github.com/Dolibarr/dolibarr/blob/develop/COPYING) fil
 
 Note : This module need the abricot module to be installed on your dolibarr
 
+### Requirement
+
+Need module abricot installed
+
 ### From the ZIP file and GUI interface
 
 - If you get the module in a zip file (like when downloading it from the market place [Dolistore](https://www.dolistore.com)), go into
