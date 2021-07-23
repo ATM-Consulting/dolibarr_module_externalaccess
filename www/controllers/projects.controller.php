@@ -57,35 +57,37 @@ class ProjectsController extends Controller
 		$this->loadTemplate('footer');
 	}
 
-
-
-	public function print_projetsTable($socId = 1)
+	public function print_projectTable($socId = 0)
 	{
-		global $langs,$db,$hookmanager;
+		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
 
-		//dol_include_once('compta/facture/class/facture.class.php');
-		dol_include_once('projet/class/project.class.php');
-		$langs->load('projet');
+		include_once DOL_DOCUMENT_ROOT . '/projet/class/project.class.php';
+		include_once DOL_DOCUMENT_ROOT . '/core/lib/pdf.lib.php';
 
-		$parameters = array("socId" => $socId);
+		$langs->load('sendings', 'main');
+
 
 		$sql = 'SELECT rowid ';
 
 		// Add fields from hooks
+		$parameters = array();
 		$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
 		$sql .= $hookmanager->resPrint;
 
-		$sql.= ' FROM `'.MAIN_DB_PREFIX.'projet` projet';
+		$sql.= ' FROM `'.MAIN_DB_PREFIX.'projet` ';
 
 		// Add From from hooks
+		$parameters = array();
 		$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
 		$sql .= $hookmanager->resPrint;
 
 		$sql.= ' WHERE fk_soc = '. intval($socId);
 		$sql.= ' AND fk_statut > 0';
+		$sql.= ' AND entity IN ('.getEntity("expedition").')';//Compatibility with Multicompany
 
 		// Add where from hooks
+		$parameters = array();
 		$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
 		$sql .= $hookmanager->resPrint;
 
@@ -95,22 +97,90 @@ class ProjectsController extends Controller
 
 		if(!empty($tableItems))
 		{
+			//TODO : ajouter la variable $dataTableConf en paramètre du hook => résoudre le souci de "order"
+//		$dataTableConf = array(
+//			'language' => array(
+//				'url' => $context->getRootUrl() . 'vendor/data-tables/french.json',
+//			),
+//			'order' => array(),
+//			'responsive' => true,
+//			'columnDefs' => array(
+//				array(
+//					'orderable' => false,
+//					'aTargets' => array(-1),
+//				),
+//				array(
+//					'bSearchable' => false,
+//					'aTargets' => array(-1, -2),
+//				),
+//			),
+//		);
 
-			//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
+			$TFieldsCols = array(
+				'ref' => array('status' => true),
+				'reftoshow' => array('status' => true),
+				'delivery_date' => array('status' => true),
+				'status' => array('status' => true),
+				'downloadlink' => array('status' => true),
+			);
 
-			print '<table id="projet-list" class="table table-striped" >';
+			$parameters = array(
+				'socId' => $socId,
+				'tableItems' =>& $tableItems,
+				'TFieldsCols' =>& $TFieldsCols
+			);
+
+			$reshook = $hookmanager->executeHooks('listColumnField', $parameters, $context); // Note that $object may have been modified by hook
+			if ($reshook < 0) {
+				$context->setEventMessages($hookmanager->errors, 'errors');
+			} elseif (empty($reshook)) {
+				$TFieldsCols = array_replace($TFieldsCols, $hookmanager->resArray); // array_replace is used to preserve keys
+			} else {
+				$TFieldsCols = $hookmanager->resArray;
+			}
+
+
+			$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			if(empty($TOther_fields_all))
+				$TOther_fields_all = array();
+
+			$TOther_fields_shipping = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_SHIPPING);
+			if(empty($TOther_fields_shipping))
+				$TOther_fields_shipping = array();
+
+			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_shipping);
+
+			print '<table id="expedition-list" class="table table-striped" >';
 
 			print '<thead>';
 
 			print '<tr>';
-			print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('Budget').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('Titre').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('Description').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('Lien de telechargement').'</th>';
+
+			if(!empty($TFieldsCols['ref']['status'])){
+				print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+			}
+
+			if(!empty($TOther_fields)) {
+				foreach ($TOther_fields as $field) {
+					if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
+					if(property_exists('Expedition', $field) || strstr($field ,'linked'))
+					{
+						print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
+					}
+				}
+			}
+			if(!empty($TFieldsCols['reftoshow']['status'])) {
+				print ' <th class="reftoshow_title text-center" >' . $langs->trans('pdfLinkedDocuments') . '</th>';
+			}
+			if(!empty($TFieldsCols['delivery_date']['status'])) {
+				print ' <th class="text-center delivery_date" >' . $langs->trans('DateLivraison') . '</th>';
+			}
+			if(!empty($TFieldsCols['status']['status'])) {
+				print ' <th class="statut_title text-center" >' . $langs->trans('Status') . '</th>';
+			}
+			if(!empty($TFieldsCols['downloadlink']['status'])) {
+				print ' <th class="downloadlink_title text-center" ></th>';
+			}
 			print '</tr>';
 
 			print '</thead>';
@@ -118,53 +188,115 @@ class ProjectsController extends Controller
 			print '<tbody>';
 			foreach ($tableItems as $item)
 			{
-				$object = new project($db);
+				$object = new Expedition($db);
 				$object->fetch($item->rowid);
-				load_last_main_doc($object);
-				$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadprojet&id='.$object->id;
+				$object->fetchObjectLinked();
 
-				if(!empty($object->last_main_doc)){
+				load_last_main_doc($object);
+				$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
+
+				if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
 					$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
-					$downloadLink = '<a class="btn btn-xs btn-primary" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
+					$downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
 				}
 				else{
 					$viewLink = $object->ref;
 					$downloadLink =  $langs->trans('DocumentFileNotAvailable');
 				}
 
-				print '<tr >';
-				print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
+				$reftoshow = '';
+				$reftosearch = '';
+				$linkedobjects = pdf_getLinkedObjects($object,$langs);
+				if (! empty($linkedobjects))
+				{
+					foreach($linkedobjects as $linkedobject)
+					{
+						if(!empty($reftoshow)){
+							$reftoshow.= ', ';
+							$reftosearch.= ' ';
+						}
+						$reftoshow.= $linkedobject["ref_value"]; //$linkedobject["ref_title"].' : '.
+						$reftosearch.= $linkedobject["ref_value"];
+					}
+				}
+				print '<tr>';
+				if(!empty($TFieldsCols['ref']['status'])) {
+					print ' <td data-search="' . $object->ref . '" data-order="' . $object->ref . '"  >' . $viewLink . '</td>';
+				}
 
-				print ' <td data-search="'.$object->dateo.'" data-order="'.dol_print_date($object->dateo).'"  >'.dol_print_date($object->dateo).'</td>';
-				print ' <td data-search="'.$object->datec.'" data-order="'.dol_print_date($object->datec).'"  >'.dol_print_date($object->datec).'</td>';
-				print ' <td  >'.$object->getLibStatut(0).'</td>';
-				print ' <td data-search="'.$object->title.'" data-order="'.$object->title.'" ></td>';
-				print '<td  ></td>';
-				print '<td  ></td>';
-				print ' <td  class="text-right" >'.$downloadLink.'</td>';
+				$total_more_fields = 0;
+				if(!empty($TOther_fields)) {
+					foreach ($TOther_fields as $field) {
+						if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
+						if(property_exists('Expedition', $field)) {
+							$total_more_fields+=1;
+							if($field =='shipping_method_id') {
+								$code = $langs->getLabelFromKey($db, $object->shipping_method_id, 'c_shipment_mode', 'rowid', 'code');
+								$field_label = $langs->trans("SendingMethod" . strtoupper($code));
+								print ' <td class="'.$field.'_value" data-search="' . strip_tags($field_label) . '" data-order="' . strip_tags($field_label) . '" >' . $field_label . '</td>';
+							} else {
+								print ' <td class="'.$field.'_value" data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+							}
+						}
+						elseif (strstr($field ,'linked')) {
+							$Tfield_parts = explode('-', $field);
+
+							$linkedobject_class=$Tfield_parts[1];
+							$linkedobject_field=$Tfield_parts[2];
+							$linkedobject_field_type=$Tfield_parts[3];
+
+							$TLinkedObjects = $object->linkedObjects[$linkedobject_class];
+
+							print ' <td class="'.$field.'_value" >';
+							if(!empty($TLinkedObjects)) {
+								foreach ($TLinkedObjects as $id=>$objectlinked) {
+									if($linkedobject_field_type == 'timestamp') print dol_print_date($objectlinked->{$linkedobject_field}). ' ';
+									else print $objectlinked->{$linkedobject_field} . ' ';
+								}
+							}
+							print '</td>';
+						}
+					}
+				}
+
+				if(!empty($TFieldsCols['reftoshow']['status'])) {
+					print ' <td class="reftoshow_value data-search="' . $reftosearch . '" data-order="' . $reftosearch . '"  >' . $reftoshow . '</td>';
+				}
+				if(!empty($TFieldsCols['delivery_date']['status'])) {
+					print ' <td data-search="' . dol_print_date($object->date_delivery) . '" data-order="' . $object->date_delivery . '" >' . dol_print_date($object->date_delivery) . '</td>';
+				}
+				if(!empty($TFieldsCols['status']['status'])) {
+					print ' <td class="statut_value text-center" >' . $object->getLibStatut(0) . '</td>';
+				}
+				if(!empty($TFieldsCols['downloadlink']['status'])) {
+					print ' <td class="downloadlink_value text-right" >' . $downloadLink . '</td>';
+				}
 				print '</tr>';
 
 			}
 			print '</tbody>';
 
 			print '</table>';
-			$jsonUrl = $context->getRootUrl().'script/interface.php?action=getprojetList';
 			?>
 			<script type="text/javascript" >
 				$(document).ready(function(){
-					$("#invoice-list").DataTable({
+					//$("#expedition-list").DataTable(<?php //echo json_encode($dataTableConf) ?>//);
+					$("#expedition-list").DataTable({
 						"language": {
 							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
 						},
+						"order": [[<?php echo ($total_more_fields + 2); ?>, 'desc']],
 
 						responsive: true,
+
 						columnDefs: [{
 							orderable: false,
 							"aTargets": [-1]
-						},{
+						}, {
 							"bSearchable": false,
 							"aTargets": [-1, -2]
 						}]
+
 					});
 				});
 			</script>
