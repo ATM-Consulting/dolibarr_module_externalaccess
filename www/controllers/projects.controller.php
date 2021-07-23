@@ -55,7 +55,7 @@ class ProjectsController extends Controller
 		$hookRes = $this->hookPrintPageView();
 		if (empty($hookRes)){
 			print '<section id="section-project"><div class="container">';
-			$this->printProjectTable($user->socid);
+			$this->printProjectTable($user->socid, $user->contact_id);
 			print '</div></section>';
 		}
 
@@ -64,9 +64,10 @@ class ProjectsController extends Controller
 
 	/**
 	 * @param int $socId socid
+	 * @param int $contactId contactId
 	 * @return void
 	 */
-	public function printProjectTable($socId = 0)
+	public function printProjectTable($socId = 0, $contactId = 0)
 	{
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
@@ -88,6 +89,10 @@ class ProjectsController extends Controller
 		$sql .= $hookmanager->resPrint;
 
 		$sql.= ' FROM '.MAIN_DB_PREFIX.'projet as p';
+		$sql.= ' INNER JOIN '.MAIN_DB_PREFIX.'element_contact as ct ON ct.element_id=p.rowid';
+		$sql.= ' INNER JOIN '.MAIN_DB_PREFIX.'c_type_contact as cct ON cct.rowid=ct.fk_c_type_contact';
+		$sql.= '  AND  cct.element=\'project\' AND cct.source=\'external\'';
+		$sql.= '  AND  ct.fk_socpeople='.(int) $contactId;
 
 		// Add From from hooks
 		$parameters = array();
@@ -173,15 +178,17 @@ class ProjectsController extends Controller
 				print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
 			}
 			if (!empty($TFieldsCols['p.title']['status'])) {
-				print ' <th class="p_title_title text-center" >' . $langs->trans('Project').' '.$langs->trans('Title') . '</th>';
+				print ' <th class="p_title_title text-center" >' . $langs->trans('Label') . '</th>';
 			}
 
 			if (!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
 					//if ($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
-					if (property_exists('Project', $field) || strstr($field, 'linked'))
+					if (property_exists('Project', $field))
 					{
-						print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
+						$project = new Project($db);
+						$label = $project->fields[$field]['label'];
+						print ' <th class="'.$field.'_title text-center" >'.$langs->trans($label).'</th>';
 					}
 				}
 			}
@@ -211,23 +218,24 @@ class ProjectsController extends Controller
 				if (!empty($TFieldsCols['p.ref']['status'])) {
 					print ' <td class="p_ref_value text-center" data-search="' . $project->ref . '" data-order="' . $project->ref . '"  >' . $project->ref . '</td>';
 				}
+				if (!empty($TFieldsCols['p.title']['status'])) {
+					print ' <td class="p_title_value text-center" data-search="' . dol_string_nospecial($project->title) . '" data-order="' . dol_string_nospecial($project->title) . '"  >' . $project->title . '</td>';
+				}
 
 				$total_more_fields = 0;
 				if (!empty($TOther_fields)) {
 					foreach ($TOther_fields as $field) {
-						if (property_exists('Projet', $field)) {
+						if (property_exists('Project', $field)) {
 							$total_more_fields+=1;
 							if ($field =='budget_amount') {
-								print ' <td class="'.$field.'_value" data-search="' . strip_tags($field) . '" data-order="' . strip_tags($field) . '" >' . price($project->{$field}) . '</td>';
+								print ' <td class="'.$field.'_value text-center" data-search="' . strip_tags($field) . '" data-order="' . strip_tags($field) . '" >' . price($project->budget_amount, 0, $langs, 1, 0, 0, $conf->currency) . '</td>';
 							} else {
-								print ' <td class="'.$field.'_value" data-search="' . strip_tags($project->{$field}) . '" data-order="' . strip_tags($project->{$field}) . '" >' . $project->{$field} . '</td>';
+								print ' <td class="'.$field.'_value text-center" data-search="' . strip_tags($project->{$field}) . '" data-order="' . strip_tags($project->{$field}) . '" >' . $project->{$field} . '</td>';
 							}
 						}
 					}
 				}
-				if (!empty($TFieldsCols['p.title']['status'])) {
-					print ' <td class="p_title_value text-center" data-search="' . dol_string_nospecial($project->title) . '" data-order="' . dol_string_nospecial($project->title) . '"  >' . $project->title . '</td>';
-				}
+
 				if (!empty($TFieldsCols['p.dateo']['status'])) {
 					print ' <td class="p_dateo_value text-center" data-search="' . dol_print_date($project->date_start) . '" data-order="' . $project->date_start . '"  >' . dol_print_date($project->date_start) . '</td>';
 				}

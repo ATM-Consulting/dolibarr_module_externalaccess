@@ -159,8 +159,7 @@ class TasksController extends Controller
 				$TFieldsCols = $hookmanager->resArray;
 			}
 
-
-			$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			/*$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 			if (empty($TOther_fields_all))
 				$TOther_fields_all = array();
 
@@ -168,7 +167,9 @@ class TasksController extends Controller
 			if (empty($TOther_fields_project))
 				$TOther_fields_project = array();
 
-			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_project);
+			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_project);*/
+
+			$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 
 			print '<table id="projettask-list" class="table table-striped" >';
 
@@ -252,14 +253,14 @@ class TasksController extends Controller
 					}
 				}
 				if (!empty($TFieldsCols['p.title']['status'])) {
-					print ' <td class="p_title_value" data-search="' . dol_string_nospecial($project->title) . '" data-order="' . dol_string_nospecial($project->title) . '"  >' . $project->title . '</td>';
+					print ' <td class="p_title_valuetext-center " data-search="' . dol_string_nospecial($project->title) . '" data-order="' . dol_string_nospecial($project->title) . '"  >' . $project->title . '</td>';
 				}
-				if (!empty($TFieldsCols['p.dateo']['status'])) {
-					print ' <td class="p_dateo_value" data-search="' . dol_print_date($project->date_start) . '" data-order="' . $project->date_start . '"  >' . dol_print_date($project->date_start) . '</td>';
+				/*if (!empty($TFieldsCols['p.dateo']['status'])) {
+					print ' <td class="p_dateo_value text-center" data-search="' . dol_print_date($project->date_start) . '" data-order="' . $project->date_start . '"  >' . dol_print_date($project->date_start) . '</td>';
 				}
 				if (!empty($TFieldsCols['p.datee']['status'])) {
-					print ' <td class="p_datee_value" data-search="' . dol_print_date($project->date_end) . '" data-order="' . $project->date_end . '"  >' . dol_print_date($project->date_end) . '</td>';
-				}
+					print ' <td class="p_datee_value text-center" data-search="' . dol_print_date($project->date_end) . '" data-order="' . $project->date_end . '"  >' . dol_print_date($project->date_end) . '</td>';
+				}*/
 				if (!empty($TFieldsCols['t.ref']['status'])) {
 					print ' <td class="t_ref_value text-center" data-search="' . $task->ref . '" data-order="' . $task->ref . '"  >' . $task->ref . '</td>';
 				}
@@ -267,24 +268,24 @@ class TasksController extends Controller
 					print ' <td class="t_label_value text-center" data-search="' . $task->label . '" data-order="' . $task->label . '"  >' . $task->label . '</td>';
 				}
 				if (!empty($TFieldsCols['t.dateo']['status'])) {
-					print ' <td class="t_dateo_value" data-search="' . dol_print_date($task->date_start) . '" data-order="' . $task->date_start . '"  >' . dol_print_date($task->date_start) . '</td>';
+					print ' <td class="t_dateo_value text-center" data-search="' . dol_print_date($task->date_start) . '" data-order="' . $task->date_start . '"  >' . dol_print_date($task->date_start) . '</td>';
 				}
 				if (!empty($TFieldsCols['t.datee']['status'])) {
-					print ' <td class="t_datee_value" data-search="' . dol_print_date($task->date_end) . '" data-order="' . $task->date_end . '"  >' . dol_print_date($task->date_end) . '</td>';
+					print ' <td class="t_datee_value text-center" data-search="' . dol_print_date($task->date_end) . '" data-order="' . $task->date_end . '"  >' . dol_print_date($task->date_end) . '</td>';
 				}
 				if (!empty($TFieldsCols['t.duration_effective']['status'])) {
 					$duration_effective = '';
 					if (!empty($task->duration_effective != '')) {
 						$duration_effective = convertSecondToTime($task->duration_effective, 'allhourmin');
 					}
-					print ' <td class="t_duration_effective_value" data-search="' . $duration_effective . '" data-order="' . $duration_effective . '"  >' . $duration_effective . '</td>';
+					print ' <td class="t_duration_effective_value text-center" data-search="' . $duration_effective . '" data-order="' . $duration_effective . '"  >' . $duration_effective . '</td>';
 				}
 				if (!empty($TFieldsCols['t.planned_workload']['status'])) {
 					$planned_workload = '';
 					if (!empty($task->planned_workload != '')) {
 						$planned_workload = convertSecondToTime($task->planned_workload, 'allhourmin');
 					}
-					print ' <td class="t_planned_workload_value" data-search="' . $planned_workload . '" data-order="' . $planned_workload . '"  >' . $planned_workload . '</td>';
+					print ' <td class="t_planned_workload_value text-center" data-search="' . $planned_workload . '" data-order="' . $planned_workload . '"  >' . $planned_workload . '</td>';
 				}
 				print '</tr>';
 			}
