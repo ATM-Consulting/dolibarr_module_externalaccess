@@ -55,7 +55,7 @@ class TasksController extends Controller
 		$hookRes = $this->hookPrintPageView();
 		if (empty($hookRes)){
 			print '<section id="section-task"><div class="container">';
-			$this->printProjectTaskTable($user->socid);
+			$this->printProjectTaskTable($user->socid, $user->contact_id);
 			print '</div></section>';
 		}
 
@@ -64,9 +64,10 @@ class TasksController extends Controller
 
 	/**
 	 * @param int $socId socid
+	 * @param int $contactId contactId
 	 * @return void
 	 */
-	public function printProjectTaskTable($socId = 0)
+	public function printProjectTaskTable($socId = 0, $contactId = 0)
 	{
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
@@ -89,6 +90,10 @@ class TasksController extends Controller
 
 		$sql.= ' FROM '.MAIN_DB_PREFIX.'projet as p';
 		$sql.= ' INNER JOIN '.MAIN_DB_PREFIX.'projet_task as t ON p.rowid=t.fk_projet';
+		$sql.= ' INNER JOIN '.MAIN_DB_PREFIX.'element_contact as ct ON ct.element_id=p.rowid';
+		$sql.= ' INNER JOIN '.MAIN_DB_PREFIX.'c_type_contact as cct ON cct.rowid=ct.fk_c_type_contact';
+		$sql.= '  AND  cct.element=\'project\' AND cct.source=\'external\'';
+		$sql.= '  AND  ct.fk_socpeople='.(int) $contactId;
 
 		// Add From from hooks
 		$parameters = array();
