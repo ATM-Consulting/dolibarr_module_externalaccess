@@ -17,6 +17,7 @@ external_access_expeditions= Consulter ses expéditions
 external_access_tickets= Consulter ses tickets
 external_access_userinfos_edit= Modifier ses informations personnelles
 external_access_projets = Consulter ses projets
+external_access_tasks = Consulter les tâches de ses projets
 external_access_supplier_invoices= Consulter ses factures fournisseurs
 
 # MENU
@@ -90,6 +91,10 @@ ViewProjects = Projets
 ViewProjectsDesc = Retrouvez facilement vos projets
 EALINKNAME_projects = Projets
 
+ViewTasks = Tâches
+ViewTasksDesc = Retrouvez facilement vos tâches
+EALINKNAME_tasks = Tâches
+
 ViewSupplierInvoices = Factures fournisseurs
 ViewSupplierInvoicesDesc = Retrouvez facilement vos factures fournisseurs
 EALINKNAME_supplier_invoices = Factures fournisseurs
@@ -128,6 +133,7 @@ EACCESS_RGPD_MSG_default=Vous pouvez demander la rectification des informations 
 EACCESS_ACTIVATE_EXPEDITIONS= Expéditions
 EACCESS_ACTIVATE_TICKETS = Tickets
 EACCESS_ACTIVATE_PROJECTS = Projets
+EACCESS_ACTIVATE_TASKS = Tâches
 EACCESS_ACTIVATE_SUPPLIER_INVOICES= Factures fournisseurs
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les informations du commercial du tiers associé à l'utilisateur
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP=Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie

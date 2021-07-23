@@ -1,13 +1,13 @@
 <?php
 
 /**
- * Class ProjectsController
+ * Class TasksController
  */
-class ProjectsController extends Controller
+class TasksController extends Controller
 {
 
 	/**
-	 * ProjectsController constructor.
+	 * TasksController constructor.
 	 */
 	public function __construct()
 	{
@@ -30,9 +30,9 @@ class ProjectsController extends Controller
 		$context = Context::getInstance();
 		if (!$context->controllerInstance->checkAccess()) { return; }
 
-		$context->title = $langs->trans('ViewProjects');
-		$context->desc = $langs->trans('ViewProjectsDesc');
-		$context->menu_active[] = 'projects';
+		$context->title = $langs->trans('ViewTasks');
+		$context->desc = $langs->trans('ViewTasksDesc');
+		$context->menu_active[] = 'tasks';
 
 		$hookRes = $this->hookDoAction();
 		if (empty($hookRes)){
@@ -54,8 +54,8 @@ class ProjectsController extends Controller
 
 		$hookRes = $this->hookPrintPageView();
 		if (empty($hookRes)){
-			print '<section id="section-project"><div class="container">';
-			$this->printProjectTable($user->socid);
+			print '<section id="section-task"><div class="container">';
+			$this->printProjectTaskTable($user->socid);
 			print '</div></section>';
 		}
 
@@ -66,7 +66,7 @@ class ProjectsController extends Controller
 	 * @param int $socId socid
 	 * @return void
 	 */
-	public function printProjectTable($socId = 0)
+	public function printProjectTaskTable($socId = 0)
 	{
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
@@ -80,7 +80,7 @@ class ProjectsController extends Controller
 		$langs->load('projects', 'main');
 
 
-		$sql = 'SELECT p.rowid as p_rowid ';
+		$sql = 'SELECT p.rowid as p_rowid, t.rowid as t_rowid ';
 
 		// Add fields from hooks
 		$parameters = array();
@@ -88,6 +88,7 @@ class ProjectsController extends Controller
 		$sql .= $hookmanager->resPrint;
 
 		$sql.= ' FROM '.MAIN_DB_PREFIX.'projet as p';
+		$sql.= ' INNER JOIN '.MAIN_DB_PREFIX.'projet_task as t ON p.rowid=t.fk_projet';
 
 		// Add From from hooks
 		$parameters = array();
@@ -95,7 +96,7 @@ class ProjectsController extends Controller
 		$sql .= $hookmanager->resPrint;
 
 		$sql.= ' WHERE p.fk_soc = '. intval($socId);
-		$sql.= ' AND p.fk_statut > 0';
+		$sql.= ' AND p.fk_statut = '.Project::STATUS_VALIDATED;
 		$sql.= ' AND p.entity IN ('.getEntity("project").')';//Compatibility with Multicompany
 
 		// Add where from hooks
@@ -103,7 +104,7 @@ class ProjectsController extends Controller
 		$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
 		$sql .= $hookmanager->resPrint;
 
-		$sql.= ' ORDER BY p.ref DESC';
+		$sql.= ' ORDER BY p.ref,t.rang DESC';
 
 		$tableItems = $context->dbTool->executeS($sql);
 
@@ -131,9 +132,15 @@ class ProjectsController extends Controller
 			$TFieldsCols = array(
 				'p.ref' => array('status' => true),
 				'p.title' => array('status' => true),
-				'p.dateo' => array('status' => true),
-				'p.datee' => array('status' => true),
+				/*'p.dateo' => array('status' => true),
+				'p.datee' => array('status' => true),*/
 				'p.fk_statut' => array('status' => true),
+				't.ref' => array('status' => true),
+				't.label' => array('status' => true),
+				't.dateo' => array('status' => true),
+				't.datee' => array('status' => true),
+				't.duration_effective' => array('status' => true),
+				't.planned_workload' => array('status' => true),
 				//'downloadlink' => array('status' => true),
 			);
 
@@ -186,13 +193,28 @@ class ProjectsController extends Controller
 				}
 			}
 			if (!empty($TFieldsCols['p.dateo']['status'])) {
-				print ' <th class="p_dated_title text-center" >' . $langs->trans('DateStart') . '</th>';
+				print ' <th class="p_dated_title text-center" >' . $langs->trans('Project').' '.$langs->trans('DateStart') . '</th>';
 			}
 			if (!empty($TFieldsCols['p.datee']['status'])) {
-				print ' <th class="p_datee_title text-center" >' . $langs->trans('DateEnd') . '</th>';
+				print ' <th class="p_datee_title text-center" >' . $langs->trans('Project').' '.$langs->trans('DateEnd') . '</th>';
 			}
-			if (!empty($TFieldsCols['p.fk_statut']['status'])) {
-				print ' <th class="p_statut_title text-center" >' . $langs->trans('Status') . '</th>';
+			if (!empty($TFieldsCols['t.ref']['status'])) {
+				print ' <th class="t_ref_title text-center" >' . $langs->trans('Task').' '.$langs->trans('Ref') . '</th>';
+			}
+			if (!empty($TFieldsCols['t.label']['status'])) {
+				print ' <th class="t_label_title text-center" >' . $langs->trans('Task').' '.$langs->trans('Label') . '</th>';
+			}
+			if (!empty($TFieldsCols['t.dateo']['status'])) {
+				print ' <th class="t_dateo_title text-center" >' . $langs->trans('Task').' '.$langs->trans('DateStart') . '</th>';
+			}
+			if (!empty($TFieldsCols['t.datee']['status'])) {
+				print ' <th class="t_datee_title text-center" >' . $langs->trans('Task').' '.$langs->trans('DateEnd') . '</th>';
+			}
+			if (!empty($TFieldsCols['t.duration_effective']['status'])) {
+				print ' <th class="t_duration_effective_title text-center" >' . $langs->trans('Task').' '.$langs->trans('ProgressCalculated') . '</th>';
+			}
+			if (!empty($TFieldsCols['t.planned_workload']['status'])) {
+				print ' <th class="t_planned_workload_title text-center" >' . $langs->trans('Task').' '.$langs->trans('PlannedWorkload') . '</th>';
 			}
 
 			print '</tr>';
@@ -206,10 +228,14 @@ class ProjectsController extends Controller
 				$project->fetch($item->p_rowid);
 				$project->fetchObjectLinked();
 
+				$task = new Task($db);
+				$task->fetch($item->t_rowid);
+				$task->fetchObjectLinked();
+
 				print '<tr>';
 
 				if (!empty($TFieldsCols['p.ref']['status'])) {
-					print ' <td class="p_ref_value text-center" data-search="' . $project->ref . '" data-order="' . $project->ref . '"  >' . $project->ref . '</td>';
+					print ' <td class="p_ref_value" data-search="' . $project->ref . '" data-order="' . $project->ref . '"  >' . $project->ref . '</td>';
 				}
 
 				$total_more_fields = 0;
@@ -226,16 +252,39 @@ class ProjectsController extends Controller
 					}
 				}
 				if (!empty($TFieldsCols['p.title']['status'])) {
-					print ' <td class="p_title_value text-center" data-search="' . dol_string_nospecial($project->title) . '" data-order="' . dol_string_nospecial($project->title) . '"  >' . $project->title . '</td>';
+					print ' <td class="p_title_value" data-search="' . dol_string_nospecial($project->title) . '" data-order="' . dol_string_nospecial($project->title) . '"  >' . $project->title . '</td>';
 				}
 				if (!empty($TFieldsCols['p.dateo']['status'])) {
-					print ' <td class="p_dateo_value text-center" data-search="' . dol_print_date($project->date_start) . '" data-order="' . $project->date_start . '"  >' . dol_print_date($project->date_start) . '</td>';
+					print ' <td class="p_dateo_value" data-search="' . dol_print_date($project->date_start) . '" data-order="' . $project->date_start . '"  >' . dol_print_date($project->date_start) . '</td>';
 				}
 				if (!empty($TFieldsCols['p.datee']['status'])) {
-					print ' <td class="p_datee_value text-center" data-search="' . dol_print_date($project->date_end) . '" data-order="' . $project->date_end . '"  >' . dol_print_date($project->date_end) . '</td>';
+					print ' <td class="p_datee_value" data-search="' . dol_print_date($project->date_end) . '" data-order="' . $project->date_end . '"  >' . dol_print_date($project->date_end) . '</td>';
 				}
-				if (!empty($TFieldsCols['p.fk_statut']['status'])) {
-					print ' <td class="p_statut_value text-center" data-search="' . dol_string_nospecial($project->getLibStatut($project->status, 1)) . '" data-order="' . dol_string_nospecial($project->getLibStatut($project->status, 1)) . '"  >' . $project->getLibStatut(2) . '</td>';
+				if (!empty($TFieldsCols['t.ref']['status'])) {
+					print ' <td class="t_ref_value text-center" data-search="' . $task->ref . '" data-order="' . $task->ref . '"  >' . $task->ref . '</td>';
+				}
+				if (!empty($TFieldsCols['t.label']['status'])) {
+					print ' <td class="t_label_value text-center" data-search="' . $task->label . '" data-order="' . $task->label . '"  >' . $task->label . '</td>';
+				}
+				if (!empty($TFieldsCols['t.dateo']['status'])) {
+					print ' <td class="t_dateo_value" data-search="' . dol_print_date($task->date_start) . '" data-order="' . $task->date_start . '"  >' . dol_print_date($task->date_start) . '</td>';
+				}
+				if (!empty($TFieldsCols['t.datee']['status'])) {
+					print ' <td class="t_datee_value" data-search="' . dol_print_date($task->date_end) . '" data-order="' . $task->date_end . '"  >' . dol_print_date($task->date_end) . '</td>';
+				}
+				if (!empty($TFieldsCols['t.duration_effective']['status'])) {
+					$duration_effective = '';
+					if (!empty($task->duration_effective != '')) {
+						$duration_effective = convertSecondToTime($task->duration_effective, 'allhourmin');
+					}
+					print ' <td class="t_duration_effective_value" data-search="' . $duration_effective . '" data-order="' . $duration_effective . '"  >' . $duration_effective . '</td>';
+				}
+				if (!empty($TFieldsCols['t.planned_workload']['status'])) {
+					$planned_workload = '';
+					if (!empty($task->planned_workload != '')) {
+						$planned_workload = convertSecondToTime($task->planned_workload, 'allhourmin');
+					}
+					print ' <td class="t_planned_workload_value" data-search="' . $planned_workload . '" data-order="' . $planned_workload . '"  >' . $planned_workload . '</td>';
 				}
 				print '</tr>';
 			}
@@ -246,7 +295,7 @@ class ProjectsController extends Controller
 			<script type="text/javascript" >
 				$(document).ready(function(){
 					//$("#expedition-list").DataTable(<?php //echo json_encode($dataTableConf) ?>//);
-					$("#projet-list").DataTable({
+					$("#projettask-list").DataTable({
 						"language": {
 							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
 						},
