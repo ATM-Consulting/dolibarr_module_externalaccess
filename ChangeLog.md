@@ -4,6 +4,11 @@ ___
 
 ## Unreleased
 
+
+- NEW : Add Task controller and view - *26/07/2021* - 1.19.0  
+  - Update project controller to make it like expedition display only project where user logged is contact of the projet
+  - Apply PHP CS Dolibarr ruleset compliant (dolibarr branch version 13.0)
+
 # RELEASE 1.18 - 2021-07-07
 
 - FIX : Retrocompatibility function needs to be loaded after dolibarr lib - *08/07/2021* - 1.18.1
