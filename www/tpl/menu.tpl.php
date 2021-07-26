@@ -13,9 +13,9 @@ $Tmenu=$TGroupMenu=array();
 
 $maxTopMenu = !empty($conf->global->EACCESS_MAX_TOP_MENU)?$conf->global->EACCESS_MAX_TOP_MENU:0;
 
-if($context->userIsLog())
+if ($context->userIsLog())
 {
-    if($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
+    if ($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
     {
         $Tmenu['projects'] = array(
             'id' => 'projects',
@@ -26,7 +26,18 @@ if($context->userIsLog())
         );
     }
 
-    if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+	if ($conf->global->EACCESS_ACTIVATE_TASKS && !empty($user->rights->externalaccess->view_tasks))
+	{
+		$Tmenu['tasks'] = array(
+			'id' => 'tasks',
+			'rank' => 15,
+			'url' => $context->getRootUrl('tasks'),
+			'name' => $langs->trans('EALINKNAME_tasks'),
+			'group' => 'technical' // group identifier for the group if necessary
+		);
+	}
+
+    if ($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
     {
         $Tmenu['propals'] = array(
             'id' => 'propals',
@@ -37,7 +48,7 @@ if($context->userIsLog())
         );
     }
 
-	if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	if ($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
 	{
 		$Tmenu['orders'] = array(
 			'id' => 'orders',
@@ -48,7 +59,7 @@ if($context->userIsLog())
 		);
 	}
 
-	if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
+	if ($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
 	{
 		$Tmenu['expeditions'] = array(
 			'id' => 'expeditions',
@@ -59,7 +70,7 @@ if($context->userIsLog())
 		);
 	}
 
-    if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+    if ($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
     {
         $Tmenu['invoices'] = array(
             'id' => 'invoices',
@@ -70,7 +81,7 @@ if($context->userIsLog())
         );
     }
 
-	if($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
+	if ($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
 	{
 		$Tmenu['supplier_invoices'] = array(
 			'id' => 'supplier_invoices',
@@ -81,7 +92,7 @@ if($context->userIsLog())
 		);
 	}
 
-    if(!empty($conf->ticket->enabled) && $conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+    if (!empty($conf->ticket->enabled) && $conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
     {
         $Tmenu['tickets'] = array(
             'id' => 'tickets',
@@ -114,11 +125,10 @@ if($context->userIsLog())
         'url' => $context->getRootUrl().'logout.php',
         'name' => '<i class="fa fa-sign-out"></i> '.$langs->trans('Logout'),
     );
-
 }
 
 
-if(!empty($conf->global->EACCESS_GOBACK_URL)){
+if (!empty($conf->global->EACCESS_GOBACK_URL)){
     $Tmenu['gobackurl'] = array(
         'id' => 'gobackurl',
         'rank' => 90,
@@ -152,32 +162,30 @@ $parameters=array(
     'TGroupMenu' =>& $TGroupMenu,
 	'maxTopMenu' =>& $maxTopMenu
 );
-$reshook=$hookmanager->executeHooks('PrintTopMenu',$parameters,$context, $context->action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+$reshook=$hookmanager->executeHooks('PrintTopMenu', $parameters, $context, $context->action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 
-if(empty($reshook)){
-    if(!empty($hookmanager->resArray)){
-        $Tmenu = array_replace($Tmenu,$hookmanager->resArray);
+if (empty($reshook)){
+    if (!empty($hookmanager->resArray)){
+        $Tmenu = array_replace($Tmenu, $hookmanager->resArray);
     }
 
-    if(!empty($Tmenu)){
-
+    if (!empty($Tmenu)){
 		// Sorting
-		uasort ( $Tmenu,'menuSortInv');
+		uasort($Tmenu, 'menuSortInv');
 
-		if(!empty($maxTopMenu) && $maxTopMenu < count($Tmenu)){
-
+		if (!empty($maxTopMenu) && $maxTopMenu < count($Tmenu)){
 			// AFFECT MENU ITEMS TO GROUPS
 			foreach ($Tmenu as $menuId => $menuItem){
 				// affectation des items de menu au groupement
-				if(!empty($menuItem['group']) && !empty($TGroupMenu[$menuItem['group']])){
+				if (!empty($menuItem['group']) && !empty($TGroupMenu[$menuItem['group']])){
 					$goupId = $menuItem['group'];
 
 					// Affectation de l'item au groupe
 					$TGroupMenu[$goupId]['children'][$menuId] = $menuItem;
 
 					// Application du rang
-					if(!empty($TGroupMenu[$goupId]['rank']) && $TGroupMenu[$goupId]['rank']>0){
+					if (!empty($TGroupMenu[$goupId]['rank']) && $TGroupMenu[$goupId]['rank']>0){
 						// le rang mini des items du groupe défini le rang du groupe
 						$TGroupMenu[$goupId]['rank'] = min(abs($TGroupMenu[$goupId]['rank']), abs($menuItem['rank']));
 					}
@@ -187,20 +195,19 @@ if(empty($reshook)){
 			// INSERTION DES GROUPES DANS LE MENU
 			foreach ($TGroupMenu as $groupId => $groupItem){
 				// If group have more than 1 item, group is valid
-				if(!empty($groupItem['children']) && count($groupItem['children']) > 1){
-
+				if (!empty($groupItem['children']) && count($groupItem['children']) > 1){
 					// ajout du group au menu
 					$Tmenu[$groupId] = $groupItem;
 
 					// suppression des items enfant du group du menu
 					foreach ($groupItem['children'] as $menuId => $menuItem){
-						if(isset($Tmenu[$menuId])){ unset($Tmenu[$menuId]); }
+						if (isset($Tmenu[$menuId])){ unset($Tmenu[$menuId]); }
 					}
 				}
 			}
 
 			// final sorting
-			uasort ( $Tmenu,'menuSortInv');
+			uasort($Tmenu, 'menuSortInv');
 		}
 
 		?>
@@ -210,11 +217,11 @@ if(empty($reshook)){
         <a class="navbar-brand js-scroll-trigger" href="<?php print $context->getRootUrl();  ?>">
 			<?php
 			$brandTitle = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
-			if(!empty($conf->global->EACCESS_TOP_MENU_IMG)){
+			if (!empty($conf->global->EACCESS_TOP_MENU_IMG)){
 				print '<img class="logo" id="logo" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . $conf->global->EACCESS_TOP_MENU_IMG . '" />';
 				print '<img class="logo" id="logoshrink" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . (!empty($conf->global->EACCESS_TOP_MENU_IMG_SHRINK)?$conf->global->EACCESS_TOP_MENU_IMG_SHRINK:$conf->global->EACCESS_TOP_MENU_IMG) . '" />';
 			}
-			else{
+			else {
 				print $brandTitle;
 			}
 			?>
@@ -232,6 +239,6 @@ if(empty($reshook)){
       </div>
     </nav>
 
-<?php
+		<?php
     }
 }

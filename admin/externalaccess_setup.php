@@ -23,9 +23,9 @@
  * 				Put some comments here
  */
 // Dolibarr environment
-$res = @include("../../main.inc.php"); // From htdocs directory
+$res = @include "../../main.inc.php"; // From htdocs directory
 if (! $res) {
-    $res = @include("../../../main.inc.php"); // From "custom" directory
+    $res = @include "../../../main.inc.php"; // From "custom" directory
 }
 
 // Libraries
@@ -50,23 +50,22 @@ $hookmanager->initHooks(array('externalaccesssetup'));
 /*
  * Actions
  */
-if (preg_match('/set_(.*)/',$action,$reg))
+if (preg_match('/set_(.*)/', $action, $reg))
 {
 	$code=$reg[1];
 	$val = GETPOST($code,  'none');
-	if(is_array($val)) $val = serialize($val);
+	if (is_array($val)) $val = serialize($val);
 	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
 	{
 		header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
 	}
-	else
-	{
+	else {
 		dol_print_error($db);
 	}
 }
 
-if (preg_match('/del_(.*)/',$action,$reg))
+if (preg_match('/del_(.*)/', $action, $reg))
 {
 	$code=$reg[1];
 	if (dolibarr_del_const($db, $code, 0) > 0)
@@ -74,8 +73,7 @@ if (preg_match('/del_(.*)/',$action,$reg))
 		Header("Location: ".$_SERVER["PHP_SELF"]);
 		exit;
 	}
-	else
-	{
+	else {
 		dol_print_error($db);
 	}
 }
@@ -101,7 +99,7 @@ dol_fiche_head(
     "externalaccess@externalaccess"
 );
 
-if(!dol_include_once('/abricot/inc.core.php')) {
+if (!dol_include_once('/abricot/inc.core.php')) {
     print '<div class="error" >'. $langs->trans('AbricotNotFound'). ' <a href="http://wiki.atm-consulting.fr/index.php/Nos_modules_Dolibarr#Abricot" target="_blank">'. $langs->trans('AbricotWiki'). '</a></div>';
 }
 
@@ -118,32 +116,32 @@ print "</tr>";
 dol_include_once('externalaccess/www/class/context.class.php');
 $context = Context::getInstance();
 $link = '<a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a>';
-_print_input_form_part('EACCESS_ROOT_URL',false,$link, array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_ROOT_URL_HELP');
-_print_input_form_part('EACCESS_TITLE',false,'',array('size'=> 50),'input','EACCESS_TITLE_HELP');
-_print_input_form_part('EACCESS_GOBACK_URL',false,'',array('size'=> 50),'input','EACCESS_GOBACK_URL_HELP');
+print_input_form_part('EACCESS_ROOT_URL', false, $link, array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_ROOT_URL_HELP');
+print_input_form_part('EACCESS_TITLE', false, '', array('size'=> 50), 'input', 'EACCESS_TITLE_HELP');
+print_input_form_part('EACCESS_GOBACK_URL', false, '', array('size'=> 50), 'input', 'EACCESS_GOBACK_URL_HELP');
 
-_print_title('ConfLinkedToContactInfos');
-_print_input_form_part('EACCESS_PHONE');
-_print_input_form_part('EACCESS_EMAIL',false,'',array('size'=> 20),'input','EACCESS_EMAIL_HELP');
-_print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
+print_title('ConfLinkedToContactInfos');
+print_input_form_part('EACCESS_PHONE');
+print_input_form_part('EACCESS_EMAIL', false, '', array('size'=> 20), 'input', 'EACCESS_EMAIL_HELP');
+print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
 
 /*
  * DESIGN
  */
-_print_title('ConfLinkedToDesign');
-_print_input_form_part('EACCESS_MAX_TOP_MENU', false, '', array('type'=>'number', 'min' => 0, 'step' => 1));
-_print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'),'input','EACCESS_PRIMARY_COLOR_HELP');
-_print_on_off('EACCESS_NO_FULL_HEADBAR_FOR_HOME');
-_print_input_form_part('EACCESS_HEADER_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_HEADER_IMG_HELP');
-_print_input_form_part('EACCESS_LOGIN_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_LOGIN_IMG_HELP');
-_print_input_form_part('EACCESS_TOP_MENU_IMG',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_HELP');
-_print_input_form_part('EACCESS_TOP_MENU_IMG_SHRINK',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_TOP_MENU_IMG_SHRINK_HELP');
-_print_input_form_part('EACCESS_MANIFEST_ICON',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_MANIFEST_ICON_HELP');
-_print_input_form_part('EACCESS_FAVICON_URL',false,'', array('size'=> 50, 'placeholder'=>'http://'),'input','EACCESS_FAVICON_URL_HELP');
+print_title('ConfLinkedToDesign');
+print_input_form_part('EACCESS_MAX_TOP_MENU', false, '', array('type'=>'number', 'min' => 0, 'step' => 1));
+print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'), 'input', 'EACCESS_PRIMARY_COLOR_HELP');
+print_on_off('EACCESS_NO_FULL_HEADBAR_FOR_HOME');
+print_input_form_part('EACCESS_HEADER_IMG', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_HEADER_IMG_HELP');
+print_input_form_part('EACCESS_LOGIN_IMG', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_LOGIN_IMG_HELP');
+print_input_form_part('EACCESS_TOP_MENU_IMG', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_TOP_MENU_IMG_HELP');
+print_input_form_part('EACCESS_TOP_MENU_IMG_SHRINK', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_TOP_MENU_IMG_SHRINK_HELP');
+print_input_form_part('EACCESS_MANIFEST_ICON', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_MANIFEST_ICON_HELP');
+print_input_form_part('EACCESS_FAVICON_URL', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_FAVICON_URL_HELP');
 
 $parameters = array();
-$reshook=$hookmanager->executeHooks('formDesignOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+$reshook=$hookmanager->executeHooks('formDesignOptions', $parameters, $object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 print $hookmanager->resPrint;
 
 
@@ -151,34 +149,36 @@ print $hookmanager->resPrint;
  * ACTIVATE MODULES
  */
 
-_print_title('EACCESS_ACTIVATE_MODULES');
-_print_on_off('EACCESS_ACTIVATE_INVOICES',false, 'EACCESS_need_some_rights');
-_print_on_off('EACCESS_ACTIVATE_PROPALS',false, 'EACCESS_need_some_rights');
-_print_on_off('EACCESS_ACTIVATE_ORDERS',false, 'EACCESS_need_some_rights');
-_print_on_off('EACCESS_ACTIVATE_EXPEDITIONS',false, 'EACCESS_need_some_rights');
-_print_on_off('EACCESS_ACTIVATE_TICKETS',false, 'EACCESS_need_some_rights');
-_print_on_off('EACCESS_ACTIVATE_PROJECTS',false, 'EACCESS_need_some_rights');
-_print_on_off('EACCESS_ACTIVATE_SUPPLIER_INVOICES',false, 'EACCESS_need_some_rights');
+print_title('EACCESS_ACTIVATE_MODULES');
+print_on_off('EACCESS_ACTIVATE_INVOICES', false, 'EACCESS_need_some_rights');
+print_on_off('EACCESS_ACTIVATE_PROPALS', false, 'EACCESS_need_some_rights');
+print_on_off('EACCESS_ACTIVATE_ORDERS', false, 'EACCESS_need_some_rights');
+print_on_off('EACCESS_ACTIVATE_EXPEDITIONS', false, 'EACCESS_need_some_rights');
+print_on_off('EACCESS_ACTIVATE_TICKETS', false, 'EACCESS_need_some_rights');
+print_on_off('EACCESS_ACTIVATE_PROJECTS', false, 'EACCESS_need_some_rights');
+print_on_off('EACCESS_ACTIVATE_TASKS', false, 'EACCESS_need_some_rights');
+print_on_off('EACCESS_ACTIVATE_SUPPLIER_INVOICES', false, 'EACCESS_need_some_rights');
 //_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
 $parameters = array();
-$reshook=$hookmanager->executeHooks('formActivateModuleOptions',$parameters,$object, $action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+$reshook=$hookmanager->executeHooks('formActivateModuleOptions', $parameters, $object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 print $hookmanager->resPrint;
 
 
-_print_title('ConfLinkedToContents');
-_print_input_form_part('EACCESS_LOGIN_EXTRA_HTML',false,'',array(),'textarea');
-if(empty($conf->global->EACCESS_RGPD_MSG)){
-    dolibarr_set_const($db,'EACCESS_RGPD_MSG',$langs->trans('EACCESS_RGPD_MSG_default',$conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity) ;
+print_title('ConfLinkedToContents');
+print_input_form_part('EACCESS_LOGIN_EXTRA_HTML', false, '', array(), 'textarea');
+if (empty($conf->global->EACCESS_RGPD_MSG)){
+    dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
 }
-_print_input_form_part('EACCESS_RGPD_MSG',false,'',array(),'textarea');
+print_input_form_part('EACCESS_RGPD_MSG', false, '', array(), 'textarea');
 
-_print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
-_print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, array('shipping_method_id'=>$langs->trans('shipping_method_id'), 'tracking_url'=>$langs->trans('tracking_url'), 'linked-delivery-date_delivery-timestamp'=>$langs->trans('linked-delivery-date_delivery-timestamp')));
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, array('shipping_method_id'=>$langs->trans('shipping_method_id'), 'tracking_url'=>$langs->trans('tracking_url'), 'linked-delivery-date_delivery-timestamp'=>$langs->trans('linked-delivery-date_delivery-timestamp')));
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROJECT', false, array('budget_amount'=>$langs->trans('Budgets')));
 
-_print_title('Experimental');
-_print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
+print_title('Experimental');
+print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
 
 print '</table>';
 
@@ -187,19 +187,23 @@ print '</table>';
  */
 
 $parameters = array();
-$reshook=$hookmanager->executeHooks('formMoreOptions', $parameters,$object, $action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+$reshook=$hookmanager->executeHooks('formMoreOptions', $parameters, $object, $action);    // Note that $action and $object may have been modified by hook
+if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 print $hookmanager->resPrint;
 
 
-dol_fiche_end(1);
+print dol_get_fiche_end(0);
 
 llxFooter();
 
 $db->close();
 
-
-function _print_title($title="")
+/**
+ * @param string $title Title
+ *
+ * @return void
+ */
+function print_title($title = "")
 {
     global $langs;
     print '<tr class="liste_titre">';
@@ -214,8 +218,10 @@ function _print_title($title="")
  * @param $title	string 	label of conf
  * @param $desc		string 	description written in small text under title
  * @param $help		string	text for tooltip
+ *
+ * @return void
  */
-function _print_on_off($confkey, $title = false, $desc = '', $help = '')
+function print_on_off($confkey, $title = false, $desc = '', $help = '')
 {
     global $langs, $conf;
 
@@ -224,15 +230,15 @@ function _print_on_off($confkey, $title = false, $desc = '', $help = '')
 
     $form=new Form($db);
 
-	if(empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
+	if (empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
 		$help = $confkey . '_HELP';
 	}
 
-	if(!empty($help)){
-		print $form->textwithtooltip('', $langs->trans($help),2,1,img_help(1,''));
+	if (!empty($help)){
+		print $form->textwithtooltip('', $langs->trans($help), 2, 1, img_help(1, ''));
 	}
 
-    if(!empty($desc))
+    if (!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
     }
@@ -247,7 +253,17 @@ function _print_on_off($confkey, $title = false, $desc = '', $help = '')
     print '</td></tr>';
 }
 
-function _print_input_form_part($confkey, $title = false, $desc ='', $metas = array(), $type='input', $help = false)
+/**
+ * @param $confkey Conf key
+ * @param false $title Title
+ * @param string $desc Description
+ * @param array $metas metas
+ * @param string $type Type
+ * @param false $help help
+ *
+ * @return void
+ */
+function print_input_form_part($confkey, $title = false, $desc = '', $metas = array(), $type = 'input', $help = false)
 {
     global $langs, $conf, $db;
 
@@ -258,7 +274,7 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     );
 
     $colspan = '';
-    if($type!='textarea'){
+    if ($type!='textarea'){
         $defaultMetas['type']   = 'text';
         $defaultMetas['value']  = $conf->global->{$confkey};
     } else {
@@ -266,7 +282,7 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     }
 
 
-    $metas = array_merge ($defaultMetas, $metas);
+    $metas = array_merge($defaultMetas, $metas);
     $metascompil = '';
     foreach ($metas as $key => $values)
     {
@@ -276,39 +292,39 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
     print '<tr class="oddeven">';
     print '<td'.$colspan.'>';
 
-	if(empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
+	if (empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
 		$help = $confkey . '_HELP';
 	}
 
-    if(!empty($help)){
-        print $form->textwithtooltip( ($title?$title:$langs->trans($confkey)) , $langs->trans($help),2,1,img_help(1,''));
+    if (!empty($help)){
+        print $form->textwithtooltip(($title?$title:$langs->trans($confkey)), $langs->trans($help), 2, 1, img_help(1, ''));
     }
     else {
         print $title?$title:$langs->trans($confkey);
     }
 
-    if(!empty($desc))
+    if (!empty($desc))
     {
         print '<br><small>'.$langs->trans($desc).'</small>';
     }
 
 
-    if($type!='textarea') {
+    if ($type!='textarea') {
         print '</td>';
         print '<td align="right" width="300">';
     }
     print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
     print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
     print '<input type="hidden" name="action" value="set_'.$confkey.'">';
-    if($type=='textarea'){
+    if ($type=='textarea'){
         include_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
         $doleditor=new DolEditor($confkey, $conf->global->{$confkey}, '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }
-	elseif($type=='input'){
+	elseif ($type=='input'){
 		print '<input '.$metascompil.'  />';
 	}
-	else{
+	else {
 		// custom
 		print $type;
 	}
@@ -324,8 +340,11 @@ function _print_input_form_part($confkey, $title = false, $desc ='', $metas = ar
  * @param $confkey	string	name of conf in llx_const
  * @param $title	string	label of conf
  * @param $Tab		array	available values
+ *
+ * @return void
  */
-function _print_multiselect($confkey, $title, $Tab) {
+function print_multiselect($confkey, $title, $Tab)
+{
 
 	global $langs, $form, $conf;
 
@@ -343,5 +362,4 @@ function _print_multiselect($confkey, $title, $Tab) {
     print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
     print '</form>';
     print '</td></tr>';
-
 }
