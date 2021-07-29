@@ -63,6 +63,7 @@ class modexternalaccess extends DolibarrModules
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
 
+
 		$this->version = '1.19.0';
 
 
