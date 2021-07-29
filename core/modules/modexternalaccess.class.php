@@ -38,7 +38,7 @@ class modexternalaccess extends DolibarrModules
 	 *
 	 *   @param      DoliDB		$db      Database handler
 	 */
-	function __construct($db)
+	public function __construct($db)
 	{
         global $langs,$conf;
 
@@ -57,13 +57,14 @@ class modexternalaccess extends DolibarrModules
 		// It is used to group modules in module setup page
 		$this->family = "ATM Consulting - Autres";
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
-		$this->name = preg_replace('/^mod/i','',get_class($this));
+		$this->name = preg_replace('/^mod/i', '', get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
 		$this->description = "Ajoute un acces externe pour les clients";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
 
-		$this->version = '1.18.2';
+
+		$this->version = '1.19.0';
 
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
@@ -111,8 +112,8 @@ class modexternalaccess extends DolibarrModules
 		$this->depends = array();		// List of modules id that must be enabled if this module is enabled
 		$this->requiredby = array();	// List of modules id to disable if this one is disabled
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
-		$this->phpmin = array(5,0);					// Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(3,0);	// Minimum version of Dolibarr required by module
+		$this->phpmin = array(7,0);					// Minimum version of PHP required by module
+		$this->need_dolibarr_version = array(12,0);	// Minimum version of Dolibarr required by module
 		$this->langfiles = array("externalaccess@externalaccess");
 
 		// Constants
@@ -239,6 +240,13 @@ class modexternalaccess extends DolibarrModules
 		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
 		$r++;
 
+		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
+		$this->rights[$r][1] = 'external_access_tasks';	// Permission label
+		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
+		$this->rights[$r][4] = 'view_tasks';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$r++;
+
 		// Main menu entries
 		$this->menu = array();			// List of menus to add
 		$r=0;
@@ -275,7 +283,7 @@ class modexternalaccess extends DolibarrModules
 		//							'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
 		// $r++;
 
-/*
+		/*
 		$this->menu[$r]=array(
 			'fk_menu'=>0,			                // Put 0 if this is a top menu
 			'type'=>'top',			                // This is a Top menu entry
@@ -340,7 +348,7 @@ class modexternalaccess extends DolibarrModules
 			'user'=>2
 		);				                // 0=Menu for internal users, 1=external users, 2=both
 		$r++;
-*/
+		*/
 
 		// Exports
 		$r=1;
@@ -368,11 +376,11 @@ class modexternalaccess extends DolibarrModules
      *      @param      string	$options    Options when enabling module ('', 'noboxes')
 	 *      @return     int             	1 if OK, 0 if KO
 	 */
-	function init($options='')
+	public function init($options = '')
 	{
 		$sql = array();
 
-		define('INC_FROM_DOLIBARR',true);
+		define('INC_FROM_DOLIBARR', true);
 
 		//dol_include_once('/externalaccess/config.php'); // Why ?
 		//include dol_buildpath('/externalaccess/script/create-maj-base.php');
@@ -390,11 +398,10 @@ class modexternalaccess extends DolibarrModules
      *      @param      string	$options    Options when enabling module ('', 'noboxes')
 	 *      @return     int             	1 if OK, 0 if KO
 	 */
-	function remove($options='')
+	public function remove($options = '')
 	{
 		$sql = array();
 
 		return $this->_remove($sql, $options);
 	}
-
 }
