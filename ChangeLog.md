@@ -13,9 +13,6 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 # RELEASE 1.20 - 06/07/2021
 
 - NEW : Add column for order extrafields in order list (conf EACCESS_LIST_ADDED_COLUMNS_ORDER) *06/08/2021* - 1.20.0
-
-## RELEASE 1.19 - 2021-07-26
-
 - NEW : Add Task controller and view - *26/07/2021* - 1.19.0  
   - Update project controller to make it like expedition display only project where user logged is contact of the projet
   - Apply PHP CS Dolibarr ruleset compliant (dolibarr branch version 13.0)
