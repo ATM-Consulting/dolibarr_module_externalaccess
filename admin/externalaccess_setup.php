@@ -180,7 +180,7 @@ $e = new ExtraFields($db);
 $e->fetch_name_optionals_label('commande');
 $TExtrafields_commande = array_keys($e->attributes['commande']['list']);
 foreach ($TExtrafields_commande as $ef_name) {
-	$TExtrafields_commande_list['EXTRAFIELD_'.$ef_name] = $ef_name;
+	$TExtrafields_commande_list['EXTRAFIELD_'.$ef_name] = $e->attributes['commande']['label'][$ef_name];
 }
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS_ORDER', false, $TExtrafields_commande_list);
 
