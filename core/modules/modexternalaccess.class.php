@@ -64,7 +64,7 @@ class modexternalaccess extends DolibarrModules
 
 
 
-		$this->version = '1.19.0';
+		$this->version = '1.20.0';
 
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
@@ -113,7 +113,7 @@ class modexternalaccess extends DolibarrModules
 		$this->requiredby = array();	// List of modules id to disable if this one is disabled
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
 		$this->phpmin = array(7,0);					// Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(12,0);	// Minimum version of Dolibarr required by module
+		$this->need_dolibarr_version = array(9,0);	// Minimum version of Dolibarr required by module
 		$this->langfiles = array("externalaccess@externalaccess");
 
 		// Constants

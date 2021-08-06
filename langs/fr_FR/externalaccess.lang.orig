@@ -139,8 +139,11 @@ EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE=Afficher en bas de page les information
 EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP=Il faut que la signature d'au moins un commercial du tiers associé à l'utilisateur soit remplie
 EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
 EACCESS_LIST_ADDED_COLUMNS_SHIPPING=Colonnes supplémentaires à afficher sur les listes d'expeditions
+<<<<<<< Updated upstream
 EACCESS_LIST_ADDED_COLUMNS_PROJECT=Colonnes supplémentaires à afficher sur les listes des projets
+=======
 EACCESS_LIST_ADDED_COLUMNS_ORDER=Colonnes supplémentaires à afficher sur les listes de commandes
+>>>>>>> Stashed changes
 ConfLinkedToContents = Paramètres liés au contenu
 ConfLinkedToContactInfos = Paramètres liés au contact
 ConfLinkedToDesign = Paramètres liés à l'apparence

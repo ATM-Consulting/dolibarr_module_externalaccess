@@ -63,7 +63,8 @@ class OrdersController extends Controller
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
 
-		dol_include_once('commande/class/commande.class.php');
+		require_once DOL_DOCUMENT_ROOT . '/commande/class/commande.class.php';
+		require_once DOL_DOCUMENT_ROOT . '/core/class/extrafields.class.php';
 
 		$langs->load('orders');
 
@@ -98,8 +99,13 @@ class OrdersController extends Controller
 
 			//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
-			$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 			if(empty($TOther_fields)) $TOther_fields = array();
+
+			$TOther_fields_order = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_ORDER);
+			if(empty($TOther_fields_order)) $TOther_fields_order = array();
+
+			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_order);
 
 			print '<table id="order-list" class="table table-striped" >';
 
@@ -109,8 +115,14 @@ class OrdersController extends Controller
 			print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
 
 			if(!empty($TOther_fields)) {
+				$e = new ExtraFields($db); // Question d'opti, c'est mieux de charger l'objet avant la boucle, sinon le __construct vide le $e->attributes et donc nécessaire de refaire fetch_name_optionals_label à chaque itération
 				foreach ($TOther_fields as $field) {
 					if(property_exists('Commande', $field)) print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+					elseif(strpos($field, 'EXTRAFIELD') !== false) {
+
+						if(empty($e->attributes)) $e->fetch_name_optionals_label('commande');
+						print ' <th class="text-center" >' . $e->attributes['commande']['label'][strtr($field, array('EXTRAFIELD_'=>''))] . '</th>';
+					}
 				}
 			}
 
@@ -148,6 +160,11 @@ class OrdersController extends Controller
 						if(property_exists('Commande', $field)) {
 							$total_more_fields+=1;
 							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+						} elseif (strpos($field, 'EXTRAFIELD') !== false) {
+							print ' <td data-search="'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'commande')) . '" data-order="'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'commande')) . '" >'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'commande')) . '</td>';
 						}
 					}
 				}
