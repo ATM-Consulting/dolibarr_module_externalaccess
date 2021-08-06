@@ -8,22 +8,26 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
-- NEW : Add column for order extrafields in order list (conf EACCESS_LIST_ADDED_COLUMNS_ORDER) *2021-08-06* - 1.20.0
 
-# RELEASE 1.19 - 2021-07-26
+
+# RELEASE 1.20 - 06/07/2021
+
+- NEW : Add column for order extrafields in order list (conf EACCESS_LIST_ADDED_COLUMNS_ORDER) *06/08/2021* - 1.20.0
+
+## RELEASE 1.19 - 2021-07-26
 
 - NEW : Add Task controller and view - *26/07/2021* - 1.19.0  
   - Update project controller to make it like expedition display only project where user logged is contact of the projet
   - Apply PHP CS Dolibarr ruleset compliant (dolibarr branch version 13.0)
 
-# RELEASE 1.18 - 2021-07-07
+## RELEASE 1.18 - 2021-07-07
 
 - FIX : User contact id compatibility - *22/07/2021* - 1.18.2
 - FIX : Retrocompatibility function needs to be loaded after dolibarr lib - *08/07/2021* - 1.18.1
 - NEW : Add hook for ticket's card - *01/07/2021* - 1.18.0
 - NEW : Move tickets list to new CONTROLLER SYSTEM - *01/07/2021* - 1.17.0
 
-# RELEASE 1.16 - 2021-06-24
+## RELEASE 1.16 - 2021-06-24
 
 - NEW : **CONTROLLER SYSTEM** - *20/06/2021* - 1.16.0
   The controller system was missing but now we can use it and make very cool stuffs
