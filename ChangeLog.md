@@ -2,6 +2,10 @@
 All notable changes to this project will be documented in this file.
 ___
 
+## notes for devs
+TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
+
+
 ## Unreleased
 
 - NEW : Add column for order extrafields in order list (conf EACCESS_LIST_ADDED_COLUMNS_ORDER) *2021-08-06* - 1.20.0
