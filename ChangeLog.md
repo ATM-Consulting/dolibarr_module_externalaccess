@@ -19,6 +19,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## RELEASE 1.18 - 2021-07-07
 
+- FIX : ref_suppliar column on external access - *29/07/2021* - 1.18.2
 - FIX : User contact id compatibility - *22/07/2021* - 1.18.2
 - FIX : Retrocompatibility function needs to be loaded after dolibarr lib - *08/07/2021* - 1.18.1
 - NEW : Add hook for ticket's card - *01/07/2021* - 1.18.0
