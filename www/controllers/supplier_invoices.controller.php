@@ -49,7 +49,7 @@ class SupplierInvoicesController extends Controller
 
 		$hookRes = $this->hookPrintPageView();
 		if(empty($hookRes)){
-			print '<section id="section-invoice"><div class="container">';
+			print '<section id="section-supplier-invoice"><div class="container">';
 			$this->print_supplierinvoiceTable($user->socid);
 			print '</div></section>';
 		}
@@ -108,6 +108,7 @@ class SupplierInvoicesController extends Controller
 
 			print '<tr>';
 			print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+			print ' <th class="text-center" >'.$langs->trans('FournRef').'</th>';
 
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
@@ -153,6 +154,7 @@ class SupplierInvoicesController extends Controller
 
 				print '<tr >';
 				print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'" >'.$viewLink.'</td>';
+				print ' <td data-search="'.dol_htmlentities($object->ref_supplier, ENT_QUOTES).'" data-order="'.dol_htmlentities($object->ref_supplier, ENT_QUOTES).'" >'.dol_htmlentities($object->ref_supplier, ENT_QUOTES).'</td>';
 
 				$total_more_fields=0;
 				if(!empty($TOther_fields)) {
