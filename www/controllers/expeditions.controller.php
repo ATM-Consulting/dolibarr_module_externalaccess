@@ -267,7 +267,7 @@ class ExpeditionsController extends Controller
 
 							$extrafieldName = substr($field, strlen('extrafields_')); // On récupère uniquement le nom de l'extrafield
 
-							print ' <td class="' . $field . '_value" >';
+							print ' <td class="' .$field. '_value" data-order="' . $object->array_options['options_' . $extrafieldName] . '" >';
 							if (!empty($object->array_options['options_' . $extrafieldName])) {
 								// showOutputField s'occupe tout seul du format à afficher grâce à la clé qu'on lui passe
 								print $e->showOutputField($extrafieldName, $object->array_options['options_' . $extrafieldName]);
