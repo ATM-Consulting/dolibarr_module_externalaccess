@@ -8,8 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
-- FIX : Allow to sort column of extrafield *19/08/2021* - 1.21.1
-- NEW : Print Extrafields in shipping list *19/08/2021* - 1.21.0
+- NEW : Gestion des Extrafields d'expédition sur la liste des BL *19/08/2021* - 1.21.0
 
 # RELEASE 1.20 - 06/07/2021
 
