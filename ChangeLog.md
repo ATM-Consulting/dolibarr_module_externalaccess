@@ -8,7 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
-
+- NEW : Print Extrafields in shipping list *19/08/2021* - 1.21.0
 
 # RELEASE 1.20 - 06/07/2021
 
