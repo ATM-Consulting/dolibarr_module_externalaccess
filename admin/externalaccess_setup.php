@@ -174,7 +174,28 @@ if (empty($conf->global->EACCESS_RGPD_MSG)){
 print_input_form_part('EACCESS_RGPD_MSG', false, '', array(), 'textarea');
 
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, array('shipping_method_id'=>$langs->trans('shipping_method_id'), 'tracking_url'=>$langs->trans('tracking_url'), 'linked-delivery-date_delivery-timestamp'=>$langs->trans('linked-delivery-date_delivery-timestamp')));
+
+$TAddedColumnShipping = array(
+	'shipping_method_id'=>$langs->trans('shipping_method_id'),
+	'tracking_url'=>$langs->trans('tracking_url'),
+	'linked-delivery-date_delivery-timestamp'=>$langs->trans('linked-delivery-date_delivery-timestamp')
+);
+
+$extrafields = new ExtraFields($db);
+$extrafields->fetch_name_optionals_label('expedition');
+
+if (!empty($extrafields->attributes['expedition']['label'])) {
+	foreach ($extrafields->attributes['expedition']['label'] as $attribute => $label) {
+		if (!empty($extrafields->attributes['expedition']['langfile'][$attribute])) {
+			$langs->load($extrafields->attributes['expedition']['langfile'][$attribute]);
+		}
+
+		$TAddedColumnShipping['extrafields_'.$attribute] = $langs->trans($label).' - '.$langs->trans('Extrafields');
+	}
+}
+
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, $TAddedColumnShipping);
+
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROJECT', false, array('budget_amount'=>$langs->trans('Budgets')));
 $e = new ExtraFields($db);
 $e->fetch_name_optionals_label('commande');

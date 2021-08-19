@@ -66,6 +66,10 @@ class ExpeditionsController extends Controller
 		include_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
 		include_once DOL_DOCUMENT_ROOT . '/core/lib/pdf.lib.php';
 
+		$object = new Expedition($db);
+		$e = new ExtraFields($db);
+		$e->fetch_name_optionals_label($object->table_element);
+
 		$langs->load('sendings', 'main');
 
 
@@ -167,8 +171,23 @@ class ExpeditionsController extends Controller
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
 					if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
-					if(property_exists('Expedition', $field) || strstr($field ,'linked') || strpos($field ,'extrafields_') !== false)
+					if(property_exists('Expedition', $field)
+						|| strstr($field ,'linked')
+						|| strpos($field ,'extrafields_') !== false)
 					{
+
+						if (strpos($field ,'extrafields_') !== false) {
+
+							$extrafieldName = substr($field, strlen('extrafields_')); // On récupère uniquement le nom de l'extrafield
+
+							// On load le fichier de langs associé à cet extrafield et on traduit le label
+							if (!empty($extrafields->attributes['expedition']['langfile'][$extrafieldName])) {
+								$langs->load($extrafields->attributes['expedition']['langfile'][$extrafieldName]);
+								$field = $langs->trans($e->attributes[$object->table_element]['label'][$extrafieldName]);
+							}
+							else $field = $e->attributes[$object->table_element]['label'][$extrafieldName];
+						}
+
 						print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
 					}
 				}
@@ -261,9 +280,6 @@ class ExpeditionsController extends Controller
 							print '</td>';
 						}
 						elseif (strpos($field, 'extrafields_') !== false) {
-
-							$e = new ExtraFields($db);
-							$e->fetch_name_optionals_label($object->table_element);
 
 							$extrafieldName = substr($field, strlen('extrafields_')); // On récupère uniquement le nom de l'extrafield
 

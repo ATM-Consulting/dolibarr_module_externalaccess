@@ -106,6 +106,7 @@ Welcome=Bienvenue
 WelcomeDesc=Bienvenue sur votre portail client
 
 # SETUP PAGE
+Extrafields = Champ complémentaire
 AbricotNotFound=Module Abricot non trouvé, le portail client ne peut pas fonctionner correctement sans ce module.
 AbricotWiki=Consulter la page d'information du module abricot.
 EACCESS_ROOT_URL=Url d'accès  public
