@@ -69,30 +69,30 @@ class ExpeditionsController extends Controller
 		$langs->load('sendings', 'main');
 
 
-		$sql = 'SELECT rowid ';
+		$sql = 'SELECT exp.rowid ';
 
 		// Add fields from hooks
 		$parameters = array();
 		$reshook = $hookmanager->executeHooks('printFieldListSelect', $parameters); // Note that $action and $object may have been modified by hook
 		$sql .= $hookmanager->resPrint;
 
-		$sql.= ' FROM `'.MAIN_DB_PREFIX.'expedition` ';
+		$sql.= ' FROM `'.MAIN_DB_PREFIX.'expedition` exp ';
 
 		// Add From from hooks
 		$parameters = array();
 		$reshook = $hookmanager->executeHooks('printFieldListFrom', $parameters); // Note that $action and $object may have been modified by hook
 		$sql .= $hookmanager->resPrint;
 
-		$sql.= ' WHERE fk_soc = '. intval($socId);
-		$sql.= ' AND fk_statut > 0';
-		$sql.= ' AND entity IN ('.getEntity("expedition").')';//Compatibility with Multicompany
+		$sql.= ' WHERE exp.fk_soc = '. intval($socId);
+		$sql.= ' AND exp.fk_statut > 0';
+		$sql.= ' AND exp.entity IN ('.getEntity("expedition").')';//Compatibility with Multicompany
 
 		// Add where from hooks
 		$parameters = array();
 		$reshook = $hookmanager->executeHooks('printFieldListWhere', $parameters); // Note that $action and $object may have been modified by hook
 		$sql .= $hookmanager->resPrint;
 
-		$sql.= ' ORDER BY date_expedition DESC';
+		$sql.= ' ORDER BY exp.date_expedition DESC';
 
 		$tableItems = $context->dbTool->executeS($sql);
 
@@ -167,7 +167,7 @@ class ExpeditionsController extends Controller
 			if(!empty($TOther_fields)) {
 				foreach ($TOther_fields as $field) {
 					if($field === 'ref_client' && !isset($object->field)) $field = 'ref_customer';
-					if(property_exists('Expedition', $field) || strstr($field ,'linked'))
+					if(property_exists('Expedition', $field) || strstr($field ,'linked') || strpos($field ,'extrafields_') !== false)
 					{
 						print ' <th class="'.$field.'_title text-center" >'.$langs->trans($field).'</th>';
 					}
@@ -257,6 +257,20 @@ class ExpeditionsController extends Controller
 									if($linkedobject_field_type == 'timestamp') print dol_print_date($objectlinked->{$linkedobject_field}). ' ';
 									else print $objectlinked->{$linkedobject_field} . ' ';
 								}
+							}
+							print '</td>';
+						}
+						elseif (strpos($field, 'extrafields_') !== false) {
+
+							$e = new ExtraFields($db);
+							$e->fetch_name_optionals_label($object->table_element);
+
+							$extrafieldName = substr($field, strlen('extrafields_')); // On récupère uniquement le nom de l'extrafield
+
+							print ' <td class="' . $field . '_value" >';
+							if (!empty($object->array_options['options_' . $extrafieldName])) {
+								// showOutputField s'occupe tout seul du format à afficher grâce à la clé qu'on lui passe
+								print $e->showOutputField($extrafieldName, $object->array_options['options_' . $extrafieldName]);
 							}
 							print '</td>';
 						}
