@@ -8,6 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
+- NEW : Gestion des Extrafields de propal sur la liste *14/09/2021* - 1.22.0
 - NEW : Gestion des Extrafields d'expédition sur la liste des BL *19/08/2021* - 1.21.0
 
 # RELEASE 1.20 - 06/07/2021

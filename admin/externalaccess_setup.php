@@ -199,11 +199,18 @@ print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, $TAddedColumnShi
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROJECT', false, array('budget_amount'=>$langs->trans('Budgets')));
 $e = new ExtraFields($db);
 $e->fetch_name_optionals_label('commande');
-$TExtrafields_commande = array_keys($e->attributes['commande']['list']);
-foreach ($TExtrafields_commande as $ef_name) {
-	$TExtrafields_commande_list['EXTRAFIELD_'.$ef_name] = $e->attributes['commande']['label'][$ef_name];
+$TExtrafields_propal = array_keys($e->attributes['commande']['list']);
+foreach ($TExtrafields_propal as $ef_name) {
+    $TExtrafields_propal_list['EXTRAFIELD_'.$ef_name] = $e->attributes['commande']['label'][$ef_name];
 }
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_ORDER', false, $TExtrafields_commande_list);
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS_ORDER', false, $TExtrafields_propal_list);
+
+$e->fetch_name_optionals_label('propal');
+$TExtrafields_propal = array_keys($e->attributes['propal']['list']);
+foreach ($TExtrafields_propal as $ef_name) {
+    $TExtrafields_propal_list['EXTRAFIELD_'.$ef_name] = $e->attributes['commande']['label'][$ef_name];
+}
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROPAL', false, $TExtrafields_propal_list);
 
 print_title('Experimental');
 print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
