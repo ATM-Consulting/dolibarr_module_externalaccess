@@ -98,6 +98,11 @@ class PropalsController extends Controller
 			$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
 			if(empty($TOther_fields)) $TOther_fields = array();
 
+            $TOther_fields_propal = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_PROPAL);
+			if(empty($TOther_fields_propal)) $TOther_fields_propal = array();
+
+            $TOther_fields = array_merge($TOther_fields, $TOther_fields_propal);
+
 			print '<table id="propal-list" class="table table-striped" >';
 
 			print '<thead>';
@@ -106,8 +111,14 @@ class PropalsController extends Controller
 			print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
 
 			if(!empty($TOther_fields)) {
+                $e = new ExtraFields($db); // Question d'opti, c'est mieux de charger l'objet avant la boucle, sinon le __construct vide le $e->attributes et donc nécessaire de refaire fetch_name_optionals_label à chaque itération
 				foreach ($TOther_fields as $field) {
 					if(property_exists('Propal', $field)) print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+                    elseif(strpos($field, 'EXTRAFIELD') !== false) {
+
+						if(empty($e->attributes)) $e->fetch_name_optionals_label('propal');
+						print ' <th class="text-center" >' . $e->attributes['propal']['label'][strtr($field, array('EXTRAFIELD_'=>''))] . '</th>';
+					}
 				}
 			}
 
@@ -147,6 +158,11 @@ class PropalsController extends Controller
 						if(property_exists('Propal', $field)) {
 							$total_more_fields+=1;
 							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+						} elseif (strpos($field, 'EXTRAFIELD') !== false) {
+							print ' <td data-search="'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'propal')) . '" data-order="'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'propal')) . '" >'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'propal')) . '</td>';
 						}
 					}
 				}
