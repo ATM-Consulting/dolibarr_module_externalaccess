@@ -249,7 +249,14 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		}
 	}
 
-	if(empty($object->id)  || $object->fk_soc != $user->socid){
+
+	if(empty($object->id)){
+		$context->controller_found = false;
+		return '';
+	}
+
+	// Droits d'accès
+	if($object->fk_soc != $user->socid && (!$user->employee && empty($user->socid))){
 		$context->controller_found = false;
 		return '';
 	}
@@ -619,17 +626,21 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
  */
 function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 
+	$context = Context::getInstance();
+	global $hookmanager, $db, $conf;
+
+	if($user->employee && empty($user->socid)) $employee = true;
+
 	/*
 	 * current right used in program
 	 * create, comment, close, open
 	 */
-	if($user->socid && $rightToTest == 'create'){
+	if(($user->socid || $employee) && $rightToTest == 'create'){
 		return true;
 	}
 
-
 	// TODO : Add hook
-	if($user->socid > 0 && intval($ticket->socid) === intval($user->socid) ){
+	if($user->socid > 0 && intval($ticket->socid) === intval($user->socid) || $employee){
 
 		if($rightToTest == 'close'){
 			return true;
@@ -644,10 +655,34 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 			$ticket::STATUS_NEED_MORE_INFO,
 			$ticket::STATUS_NOT_READ
 		);
-		if($rightToTest == 'comment' && in_array($ticket->statut , $TAvailableStatus)){
-			return true;
+
+		if (!empty($conf->multicompany->enabled) && $ticket->ismultientitymanaged == 1) {
+/*			$sql = 'SELECT t.entity entity FROM '.MAIN_DB_PREFIX.'ticket t';
+			$sql.= ' WHERE t.rowid = '.$ticket->id;
+
+			$resql = $db->query($sql);
+			if ($resql) {
+				$num = $db->num_rows($resql);
+				while ($obj = $db->fetch_object($resql)) {
+					$ticket->entity = $obj->entity;
+				}
+			} */
 		}
 
+		$group = new UserGroup($db);
+		$TUserGroups = $group->listGroupsForUser($user->id);
+		$TUserGroupsRights = $group->getrights('ticket');
+		$TGroupsEntities = array();
+
+		foreach ($TUserGroups as $group){
+			$TGroupsEntities[] = $group->usergroup_entity;
+		}
+
+		$TTicketsEntities = getEntity('ticket', 1, $ticket);
+		$TExplode = explode(',', $TTicketsEntities);
+		if($rightToTest == 'comment' && in_array($ticket->statut , $TAvailableStatus) && ($employee && in_array($user->entity, $TExplode) || $user->admin)){
+			return true;
+		}
 
 	}
 

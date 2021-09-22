@@ -43,6 +43,7 @@ class DefaultController extends Controller
 		$this->loadTemplate('header');
 
 		$hookRes = $this->hookPrintPageView();
+
 		if(empty($hookRes)){
 			if(!empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){
 				$this->loadTemplate('headbar');
