@@ -642,7 +642,7 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 	 * current right used in program
 	 * create, comment, close, open
 	 */
-	if(($user->socid) && $rightToTest == 'create' || $employee){
+	if($user->socid && $rightToTest == 'create' || $employee && $user->rights->ticket->create){
         return true;
 	}
 
