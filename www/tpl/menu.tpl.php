@@ -7,7 +7,7 @@ if (empty($context) || ! is_object($context))
 
 
 
-global $conf,$user,$langs;
+global $conf,$user,$langs, $hookmanager;
 
 $Tmenu=$TGroupMenu=array();
 
@@ -162,6 +162,7 @@ $parameters=array(
     'TGroupMenu' =>& $TGroupMenu,
 	'maxTopMenu' =>& $maxTopMenu
 );
+
 $reshook=$hookmanager->executeHooks('PrintTopMenu', $parameters, $context, $context->action);    // Note that $action and $object may have been modified by hook
 if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
 

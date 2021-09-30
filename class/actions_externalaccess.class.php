@@ -180,7 +180,7 @@ class Actionsexternalaccess
     public function print_ticketCard($ticketId = 0, $socId = 0)
     {
         print '<section id="section-ticket-card" class="type-content"><div class="container">';
-        print_ticketCard($ticketId, $socId, GETPOST('action', 'none'));
+		print_ticketCard($ticketId, $socId, GETPOST('action', 'none'));
         print '</div></section>';
     }
 
@@ -343,10 +343,12 @@ class Actionsexternalaccess
 		if($ticketId > 0) {
 			$res = $ticket->fetch($ticketId);
 			$context->fetchedTicket = $ticket;
-			if($ticket->fk_soc != $user->socid){
+
+			if($ticket->fk_soc != $user->socid && (!$user->employee && empty($user->socid)) ){
 				return null;
 			}
 		}
+
 		// DO ACTIONS
 
 		// Remove file
@@ -364,7 +366,6 @@ class Actionsexternalaccess
 		if($action == "add-comment-file" || $action == "new-comment"){
 			global $conf;
 			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
-
 				include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 
 				// Set tmp directory TODO Use a dedicated directory for temp mails files

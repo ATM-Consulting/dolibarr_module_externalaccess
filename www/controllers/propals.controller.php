@@ -57,7 +57,7 @@ class PropalsController extends Controller
 	}
 
 
-	static public function print_propalTable($socId = 0)
+	static public function print_propalTable($socId = 0, $searching = true, $paging=false)
 	{
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
@@ -182,14 +182,31 @@ class PropalsController extends Controller
 			print '</tbody>';
 
 			print '</table>';
+
+
+
+			$jsonConf = array(
+				'rootUrl' => $context->getRootUrl(),
+				'searching' => $searching,
+				'paging' => $paging,
+				'total_more_fields' => $total_more_fields
+			)
+
 			?>
 			<script type="text/javascript" >
 				$(document).ready(function(){
+
+					let jsonConf = <?php print json_encode($jsonConf) ?>;
+
 					$("#propal-list").DataTable({
+
+						searching: jsonConf.searching,
+						paging: jsonConf.paging,
+
 						"language": {
-							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+							"url": jsonConf.rootUrl + "vendor/data-tables/french.json"
 						},
-						"order": [[<?php echo ($total_more_fields + 1); ?>, 'desc']],
+						"order": [[jsonConf.total_more_fields + 1, 'desc']],
 
 						responsive: true,
 						columnDefs: [{
