@@ -8,7 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
-
+- NEW : Permissions employé et ajout d'un hook pour la permission d'ajouter un message à un ticket *28/09/2021* - 1.23.0
 
 # RELEASE 1.22 - 17/09/2021
 
