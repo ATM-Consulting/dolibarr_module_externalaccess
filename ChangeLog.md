@@ -8,11 +8,11 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
+- NEW : Gestion des selects par la fonction stdFormHelper *30/09/2021* - 1.23.0
 
 
 # RELEASE 1.22 - 17/09/2021
 
-- NEW : Gestion des Extrafields de propal sur la liste *14/09/2021* - 1.22.0
 
 # RELEASE 1.21 - 19/08/2021
 
