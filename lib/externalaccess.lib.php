@@ -281,10 +281,13 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
 	}
 
 	//TODO : standardiser avec dolibarr standard ex fonction dolGetButtonAction()
-	elseif($param['type'] == 'select') {
-		print '<select id="'.$name.'" name="'.$name.'" type="'.$param['type'].'" '.$readonly.' class="'.$class.' selectpicker"  value="'.$value.'" ';
+	elseif($param['type'] == 'select' || $param['type'] == 'select2') {
+		print '<select id="'.$name.'" name="'.$name.(($param['type'] == 'select2') ? '[]' : '').'" type="'.$param['type'].'" '.$readonly.' class="'.$class.' selectpicker"  value="'.$value.'"';
 		if(!empty($param['required'])){
 			print ' required ';
+		}
+		if($param['type'] == 'select2'){
+			print ' multiple ';
 		}
 		print ' >';
 
