@@ -280,11 +280,14 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
 		print $param['inputOverride'];
 	}
 
-	//TODO : standardiser avec dolibarr standard ex fonction dolGetButtonAction()
-	elseif($param['type'] == 'select') {
-		print '<select id="'.$name.'" name="'.$name.'" type="'.$param['type'].'" '.$readonly.' class="'.$class.' selectpicker"  value="'.$value.'" ';
+	//TODO : AVANT DE RAJOUTER DES CHOSES, il faut standardiser avec dolibarr standard ex fonction dolGetButtonAction()
+	elseif($param['type'] == 'select' || !empty($param['usemultiselect'])) {
+		print '<select id="'.$name.'" name="'.$name.((!empty($param['usemultiselect'])) ? '[]' : '').'" type="'.$param['type'].'" '.$readonly.' class="'.$class.' selectpicker"  value="'.$value.'"';
 		if(!empty($param['required'])){
 			print ' required ';
+		}
+		if(!empty($param['usemultiselect'])){
+			print ' multiple ';
 		}
 		print ' >';
 

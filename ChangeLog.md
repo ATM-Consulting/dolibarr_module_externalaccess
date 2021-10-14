@@ -7,7 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
-
+- NEW : Gestion des selects multiple par la fonction stdFormHelper *12/10/2021* - 1.25.0
 
 # RELEASE 1.24 - 01/10/2021
 
