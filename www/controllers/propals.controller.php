@@ -57,7 +57,7 @@ class PropalsController extends Controller
 	}
 
 
-	static public function print_propalTable($socId = 0, $searching = true, $paging=false)
+	static public function print_propalTable($socId = 0, $searching = true, $paging=false, $propallink = true)
 	{
 		global $langs, $db, $conf, $hookmanager;
 		$context = Context::getInstance();
@@ -150,7 +150,7 @@ class PropalsController extends Controller
 				}
 
 				print '<tr>';
-				print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.$viewLink.'</td>';
+				print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  >'.(($propallink) ? $viewLink : $object->ref).'</td>';
 
 				$total_more_fields=0;
 				if(!empty($TOther_fields)) {

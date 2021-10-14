@@ -6,7 +6,7 @@ ___
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
 ## Unreleased
-
+- NEW : function print_propalTable : parameter link or not to propal *14/10/2021* - 1.26.0
 - NEW : Gestion des selects multiple par la fonction stdFormHelper *12/10/2021* - 1.25.0
 
 # RELEASE 1.24 - 01/10/2021
