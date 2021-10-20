@@ -250,10 +250,10 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
         'class' => '',
         'valid' => 0, // is-valid: 1  is-invalid: -1
         'feedback' => '',
+		'inputOverride' => false
     );
 
     $param = array_replace($TdefaultParam, $param);
-
 
     print '<div class="form-group row">';
     print '<label for="staticEmail" class="col-4 col-form-label">'.$label;
@@ -276,11 +276,52 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
 
     $readonly = ($mode=='readonly'?'readonly':'');
 
-    print '<input id="'.$name.'" name="'.$name.'" type="'.$param['type'].'" '.$readonly.' class="'.$class.'"  value="'.$value.'" ';
-    if(!empty($param['required'])){
-        print ' required ';
-    }
-    print ' >';
+	if(!empty($param['inputOverride'])){
+		print $param['inputOverride'];
+	}
+
+	//TODO : AVANT DE RAJOUTER DES CHOSES, il faut standardiser avec dolibarr standard ex fonction dolGetButtonAction()
+	elseif($param['type'] == 'select' || !empty($param['usemultiselect'])) {
+		print '<select id="'.$name.'" name="'.$name.((!empty($param['usemultiselect'])) ? '[]' : '').'" type="'.$param['type'].'" '.$readonly.' class="'.$class.' selectpicker"  value="'.$value.'"';
+		if(!empty($param['required'])){
+			print ' required ';
+		}
+		if(!empty($param['usemultiselect'])){
+			print ' multiple ';
+		}
+		print ' >';
+
+		if(!empty($param['input_values'])){
+			foreach ($param['input_values'] as $k => $val){
+
+				print '<option ';
+
+				if(!empty($val['id'])){
+					print ' id="'.dol_htmlentities($val['id'], ENT_QUOTES).'" ';
+				}
+
+				if(!empty($val['value'])){
+					print ' value="'.dol_htmlentities($val['value'], ENT_QUOTES).'" ';
+				}
+
+				if(!empty($val['value']) && $value === $val['value']){
+					print 'selected="selected" ';
+				}
+
+				print '>'.dol_htmlentities($val['label'], ENT_QUOTES).'</option>';
+			}
+		}
+		print '</select>';
+	}
+	else
+	{
+		print '<input id="'.$name.'" name="'.$name.'" type="'.$param['type'].'" '.$readonly.' class="'.$class.'"  value="'.$value.'" ';
+		if(!empty($param['required'])){
+			print ' required ';
+		}
+		print ' >';
+	}
+
 
     if(!empty($param['help'])){
         print '<small class="text-muted">'.$param['help'].'</small>';

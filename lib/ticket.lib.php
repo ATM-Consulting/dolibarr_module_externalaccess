@@ -113,7 +113,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 
 	$out = '<!-- ticket.lib START print_ticketCard_comment_form -->';
 
-	if (!checkUserTicketRight($user, $ticket, 'create')) {
+    if (!checkUserTicketRight($user, $ticket, 'create')) {
 		$out .= '<!-- not enough right -->';
 		$out .= '<!-- END print_ticketCard_comment_form -->';
 		return $out;
@@ -249,7 +249,14 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		}
 	}
 
-	if(empty($object->id)  || $object->fk_soc != $user->socid){
+
+	if(empty($object->id)){
+		$context->controller_found = false;
+		return '';
+	}
+
+	// Droits d'accès
+	if($object->fk_soc != $user->socid && (!$user->employee && empty($user->socid))){
 		$context->controller_found = false;
 		return '';
 	}
@@ -601,7 +608,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		'outCommentForm' =>& $outCommentForm,
 	);
 	$reshook=$hookmanager->executeHooks('externalAccessTicketCard',$parameters,$object, $context->action);    // Note that $action and $object may have been modified by hook
-	if ($reshook > 0) {
+    if ($reshook > 0) {
 		print $hookmanager->resPrint;
 	}elseif ($reshook < 0) {
 		$context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
@@ -619,19 +626,30 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
  */
 function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 
+	$context = Context::getInstance();
+	global $hookmanager, $db, $conf;
+
+    if($user->employee && empty($user->socid)) $employee = true;
+
+    // Add fields from hooks
+    $parameters = array('user' => $user, 'ticket' => $ticket, 'rightToTest' => $rightToTest, 'employee' => $employee);
+    $reshook = $hookmanager->executeHooks('checkUserTicketRight', $parameters);
+
+    if($reshook == 1) return true;
+    if($reshook == -1) return false;
+
 	/*
 	 * current right used in program
 	 * create, comment, close, open
 	 */
-	if($user->socid && $rightToTest == 'create'){
-		return true;
+	if($user->socid && $rightToTest == 'create' || $employee && $user->rights->ticket->create){
+        return true;
 	}
 
-
 	// TODO : Add hook
-	if($user->socid > 0 && intval($ticket->socid) === intval($user->socid) ){
+	if($user->socid > 0 && intval($ticket->socid) === intval($user->socid) || $employee){
 
-		if($rightToTest == 'close'){
+        if($rightToTest == 'close'){
 			return true;
 		}
 
@@ -644,14 +662,13 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 			$ticket::STATUS_NEED_MORE_INFO,
 			$ticket::STATUS_NOT_READ
 		);
-		if($rightToTest == 'comment' && in_array($ticket->statut , $TAvailableStatus)){
-			return true;
-		}
-
+        if($rightToTest == 'comment' && in_array($ticket->statut , $TAvailableStatus)){
+            return true;
+        }
 
 	}
 
-	return false;
+    return false;
 }
 
 

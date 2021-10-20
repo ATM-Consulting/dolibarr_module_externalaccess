@@ -5,10 +5,18 @@ ___
 ## notes for devs
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
-
 ## Unreleased
+- NEW : function print_propalTable : parameter link or not to propal *14/10/2021* - 1.26.0
+- NEW : Gestion des selects multiple par la fonction stdFormHelper *12/10/2021* - 1.25.0
 
+# RELEASE 1.24 - 01/10/2021
 
+- NEW : Gestion des selects par la fonction stdFormHelper *30/09/2021* - 1.24.0
+- NEW : Permissions employé et ajout d'un hook pour la permission d'ajouter un message à un ticket *28/09/2021* - 1.23.0
+
+# RELEASE 1.22 - 17/09/2021
+
+- NEW : Gestion des Extrafields de propal sur la liste *14/09/2021* - 1.22.0
 
 # RELEASE 1.21 - 19/08/2021
 

@@ -73,7 +73,6 @@ class TicketsController extends Controller
 		$sql.= ' ORDER BY t.datec DESC';
 		$tableItems = $context->dbTool->executeS($sql);
 
-
 		if(checkUserTicketRight($user, $ticketStatic, 'create')) {
 			print '<div><a href="' . $context->getRootUrl('ticket_card', '&action=create') . '" class="btn btn-primary btn-strong pull-right" >' . $langs->trans('NewTicket') . '</a></div>';
 		}

@@ -142,6 +142,7 @@ EACCESS_LIST_ADDED_COLUMNS=Colonnes supplémentaires à afficher sur les listes
 EACCESS_LIST_ADDED_COLUMNS_SHIPPING=Colonnes supplémentaires à afficher sur les listes d'expeditions
 EACCESS_LIST_ADDED_COLUMNS_PROJECT=Colonnes supplémentaires à afficher sur les listes des projets
 EACCESS_LIST_ADDED_COLUMNS_ORDER=Colonnes supplémentaires à afficher sur les listes de commandes
+EACCESS_LIST_ADDED_COLUMNS_PROPAL=Colonnes supplémentaires à afficher sur les listes de propositions commerciales
 ConfLinkedToContents = Paramètres liés au contenu
 ConfLinkedToContactInfos = Paramètres liés au contact
 ConfLinkedToDesign = Paramètres liés à l'apparence

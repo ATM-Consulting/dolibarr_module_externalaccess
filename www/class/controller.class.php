@@ -139,7 +139,6 @@ class Controller {
 		if ($reshook < 0) {
 			$context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
 		}
-
 		return $reshook;
 	}
 
