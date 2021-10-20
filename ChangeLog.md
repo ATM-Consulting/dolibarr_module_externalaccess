@@ -20,6 +20,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.21 - 19/08/2021
 
+- FIX : Trad FournRef -> Référence fournisseur *20/10/2021* - 1.21.1
 - NEW : Gestion des Extrafields d'expédition sur la liste des BL *19/08/2021* - 1.21.0
 
 # RELEASE 1.20 - 06/07/2021
