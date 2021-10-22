@@ -146,7 +146,9 @@ class Controller {
 		global $conf, $langs, $hookmanager, $db; // load for tpl
 		$context = Context::getInstance(); // load for tpl
 
-		if(!ctype_alnum($templateName)){ return; }
+		if (!preg_match('/^[0-9A-ZaZ_\-]*$/ui', $templateName)) {
+			return;
+		}
 
 		$tplPath = $context->tplPath . '/' . $templateName.'.tpl.php';
 
