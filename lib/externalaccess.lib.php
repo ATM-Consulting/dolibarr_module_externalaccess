@@ -282,7 +282,7 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
 
 	//TODO : AVANT DE RAJOUTER DES CHOSES, il faut standardiser avec dolibarr standard ex fonction dolGetButtonAction()
 	elseif($param['type'] == 'select' || !empty($param['usemultiselect'])) {
-		print '<select id="'.$name.'" name="'.$name.((!empty($param['usemultiselect'])) ? '[]' : '').'" type="'.$param['type'].'" '.$readonly.' class="'.$class.' selectpicker"  value="'.$value.'"';
+		print '<select id="'.$name.'" name="'.$name.((!empty($param['usemultiselect'])) ? '[]' : '').'" type="'.$param['type'].'" '.$readonly.' class="'.$class.' selectpicker"  data-live-search="true" value="'.$value.'"';
 		if(!empty($param['required'])){
 			print ' required ';
 		}
