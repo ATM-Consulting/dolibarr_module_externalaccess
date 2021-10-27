@@ -11,6 +11,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.26
 
+- FIX : missing employee parameter on document download *26/10/2021* - 1.26.1
 - NEW : function print_propalTable : parameter link or not to propal *14/10/2021* - 1.26.0
 - NEW : Gestion des selects multiple par la fonction stdFormHelper *12/10/2021* - 1.25.0
 
