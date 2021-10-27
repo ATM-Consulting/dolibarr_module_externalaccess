@@ -196,13 +196,14 @@ class Actionsexternalaccess
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-		if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+         if($user->employee && empty($user->socid)) $employee = true;
+		if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices) || $employee)
 	    {
 	        dol_include_once('compta/facture/class/facture.class.php');
 	        $object = new Facture($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut>=Facture::STATUS_VALIDATED && $object->socid==$user->socid)
+	            if($object->statut>=Facture::STATUS_VALIDATED && ($object->socid==$user->socid || $employee))
 	            {
 					load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
@@ -231,13 +232,14 @@ class Actionsexternalaccess
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+        if($user->employee && empty($user->socid)) $employee = true;
+	    if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals) || $employee)
 	    {
 	        dol_include_once('comm/propal/class/propal.class.php');
 	        $object = new Propal($db);
 	        if($object->fetch($id)>0)
 	        {
-	            if($object->statut>=Propal::STATUS_VALIDATED && $object->socid==$user->socid)
+	            if($object->statut>=Propal::STATUS_VALIDATED && ($object->socid==$user->socid || $employee))
 	            {
 					load_last_main_doc($object);
 	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
