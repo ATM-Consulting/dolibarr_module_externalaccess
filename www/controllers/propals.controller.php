@@ -127,6 +127,11 @@ class PropalsController extends Controller
 			print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
 			print ' <th class="text-center" ></th>';
+
+			$parameters = array('context' => $context, 'controller' => $context->controller);
+			$reshook = $hookmanager->executeHooks('printFieldListTitle', $parameters, $object, $action);
+			if($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
+
 			print '</tr>';
 
 			print '</thead>';
@@ -175,6 +180,9 @@ class PropalsController extends Controller
 
 				print ' <td  class="text-right" >'.$downloadLink.'</td>';
 
+				$parameters = array('context' => $context, 'controller' => $context->controller);
+				$reshook = $hookmanager->executeHooks('printFieldListValue', $parameters, $object, $action);
+				if($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
 
 				print '</tr>';
 
