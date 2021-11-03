@@ -312,6 +312,16 @@ function stdFormHelper($name='', $label='', $value = '', $mode = 'edit', $htmlen
 			}
 		}
 		print '</select>';
+	} elseif ($param['type'] == 'checkbox') {
+		print '<input id="'.$name.'" name="'.$name.'" type="'.$param['type'].'" '.$readonly.' class="'.$class.'"';
+		if(!empty($param['required'])){
+			print ' required ';
+		}
+		if(!empty($value)){
+			print ' checked ';
+		}
+		print ' >';
+
 	}
 	else
 	{

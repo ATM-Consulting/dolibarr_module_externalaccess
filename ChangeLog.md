@@ -7,6 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 ## Unreleased
 
+- NEW : Ajout type checkbox dans la fonction "stdFormHelper" - *1.27.0* - **03/11/2021**
 
 
 # RELEASE 1.26
