@@ -167,6 +167,8 @@ print $hookmanager->resPrint;
 
 
 print_title('ConfLinkedToContents');
+print_on_off('EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL', false, '');
+
 print_input_form_part('EACCESS_LOGIN_EXTRA_HTML', false, '', array(), 'textarea');
 if (empty($conf->global->EACCESS_RGPD_MSG)){
     dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);

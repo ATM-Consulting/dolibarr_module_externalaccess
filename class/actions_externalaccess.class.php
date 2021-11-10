@@ -241,8 +241,11 @@ class Actionsexternalaccess
 	        {
 	            if($object->statut>=Propal::STATUS_VALIDATED && ($object->socid==$user->socid || $employee))
 	            {
-					load_last_main_doc($object);
-	                $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
+                    if (!empty($conf->global->EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL)){
+                        $object->last_main_doc = '';
+                    }
+                    load_last_main_doc($object);
+                    $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
 
 	                if(!empty($object->last_main_doc)){
 	                    downloadFile($filename, $forceDownload);

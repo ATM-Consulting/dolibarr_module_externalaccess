@@ -161,6 +161,7 @@ EACCESS_MAX_TOP_MENU = Regroupement automatique des entrées du menu du haut dan
 EACCESS_MAX_TOP_MENU_HELP = Exemple : Administratif / Technique.<br/>Laisser vide (ou 0) pour désactiver le comportement.
 EACCESS_FAVICON_URL = Url de la favicon
 EACCESS_FAVICON_URL_HELP = Utiliser une image carré de 16x16 pixels minimum ou 32x32 pixels. <br/>Une favicon est une icône mise à disposition par un site Web pour enjoliver, en particulier dans les navigateurs Web, les endroits où ce site est mentionné. Cette icône pourra être utilisée dans la barre d'adresses ou de titre, les favoris (le terme est d'ailleurs un mot-valise né de la contraction de « favorites » et « icon »), les onglets, ou autres raccourcis.
+EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL = Forcer l'utilisation du modèle par défaut pour le téléchargement des propositions commerciales
 
 # INDEX
 Quotations=Devis
