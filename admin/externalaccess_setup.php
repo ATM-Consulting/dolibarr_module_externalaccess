@@ -198,6 +198,7 @@ print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, $TAddedColumnShi
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROJECT', false, array('budget_amount'=>$langs->trans('Budgets')));
 $e = new ExtraFields($db);
 $e->fetch_name_optionals_label('commande');
+$TExtrafields_commande_list=array();
 if (!empty($e->attributes['commande']['list'])) {
 	$TExtrafields_commande = array_keys($e->attributes['commande']['list']);
 	foreach ($TExtrafields_commande as $ef_name) {
@@ -208,6 +209,7 @@ print_multiselect('EACCESS_LIST_ADDED_COLUMNS_ORDER', false, $TExtrafields_comma
 
 
 $e->fetch_name_optionals_label('propal');
+$TExtrafields_propal_list=array();
 if (!empty($e->attributes['propal']['list'])) {
 	$TExtrafields_propal = array_keys($e->attributes['propal']['list']);
 	foreach ($TExtrafields_propal as $ef_name) {
