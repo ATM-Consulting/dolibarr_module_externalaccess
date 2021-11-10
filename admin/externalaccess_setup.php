@@ -218,7 +218,6 @@ if (!empty($e->attributes['propal']['list'])) {
 }
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROPAL', false, $TExtrafields_propal_list);
 
-
 print_title('Experimental');
 print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
 
