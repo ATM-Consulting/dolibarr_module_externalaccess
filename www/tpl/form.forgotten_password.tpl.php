@@ -35,18 +35,18 @@ if (empty($conf) || ! is_object($conf))
                   </div>
                 </div>
             </div>
-          </div>
-	</div>
 
-	<div class="text-center" >
-        <?php if ($mode == 'dolibarr' || ! $disabled) { ?>
-        	<span class="passwordmessagedesc">
+			<div class="text-center" >
+				<?php if ($mode == 'dolibarr' || ! $disabled) { ?>
+					<span class="passwordmessagedesc">
         	<?php echo $langs->trans('SendNewPasswordDesc'); ?>
         	</span>
-        <?php }else{ ?>
-        	<div class="warning" align="center">
-        	<?php echo $langs->trans('AuthenticationDoesNotAllowSendNewPassword', $mode); ?>
-        	</div>
-        <?php } ?>
+				<?php }else{ ?>
+					<div class="warning" align="center">
+						<?php echo $langs->trans('AuthenticationDoesNotAllowSendNewPassword', $mode); ?>
+					</div>
+				<?php } ?>
+			</div>
+          </div>
 	</div>
 </div>

@@ -4,6 +4,7 @@ if (empty($conf) || ! is_object($conf))
 	print "Error, template page can't be called as URL";
 	exit;
 }
+$context = Context::getInstance();
 ?>
 <div class="container">
 	<div class="row  ">
@@ -52,15 +53,13 @@ if (empty($conf) || ! is_object($conf))
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<?php echo $langs->trans("Password"); ?>" required>
                 <input type="hidden" name="urlfrom" value="<?php print Context::urlOrigin(); ?>"/>
 
-                <?php
-
-                /* ?>
-                <div id="remember" class="checkbox">
+                <?php if(!empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE)){ ?>
+                <div id="forgot-password" class="checkbox text-right">
                     <label>
-                        <a href="" ><?php print $langs->trans('ForgetPassword'); ?></a>
+                        <a href="<?php print $context->getRootUrl('login', '&action=forgot-password') ?>" ><?php print $langs->trans('AskForgotPassword'); ?></a>
                     </label>
                 </div>
-                <?php */ ?>
+                <?php } ?>
 
                 <button class="btn btn-lg btn-primary btn-strong btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
 

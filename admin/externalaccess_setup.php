@@ -119,6 +119,7 @@ $link = '<a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-a
 print_input_form_part('EACCESS_ROOT_URL', false, $link, array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_ROOT_URL_HELP');
 print_input_form_part('EACCESS_TITLE', false, '', array('size'=> 50), 'input', 'EACCESS_TITLE_HELP');
 print_input_form_part('EACCESS_GOBACK_URL', false, '', array('size'=> 50), 'input', 'EACCESS_GOBACK_URL_HELP');
+print_on_off('EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE');
 
 print_title('ConfLinkedToContactInfos');
 print_input_form_part('EACCESS_PHONE');
