@@ -64,7 +64,7 @@ class modexternalaccess extends DolibarrModules
 
 
 
-		$this->version = '1.28.0';
+		$this->version = '1.29.0';
 
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
