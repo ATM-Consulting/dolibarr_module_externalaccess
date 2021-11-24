@@ -905,7 +905,7 @@ function load_last_main_doc(&$object) {
 }
 
 /*
- * Compatible à partir de la version V12
+ * Compatible toute version, retourne le chemin entier
  */
 
 function load_last_main_doc_multientity(&$object) {
@@ -915,12 +915,15 @@ function load_last_main_doc_multientity(&$object) {
 	if(empty($object->last_main_doc)) {
 		$ref = dol_sanitizeFileName($object->ref);
 
-		$last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+		if(DOL_VERSION < 12) $last_main_doc = DOL_DATA_ROOT.'/'.$object->element.'/'.$ref.'/'.$ref.'.pdf';
+		else $last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 
 		if($object->element == 'propal'){
-			$last_main_doc = $conf->propal->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+			if(DOL_VERSION < 12) $last_main_doc = DOL_DATA_ROOT.'/propale/'.$ref.'/'.$ref.'.pdf';
+			else $last_main_doc = $conf->propal->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 		}
 		elseif($object->element == 'shipping'){
+			if(DOL_VERSION < 12)  $last_main_doc = DOL_DATA_ROOT.'/expedition/sending/'.$ref.'/'.$ref.'.pdf';
 			$last_main_doc = $conf->expedition->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 		}
 
