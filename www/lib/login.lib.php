@@ -72,12 +72,11 @@ function dol_loginfunction($langs,$conf,$mysoc)
         $captcha_refresh=img_picto($langs->trans("Refresh"),'refresh','id="captcha_refresh_img"');
     }
 
-
-
+	/**
+	 *  LOGIN DISPLAY
+	 */
     // Include login page template
     include __DIR__.'/../tpl/login.tpl.php';
-
-
 }
 
 

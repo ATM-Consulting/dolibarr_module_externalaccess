@@ -142,11 +142,15 @@ class Controller {
 		return $reshook;
 	}
 
-	public function loadTemplate($templateName){
+	/**
+	 * @param string $templateName
+	 * @param mixed $vars data to transmit to template
+	 */
+	public function loadTemplate($templateName, $vars = false){
 		global $conf, $langs, $hookmanager, $db; // load for tpl
 		$context = Context::getInstance(); // load for tpl
 
-		if (!preg_match('/^[0-9A-ZaZ_\-]*$/ui', $templateName)) {
+		if (!preg_match('/^[0-9\.A-ZaZ_\-]*$/ui', $templateName)) {
 			return;
 		}
 

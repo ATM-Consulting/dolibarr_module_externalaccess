@@ -321,12 +321,16 @@ if (! empty($_SESSION["disablemodules"]))
 }
 
 /*
+ * Ajout du Context et des controllers avant la partie login
+ */
+$context = Context::getInstance();
+
+/*
  * Phase authentication / login
  */
-
 $langs->load('externalaccess@externalaccess');
 $login='';
-if (! defined('NOLOGIN'))
+if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLoggedUser))
 {
 	// $authmode lists the different means of identification to be tested in order of preference.
 	// Example: 'http', 'dolibarr', 'ldap', 'http,forceuser', '...'
@@ -775,7 +779,7 @@ if (! defined('NOREQUIRETRAN'))
 	}
 }
 
-if (! defined('NOLOGIN'))
+if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLoggedUser))
 {
 	// If the login is not recovered, it is identified with an account that does not exist.
 	// Hacking attempt?

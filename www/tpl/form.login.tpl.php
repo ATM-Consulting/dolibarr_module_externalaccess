@@ -56,7 +56,7 @@ $context = Context::getInstance();
                 <?php if(!empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE)){ ?>
                 <div id="forgot-password" class="checkbox text-right">
                     <label>
-                        <a href="<?php print $context->getRootUrl('login', '&action=forgot-password') ?>" ><?php print $langs->trans('AskForgotPassword'); ?></a>
+                        <a href="<?php print $context->getRootUrl('forgottenpassword', '&action=forgot-password') ?>" ><?php print $langs->trans('AskForgotPassword'); ?></a>
                     </label>
                 </div>
                 <?php } ?>

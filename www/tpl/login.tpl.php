@@ -39,23 +39,14 @@ include __DIR__ . '/menu.tpl.php';
 <div class="container my-auto">
 <?php
 
-if($action == 'forgot-password' && !empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE))
-{
-	require __DIR__ .'/form.forgotten_password.tpl.php';
-}
-else{
-	require __DIR__ .'/form.login.tpl.php';
-}
+
+require __DIR__ .'/form.login.tpl.php';
+
 
 ?>
 </div>
 </header>
 
-<?php /*
-<section id="forgottenpassword" class="hide" >
-<?php require __DIR__ .'/form.forgotten_password.tpl.php'; ?>
-</section>
-  */ ?>
 
 <?php include __DIR__ .'/footer.tpl.php';
 

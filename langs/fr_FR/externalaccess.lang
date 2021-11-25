@@ -182,6 +182,7 @@ linked-delivery-date_delivery-timestamp=Date réelle de réception
 
 ForgotThePassword=Mot de passe oublié ?
 ForgotPassword=Mot de passe oublié ?
+GoBackToLoginPage = Retour à la page d'identification
 Rememberme=Se souvenir de moi.
 SignIn=Connexion
 YouCanResetYourPasswordHere=Vous pouvez le renouveler ici
