@@ -22,6 +22,12 @@ class Context
 	public $meta_title;
 	public $meta_desc;
 
+	/**
+	 * The application name
+	 * @var $appliName
+	 */
+	public $appliName;
+
 	public $controller;
 	public $controller_found = false;
 
@@ -91,6 +97,9 @@ class Context
 			$this->controller = 'default';
 		}
 
+
+		$this->appliName = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+
 		$this->generateNewToken();
 
 		$this->initController();
@@ -133,6 +142,7 @@ class Context
 
 		// define controllers definition
 		$this->addControllerDefinition('default', $defaultControllersPath.'default.controller.php', 'DefaultController');
+		$this->addControllerDefinition('forgottenpassword', $defaultControllersPath.'forgotten_password.controller.php', 'ForgottenPasswordController');
 		$this->addControllerDefinition('personalinformations', $defaultControllersPath.'personalinformations.controller.php', 'PersonalInformationsController');
 		$this->addControllerDefinition('invoices', $defaultControllersPath.'invoices.controller.php', 'InvoicesController');
 		$this->addControllerDefinition('orders', $defaultControllersPath.'orders.controller.php', 'OrdersController');

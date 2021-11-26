@@ -25,6 +25,8 @@ $context = Context::getInstance();
 $context->doNotDisplayHeaderBar = 1;
 $context->doNotDisplayMenu = 1;
 
+$action = GETPOST('action');
+
 include __DIR__ .'/header.tpl.php';
 
 
@@ -35,15 +37,16 @@ include __DIR__ . '/menu.tpl.php';
 
 <header class="masthead text-center  d-flex">
 <div class="container my-auto">
-<?php require __DIR__ .'/form.login.tpl.php'; ?>
+<?php
+
+
+require __DIR__ .'/form.login.tpl.php';
+
+
+?>
 </div>
 </header>
 
-<?php /*
-<section id="forgottenpassword" class="hide" >
-<?php require __DIR__ .'/form.forgotten_password.tpl.php'; ?>
-</section>
-  */ ?>
 
 <?php include __DIR__ .'/footer.tpl.php';
 
