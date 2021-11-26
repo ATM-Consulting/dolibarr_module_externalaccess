@@ -8,7 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 ## Unreleased
 
 - NEW : Add forgotten password - *1.31.0* - **25/11/2021**
-- NEW : Add support for controlleur without logged user needed  - *1.30.0* - **25/11/2021**
+- NEW : Add support for controller without logged user needed  - *1.30.0* - **25/11/2021**
 - NEW : Ajout fonction load_last_main_doc : ajout gestion multientité - *1.29.0* - **24/11/2021**
 - NEW : Ajout type checkbox dans la fonction "stdFormHelper" - *1.28.0* - **03/11/2021**
 - NEW : ajout hook "printFieldListValue" et "printFieldListTitle" dans la liste des propals - *03/11/2021* - 1.27.0

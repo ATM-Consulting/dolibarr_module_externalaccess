@@ -42,7 +42,7 @@ class UserExternalAccess extends User
 			$outputlangs->getDefaultLang($this->conf->MAIN_LANG_DEFAULT);
 		}
 
-		if ($this->conf->MAIN_LANG_DEFAULT) {
+		if (!empty($this->conf->MAIN_LANG_DEFAULT)) {
 			$outputlangs->setDefaultLang($this->conf->MAIN_LANG_DEFAULT);
 		} else {	// If user has not defined its own language, we used current language
 			$outputlangs = $langs;
