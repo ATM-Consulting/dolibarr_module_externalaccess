@@ -3,12 +3,17 @@
 
 class DefaultController extends Controller
 {
-
-	public function __construct() {
-		parent::__construct();
-
+	/**
+	 * check current access to controller
+	 *
+	 * @param void
+	 * @return  bool
+	 */
+	public function checkAccess() {
 		$this->accessRight = true;
+		return parent::checkAccess();
 	}
+	
 
 	/**
 	 * action method is called before html output

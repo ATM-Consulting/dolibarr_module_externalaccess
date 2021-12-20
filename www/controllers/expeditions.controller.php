@@ -4,13 +4,18 @@
 class ExpeditionsController extends Controller
 {
 
-	public function __construct() {
+
+	/**
+	 * check current access to controller
+	 *
+	 * @param void
+	 * @return  bool
+	 */
+	public function checkAccess() {
 		global $conf, $user;
-		parent::__construct();
-
 		$this->accessRight = !empty($conf->expedition->enabled) && $conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions);
+		return parent::checkAccess();
 	}
-
 
 	/**
 	 * action method is called before html output

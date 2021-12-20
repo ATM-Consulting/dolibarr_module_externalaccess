@@ -57,12 +57,12 @@ class Controller {
 
 		$context = Context::getInstance();
 
-		if(!$this->accessRight){
-			return false;
-		}
-
 		if($this->accessNeedLoggedUser){
 			if (! $context->userIslog()) return false;
+		}
+
+		if(!$this->accessRight){
+			return false;
 		}
 
 		return true;

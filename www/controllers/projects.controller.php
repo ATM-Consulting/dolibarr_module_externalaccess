@@ -6,17 +6,18 @@
 class ProjectsController extends Controller
 {
 
+
 	/**
-	 * ProjectsController constructor.
+	 * check current access to controller
+	 *
+	 * @param void
+	 * @return  bool
 	 */
-	public function __construct()
-	{
+	public function checkAccess() {
 		global $conf, $user;
-		parent::__construct();
-
 		$this->accessRight = !empty($conf->projet->enabled) && $conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects);
+		return parent::checkAccess();
 	}
-
 
 	/**
 	 * action method is called before html output

@@ -11,8 +11,10 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.31
 
+- FIX : User access rights - *1.31.1* - **20/12/2021**
 - NEW : Add forgotten password - *1.31.0* - **25/11/2021**
-- NEW : Add support for controller without logged user needed  - *1.30.0* - **25/11/2021**
+- NEW : Add support for controller without logged user needed  - *1.30.0* - **25/11/2021**  
+  **WARNING** : be sure your controllers accessRight values are set in `checkAccess()` methods
 - NEW : Ajout fonction load_last_main_doc : ajout gestion multientité - *1.29.0* - **24/11/2021**
 
 # RELEASE 1.28

@@ -4,13 +4,17 @@
 class PropalsController extends Controller
 {
 
-	public function __construct() {
+	/**
+	 * check current access to controller
+	 *
+	 * @param void
+	 * @return  bool
+	 */
+	public function checkAccess() {
 		global $conf, $user;
-		parent::__construct();
-
 		$this->accessRight = $conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals);
+		return parent::checkAccess();
 	}
-
 
 	/**
 	 * action method is called before html output
