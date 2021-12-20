@@ -11,6 +11,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.31
 
+- FIX : Missing check for module activation - *1.31.2* - **20/12/2021**
 - FIX : User access rights - *1.31.1* - **20/12/2021**
 - NEW : Add forgotten password - *1.31.0* - **25/11/2021**
 - NEW : Add support for controller without logged user needed  - *1.30.0* - **25/11/2021**  

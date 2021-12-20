@@ -3,8 +3,6 @@
 
 class ExpeditionsController extends Controller
 {
-
-
 	/**
 	 * check current access to controller
 	 *
