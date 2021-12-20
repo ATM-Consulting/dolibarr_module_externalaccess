@@ -15,7 +15,13 @@ $maxTopMenu = !empty($conf->global->EACCESS_MAX_TOP_MENU)?$conf->global->EACCESS
 
 if ($context->userIsLog())
 {
-    if ($conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects))
+
+	// TODO : check if is it possible to use checkAccess() of controller
+
+    if (!empty($conf->projet->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_PROJECTS
+		&& !empty($user->rights->externalaccess->view_projects)
+	)
     {
         $Tmenu['projects'] = array(
             'id' => 'projects',
@@ -26,7 +32,10 @@ if ($context->userIsLog())
         );
     }
 
-	if ($conf->global->EACCESS_ACTIVATE_TASKS && !empty($user->rights->externalaccess->view_tasks))
+	if (!empty($conf->projet->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_TASKS
+		&& !empty($user->rights->externalaccess->view_tasks)
+	)
 	{
 		$Tmenu['tasks'] = array(
 			'id' => 'tasks',
@@ -37,7 +46,10 @@ if ($context->userIsLog())
 		);
 	}
 
-    if ($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+    if (!empty($conf->propal->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_PROPALS
+		&& !empty($user->rights->externalaccess->view_propals)
+	)
     {
         $Tmenu['propals'] = array(
             'id' => 'propals',
@@ -48,7 +60,10 @@ if ($context->userIsLog())
         );
     }
 
-	if ($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	if (!empty($conf->commande->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_ORDERS
+		&& !empty($user->rights->externalaccess->view_orders)
+	)
 	{
 		$Tmenu['orders'] = array(
 			'id' => 'orders',
@@ -59,7 +74,10 @@ if ($context->userIsLog())
 		);
 	}
 
-	if ($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
+	if (!empty($conf->expedition->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_EXPEDITIONS
+		&& !empty($user->rights->externalaccess->view_expeditions)
+	)
 	{
 		$Tmenu['expeditions'] = array(
 			'id' => 'expeditions',
@@ -70,7 +88,10 @@ if ($context->userIsLog())
 		);
 	}
 
-    if ($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+    if (!empty($conf->facture->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_INVOICES
+		&& !empty($user->rights->externalaccess->view_invoices)
+	)
     {
         $Tmenu['invoices'] = array(
             'id' => 'invoices',
@@ -81,7 +102,10 @@ if ($context->userIsLog())
         );
     }
 
-	if ($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices))
+	if (!empty($conf->supplier_invoice->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES
+		&& !empty($user->rights->externalaccess->view_supplier_invoices)
+	)
 	{
 		$Tmenu['supplier_invoices'] = array(
 			'id' => 'supplier_invoices',
@@ -92,7 +116,10 @@ if ($context->userIsLog())
 		);
 	}
 
-    if (!empty($conf->ticket->enabled) && $conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+    if (!empty($conf->ticket->enabled)
+		&& $conf->global->EACCESS_ACTIVATE_TICKETS
+		&& !empty($user->rights->externalaccess->view_tickets)
+	)
     {
         $Tmenu['tickets'] = array(
             'id' => 'tickets',
