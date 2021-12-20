@@ -11,11 +11,20 @@ class ForgottenPasswordController extends Controller
 	public $tpl;
 
 	public function __construct() {
-		global $conf;
 		$this->accessNeedLoggedUser = false;
-		$this->accessRight = !empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE);
-
 		$this->tpl = new stdClass();
+	}
+
+	/**
+	 * check current access to controller
+	 *
+	 * @param void
+	 * @return  bool
+	 */
+	public function checkAccess() {
+		global $conf;
+		$this->accessRight = !empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE);
+		return parent::checkAccess();
 	}
 
 	/**

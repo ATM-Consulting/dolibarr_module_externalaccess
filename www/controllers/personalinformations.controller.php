@@ -3,12 +3,16 @@
 
 class PersonalInformationsController extends Controller
 {
-	public function __construct() {
-		global $conf, $user;
-		parent::__construct();
-
+	/**
+	 * check current access to controller
+	 *
+	 * @param void
+	 * @return  bool
+	 */
+	public function checkAccess() {
 		$this->accessNeedLoggedUser = true;
 		$this->accessRight =  true; // personal information always available
+		return parent::checkAccess();
 	}
 
 
