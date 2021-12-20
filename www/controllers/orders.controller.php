@@ -12,7 +12,7 @@ class OrdersController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = $conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders);
+		$this->accessRight = !empty($conf->commande->enabled) && $conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders);
 		return parent::checkAccess();
 	}
 
@@ -105,10 +105,10 @@ class OrdersController extends Controller
 			//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
 			$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
-			if(empty($TOther_fields)) $TOther_fields = array();
+			if(empty($TOther_fields_all) || !is_array($TOther_fields_all)) $TOther_fields_all = array();
 
 			$TOther_fields_order = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_ORDER);
-			if(empty($TOther_fields_order)) $TOther_fields_order = array();
+			if(empty($TOther_fields_order) || !is_array($TOther_fields_order)) $TOther_fields_order = array();
 
 			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_order);
 

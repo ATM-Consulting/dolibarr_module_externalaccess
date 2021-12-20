@@ -12,7 +12,7 @@ class InvoicesController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices);
+		$this->accessRight = !empty($conf->facture->enabled) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices);
 		return parent::checkAccess();
 	}
 
