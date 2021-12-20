@@ -241,6 +241,10 @@ if (! empty($conf->file->main_force_https) && (empty($_SERVER["HTTPS"]) || $_SER
 	}
 }
 
+/*
+ * Ajout du Context et des controllers avant la partie login
+ */
+$context = Context::getInstance();
 
 // Loading of additional presentation includes
 if (! defined('NOREQUIREHTML')) require_once DOL_DOCUMENT_ROOT .'/core/class/html.form.class.php';	    // Need 660ko memory (800ko in 2.2)
@@ -320,10 +324,7 @@ if (! empty($_SESSION["disablemodules"]))
 	}
 }
 
-/*
- * Ajout du Context et des controllers avant la partie login
- */
-$context = Context::getInstance();
+
 
 /*
  * Phase authentication / login
@@ -810,4 +811,3 @@ if (! defined('NOREQUIRETRAN'))
 	$langs->load("main");
 	$langs->load("dict");
 }
-
