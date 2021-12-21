@@ -92,12 +92,8 @@ class Controller {
 	 * @return void
 	 */
 	public function display404(){
-		$context = Context::getInstance();
-
 		$this->loadTemplate('header');
-
-		if(!$context->controller_found) $this->loadTemplate('404');
-
+		$this->loadTemplate('404');
 		$this->loadTemplate('footer');
 	}
 
