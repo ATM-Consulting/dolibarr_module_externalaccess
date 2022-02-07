@@ -6,7 +6,7 @@ if (empty($context) || ! is_object($context))
     // Note: use fontawesome v4.7.0 : https://fontawesome.com/v4.7.0/
 }
 
-global $langs;
+global $langs, $user;
 
 $signature = '';
 if(!empty($user->socid) && !empty($conf->global->EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE)) {
@@ -15,7 +15,6 @@ if(!empty($user->socid) && !empty($conf->global->EACCESS_ADD_INFOS_COMMERCIAL_BA
 	$soc = new Societe($db);
 	$soc->fetch($user->socid);
 	$TSalesRep = $soc->getSalesRepresentatives($user);
-
 	if(!empty($TSalesRep)) {
 
 		$signature = $langs->trans('YourSalesRep', $conf->global->MAIN_INFO_SOCIETE_NOM).'<br />';
