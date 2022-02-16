@@ -6,8 +6,7 @@ ___
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
 ## Unreleased
-
-
+-NEW : Add conf for description field & Text help message *1.32.0* - **16/02/2022** 
 
 # RELEASE 1.31
 
