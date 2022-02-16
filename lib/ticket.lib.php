@@ -54,8 +54,11 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 		$out.= '<input type="hidden" name="id" value="'.$object->id.'" />';
 	}
 
+		$out.= '<div class="ticket-help-msg-wrap">'.$conf->global->TICKET_PUBLIC_TEXT_HELP_MESSAGE.'</div>';
+
 	$out .= '<div class="form-ticket-message-container" >';
 	$out .= '<div class="form-group">
+
 				<label for="ticket-subject">'.$langs->transnoentities('TicketSubject').'</label>
 				<input required type="text" name="subject" class="form-control" id="ticket-subject" aria-describedby="ticket-subject-help" placeholder="'.$langs->transnoentities('TicketSubjectHere').'" maxlength="200">
 				<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
@@ -69,7 +72,7 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 	$out .=  '<div class="form-group">
 				<label for="ticket-message">'.$langs->transnoentities('TicketMessage').'</label>
-				<textarea required name="message" class="form-control" id="ticket-message" rows="10">'.dol_htmlentities($object->message).'</textarea>
+				<textarea required name="message" class="form-control" id="ticket-message" rows="10">'.dol_htmlentities($object->message).$conf->global->TICKET_EXTERNAL_DESCRIPTION_MESSAGE.'</textarea>
 			</div>
 	';
 
@@ -84,7 +87,6 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 	else{
 		$out .=  '<button type="submit" class="btn btn-success btn-strong pull-right" name="action" value="savecreate"  >'.$langs->transnoentities('TicketBtnSubmitCreate').'</button>';
 	}
-
 	$out .= '
 			</div>
 		</div>

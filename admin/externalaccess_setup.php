@@ -174,7 +174,18 @@ print_input_form_part('EACCESS_LOGIN_EXTRA_HTML', false, '', array(), 'textarea'
 if (empty($conf->global->EACCESS_RGPD_MSG)){
     dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
 }
+
+if (empty($conf->global->TICKET_EXTERNAL_DESCRIPTION_MESSAGE)){
+	dolibarr_set_const($db, 'TICKET_EXTERNAL_DESCRIPTION_MESSAGE', $langs->trans('TICKET_EXTERNAL_DESCRIPTION_MESSAGE_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
+}
+
+if (empty($conf->global->TICKET_PUBLIC_TEXT_HELP_MESSAGE)){
+	dolibarr_set_const($db, 'TICKET_PUBLIC_TEXT_HELP_MESSAGE', $langs->trans('TICKET_PUBLIC_TEXT_HELP_MESSAGE_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
+}
+
 print_input_form_part('EACCESS_RGPD_MSG', false, '', array(), 'textarea');
+print_input_form_part('TICKET_EXTERNAL_DESCRIPTION_MESSAGE', false, '', array(), 'textarea');
+print_input_form_part('TICKET_EXTERNAL_TEXT_HELP_MESSAGE', false, '', array(), 'textarea');
 
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
 
