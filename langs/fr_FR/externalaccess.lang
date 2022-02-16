@@ -230,5 +230,6 @@ ContactUs = Nous contacter
 FournRef = Référence fournisseur
 AskForgotPassword = Mot de passe oublié ?
 
-TICKET_EXTERNAL_TEXT_HELP_MESSAGE=Texte d'aide pour la saisie du message
+
+TICKET_PUBLIC_TEXT_HELP_MESSAGE=Texte d'aide pour la saisie du message
 TICKET_EXTERNAL_DESCRIPTION_MESSAGE=Texte par défaut du champ description à la création d'un ticket

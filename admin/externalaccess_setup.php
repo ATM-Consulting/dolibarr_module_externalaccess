@@ -31,6 +31,7 @@ if (! $res) {
 // Libraries
 require_once DOL_DOCUMENT_ROOT . "/core/lib/admin.lib.php";
 require_once '../lib/externalaccess.lib.php';
+require_once '../lib/ticket.lib.php';
 require_once DOL_DOCUMENT_ROOT . '/core/class/html.form.class.php';
 
 // Translations
@@ -176,16 +177,16 @@ if (empty($conf->global->EACCESS_RGPD_MSG)){
 }
 
 if (empty($conf->global->TICKET_EXTERNAL_DESCRIPTION_MESSAGE)){
-	dolibarr_set_const($db, 'TICKET_EXTERNAL_DESCRIPTION_MESSAGE', $langs->trans('TICKET_EXTERNAL_DESCRIPTION_MESSAGE_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
+	dolibarr_set_const($db, 'TICKET_EXTERNAL_DESCRIPTION_MESSAGE', $langs->trans(''), 'chaine', 0, '', $conf->entity);
 }
 
 if (empty($conf->global->TICKET_PUBLIC_TEXT_HELP_MESSAGE)){
-	dolibarr_set_const($db, 'TICKET_PUBLIC_TEXT_HELP_MESSAGE', $langs->trans('TICKET_PUBLIC_TEXT_HELP_MESSAGE_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
+	dolibarr_set_const($db, 'TICKET_PUBLIC_TEXT_HELP_MESSAGE', $langs->trans('TicketPublicPleaseBeAccuratelyDescribe'), 'chaine', 0, '', $conf->entity);
 }
 
 print_input_form_part('EACCESS_RGPD_MSG', false, '', array(), 'textarea');
 print_input_form_part('TICKET_EXTERNAL_DESCRIPTION_MESSAGE', false, '', array(), 'textarea');
-print_input_form_part('TICKET_EXTERNAL_TEXT_HELP_MESSAGE', false, '', array(), 'textarea');
+print_input_form_part('TICKET_PUBLIC_TEXT_HELP_MESSAGE', false, '', array(), 'textarea');
 
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
 
