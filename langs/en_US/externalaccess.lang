@@ -127,11 +127,6 @@ Invoices = Invoices
 
 Renew = Renew
 
-
-#
-# MISSING TRANSLATION FROM fr_FR
-#
-
 AbricotNotFound = Abricot module missing, this module is required.
 AbricotWiki = View page informations about Abricot module.
 EACCESS_ROOT_URL = Public URL
