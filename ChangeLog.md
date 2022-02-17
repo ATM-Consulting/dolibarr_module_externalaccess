@@ -11,6 +11,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.31
 
+- FIX : Missing en_US translations - *1.31.4* - **17/02/2022**
 - FIX : 404 - *1.31.3* - **20/12/2021**
 - FIX : Missing check for module activation - *1.31.2* - **20/12/2021**
 - FIX : User access rights - *1.31.1* - **20/12/2021**
