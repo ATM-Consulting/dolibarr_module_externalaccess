@@ -911,6 +911,10 @@ body.iframe .container {
 	margin-right: .1rem;
 }
 
+.ticket-help-msg-wrap {
+	margin-bottom: 30px;
+}
+
 <?php
 
 include_once __DIR__ . '/timeline.inc.php';

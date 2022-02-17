@@ -174,7 +174,15 @@ print_input_form_part('EACCESS_LOGIN_EXTRA_HTML', false, '', array(), 'textarea'
 if (empty($conf->global->EACCESS_RGPD_MSG)){
     dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
 }
+
+//Liaison entre la conf de Ticket et Portail pour avoir un message par défaut si vide
+//if (empty($conf->global->TICKET_PUBLIC_TEXT_HELP_MESSAGE)){
+//	dolibarr_set_const($db, 'TICKET_PUBLIC_TEXT_HELP_MESSAGE', $langs->trans('TicketPublicPleaseBeAccuratelyDescribe'), 'chaine', 0, '', $conf->entity);
+//}
+
 print_input_form_part('EACCESS_RGPD_MSG', false, '', array(), 'textarea');
+print_input_form_part('TICKET_EXTERNAL_DESCRIPTION_MESSAGE', false, '', array(), 'textarea');
+print_input_form_part('TICKET_PUBLIC_TEXT_HELP_MESSAGE', false, '', array(), 'textarea');
 
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
 
