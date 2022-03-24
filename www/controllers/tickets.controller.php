@@ -63,7 +63,7 @@ class TicketsController extends Controller
 
 	static public function print_ticketTable($socId = 0)
 	{
-		global $langs,$db, $user;
+		global $langs,$db, $user, $conf;
 		$context = Context::getInstance();
 
 		dol_include_once('ticket/class/ticket.class.php');
@@ -83,10 +83,33 @@ class TicketsController extends Controller
 
 		if(!empty($tableItems))
 		{
+
+			$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			if(empty($TOther_fields)) $TOther_fields = array();
+
+			$TOther_fields_ticket = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_TICKET);
+			if(empty($TOther_fields_ticket)) $TOther_fields_ticket = array();
+
+			$TOther_fields = array_merge($TOther_fields, $TOther_fields_ticket);
+
+
 			print '<table id="ticket-list" class="table table-striped" >';
 			print '<thead>';
 			print '<tr>';
 			print ' <th class="text-center" >'.$langs->trans('Ref').'</th>';
+
+			if(!empty($TOther_fields)) {
+				$e = new ExtraFields($db); // Question d'opti, c'est mieux de charger l'objet avant la boucle, sinon le __construct vide le $e->attributes et donc nécessaire de refaire fetch_name_optionals_label à chaque itération
+				foreach ($TOther_fields as $field) {
+					if(property_exists('Ticket', $field)) print ' <th class="text-center" >' . $langs->trans($field) . '</th>';
+                    elseif(strpos($field, 'EXTRAFIELD') !== false) {
+
+						if(empty($e->attributes)) $e->fetch_name_optionals_label('ticket');
+						print ' <th class="text-center" >' . $e->attributes['ticket']['label'][strtr($field, array('EXTRAFIELD_'=>''))] . '</th>';
+					}
+				}
+			}
+
 			print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Subject').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
@@ -102,6 +125,20 @@ class TicketsController extends Controller
 
 				print '<tr>';
 				print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$context->getRootUrl('ticket_card', '&id='.$item->rowid).'">'.$object->ref.'</a></td>';
+				$total_more_fields=0;
+				if(!empty($TOther_fields)) {
+					foreach ($TOther_fields as $field) {
+						if(property_exists('Ticket', $field)) {
+							$total_more_fields+=1;
+							print ' <td data-search="' . strip_tags($object->{$field}) . '" data-order="' . strip_tags($object->{$field}) . '" >' . $object->{$field} . '</td>';
+						} elseif (strpos($field, 'EXTRAFIELD') !== false) {
+							print ' <td data-search="'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'ticket')) . '" data-order="'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'ticket')) . '" >'
+								. strip_tags($e->showOutputField(strtr($field, array('EXTRAFIELD_'=>'')), $object->array_options['options_'.strtr($field, array('EXTRAFIELD_'=>''))], '', 'ticket')) . '</td>';
+						}
+					}
+				}
 				print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
 				print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
 				print ' <td data-search="'.$object->type_label.'" data-order="'.$object->type_label.'" >'.$object->type_label.'</td>';
