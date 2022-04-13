@@ -24,13 +24,14 @@ function print_ticketCard($ticketId = 0, $socId = 0, $action = ''){
 function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 {
 	global $langs,$db, $conf;
-	$context = Context::getInstance();
+
 	$out = '';
 
 	$ticketId = intval($ticketId);
 
 	dol_include_once('ticket/class/ticket.class.php');
 	dol_include_once('user/class/user.class.php');
+	dol_include_once('externalaccess/class/html.formexternal.class.php');
 
 
 	/** @var Ticket $object */
@@ -46,58 +47,45 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 	$out .= '<!-- ticket.lib print_ticketCard_form -->';
 	//$out.= '<h5>'.$langs->trans('Ticket').' '.$object->ref.'</h5>';
 
-
-	$out .= '<form role="form" autocomplete="off" class="form" method="post"  action="'.$context->getRootUrl('ticket_card').'" >';
+	$formExternal = new FormExternal($db, 'ticket_card');
+	$formExternal->formAttributes['autocomplete'] = 'off';
+	$formExternal->formAttributes['role'] = 'form';
+	$formExternal->formAttributes['class'] = 'form';
 
 	if($object->id > 0){
-		$out.= '<input type="hidden" name="track_id" value="'.$object->track_id.'" />';
-		$out.= '<input type="hidden" name="id" value="'.$object->id.'" />';
+		$formExternal->formHiddenInputs['track_id'] = $object->track_id;
+		$formExternal->formHiddenInputs['id'] = $object->id;
 	}
 
-	if(!empty($conf->global->TICKET_PUBLIC_TEXT_HELP_MESSAGE)) {
-		$out .= '<div class="ticket-help-msg-wrap">' . $conf->global->TICKET_PUBLIC_TEXT_HELP_MESSAGE . '</div>';
-	}
-
-	$out .= '<div class="form-ticket-message-container" >';
-	$out .= '<div class="form-group">
-
-				<label for="ticket-subject">'.$langs->transnoentities('TicketSubject').'</label>
-				<input required type="text" name="subject" class="form-control" id="ticket-subject" aria-describedby="ticket-subject-help" placeholder="'.$langs->transnoentities('TicketSubjectHere').'" maxlength="200">
-				<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
-			</div>';
-
-//	$out .= '<div class="form-group">
-//				<label for="ticket-type-code">'.$langs->transnoentities('TicketTypeCode').'</label>';
-//	$out .=  $formticket->selectTypesTickets($object->type_code, 'ticket-type-code', '', 2, 1, 1, 0, 'form-control');
-//	$out .=  '<small id="ticket-subject-help" class="form-text text-muted">'.$langs->transnoentities('TicketSubjectHelp').'</small>
-//			</div>';
+	$item = $formExternal->newItem('subject');
+	$item->setAsRequired();
+	$item->nameText = $langs->transnoentities('TicketSubjectHere');
+	$item->helpText = $langs->transnoentities('TicketSubjectHelp');
+	$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketSubjectHere');
+	$item->fieldAttr['maxlength'] = 200;
 
 	if(empty($object->message)){
 		$object->message = $conf->global->TICKET_EXTERNAL_DESCRIPTION_MESSAGE;
 	}
+	$item = $formExternal->newItem('message');
+	$item->setAsHtml();
+	$item->setAsRequired();
+	$item->nameText = $langs->transnoentities('TicketMessage');
+	$item->fieldValue = dol_htmlentities($object->message);
 
-	$out .=  '<div class="form-group">
-				<label for="ticket-message">'.$langs->transnoentities('TicketMessage').'</label>
-				<textarea required name="message" class="form-control" id="ticket-message" rows="10">'.dol_htmlentities($object->message).'</textarea>
-			</div>
-	';
+	$formExternal->addExtrafieldsItems();
 
-	if (!empty($conf->global->FCKEDITOR_ENABLE_TICKET)){
-		$out .= '<script>CKEDITOR.replace( "message" );</script>';
-	}
-
-	$out .=  '<div class="form-btn-action-container">';
 	if($object->id > 0 ){
-		$out .=  '<button type="submit" class="btn btn-success btn-strong pull-right" name="action" value="save" >'.$langs->transnoentities('TicketBtnSubmitSave').'</button>';
+		$formExternal->btAttributes['action'] = 'save';
+		$formExternal->btAttributes['text'] = $langs->transnoentities('TicketBtnSubmitSave');
 	}
 	else{
-		$out .=  '<button type="submit" class="btn btn-success btn-strong pull-right" name="action" value="savecreate"  >'.$langs->transnoentities('TicketBtnSubmitCreate').'</button>';
+		$formExternal->btAttributes['action'] = 'savecreate';
+		$formExternal->btAttributes['text'] = $langs->transnoentities('TicketBtnSubmitCreate');
 	}
-	$out .= '
-			</div>
-		</div>
-	</form>
-	';
+
+
+	$out .= $formExternal->generateOutput(true, 'ticket');
 
 	print $out;
 }
