@@ -147,6 +147,7 @@ class FormExternal
 		$parameters = array(
 			'editMode' => $editMode
 		);
+		$this->addExtrafieldsItems();
 		$reshook = $hookmanager->executeHooks('formExternalBeforeGenerateOutput', $parameters, $this, $action); // Note that $action and $object may have been modified by some hooks
 		if ($reshook < 0) {
 			setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
@@ -248,20 +249,51 @@ class FormExternal
 	 * @return void
 	 */
 	public function addExtrafieldsItems() {
-//		dol_include_once('extrafields/class/extrafields.class.php');
-//			$e = new ExtraFields($db);
-//			$e->fetch_name_optionals_label('ticket');
-//			$extralabels = $e->attributes["ticket"]['label'];
-//			if(!empty($extralabels)) {
-//				foreach($extralabels as $k => $label) {
-//					$out .=  '<div class="form-group">
-//						<label for="ticket-message">'.$langs->transnoentities($label).'</label>
-//						'.$e->showInputField($k, '').'
-//					</div>';
-//				}
-//				stdFormHelper();
-//			}
+		global $conf;
+		dol_include_once('extrafields/class/extrafields.class.php');
+		$e = new ExtraFields($this->db);
+		$e->fetch_name_optionals_label($this->element);
+		$TTicketAddedField = unserialize($conf->global->EACCESS_CARD_ADDED_FIELD_TICKET);
+		if(!empty($TTicketAddedField)) {
+			foreach($TTicketAddedField as $ticket_field) {
+				$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
+				$label = $e->attributes[$this->element]['label'][$ticket_field];
+				$type = $e->attributes[$this->element]['type'][$ticket_field];
+				$size = $e->attributes[$this->element]['size'][$ticket_field];
+				$default = $e->attributes[$this->element]['default'][$ticket_field];
+				$computed = $e->attributes[$this->element]['computed'][$ticket_field];
+				$unique = $e->attributes[$this->element]['unique'][$ticket_field];
+				$required = $e->attributes[$this->element]['required'][$ticket_field];
+				$param = $e->attributes[$this->element]['param'][$ticket_field];
+				$perms = dol_eval($e->attributes[$this->element]['perms'][$ticket_field], 1); //TODO
+				$langfile = $e->attributes[$this->element]['langfile'][$ticket_field]; //TODO
+				$list = dol_eval($e->attributes[$this->element]['list'][$ticket_field], 1);
+				$totalizable = $e->attributes[$this->element]['totalizable'][$ticket_field];
+				$help = $e->attributes[$this->element]['help'][$ticket_field];
+				$hidden = (empty($list) ? 1 : 0);
+				$item = $this->newItem('extrafield-'.$ticket_field);
+				if(!empty($required)) $item->setAsRequired();
+				$item->nameText = $label;
+				if(!empty($help)) $item->helpText = $help;
+				if(!empty($size) && in_array($type, array('varchar', 'text'))) $item->fieldAttr['maxlength'] = $size;
+				if(!empty($default)) $item->fieldValue = $default;
+				if($type == 'html') $item->setAsHtml();
+				if($type == 'separate') $item->setAsSeparator();
+				if($type == 'text') $item->setAsTextarea();
+				if($type == 'int' || $type == 'double') {
+					$item->fieldAttr['type'] = 'number';
+					if($type == 'int') $item->fieldAttr['step'] = '1';
+					else $item->fieldAttr['step'] = 'any';
+				}
+				if($type == 'date') $item->fieldAttr['type'] = 'date';
+				if($type == 'datetime') $item->setAsDateTime();
+				if($type == 'boolean') {
+					$item->setAsYesNo();
+				}
+				var_dump($type);
 
+			}
+		}
 	}
 
 	/**
@@ -308,24 +340,26 @@ class FormExternal
 	 * @param 	bool 			$editMode 	Display as edit mod
 	 * @return 	string 						the html output for an external item
 	 */
-	public function generateLineOutput($item, $editMode = false)
-	{
-
+	public function generateLineOutput($item, $editMode = false) {
 		$out = '';
-		if ($item->enabled==1) {
+		if($item->enabled == 1) {
 			if(empty($item->element)) $item->element = $this->element;
 			$this->externalNotEmpty++;
-			$out.= '<div class="form-group">';
+			$out .= '<div class="form-group">';
+			if($item->getType() == 'separator') $out .= '<hr style="max-width : 100%;">';
+			else {
+				$out .= '<label for="'.$this->element.'-'.$item->confKey.'">'.$item->getNameText().'</label>';
+				$helpText = $item->getHelpText();
+				if(! empty($helpText)) $item->fieldAttr['aria-describedby'] = $this->element.'-'.$item->confKey.'-help';
 
-			$out.= '<label for="'.$this->element.'-'.$item->confKey.'">'.$item->getNameText().'</label>';
-			$helpText = $item->getHelpText();
-			if(!empty($helpText)) $item->fieldAttr['aria-describedby'] = $this->element.'-'.$item->confKey.'-help';
-
-			if ($editMode) {
-				$out.= $item->generateInputField();
-			} else {
-				$out.= $item->generateOutputField();
+				if($editMode) {
+					$out .= $item->generateInputField();
+				}
+				else {
+					$out .= $item->generateOutputField();
+				}
 			}
+
 
 			if (!empty($item->errors)) {
 				// TODO : move set event message in a methode to be called by cards not by this class
@@ -752,10 +786,12 @@ class FormExternalItem
 			$out.= $this->generateOutputField(); // title have no input
 		} elseif ($this->type == 'textarea') {
 			$out.= $this->generateInputFieldTextarea();
+		} elseif ($this->type == 'datetime') {
+			$out.= $this->generateInputFieldDateTime();
 		} elseif ($this->type== 'html') {
 			$out.= $this->generateInputFieldHtml();
 		} elseif ($this->type == 'yesno') {
-			$out.= $this->form->selectyesno($this->confKey, $this->fieldValue, 1);
+			$out.= $this->form->selectyesno($this->element.'-'.$this->confKey, $this->fieldValue, 1, false,  0,  0, 'form-control');
 		} elseif (preg_match('/emailtemplate:/', $this->type)) {
 			$out.= $this->generateInputFieldEmailTemplate();
 		} elseif (preg_match('/category:/', $this->type)) {
@@ -784,6 +820,17 @@ class FormExternalItem
 	 * generate input field for textarea
 	 * @return string
 	 */
+	public function generateInputFieldDateTime()
+	{
+		if (empty($this->fieldAttr['class'])) { $this->fieldAttr['class'] = 'form-control '.(empty($this->cssClass) ? '' : $this->cssClass); }
+		$out = '<input '.($this->required ? 'required' : '').' class="form-control" type="date" name="'.$this->confKey.'" id="'.$this->element.'-'.$this->confKey.'"/>';
+		$out .= '<input '.($this->required ? 'required' : '').' class="form-control" type="time" name="'.$this->confKey.'-time" id="'.$this->element.'-'.$this->confKey.'-time" />';
+		return $out;
+	}
+	/**
+	 * generate input field for textarea
+	 * @return string
+	 */
 	public function generateInputFieldTextarea()
 	{
 		$out = '<textarea '.($this->required ? 'required' : '').' class="form-control" name="'.$this->confKey.'" id="'.$this->element.'-'.$this->confKey.'"  rows="10" >' . "\n";
@@ -791,6 +838,17 @@ class FormExternalItem
 		$out.= "</textarea>\n";
 		return $out;
 	}
+//	/**
+//	 * generate input field for number
+//	 * @return string
+//	 */
+//	public function generateInputFieldNumber()
+//	{
+//		$out = '<textarea '.($this->required ? 'required' : '').' class="form-control" name="'.$this->confKey.'" id="'.$this->element.'-'.$this->confKey.'"  rows="10" >' . "\n";
+//		$out.= dol_htmlentities($this->fieldValue);
+//		$out.= "</textarea>\n";
+//		return $out;
+//	}
 
 	/**
 	 * generate input field for html
@@ -804,7 +862,7 @@ class FormExternalItem
 		$out .= dol_htmlentities($this->fieldValue);
 		$out .= "</textarea>\n";
 		if(! empty($conf->global->FCKEDITOR_ENABLE_TICKET)) {
-			$out .= '<script>CKEDITOR.replace( "message" );</script>';
+			$out .= '<script>CKEDITOR.replace("'.$this->confKey.'");</script>';
 		}
 
 		return $out;
@@ -1019,6 +1077,15 @@ class FormExternalItem
 		$this->type = 'string';
 		return $this;
 	}
+	/**
+	 * Set type of input as string
+	 * @return self
+	 */
+	public function setAsDateTime()
+	{
+		$this->type = 'datetime';
+		return $this;
+	}
 
 	/**
 	 * Set type of input as textarea
@@ -1037,6 +1104,16 @@ class FormExternalItem
 	public function setAsHtml()
 	{
 		$this->type = 'html';
+		return $this;
+	}
+
+	/**
+	 * Set type of input as html editor
+	 * @return self
+	 */
+	public function setAsSeparator()
+	{
+		$this->type = 'separator';
 		return $this;
 	}
 	/**

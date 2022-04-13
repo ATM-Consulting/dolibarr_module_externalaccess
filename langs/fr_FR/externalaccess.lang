@@ -144,6 +144,7 @@ EACCESS_LIST_ADDED_COLUMNS_PROJECT=Colonnes supplémentaires à afficher sur les
 EACCESS_LIST_ADDED_COLUMNS_ORDER=Colonnes supplémentaires à afficher sur les listes de commandes
 EACCESS_LIST_ADDED_COLUMNS_PROPAL=Colonnes supplémentaires à afficher sur les listes de propositions commerciales
 EACCESS_LIST_ADDED_COLUMNS_TICKET=Colonnes supplémentaires à afficher sur les listes de tickets
+EACCESS_CARD_ADDED_FIELD_TICKET=Champs supplémentaires à afficher sur les fiches tickets
 ConfLinkedToContents = Paramètres liés au contenu
 ConfLinkedToContactInfos = Paramètres liés au contact
 ConfLinkedToDesign = Paramètres liés à l'apparence

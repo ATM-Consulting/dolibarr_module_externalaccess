@@ -73,8 +73,6 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 	$item->nameText = $langs->transnoentities('TicketMessage');
 	$item->fieldValue = dol_htmlentities($object->message);
 
-	$formExternal->addExtrafieldsItems();
-
 	if($object->id > 0 ){
 		$formExternal->btAttributes['action'] = 'save';
 		$formExternal->btAttributes['text'] = $langs->transnoentities('TicketBtnSubmitSave');
