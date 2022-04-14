@@ -473,6 +473,32 @@ class Actionsexternalaccess
 					$context->setEventMessages($langs->trans('SocIsEmpty'), 'errors');
 				}
 
+				$e = new ExtraFields($ticket->db);
+				$e->fetch_name_optionals_label('ticket');
+				$TTicketAddedField = unserialize($conf->global->EACCESS_CARD_ADDED_FIELD_TICKET);
+				if(! empty($TTicketAddedField)) {
+					foreach($TTicketAddedField as $ticket_field) {
+						$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
+						$type = $e->attributes['ticket']['type'][$ticket_field];
+						if($type == 'date' || $type == 'datetime') {
+							$valdate = GETPOST('options_'.$ticket_field, 'alphanohtml');
+							$dateTime = DateTime::createFromFormat('Y-m-d', $valdate);
+							if($type == 'datetime'){
+								$valtime = GETPOST('options_'.$ticket_field.'-time', 'alphanohtml');
+								if(!empty($valtime)) {
+									list($hour, $min) = explode(':', $valtime);
+									$dateTime->setTime($hour, $min);
+								}
+							}
+							$ticket->array_options['options_'.$ticket_field] = $dateTime->getTimestamp();
+						}
+						else if($e->setOptionalsFromPost(null, $ticket, $ticket_field) < 0) {
+							$errors ++;
+							$context->setEventMessages($langs->trans('ErrorFieldsRequired').' : '.$e->attributes['ticket']['label'][$ticket_field], 'errors');
+						}
+					}
+				}
+
 				if(empty($errors)){
 					$ticket->ref = $ticket->getDefaultRef();
 					$ticket->datec = time();

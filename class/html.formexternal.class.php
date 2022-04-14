@@ -271,7 +271,7 @@ class FormExternal
 				$totalizable = $e->attributes[$this->element]['totalizable'][$ticket_field];
 				$help = $e->attributes[$this->element]['help'][$ticket_field];
 				$hidden = (empty($list) ? 1 : 0);
-				$item = $this->newItem('extrafield-'.$ticket_field);
+				$item = $this->newItem('options_'.$ticket_field);
 				if(!empty($required)) $item->setAsRequired();
 				$item->nameText = $label;
 				if(!empty($help)) $item->helpText = $help;
@@ -287,15 +287,553 @@ class FormExternal
 				}
 				if($type == 'date') $item->fieldAttr['type'] = 'date';
 				if($type == 'datetime') $item->setAsDateTime();
-				if($type == 'boolean') {
-					$item->setAsYesNo();
+				if($type == 'boolean') $item->setAsYesNo();
+				if($type == 'password') $item->fieldAttr['type'] = 'password';
+				if($type == 'select') $item->setAsSelect($param['options']);
+				if($type == 'sellist') {
+					$TOption = $this->prepareArrayFromTable($param);
+					$item->setAsSelect($TOption);
 				}
-				var_dump($type);
-
+				if($type == 'radio') $item->setAsRadio($param['options']);
+				if($type == 'checkbox') {
+					$item->multiple = true;
+					$item->setAsSelect($param['options']);
+				}
+				if($type == 'chkbxlst') {
+					$item->multiple = true;
+					$TOption = $this->prepareArrayMultipleFromTable($param);
+					$item->setAsSelect($TOption);
+				}
+				if($type == 'link') {
+					$TOption = $this->prepareArrayFromLink($param);
+					$item->setAsSelect($TOption);
+				}
 			}
 		}
 	}
 
+	/**
+	 * saveConfFromPost
+	 *
+	 * @param 	array 		$param
+	 * @return    void|null
+	 */
+	public function prepareArrayFromLink($param) {
+		global $conf, $user, $hookmanager;
+		$TOption = array();
+		$param_list = array_keys($param['options']); // $param_list='ObjectName:classPath'
+
+		$objecttmp = null;
+		$InfoFieldList = explode(":", $param_list[0]);
+		$classname = $InfoFieldList[0];
+		$classpath = $InfoFieldList[1];
+		$addcreatebuttonornot = empty($InfoFieldList[2]) ? 0 : $InfoFieldList[2];
+		$filter = empty($InfoFieldList[3]) ? '' : $InfoFieldList[3];
+
+		if(! empty($classpath)) {
+			dol_include_once($classpath);
+
+			if($classname && class_exists($classname)) {
+				$objecttmp = new $classname($this->db);
+				// Make some replacement
+				$sharedentities = getEntity(strtolower($classname));
+				$objecttmp->filter = str_replace(array('__ENTITY__', '__SHARED_ENTITIES__', '__USER_ID__'), array($conf->entity, $sharedentities, $user->id), $filter);
+			}
+		}
+		if(! is_object($objecttmp)) {
+			dol_syslog('Error bad setup of type for field '.$InfoFieldList, LOG_WARNING);
+
+			return 'Error bad setup of type for field '.join(',', $InfoFieldList);
+		}
+
+		//var_dump($objecttmp->filter);
+		$prefixforautocompletemode = $objecttmp->element;
+		if($prefixforautocompletemode == 'societe') {
+			$prefixforautocompletemode = 'company';
+		}
+		if($prefixforautocompletemode == 'product') {
+			$prefixforautocompletemode = 'produit';
+		}
+		$confkeyforautocompletemode = strtoupper($prefixforautocompletemode).'_USE_SEARCH_TO_SELECT'; // For example COMPANY_USE_SEARCH_TO_SELECT
+
+		$prefixforautocompletemode = $objecttmp->element;
+		if($prefixforautocompletemode == 'societe') {
+			$prefixforautocompletemode = 'company';
+		}
+		$confkeyforautocompletemode = strtoupper($prefixforautocompletemode).'_USE_SEARCH_TO_SELECT'; // For example COMPANY_USE_SEARCH_TO_SELECT
+
+		if(! empty($objecttmp->fields)) {    // For object that declare it, it is better to use declared fields (like societe, contact, ...)
+			$tmpfieldstoshow = '';
+			foreach($objecttmp->fields as $key => $val) {
+				if(! dol_eval($val['enabled'], 1, 1)) {
+					continue;
+				}
+				if(! empty($val['showoncombobox'])) {
+					$tmpfieldstoshow .= ($tmpfieldstoshow ? ',' : '').'t.'.$key;
+				}
+			}
+			if($tmpfieldstoshow) {
+				$fieldstoshow = $tmpfieldstoshow;
+			}
+		}
+		else {
+			// For backward compatibility
+			$objecttmp->fields['ref'] = array('type' => 'varchar(30)', 'label' => 'Ref', 'showoncombobox' => 1);
+		}
+
+		if(empty($fieldstoshow)) {
+			if(isset($objecttmp->fields['ref'])) {
+				$fieldstoshow = 't.ref';
+			}
+			else {
+				$this->langs->load("errors");
+				$this->error = $this->langs->trans("ErrorNoFieldWithAttributeShowoncombobox");
+
+				return $this->langs->trans('ErrorNoFieldWithAttributeShowoncombobox');
+			}
+		}
+
+		// Search data
+		$sql = "SELECT t.rowid, ".$fieldstoshow." FROM ".MAIN_DB_PREFIX.$objecttmp->table_element." as t";
+		if(isset($objecttmp->ismultientitymanaged)) {
+			if(! is_numeric($objecttmp->ismultientitymanaged)) {
+				$tmparray = explode('@', $objecttmp->ismultientitymanaged);
+				$sql .= " INNER JOIN ".MAIN_DB_PREFIX.$tmparray[1]." as parenttable ON parenttable.rowid = t.".$tmparray[0];
+			}
+			if($objecttmp->ismultientitymanaged === 'fk_soc@societe') {
+				if(! $user->rights->societe->client->voir && ! $user->socid) {
+					$sql .= ", ".MAIN_DB_PREFIX."societe_commerciaux as sc";
+				}
+			}
+		}
+
+		// Add where from hooks
+		$parameters = array();
+		$reshook = $hookmanager->executeHooks('selectForFormsListWhere', $parameters); // Note that $action and $object may have been modified by hook
+		if(! empty($hookmanager->resPrint)) {
+			$sql .= $hookmanager->resPrint;
+		}
+		else {
+			$sql .= " WHERE 1=1";
+			if(isset($objecttmp->ismultientitymanaged)) {
+				if($objecttmp->ismultientitymanaged == 1) {
+					$sql .= " AND t.entity IN (".getEntity($objecttmp->table_element).")";
+				}
+				if(! is_numeric($objecttmp->ismultientitymanaged)) {
+					$sql .= " AND parenttable.entity = t.".$tmparray[0];
+				}
+				if($objecttmp->ismultientitymanaged == 1 && ! empty($user->socid)) {
+					if($objecttmp->element == 'societe') {
+						$sql .= " AND t.rowid = ".((int) $user->socid);
+					}
+					else {
+						$sql .= " AND t.fk_soc = ".((int) $user->socid);
+					}
+				}
+				if($objecttmp->ismultientitymanaged === 'fk_soc@societe') {
+					if(! $user->rights->societe->client->voir && ! $user->socid) {
+						$sql .= " AND t.rowid = sc.fk_soc AND sc.fk_user = ".((int) $user->id);
+					}
+				}
+			}
+
+			if($objecttmp->ismultientitymanaged == 'fk_soc@societe') {
+				if(! $user->rights->societe->client->voir && ! $user->socid) {
+					$sql .= " AND t.rowid = sc.fk_soc AND sc.fk_user = ".((int) $user->id);
+				}
+			}
+			if($objecttmp->filter) {     // Syntax example "(t.ref:like:'SO-%') and (t.date_creation:<:'20160101')"
+				$regexstring = '\(([^:\'\(\)]+:[^:\'\(\)]+:[^\(\)]+)\)';
+				$sql .= " AND (".preg_replace_callback('/'.$regexstring.'/', 'Form::forgeCriteriaCallback', $objecttmp->filter).")";
+			}
+		}
+		$sql .= $this->db->order($fieldstoshow, "ASC");
+
+		// Build output string
+		$resql = $this->db->query($sql);
+		if($resql) {
+			$num = $this->db->num_rows($resql);
+			$i = 0;
+			if($num) {
+				while($i < $num) {
+					$obj = $this->db->fetch_object($resql);
+					$label = '';
+					$tmparray = explode(',', $fieldstoshow);
+					$oldvalueforshowoncombobox = 0;
+					foreach($tmparray as $key => $val) {
+						$val = preg_replace('/t\./', '', $val);
+						$label .= (($label && $obj->$val) ? ($oldvalueforshowoncombobox != $objecttmp->fields[$val]['showoncombobox'] ? ' - ' : ' ') : '');
+						$label .= $obj->$val;
+						$oldvalueforshowoncombobox = $objecttmp->fields[$val]['showoncombobox'];
+					}
+					if(empty($outputmode)) {
+						$TOption[$obj->rowid] = $label;
+					}
+					else {
+						$TOption[$label] = $label;
+					}
+
+					$i++;
+				}
+			}
+		}
+		else {
+			dol_print_error($this->db);
+		}
+
+		return $TOption;
+	}
+
+	/**
+	 * saveConfFromPost
+	 *
+	 * @param 	array 		$param
+	 * @return 	void|null
+	 */
+	public function prepareArrayFromTable($param)
+	{
+		global $conf;
+		$TOption = array();
+		if(is_array($param['options'])) {
+			$param_list = array_keys($param['options']);
+			$InfoFieldList = explode(":", $param_list[0]);
+			$parentName = '';
+			$parentField = '';
+			// 0 : tableName
+			// 1 : label field name
+			// 2 : key fields name (if differ of rowid)
+			// 3 : key field parent (for dependent lists)
+			// 4 : where clause filter on column or table extrafield, syntax field='value' or extra.field=value
+			// 5 : id category type
+			// 6 : ids categories list separated by comma for category root
+			$keyList = (empty($InfoFieldList[2]) ? 'rowid' : $InfoFieldList[2].' as rowid');
+
+			if(count($InfoFieldList) > 4 && ! empty($InfoFieldList[4])) {
+				if(strpos($InfoFieldList[4], 'extra.') !== false) {
+					$keyList = 'main.'.$InfoFieldList[2].' as rowid';
+				}
+				else {
+					$keyList = $InfoFieldList[2].' as rowid';
+				}
+			}
+			if(count($InfoFieldList) > 3 && ! empty($InfoFieldList[3])) {
+				list($parentName, $parentField) = explode('|', $InfoFieldList[3]);
+				$keyList .= ', '.$parentField;
+			}
+
+			$filter_categorie = false;
+			if(count($InfoFieldList) > 5) {
+				if($InfoFieldList[0] == 'categorie') {
+					$filter_categorie = true;
+				}
+			}
+
+			if($filter_categorie === false) {
+				$fields_label = explode('|', $InfoFieldList[1]);
+				if(is_array($fields_label)) {
+					$keyList .= ', ';
+					$keyList .= implode(', ', $fields_label);
+				}
+
+				$sqlwhere = '';
+				$sql = 'SELECT '.$keyList;
+				$sql .= ' FROM '.MAIN_DB_PREFIX.$InfoFieldList[0];
+				if(! empty($InfoFieldList[4])) {
+					// can use curent entity filter
+					if(strpos($InfoFieldList[4], '$ENTITY$') !== false) {
+						$InfoFieldList[4] = str_replace('$ENTITY$', $conf->entity, $InfoFieldList[4]);
+					}
+					// can use SELECT request
+					if(strpos($InfoFieldList[4], '$SEL$') !== false) {
+						$InfoFieldList[4] = str_replace('$SEL$', 'SELECT', $InfoFieldList[4]);
+					}
+
+					// current object id can be use into filter
+					if(strpos($InfoFieldList[4], '$ID$') !== false && ! empty($objectid)) {
+						$InfoFieldList[4] = str_replace('$ID$', $objectid, $InfoFieldList[4]);
+					}
+					else {
+						$InfoFieldList[4] = str_replace('$ID$', '0', $InfoFieldList[4]);
+					}
+					//We have to join on extrafield table
+					if(strpos($InfoFieldList[4], 'extra') !== false) {
+						$sql .= ' as main, '.MAIN_DB_PREFIX.$InfoFieldList[0].'_extrafields as extra';
+						$sqlwhere .= ' WHERE extra.fk_object=main.'.$InfoFieldList[2].' AND '.$InfoFieldList[4];
+					}
+					else {
+						$sqlwhere .= ' WHERE '.$InfoFieldList[4];
+					}
+				}
+				else {
+					$sqlwhere .= ' WHERE 1=1';
+				}
+				// Some tables may have field, some other not. For the moment we disable it.
+				if(in_array($InfoFieldList[0], array('tablewithentity'))) {
+					$sqlwhere .= ' AND entity = '.$conf->entity;
+				}
+				$sql .= $sqlwhere;
+				//print $sql;
+
+				$sql .= ' ORDER BY '.implode(', ', $fields_label);
+
+				dol_syslog(get_class($this).'::showInputField type=sellist', LOG_DEBUG);
+				$resql = $this->db->query($sql);
+				if($resql) {
+					$num = $this->db->num_rows($resql);
+					$i = 0;
+					while($i < $num) {
+						$labeltoshow = '';
+						$obj = $this->db->fetch_object($resql);
+
+						// Several field into label (eq table:code|libelle:rowid)
+						$notrans = false;
+						$fields_label = explode('|', $InfoFieldList[1]);
+						if(is_array($fields_label) && count($fields_label) > 1) {
+							$notrans = true;
+							foreach($fields_label as $field_toshow) {
+								$labeltoshow .= $obj->$field_toshow.' ';
+							}
+						}
+						else {
+							$labeltoshow = $obj->{$InfoFieldList[1]};
+						}
+
+						if(! $notrans) {
+							$translabel = $this->langs->trans($obj->{$InfoFieldList[1]});
+							$labeltoshow = $translabel;
+						}
+						if(empty($labeltoshow)) {
+							$labeltoshow = '(not defined)';
+						}
+
+						if(! empty($InfoFieldList[3]) && $parentField) {
+							$parent = $parentName.':'.$obj->{$parentField};
+						}
+
+						$TOption[$obj->rowid] = $labeltoshow;
+
+						$i++;
+					}
+					$this->db->free($resql);
+				}
+				else {
+					print 'Error in request '.$sql.' '.$this->db->lasterror().'. Check setup of extra parameters.<br>';
+				}
+			}
+			else {
+				require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
+				$TOption = $this->form->select_all_categories(Categorie::$MAP_ID_TO_CODE[$InfoFieldList[5]], '', 'parent', 64, $InfoFieldList[6], 1, 1);
+			}
+		}
+
+		return $TOption;
+	}
+	/**
+	 * saveConfFromPost
+	 *
+	 * @param 	array 		$param
+	 * @return 	void|null
+	 */
+	public function prepareArrayMultipleFromTable($param)
+	{
+		global $conf;
+		$TOption = array();
+		if(is_array($param['options'])) {
+			$param_list = array_keys($param['options']);
+			$InfoFieldList = explode(":", $param_list[0]);
+			$parentName = '';
+			$parentField = '';
+			// 0 : tableName
+			// 1 : label field name
+			// 2 : key fields name (if differ of rowid)
+			// 3 : key field parent (for dependent lists)
+			// 4 : where clause filter on column or table extrafield, syntax field='value' or extra.field=value
+			// 5 : id category type
+			// 6 : ids categories list separated by comma for category root
+			$keyList = (empty($InfoFieldList[2]) ? 'rowid' : $InfoFieldList[2].' as rowid');
+
+			if(count($InfoFieldList) > 3 && ! empty($InfoFieldList[3])) {
+				list ($parentName, $parentField) = explode('|', $InfoFieldList[3]);
+				$keyList .= ', '.$parentField;
+			}
+			if(count($InfoFieldList) > 4 && ! empty($InfoFieldList[4])) {
+				if(strpos($InfoFieldList[4], 'extra.') !== false) {
+					$keyList = 'main.'.$InfoFieldList[2].' as rowid';
+				}
+				else {
+					$keyList = $InfoFieldList[2].' as rowid';
+				}
+			}
+
+			$filter_categorie = false;
+			if(count($InfoFieldList) > 5) {
+				if($InfoFieldList[0] == 'categorie') {
+					$filter_categorie = true;
+				}
+			}
+
+			if($filter_categorie === false) {
+				$fields_label = explode('|', $InfoFieldList[1]);
+				if(is_array($fields_label)) {
+					$keyList .= ', ';
+					$keyList .= implode(', ', $fields_label);
+				}
+
+				$sqlwhere = '';
+				$sql = 'SELECT '.$keyList;
+				$sql .= ' FROM '.MAIN_DB_PREFIX.$InfoFieldList[0];
+				if(! empty($InfoFieldList[4])) {
+					// can use SELECT request
+					if(strpos($InfoFieldList[4], '$SEL$') !== false) {
+						$InfoFieldList[4] = str_replace('$SEL$', 'SELECT', $InfoFieldList[4]);
+					}
+
+					// current object id can be use into filter
+					if(strpos($InfoFieldList[4], '$ID$') !== false && ! empty($objectid)) {
+						$InfoFieldList[4] = str_replace('$ID$', $objectid, $InfoFieldList[4]);
+					}
+					else if(preg_match("#^.*list.php$#", $_SERVER["PHP_SELF"])) {
+						// Pattern for word=$ID$
+						$word = '\b[a-zA-Z0-9-\.-_]+\b=\$ID\$';
+
+						// Removing space arount =, ( and )
+						$InfoFieldList[4] = preg_replace('# *(=|\(|\)) *#', '$1', $InfoFieldList[4]);
+
+						$nbPreg = 1;
+						// While we have parenthesis
+						while($nbPreg != 0) {
+							// Init des compteurs
+							$nbPregRepl = $nbPregSel = 0;
+							// On retire toutes les parenthèses sans = avant
+							$InfoFieldList[4] = preg_replace('#([^=])(\([^)^(]*('.$word.')[^)^(]*\))#', '$1 $3 ', $InfoFieldList[4], -1, $nbPregRepl);
+							// On retire les espaces autour des = et parenthèses
+							$InfoFieldList[4] = preg_replace('# *(=|\(|\)) *#', '$1', $InfoFieldList[4]);
+							// On retire toutes les parenthèses avec = avant
+							$InfoFieldList[4] = preg_replace('#\b[a-zA-Z0-9-\.-_]+\b=\([^)^(]*('.$word.')[^)^(]*\)#', '$1 ', $InfoFieldList[4], -1, $nbPregSel);
+							// On retire les espaces autour des = et parenthèses
+							$InfoFieldList[4] = preg_replace('# *(=|\(|\)) *#', '$1', $InfoFieldList[4]);
+
+							// Calcul du compteur général pour la boucle
+							$nbPreg = $nbPregRepl + $nbPregSel;
+						}
+
+						// Si l'on a un AND ou un OR, avant ou après
+						preg_match('#(AND|OR|) *('.$word.') *(AND|OR|)#', $InfoFieldList[4], $matchCondition);
+						while(! empty($matchCondition[0])) {
+							// If the two sides differ but are not empty
+							if(! empty($matchCondition[1]) && ! empty($matchCondition[3]) && $matchCondition[1] != $matchCondition[3]) {
+								// Nobody sain would do that without parentheses
+								$InfoFieldList[4] = str_replace('$ID$', '0', $InfoFieldList[4]);
+							}
+							else {
+								if(! empty($matchCondition[1])) {
+									$boolCond = (($matchCondition[1] == "AND") ? ' AND TRUE ' : ' OR FALSE ');
+									$InfoFieldList[4] = str_replace($matchCondition[0], $boolCond.$matchCondition[3], $InfoFieldList[4]);
+								}
+								else if(! empty($matchCondition[3])) {
+									$boolCond = (($matchCondition[3] == "AND") ? ' TRUE AND ' : ' FALSE OR');
+									$InfoFieldList[4] = str_replace($matchCondition[0], $boolCond, $InfoFieldList[4]);
+								}
+								else {
+									$InfoFieldList[4] = " TRUE ";
+								}
+							}
+
+							// Si l'on a un AND ou un OR, avant ou après
+							preg_match('#(AND|OR|) *('.$word.') *(AND|OR|)#', $InfoFieldList[4], $matchCondition);
+						}
+					}
+					else {
+						$InfoFieldList[4] = str_replace('$ID$', '0', $InfoFieldList[4]);
+					}
+
+					// We have to join on extrafield table
+					if(strpos($InfoFieldList[4], 'extra.') !== false) {
+						$sql .= ' as main, '.MAIN_DB_PREFIX.$InfoFieldList[0].'_extrafields as extra';
+						$sqlwhere .= ' WHERE extra.fk_object=main.'.$InfoFieldList[2].' AND '.$InfoFieldList[4];
+					}
+					else {
+						$sqlwhere .= ' WHERE '.$InfoFieldList[4];
+					}
+				}
+				else {
+					$sqlwhere .= ' WHERE 1=1';
+				}
+				// Some tables may have field, some other not. For the moment we disable it.
+				if(in_array($InfoFieldList[0], array('tablewithentity'))) {
+					$sqlwhere .= ' AND entity = '.$conf->entity;
+				}
+				// $sql.=preg_replace('/^ AND /','',$sqlwhere);
+				// print $sql;
+
+				$sql .= $sqlwhere;
+				dol_syslog(get_class($this).'::showInputField type=chkbxlst', LOG_DEBUG);
+				$resql = $this->db->query($sql);
+				if($resql) {
+					$num = $this->db->num_rows($resql);
+					$i = 0;
+
+					$data = array();
+
+					while($i < $num) {
+						$labeltoshow = '';
+						$obj = $this->db->fetch_object($resql);
+
+						$notrans = false;
+						// Several field into label (eq table:code|libelle:rowid)
+						$fields_label = explode('|', $InfoFieldList[1]);
+						if(is_array($fields_label)) {
+							$notrans = true;
+							foreach($fields_label as $field_toshow) {
+								$labeltoshow .= $obj->$field_toshow.' ';
+							}
+						}
+						else {
+							$labeltoshow = $obj->{$InfoFieldList[1]};
+						}
+						$labeltoshow = dol_trunc($labeltoshow, 45);
+
+						if(! $notrans) {
+							$translabel = $this->langs->trans($obj->{$InfoFieldList[1]});
+							if($translabel != $obj->{$InfoFieldList[1]}) {
+								$labeltoshow = dol_trunc($translabel, 18);
+							}
+							else {
+								$labeltoshow = dol_trunc($obj->{$InfoFieldList[1]}, 18);
+							}
+						}
+						if(empty($labeltoshow)) {
+							$labeltoshow = '(not defined)';
+						}
+
+						if(is_array($value_arr) && in_array($obj->rowid, $value_arr)) {
+							$data[$obj->rowid] = $labeltoshow;
+						}
+
+						if(! empty($InfoFieldList[3]) && $parentField) {
+							$parent = $parentName.':'.$obj->{$parentField};
+						}
+
+						$data[$obj->rowid] = $labeltoshow;
+
+						$i++;
+					}
+					$this->db->free($resql);
+					$TOption = $data;
+				}
+				else {
+					print 'Error in request '.$sql.' '.$this->db->lasterror().'. Check setup of extra parameters.<br>';
+				}
+			}
+			else {
+				require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
+				$data = $this->form->select_all_categories(Categorie::$MAP_ID_TO_CODE[$InfoFieldList[5]], '', 'parent', 64, $InfoFieldList[6], 1, 1);
+				$TOption = $data;
+			}
+		}
+
+		return $TOption;
+	}
 	/**
 	 * saveConfFromPost
 	 *
@@ -646,6 +1184,8 @@ class FormExternalItem
 	 */
 	public $errors = array();
 
+	public $TOptions = array();
+
 	/**
 	 * TODO each type must have setAs{type} method to help configuration
 	 *   And set var as protected when its done configuration must be done by method
@@ -656,6 +1196,7 @@ class FormExternalItem
 
 	public $enabled = 1;
 	public $required = false;
+	public $multiple = false;
 
 	public $cssClass = '';
 	public $element = '';
@@ -790,8 +1331,12 @@ class FormExternalItem
 			$out.= $this->generateInputFieldDateTime();
 		} elseif ($this->type== 'html') {
 			$out.= $this->generateInputFieldHtml();
+		}elseif ($this->type== 'select') {
+			$out.= $this->generateInputFieldSelect();
+		}elseif ($this->type== 'radio') {
+			$out.= $this->generateInputFieldRadio();
 		} elseif ($this->type == 'yesno') {
-			$out.= $this->form->selectyesno($this->element.'-'.$this->confKey, $this->fieldValue, 1, false,  0,  0, 'form-control');
+			$out.= $this->form->selectyesno($this->confKey, $this->fieldValue, 1, false,  0,  0, 'form-control');
 		} elseif (preg_match('/emailtemplate:/', $this->type)) {
 			$out.= $this->generateInputFieldEmailTemplate();
 		} elseif (preg_match('/category:/', $this->type)) {
@@ -836,6 +1381,49 @@ class FormExternalItem
 		$out = '<textarea '.($this->required ? 'required' : '').' class="form-control" name="'.$this->confKey.'" id="'.$this->element.'-'.$this->confKey.'"  rows="10" >' . "\n";
 		$out.= dol_htmlentities($this->fieldValue);
 		$out.= "</textarea>\n";
+		return $out;
+	}
+	/**
+	 * generate input field for select
+	 * @return string
+	 */
+	public function generateInputFieldSelect()
+	{
+		$out = '<select '.($this->required ? 'required' : '').' id="'.$this->element.'-'.$this->confKey.'" name="'.$this->confKey.((! empty($this->multiple)) ? '[]' : '').'" class="selectpicker form-control"  data-live-search="true" '.((! empty($this->multiple)) ? 'multiple' : '').'>';
+		if(!$this->multiple) {
+			$out .= '<option ';
+			$out .= ' id="'.$this->element.'-'.$this->confKey.'-0" ';
+			$out .= ' value="0" ';
+			$out .= '>&nbsp;</option>';
+		}
+		if(! empty($this->TOptions)) {
+			foreach($this->TOptions as $k => $val) {
+				$out .= '<option ';
+				$out .= ' id="'.$this->element.'-'.$this->confKey.'-'.$k.'" ';
+				$out .= ' value="'.dol_htmlentities($k, ENT_QUOTES).'" ';
+				$out .= '>'.dol_htmlentities($val, ENT_QUOTES).'</option>';
+			}
+		}
+		$out .= '</select>';
+
+		return $out;
+	}
+	/**
+	 * generate input field for select
+	 * @return string
+	 */
+	public function generateInputFieldRadio()
+	{
+		$out = '';
+		if(!empty($this->TOptions)) {
+			foreach($this->TOptions as $keyopt => $val) {
+				$out .= '<input '.($this->required ? 'required' : '').' class="form-control" type="radio" name="'.$this->confKey.'" id="'.$this->element.'-'.$this->confKey.'" ';
+				$out .= ' value="'.$keyopt.'"';
+				$out .= ' id="'.$this->element.'-'.$this->confKey.'-'.$keyopt.'"';
+				$out .= '/><label for="'.$this->element.'-'.$this->confKey.'-'.$keyopt.'">'.$val.'</label><br>';
+			}
+		}
+
 		return $out;
 	}
 //	/**
@@ -1084,6 +1672,31 @@ class FormExternalItem
 	public function setAsDateTime()
 	{
 		$this->type = 'datetime';
+		return $this;
+	}
+
+	/**
+	 * Set type of input as string
+	 *
+	 * @param array $TOptions
+	 * @return self
+	 */
+	public function setAsRadio($TOptions = array())
+	{
+		$this->TOptions = $TOptions;
+		$this->type = 'radio';
+		return $this;
+	}
+	/**
+	 * Set type of input as string
+	 *
+	 * @param array $TOptions
+	 * @return self
+	 */
+	public function setAsSelect($TOptions = array())
+	{
+		$this->TOptions = $TOptions;
+		$this->type = 'select';
 		return $this;
 	}
 
