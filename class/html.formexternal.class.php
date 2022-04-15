@@ -271,6 +271,7 @@ class FormExternal
 				$totalizable = $e->attributes[$this->element]['totalizable'][$ticket_field]; //TODO
 				$help = $e->attributes[$this->element]['help'][$ticket_field];
 				$hidden = (empty($list) ? 1 : 0); //TODO
+				if($hidden) continue;
 				$item = $this->newItem('options_'.$ticket_field);
 				if(!empty($required)) $item->setAsRequired();
 				$item->nameText = $label;
