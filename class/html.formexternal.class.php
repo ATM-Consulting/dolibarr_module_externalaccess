@@ -250,7 +250,7 @@ class FormExternal
 	 */
 	public function addExtrafieldsItems() {
 		global $conf;
-		dol_include_once('extrafields/class/extrafields.class.php');
+		dol_include_once('core/class/extrafields.class.php');
 		$e = new ExtraFields($this->db);
 		$e->fetch_name_optionals_label($this->element);
 		$TTicketAddedField = unserialize($conf->global->EACCESS_CARD_ADDED_FIELD_TICKET);
@@ -261,16 +261,16 @@ class FormExternal
 				$type = $e->attributes[$this->element]['type'][$ticket_field];
 				$size = $e->attributes[$this->element]['size'][$ticket_field];
 				$default = $e->attributes[$this->element]['default'][$ticket_field];
-				$computed = $e->attributes[$this->element]['computed'][$ticket_field];
-				$unique = $e->attributes[$this->element]['unique'][$ticket_field];
+				$computed = $e->attributes[$this->element]['computed'][$ticket_field]; //TODO
+				$unique = $e->attributes[$this->element]['unique'][$ticket_field]; //TODO
 				$required = $e->attributes[$this->element]['required'][$ticket_field];
 				$param = $e->attributes[$this->element]['param'][$ticket_field];
 				$perms = dol_eval($e->attributes[$this->element]['perms'][$ticket_field], 1); //TODO
 				$langfile = $e->attributes[$this->element]['langfile'][$ticket_field]; //TODO
 				$list = dol_eval($e->attributes[$this->element]['list'][$ticket_field], 1);
-				$totalizable = $e->attributes[$this->element]['totalizable'][$ticket_field];
+				$totalizable = $e->attributes[$this->element]['totalizable'][$ticket_field]; //TODO
 				$help = $e->attributes[$this->element]['help'][$ticket_field];
-				$hidden = (empty($list) ? 1 : 0);
+				$hidden = (empty($list) ? 1 : 0); //TODO
 				$item = $this->newItem('options_'.$ticket_field);
 				if(!empty($required)) $item->setAsRequired();
 				$item->nameText = $label;

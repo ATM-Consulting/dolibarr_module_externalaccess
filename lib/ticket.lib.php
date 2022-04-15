@@ -315,6 +315,8 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 	$ticketMorePanelBodyBottom = $ticketMorePanelBodyTop = '';
 
+	$ticketMorePanelBodyBottom = print_ticketCard_extrafields($object);
+
 	$parameters=array(
 		'controller' => $context->controller,
 		'out' =>& $out,
@@ -610,6 +612,343 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	else{
 		print $out.$outCommentForm;
 	}
+}
+
+/**
+ * Méthode ShowOutputField des extrafields adaptée
+ * @param Ticket $ticket
+ * @return string
+ * @throws Exception
+ */
+function print_ticketCard_extrafields($ticket) {
+	global $conf, $db, $langs;
+	dol_include_once('core/class/extrafields.class.php');
+	$out = '';
+	$e = new ExtraFields($db);
+	$e->fetch_name_optionals_label('ticket');
+	$TTicketAddedField = unserialize($conf->global->EACCESS_CARD_ADDED_FIELD_TICKET);
+	if(! empty($TTicketAddedField)) {
+		foreach($TTicketAddedField as $ticket_field) {
+			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
+			$label = $e->attributes['ticket']['label'][$ticket_field];
+			$type = $e->attributes['ticket']['type'][$ticket_field];
+			$size = $e->attributes['ticket']['size'][$ticket_field];            // Can be '255', '24,8'...
+			$default = $e->attributes['ticket']['default'][$ticket_field];
+			$computed = $e->attributes['ticket']['computed'][$ticket_field];
+			$unique = $e->attributes['ticket']['unique'][$ticket_field];
+			$required = $e->attributes['ticket']['required'][$ticket_field];
+			$param = $e->attributes['ticket']['param'][$ticket_field];
+			$perms = dol_eval($e->attributes['ticket']['perms'][$ticket_field], 1);
+			$langfile = $e->attributes['ticket']['langfile'][$ticket_field];
+			$list = dol_eval($e->attributes['ticket']['list'][$ticket_field], 1);
+			$help = $e->attributes['ticket']['help'][$ticket_field];
+			$hidden = (empty($list) ? 1 : 0);
+			if($type == 'separate') $out .= '<hr style="max-width : 100%;">';
+			else {
+				$value = $ticket->array_options['options_'.$ticket_field];
+				if($type == 'text') {
+					$value = dol_htmlentitiesbr($value);
+				}
+				else if($type == 'html') {
+					$value = dol_htmlentitiesbr($value);
+				}
+				else if($type == 'password') {
+					$value = dol_trunc(preg_replace('/./i', '*', $value), 8, 'right', 'UTF-8', 1);
+				}
+				else if($type == 'date') {
+					$showsize = 10;
+					$value = dol_print_date($value, 'day');    // For date without hour, date is always GMT for storage and output
+				}
+				else if($type == 'datetime') {
+					$showsize = 19;
+					$value = dol_print_date($value, 'dayhour', 'tzuserrel');
+				}
+				else if($type == 'int') {
+					$showsize = 10;
+				}
+				else if($type == 'double') {
+					if(! empty($value)) {
+						//$value=price($value);
+						$sizeparts = explode(",", $size);
+						$number_decimals = $sizeparts[1];
+						$value = price($value, 0, $langs, 0, 0, $number_decimals, '');
+					}
+				}
+				else if($type == 'boolean') {
+					$checked = '';
+					if(! empty($value)) {
+						$checked = ' checked ';
+					}
+					$value = '<input type="checkbox" '.$checked.' readonly disabled>';
+				}
+				else if($type == 'mail') {
+					$value = dol_print_email($value, 0, 0, 0, 64, 1, 0);
+				}
+				else if($type == 'url') {
+					$value = dol_print_url($value, '_blank', 32, 1);
+				}
+				else if($type == 'phone') {
+					$value = dol_print_phone($value, '', 0, 0, '', '&nbsp;', '');
+				}
+				else if($type == 'price') {
+					//$value = price($value, 0, $langs, 0, 0, -1, $conf->currency);
+					if($value || $value == '0') {
+						$value = price($value, 0, $langs, 0, $conf->global->MAIN_MAX_DECIMALS_TOT, -1).' '.$langs->getCurrencySymbol($conf->currency);
+					}
+				}
+				else if($type == 'select') {
+					$valstr = (! empty($param['options'][$value]) ? $param['options'][$value] : '');
+					if(($pos = strpos($valstr, "|")) !== false) {
+						$valstr = substr($valstr, 0, $pos);
+					}
+					if($langfile && $valstr) {
+						$value = $langs->trans($valstr);
+					}
+					else {
+						$value = $valstr;
+					}
+				}
+				else if($type == 'sellist') {
+					$param_list = array_keys($param['options']);
+					$InfoFieldList = explode(":", $param_list[0]);
+
+					$selectkey = "rowid";
+					$keyList = 'rowid';
+
+					if(count($InfoFieldList) >= 3) {
+						$selectkey = $InfoFieldList[2];
+						$keyList = $InfoFieldList[2].' as rowid';
+					}
+
+					$fields_label = explode('|', $InfoFieldList[1]);
+					if(is_array($fields_label)) {
+						$keyList .= ', ';
+						$keyList .= implode(', ', $fields_label);
+					}
+
+					$filter_categorie = false;
+					if(count($InfoFieldList) > 5) {
+						if($InfoFieldList[0] == 'categorie') {
+							$filter_categorie = true;
+						}
+					}
+
+					$sql = 'SELECT '.$keyList;
+					$sql .= ' FROM '.MAIN_DB_PREFIX.$InfoFieldList[0];
+					if(strpos($InfoFieldList[4], 'extra') !== false) {
+						$sql .= ' as main';
+					}
+					if($selectkey == 'rowid' && empty($value)) {
+						$sql .= " WHERE ".$selectkey." = 0";
+					}
+					else if($selectkey == 'rowid') {
+						$sql .= " WHERE ".$selectkey." = ".((int) $value);
+					}
+					else {
+						$sql .= " WHERE ".$selectkey." = '".$db->escape($value)."'";
+					}
+
+					//$sql.= ' AND entity = '.$conf->entity;
+
+					dol_syslog(get_class($e).':showOutputField:$type=sellist', LOG_DEBUG);
+					$resql = $db->query($sql);
+					if($resql) {
+						if($filter_categorie === false) {
+							$value = ''; // value was used, so now we reste it to use it to build final output
+
+							$obj = $db->fetch_object($resql);
+
+							// Several field into label (eq table:code|libelle:rowid)
+							$fields_label = explode('|', $InfoFieldList[1]);
+
+							if(is_array($fields_label) && count($fields_label) > 1) {
+								foreach($fields_label as $field_toshow) {
+									$translabel = '';
+									if(! empty($obj->$field_toshow)) {
+										$translabel = $langs->trans($obj->$field_toshow);
+									}
+									if($translabel != $field_toshow) {
+										$value .= dol_trunc($translabel, 18).' ';
+									}
+									else {
+										$value .= $obj->$field_toshow.' ';
+									}
+								}
+							}
+							else {
+								$translabel = '';
+								if(! empty($obj->{$InfoFieldList[1]})) {
+									$translabel = $langs->trans($obj->{$InfoFieldList[1]});
+								}
+								if($translabel != $obj->{$InfoFieldList[1]}) {
+									$value = dol_trunc($translabel, 18);
+								}
+								else {
+									$value = $obj->{$InfoFieldList[1]};
+								}
+							}
+						}
+						else {
+							require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
+
+							$toprint = array();
+							$obj = $db->fetch_object($resql);
+							$c = new Categorie($db);
+							$c->fetch($obj->rowid);
+							$ways = $c->print_all_ways(); // $ways[0] = "ccc2 >> ccc2a >> ccc2a1" with html formatted text
+							foreach($ways as $way) {
+								$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories">'.img_object('', 'category').' '.$way.'</li>';
+							}
+							$value = '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">'.implode(' ', $toprint).'</ul></div>';
+						}
+					}
+					else {
+						dol_syslog(get_class($e).'::showOutputField error '.$db->lasterror(), LOG_WARNING);
+					}
+				}
+				else if($type == 'radio') {
+					$value = $param['options'][$value];
+				}
+				else if($type == 'checkbox') {
+					$value_arr = explode(',', $value);
+					$value = '';
+					$toprint = array();
+					if(is_array($value_arr)) {
+						foreach($value_arr as $keyval => $valueval) {
+							$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories" >'.$param['options'][$valueval].'</li>';
+						}
+					}
+					$value = '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">'.implode(' ', $toprint).'</ul></div>';
+				}
+				else if($type == 'chkbxlst') {
+					$value_arr = explode(',', $value);
+
+					$param_list = array_keys($param['options']);
+					$InfoFieldList = explode(":", $param_list[0]);
+
+					$selectkey = "rowid";
+					$keyList = 'rowid';
+
+					if(count($InfoFieldList) >= 3) {
+						$selectkey = $InfoFieldList[2];
+						$keyList = $InfoFieldList[2].' as rowid';
+					}
+
+					$fields_label = explode('|', $InfoFieldList[1]);
+					if(is_array($fields_label)) {
+						$keyList .= ', ';
+						$keyList .= implode(', ', $fields_label);
+					}
+
+					$filter_categorie = false;
+					if(count($InfoFieldList) > 5) {
+						if($InfoFieldList[0] == 'categorie') {
+							$filter_categorie = true;
+						}
+					}
+
+					$sql = 'SELECT '.$keyList;
+					$sql .= ' FROM '.MAIN_DB_PREFIX.$InfoFieldList[0];
+					if(strpos($InfoFieldList[4], 'extra') !== false) {
+						$sql .= ' as main';
+					}
+					// $sql.= " WHERE ".$selectkey."='".$this->db->escape($value)."'";
+					// $sql.= ' AND entity = '.$conf->entity;
+
+					dol_syslog(get_class($e).':showOutputField:$type=chkbxlst', LOG_DEBUG);
+					$resql = $db->query($sql);
+					if($resql) {
+						if($filter_categorie === false) {
+							$value = ''; // value was used, so now we reste it to use it to build final output
+							$toprint = array();
+							while($obj = $db->fetch_object($resql)) {
+								// Several field into label (eq table:code|libelle:rowid)
+								$fields_label = explode('|', $InfoFieldList[1]);
+								if(is_array($value_arr) && in_array($obj->rowid, $value_arr)) {
+									if(is_array($fields_label) && count($fields_label) > 1) {
+										foreach($fields_label as $field_toshow) {
+											$translabel = '';
+											if(! empty($obj->$field_toshow)) {
+												$translabel = $langs->trans($obj->$field_toshow);
+											}
+											if($translabel != $field_toshow) {
+												$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories" >'.dol_trunc($translabel, 18).'</li>';
+											}
+											else {
+												$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories"  >'.$obj->$field_toshow.'</li>';
+											}
+										}
+									}
+									else {
+										$translabel = '';
+										if(! empty($obj->{$InfoFieldList[1]})) {
+											$translabel = $langs->trans($obj->{$InfoFieldList[1]});
+										}
+										if($translabel != $obj->{$InfoFieldList[1]}) {
+											$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories">'.dol_trunc($translabel, 18).'</li>';
+										}
+										else {
+											$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories">'.$obj->{$InfoFieldList[1]}.'</li>';
+										}
+									}
+								}
+							}
+						}
+						else {
+							require_once DOL_DOCUMENT_ROOT.'/categories/class/categorie.class.php';
+
+							$toprint = array();
+							while($obj = $db->fetch_object($resql)) {
+								if(is_array($value_arr) && in_array($obj->rowid, $value_arr)) {
+									$c = new Categorie($db);
+									$c->fetch($obj->rowid);
+									$ways = $c->print_all_ways(); // $ways[0] = "ccc2 >> ccc2a >> ccc2a1" with html formatted text
+									foreach($ways as $way) {
+										$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories">'.img_object('', 'category').' '.$way.'</li>';
+									}
+								}
+							}
+						}
+						$value = '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">'.implode(' ', $toprint).'</ul></div>';
+					}
+					else {
+						dol_syslog(get_class($e).'::showOutputField error '.$db->lasterror(), LOG_WARNING);
+					}
+				}
+				else if($type == 'link') {
+
+					// Only if something to display (perf)
+					if($value) {        // If we have -1 here, pb is into insert, not into ouptut (fix insert instead of changing code here to compensate)
+						$param_list = array_keys($param['options']); // $param_list='ObjectName:classPath'
+
+						$InfoFieldList = explode(":", $param_list[0]);
+						$classname = $InfoFieldList[0];
+						$classpath = $InfoFieldList[1];
+						if(! empty($classpath)) {
+							dol_include_once($InfoFieldList[1]);
+							if($classname && class_exists($classname)) {
+								$object = new $classname($db);
+								$object->fetch($value);
+								$value = strip_tags($object->getNomUrl(3));
+							}
+						}
+						else {
+							dol_syslog('Error bad setup of extrafield', LOG_WARNING);
+
+							return 'Error bad setup of extrafield';
+						}
+					}
+				}
+				if (!$hidden) {
+					$out .= '<div class="row clearfix form-group" id="Severity">';
+					$out .= '<div class="col-md-2">'.$label.'</div>';
+					$out .= '<div class="col-md-8"> '.$value.'</div> ';
+					$out .= '</div > ';
+				}
+			}
+		}
+	}
+	return $out;
 }
 
 /**
