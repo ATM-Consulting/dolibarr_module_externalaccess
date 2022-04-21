@@ -131,7 +131,7 @@ class FormExternal
 	}
 
 	/**
-	 * generateOutput
+	 * print form
 	 *
 	 * @param bool   $editMode true will display output on edit mod
 	 * @param string $element
@@ -208,7 +208,7 @@ class FormExternal
 	}
 
 	/**
-	 * generateTableOutput
+	 * prepare div form
 	 *
 	 * @param bool   $editMode true will display output on edit mod
 	 * @return    string                html output
@@ -253,26 +253,27 @@ class FormExternal
 		dol_include_once('core/class/extrafields.class.php');
 		$e = new ExtraFields($this->db);
 		$e->fetch_name_optionals_label($this->element);
-		$TTicketAddedField = unserialize($conf->global->EACCESS_CARD_ADDED_FIELD_TICKET);
-		if(!empty($TTicketAddedField)) {
-			foreach($TTicketAddedField as $ticket_field) {
-				$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
-				$label = $e->attributes[$this->element]['label'][$ticket_field];
-				$type = $e->attributes[$this->element]['type'][$ticket_field];
-				$size = $e->attributes[$this->element]['size'][$ticket_field];
-				$default = $e->attributes[$this->element]['default'][$ticket_field];
-				$computed = $e->attributes[$this->element]['computed'][$ticket_field]; //TODO
-				$unique = $e->attributes[$this->element]['unique'][$ticket_field]; //TODO
-				$required = $e->attributes[$this->element]['required'][$ticket_field];
-				$param = $e->attributes[$this->element]['param'][$ticket_field];
-				$perms = dol_eval($e->attributes[$this->element]['perms'][$ticket_field], 1); //TODO
-				$langfile = $e->attributes[$this->element]['langfile'][$ticket_field]; //TODO
-				$list = dol_eval($e->attributes[$this->element]['list'][$ticket_field], 1);
-				$totalizable = $e->attributes[$this->element]['totalizable'][$ticket_field]; //TODO
-				$help = $e->attributes[$this->element]['help'][$ticket_field];
+		$confVal = 'EACCESS_CARD_ADDED_FIELD_'.strtoupper($this->element);
+		$TExtraAddedField = unserialize($conf->global->{$confVal});
+		if(!empty($TExtraAddedField)) {
+			foreach($TExtraAddedField as $extra_field) {
+				$extra_field = strtr($extra_field, array('EXTRAFIELD_' => ''));
+				$label = $e->attributes[$this->element]['label'][$extra_field];
+				$type = $e->attributes[$this->element]['type'][$extra_field];
+				$size = $e->attributes[$this->element]['size'][$extra_field];
+				$default = $e->attributes[$this->element]['default'][$extra_field];
+				$computed = $e->attributes[$this->element]['computed'][$extra_field]; //TODO
+				$unique = $e->attributes[$this->element]['unique'][$extra_field]; //TODO
+				$required = $e->attributes[$this->element]['required'][$extra_field];
+				$param = $e->attributes[$this->element]['param'][$extra_field];
+				$perms = dol_eval($e->attributes[$this->element]['perms'][$extra_field], 1); //TODO
+				$langfile = $e->attributes[$this->element]['langfile'][$extra_field]; //TODO
+				$list = dol_eval($e->attributes[$this->element]['list'][$extra_field], 1);
+				$totalizable = $e->attributes[$this->element]['totalizable'][$extra_field]; //TODO
+				$help = $e->attributes[$this->element]['help'][$extra_field];
 				$hidden = (empty($list) ? 1 : 0); //TODO
 				if($hidden) continue;
-				$item = $this->newItem('options_'.$ticket_field);
+				$item = $this->newItem('options_'.$extra_field);
 				if(!empty($required)) $item->setAsRequired();
 				$item->nameText = $label;
 				if(!empty($help)) $item->helpText = $help;
@@ -314,7 +315,7 @@ class FormExternal
 	}
 
 	/**
-	 * saveConfFromPost
+	 * Préparation du tableau pour le type lien
 	 *
 	 * @param 	array 		$param
 	 * @return    void|null
@@ -486,7 +487,7 @@ class FormExternal
 	}
 
 	/**
-	 * saveConfFromPost
+	 * prepare array from table type
 	 *
 	 * @param 	array 		$param
 	 * @return 	void|null
@@ -630,7 +631,7 @@ class FormExternal
 		return $TOption;
 	}
 	/**
-	 * saveConfFromPost
+	 * Preparation de tableau pour le type multiple issu d'une table
 	 *
 	 * @param 	array 		$param
 	 * @return 	void|null
@@ -979,11 +980,13 @@ class FormExternal
 	public function exportItemsAsParamsArray()
 	{
 		$arrayofparameters = array();
-		foreach ($this->items as $item) {
-			$arrayofparameters[$item->confKey] = array(
-				'type' => $item->getType(),
-				'enabled' => $item->enabled
-			);
+		if(!empty($this->items)) {
+			foreach($this->items as $item) {
+				$arrayofparameters[$item->confKey] = array(
+					'type' => $item->getType(),
+					'enabled' => $item->enabled
+				);
+			}
 		}
 
 		return $arrayofparameters;
@@ -999,8 +1002,10 @@ class FormExternal
 	{
 
 		if (!array($this->items)) { return false; }
-		foreach ($this->items as $item) {
-			$item->reloadValueFromConf();
+		if(!empty($this->items)) {
+			foreach($this->items as $item) {
+				$item->reloadValueFromConf();
+			}
 		}
 
 		return true;
@@ -1037,10 +1042,12 @@ class FormExternal
 			}
 
 			// calc new rank for each item to make place for new item
-			foreach ($this->items as $fItem) {
-				if ($item->rank <= $fItem->rank) {
-					$fItem->rank = $fItem->rank + 1;
-					$this->setItemMaxRank($fItem->rank); // set new max rank if needed
+			if(!empty($this->items)) {
+				foreach($this->items as $fItem) {
+					if($item->rank <= $fItem->rank) {
+						$fItem->rank = $fItem->rank + 1;
+						$this->setItemMaxRank($fItem->rank); // set new max rank if needed
+					}
 				}
 			}
 		}
@@ -1061,7 +1068,7 @@ class FormExternal
 	}
 
 	/**
-	 * getCurentItemMaxRank
+	 * get max item rank of item
 	 *
 	 * @param bool $cache To use cache or not
 	 * @return int
@@ -1077,8 +1084,10 @@ class FormExternal
 		}
 
 		$this->maxItemRank = 0;
-		foreach ($this->items as $item) {
-			$this->maxItemRank = max($this->maxItemRank, $item->rank);
+		if(!empty($this->items)) {
+			foreach($this->items as $item) {
+				$this->maxItemRank = max($this->maxItemRank, $item->rank);
+			}
 		}
 
 		return $this->maxItemRank;
