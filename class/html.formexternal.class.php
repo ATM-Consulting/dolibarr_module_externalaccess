@@ -281,7 +281,7 @@ class FormExternal
 				if($type == 'html') $item->setAsHtml();
 				if($type == 'separate') $item->setAsSeparator();
 				if($type == 'text') $item->setAsTextarea();
-				if($type == 'int' || $type == 'double') {
+				if($type == 'int' || $type == 'double' || $type == 'price') {
 					$item->fieldAttr['type'] = 'number';
 					if($type == 'int') $item->fieldAttr['step'] = '1';
 					else $item->fieldAttr['step'] = 'any';

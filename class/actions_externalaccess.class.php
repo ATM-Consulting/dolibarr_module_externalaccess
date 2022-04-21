@@ -483,14 +483,14 @@ class Actionsexternalaccess
 						if($type == 'date' || $type == 'datetime') {
 							$valdate = GETPOST('options_'.$ticket_field, 'alphanohtml');
 							$dateTime = DateTime::createFromFormat('Y-m-d', $valdate);
-							if($type == 'datetime'){
+							if($type == 'datetime' && $dateTime){
 								$valtime = GETPOST('options_'.$ticket_field.'-time', 'alphanohtml');
 								if(!empty($valtime)) {
 									list($hour, $min) = explode(':', $valtime);
 									$dateTime->setTime($hour, $min);
 								}
 							}
-							$ticket->array_options['options_'.$ticket_field] = $dateTime->getTimestamp();
+							if($dateTime) $ticket->array_options['options_'.$ticket_field] = $dateTime->getTimestamp();
 						}
 						else if($e->setOptionalsFromPost(null, $ticket, $ticket_field) < 0) {
 							$errors ++;

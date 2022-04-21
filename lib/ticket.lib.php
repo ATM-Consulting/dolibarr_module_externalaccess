@@ -812,13 +812,13 @@ function print_ticketCard_extrafields($ticket) {
 				else if($type == 'checkbox') {
 					$value_arr = explode(',', $value);
 					$value = '';
-					$toprint = array();
 					if(is_array($value_arr)) {
 						foreach($value_arr as $keyval => $valueval) {
+							if(empty($valueval)) continue;
 							$toprint[] = '<li class="select2-search-choice-dolibarr noborderoncategories" >'.$param['options'][$valueval].'</li>';
 						}
 					}
-					$value = '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">'.implode(' ', $toprint).'</ul></div>';
+					if(!empty($toprint)) $value = '<div class="select2-container-multi-dolibarr" style="width: 90%;"><ul class="select2-choices-dolibarr">'.implode(' ', $toprint).'</ul></div>';
 				}
 				else if($type == 'chkbxlst') {
 					$value_arr = explode(',', $value);
@@ -937,7 +937,7 @@ function print_ticketCard_extrafields($ticket) {
 
 							return 'Error bad setup of extrafield';
 						}
-					}
+					} else $value = '';
 				}
 				if (!$hidden) {
 					$out .= '<div class="row clearfix form-group" id="Severity">';
