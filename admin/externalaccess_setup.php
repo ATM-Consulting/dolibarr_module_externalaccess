@@ -239,6 +239,8 @@ if (!empty($e->attributes['ticket']['list'])) {
 }
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS_TICKET', false, $TExtrafields_ticket_list);
 
+print_multiselect('EACCESS_CARD_ADDED_FIELD_TICKET', false, $TExtrafields_ticket_list);
+
 print_title('Experimental');
 print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
 
