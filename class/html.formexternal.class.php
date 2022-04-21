@@ -837,7 +837,7 @@ class FormExternal
 		return $TOption;
 	}
 	/**
-	 * saveConfFromPost
+	 * save conf value from POST
 	 *
 	 * @param 	bool 		$noMessageInUpdate display event message on errors and success
 	 * @return 	void|null
@@ -874,7 +874,7 @@ class FormExternal
 	}
 
 	/**
-	 * generateLineOutput
+	 * prepare div for a line
 	 *
 	 * @param 	FormExternalItem 	$item 		the external item
 	 * @param 	bool 			$editMode 	Display as edit mod
