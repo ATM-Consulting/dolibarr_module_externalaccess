@@ -169,7 +169,7 @@ class InvoicesController extends Controller
 
 				print ' <td data-order="'.$object->date.'" data-search="'.dol_print_date($object->date).'"  >'.dol_print_date($object->date).'</td>';
 				print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
-				print ' <td  >'.$object->getLibStatut(0).'</td>';
+				print ' <td  >'.$object->getLibStatut(0, $totalpaye).'</td>';
 
 				if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
 					print ' <td data-order="'.$object->multicurrency_total_ht.'" class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
