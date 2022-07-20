@@ -5,6 +5,8 @@ if (empty($conf) || ! is_object($conf))
 	exit;
 }
 
+$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
+
 ?>
 <div class="container ">
 	<div class="row">
@@ -18,7 +20,7 @@ if (empty($conf) || ! is_object($conf))
 
                     <form id="register-form" role="form" autocomplete="off" class="form" method="post"  action="<?php echo $context->getRootUrl('forgottenpassword'); ?>">
 
-                        <input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']; ?>">
+                        <input type="hidden" name="token" value="<?php echo $newToken; ?>">
                         <input type="hidden" name="action" value="buildnewpassword">
 
 						<div class="form-group">
