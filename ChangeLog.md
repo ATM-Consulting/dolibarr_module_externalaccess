@@ -6,10 +6,13 @@ ___
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
 # RELEASE 1.34
-- FIX : Forgot password form css *1.34.1* - **20/07/2022**
+
+- FIX : Forgot password form css *1.34.2* - **20/07/2022**
+- FIX : Compatibilité v16 *1.34.1* - **09/06/2022**
 - NEW : Add "Tickets" extrafields management on portal card *1.34.0* - **21/04/2022**
 
 # RELEASE 1.33
+
 - NEW : Add "Tickets" extrafields management on portal list *1.33.0* - **24/03/2022** 
 - NEW : Add conf for description field & Text help message *1.32.0* - **16/02/2022** 
 

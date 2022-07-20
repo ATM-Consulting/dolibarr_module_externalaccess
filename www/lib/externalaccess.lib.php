@@ -37,12 +37,15 @@ function getEaModalConfirm($htmlid, $title, $body, $action, $doAction)
 {
 	global $langs;
 
+	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
+
 	$out= '
 		<div class="modal fade" id="'.$htmlid.'" >
 			<div class="modal-dialog">
 				<div class="modal-content">
 					<form action="'.$action.'" method="POST">
 						<input type="hidden" name="action" value="'.$doAction.'" />
+						<input type="hidden" name="token" value="'.$newToken.'"/>
 						<!-- Modal Header -->
 						<div class="modal-header">
 							<h4 class="modal-title">'.$title.'</h4>
