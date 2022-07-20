@@ -57,6 +57,13 @@ $headerImg = !empty($conf->global->EACCESS_HEADER_IMG)?$conf->global->EACCESS_HE
 
 
 ?>
+
+:root{
+	--theme-primary-color : <?php print $primaryColor; ?>;
+	--theme-primary-color-hover : <?php print $primaryColorHover; ?>;
+}
+
+
 body,
 html {
   width: 100%;
@@ -71,7 +78,7 @@ body {
 hr {
   max-width: 50px;
   border-width: 3px;
-  border-color: <?php print $primaryColor; ?>;
+  border-color: var(--theme-primary-color);
 }
 
 hr.light {
@@ -79,14 +86,14 @@ hr.light {
 }
 
 a {
-  color: <?php print $primaryColor; ?>;
+  color: var(--theme-primary-color);
   -webkit-transition: all 0.2s;
   -moz-transition: all 0.2s;
   transition: all 0.2s;
 }
 
 a:hover {
-  color: <?php print $primaryColor; ?>;
+  color: var(--theme-primary-color);
 }
 
 h1,
@@ -99,7 +106,7 @@ h6 {
 }
 
 .bg-primary {
-  background-color: <?php print $primaryColor; ?> !important;
+  background-color: var(--theme-primary-color) !important;
 }
 
 .bg-dark {
@@ -161,12 +168,12 @@ img::-moz-selection {
 #mainNav .navbar-brand {
   font-weight: 700;
   text-transform: uppercase;
-  color: <?php print $primaryColor; ?>;
+  color: var(--theme-primary-color);
   font-family: 'Open Sans', 'Helvetica Neue', Arial, sans-serif;
 }
 
 #mainNav .navbar-brand:focus, #mainNav .navbar-brand:hover {
-  color: <?php print $primaryColor; ?>;
+  color: var(--theme-primary-color);
 }
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link,
@@ -179,12 +186,12 @@ img::-moz-selection {
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link:hover,
 #mainNav .navbar-nav > li.nav-item > a.nav-link:focus:hover {
-  color: <?php print $primaryColor; ?>;
+  color: var(--theme-primary-color);
 }
 
 #mainNav .navbar-nav > li.nav-item > a.nav-link.active,
 #mainNav .navbar-nav > li.nav-item > a.nav-link:focus.active {
-  color: <?php print $primaryColor; ?> !important;
+  color: var(--theme-primary-color) !important;
   background-color: transparent;
 }
 
@@ -256,10 +263,10 @@ img::-moz-selection {
     background: #fff;
   }
   #mainNav.navbar-shrink .navbar-brand {
-    color: <?php print $primaryColor; ?>;
+    color: var(--theme-primary-color);
   }
   #mainNav.navbar-shrink .navbar-brand:focus, #mainNav.navbar-shrink .navbar-brand:hover {
-    color: <?php print $primaryColor; ?>;
+    color: var(--theme-primary-color);
   }
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link,
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus {
@@ -267,7 +274,7 @@ img::-moz-selection {
   }
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:hover,
   #mainNav.navbar-shrink .navbar-nav > li.nav-item > a.nav-link:focus:hover {
-    color: <?php print $primaryColor; ?>;
+    color: var(--theme-primary-color);
   }
 }
 
@@ -408,7 +415,7 @@ header.masthead p {
 }
 
 .text-primary {
-  color: <?php print $primaryColor; ?> !important;
+  color: var(--theme-primary-color) !important;
 }
 
 .btn {
@@ -427,13 +434,13 @@ header.masthead p {
 }
 
 .btn-primary {
-  background-color: <?php print $primaryColor; ?>;
-  border-color: <?php print $primaryColor; ?>;
+  background-color: var(--theme-primary-color);
+  border-color: var(--theme-primary-color);
 }
 
 .btn-primary:hover, .btn-primary:focus, .btn-primary:active {
   color: #fff;
-  background-color: <?php echo $primaryColorHover ?> !important;
+  background-color: var(--theme-primary-color-hover) !important;
 }
 
 .btn-primary:active, .btn-primary:focus {
@@ -526,7 +533,7 @@ header.masthead p {
 
 .btn.btn-signin {
     /*background-color: #4d90fe; */
-    background-color: <?php print $primaryColor; ?>;;
+    background-color: var(--theme-primary-color);;
     /* background-color: linear-gradient(rgb(104, 145, 162), rgb(12, 97, 33));*/
     padding: 0px;
     font-weight: 700;
@@ -545,7 +552,7 @@ header.masthead p {
 .btn.btn-signin:hover,
 .btn.btn-signin:active,
 .btn.btn-signin:focus {
-    background-color: <?php print $primaryColor; ?>;;
+    background-color: var(--theme-primary-color);;
 }
 
 .forgot-password {
@@ -558,6 +565,9 @@ header.masthead p {
     color: rgb(12, 97, 33);
 }
 
+.margin-top-if-not-empty:not(:empty){
+	margin-top: 20px;
+}
 
 
 .list-group {
@@ -598,8 +608,8 @@ header.masthead p {
 .list-group-item.active:focus {
 	z-index: 2;
 	color: #fff;
-	background-color: <?php print $primaryColor; ?>;
-	border-color: <?php print $primaryColor; ?>
+	background-color: var(--theme-primary-color);
+	border-color: var(--theme-primary-color)
 }
 
 .list-group-item.active .list-group-item-heading,
@@ -693,8 +703,8 @@ a.list-group-item:focus {
 .panel-heading {
 	padding: 10px 15px;
 	border-bottom: 1px solid transparent;
-	border-top-right-radius: -1px;
-	border-top-left-radius: -1px
+	border-top-right-radius: 1px;
+	border-top-left-radius: 1px;
 }
 
 .panel-title {
@@ -711,8 +721,8 @@ a.list-group-item:focus {
 	padding: 10px 15px;
 	background-color: #f5f5f5;
 	border-top: 1px solid #ddd;
-	border-bottom-right-radius: -1px;
-	border-bottom-left-radius: -1px
+	border-bottom-right-radius: 1px;
+	border-bottom-left-radius: 1px
 }
 
 .panel-group .panel {
@@ -760,21 +770,21 @@ a.list-group-item:focus {
 }
 
 .panel-primary {
-	border-color: <?php print $primaryColor; ?>
+	border-color: var(--theme-primary-color)
 }
 
 .panel-primary>.panel-heading {
 	color: #fff;
-	background-color: <?php print $primaryColor; ?>;
-	border-color: <?php print $primaryColor; ?>
+	background-color: var(--theme-primary-color);
+	border-color: var(--theme-primary-color)
 }
 
 .panel-primary>.panel-heading+.panel-collapse .panel-body {
-	border-top-color: <?php print $primaryColor; ?>
+	border-top-color: var(--theme-primary-color)
 }
 
 .panel-primary>.panel-footer+.panel-collapse .panel-body {
-	border-bottom-color: <?php print $primaryColor; ?>
+	border-bottom-color: var(--theme-primary-color)
 }
 
 .panel-success {
@@ -914,6 +924,8 @@ body.iframe .container {
 .ticket-help-msg-wrap {
 	margin-bottom: 30px;
 }
+
+
 
 <?php
 
