@@ -82,7 +82,7 @@ class ForgottenPasswordController extends Controller
 
 				if ($result < 0)
 				{
-					$this->tpl->message = '<div class="text-danger">'.dol_escape_htmltag($langs->trans("ErrorLoginDoesNotExists", $this->username)).'</div>';
+					$this->tpl->message.= '<div class="text-danger">'.dol_escape_htmltag($langs->trans("ErrorLoginDoesNotExists", $this->username)).'</div>';
 				} else {
 					if (dol_verifyHash($edituser->pass_temp, $this->passwordhash))
 					{
@@ -96,7 +96,7 @@ class ForgottenPasswordController extends Controller
 						exit;
 					} else {
 						$langs->load("errors");
-						$this->tpl->message = '<div class="text-danger">'.$langs->trans("ErrorFailedToValidatePasswordReset").'</div>';
+						$this->tpl->message.= '<div class="text-danger">'.$langs->trans("ErrorFailedToValidatePasswordReset").'</div>';
 					}
 				}
 			}
@@ -109,7 +109,7 @@ class ForgottenPasswordController extends Controller
 				// Verify code
 				if (!$ok)
 				{
-					$this->tpl->message = '<div class="text-danger">'.$langs->trans("ErrorBadValueForCode").'</div>';
+					$this->tpl->message.= '<div class="text-danger">'.$langs->trans("ErrorBadValueForCode").'</div>';
 				}
 				else
 				{
@@ -122,9 +122,10 @@ class ForgottenPasswordController extends Controller
 						$result = $edituser->fetch('', '', '', 1, -1, $this->username);
 					}
 
+					$this->tpl->message.= '<div class="margin-top-if-not-empty">';
 					if ($result <= 0 && $edituser->error == 'USERNOTFOUND')
 					{
-						$this->tpl->message = '<div class="warning paddingtopbottom'.(empty($conf->global->MAIN_LOGIN_BACKGROUND) ? '' : ' backgroundsemitransparent').'">';
+						$this->tpl->message.= '<div class="alert alert-info">';
 						if (!$isanemail) {
 							$this->tpl->message .= $langs->trans("IfLoginExistPasswordRequestSent");
 						} else {
@@ -135,7 +136,7 @@ class ForgottenPasswordController extends Controller
 					} else {
 						if (!$edituser->email)
 						{
-							$this->tpl->message = '<div class="text-danger">'.$langs->trans("ErrorLoginHasNoEmail").'</div>';
+							$this->tpl->message.= '<div class="alert alert-danger">'.$langs->trans("ErrorLoginHasNoEmail").'</div>';
 						}
 						else
 						{
@@ -143,25 +144,26 @@ class ForgottenPasswordController extends Controller
 							if ($newpassword < 0)
 							{
 								// Failed
-								$this->tpl->message = '<div class="text-danger">'.$langs->trans("ErrorFailedToChangePassword").'</div>';
+								$this->tpl->message.= '<div class="alert alert-danger">'.$langs->trans("ErrorFailedToChangePassword").'</div>';
 							} else {
 								// Success
 								if ($edituser->send_password($user, $newpassword, 1) > 0)
 								{
-									$this->tpl->message = '<div class="warning paddingtopbottom'.(empty($conf->global->MAIN_LOGIN_BACKGROUND) ? '' : ' backgroundsemitransparent').'">';
+									$this->tpl->message.= '<div class="alert alert-info">';
 									if (!$isanemail) {
-										$this->tpl->message .= $langs->trans("IfLoginExistPasswordRequestSent");
+										$this->tpl->message.= $langs->trans("IfLoginExistPasswordRequestSent");
 									} else {
-										$this->tpl->message .= $langs->trans("IfEmailExistPasswordRequestSent");
+										$this->tpl->message.= $langs->trans("IfEmailExistPasswordRequestSent");
 									}
-									$this->tpl->message .= '</div>';
+									$this->tpl->message.= '</div>';
 									$this->username = '';
 								} else {
-									$this->tpl->message .= '<div class="text-danger">'.$edituser->error.'</div>';
+									$this->tpl->message.= '<div class="text-danger">'.$edituser->error.'</div>';
 								}
 							}
 						}
 					}
+					$this->tpl->message.= '</div>';
 				}
 			}
 		}
