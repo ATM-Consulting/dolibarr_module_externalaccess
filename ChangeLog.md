@@ -6,6 +6,7 @@ ___
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
 # RELEASE 1.34
+- FIX : Compatibilité v16 *1.34.1* - **09/06/2022**
 - NEW : Add "Tickets" extrafields management on portal card *1.34.0* - **21/04/2022**
 
 # RELEASE 1.33

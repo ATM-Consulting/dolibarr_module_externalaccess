@@ -289,6 +289,8 @@ function print_on_off($confkey, $title = false, $desc = '', $help = '')
 {
     global $langs, $conf;
 
+	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
+
 	print '<tr class="oddeven">';
     print '<td>'.($title?$title:$langs->trans($confkey));
 
@@ -310,7 +312,7 @@ function print_on_off($confkey, $title = false, $desc = '', $help = '')
     print '<td align="center" width="20">&nbsp;</td>';
     print '<td align="center">';
     print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-    print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+    print '<input type="hidden" name="token" value="'.$newToken.'">';
     print '<input type="hidden" name="action" value="set_'.$confkey.'">';
     print ajax_constantonoff($confkey);
     print '</form>';
@@ -330,6 +332,8 @@ function print_on_off($confkey, $title = false, $desc = '', $help = '')
 function print_input_form_part($confkey, $title = false, $desc = '', $metas = array(), $type = 'input', $help = false)
 {
     global $langs, $conf, $db;
+
+	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 
     $form=new Form($db);
 
@@ -378,7 +382,7 @@ function print_input_form_part($confkey, $title = false, $desc = '', $metas = ar
         print '<td align="right" width="300">';
     }
     print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-    print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+    print '<input type="hidden" name="token" value="'.$newToken.'">';
     print '<input type="hidden" name="action" value="set_'.$confkey.'">';
     if ($type=='textarea'){
         include_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
@@ -412,12 +416,14 @@ function print_multiselect($confkey, $title, $Tab)
 
 	global $langs, $form, $conf;
 
+	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
+
 	print '<tr class="oddeven"><td>';
 	print $title?$title:$langs->trans($confkey);
 	print '</td>';
 	print '<td align="right" width="300">';
 	print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-	print '<input type="hidden" name="token" value="'.$_SESSION['newtoken'].'">';
+	print '<input type="hidden" name="token" value="'.$newToken.'">';
 	print '<input type="hidden" name="action" value="set_'.$confkey.'">';
 
 	print $form->multiselectarray($confkey, $Tab, unserialize($conf->global->{$confkey}), '', 0, '', 0, '100%');
