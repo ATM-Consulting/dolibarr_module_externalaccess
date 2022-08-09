@@ -44,7 +44,7 @@ class modexternalaccess extends DolibarrModules
 
         $this->db = $db;
 
-		$this->editor_name = 'ATM-Consulting';
+		$this->editor_name = 'ATM Consulting';
 		$this->editor_url = 'https://www.atm-consulting.fr';
 
 		// Id for module (must be unique).
@@ -62,7 +62,7 @@ class modexternalaccess extends DolibarrModules
 		$this->description = "Ajoute un acces externe pour les clients";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.34.2';
+		$this->version = '1.34.3';
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
