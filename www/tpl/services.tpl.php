@@ -32,27 +32,27 @@ if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->e
 
 if(empty($reshook)){
 
-    if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals)){
+    if(isset($conf->global->EACCESS_ACTIVATE_PROPALS) && !empty($user->rights->externalaccess->view_propals)){
         $link = $context->getRootUrl('propals');
         printService($langs->trans('Quotations'),'fa-pencil',$link); // desc : $langs->trans('QuotationsDesc')
     }
 
-	if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders)){
+	if(isset($conf->global->EACCESS_ACTIVATE_ORDERS) && !empty($user->rights->externalaccess->view_orders)){
 		$link = $context->getRootUrl('orders');
 		printService($langs->trans('Orders'),'fa-file-text-o',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-	if($conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions)){
+	if(isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS) && !empty($user->rights->externalaccess->view_expeditions)){
 		$link = $context->getRootUrl('expeditions');
 		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-    if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($conf->facture->enabled) && !empty($user->rights->externalaccess->view_invoices)){
+    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && !empty($conf->facture->enabled) && !empty($user->rights->externalaccess->view_invoices)){
         $link = $context->getRootUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
 
-    if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($conf->ticket->enabled) && !empty($user->rights->externalaccess->view_tickets)){
+    if(isset($conf->global->EACCESS_ACTIVATE_TICKETS) && !empty($conf->ticket->enabled) && !empty($user->rights->externalaccess->view_tickets)){
         $link = $context->getRootUrl('tickets');
         printService($langs->trans('Tickets'),'fa-ticket',$link);
     }

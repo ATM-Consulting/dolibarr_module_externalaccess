@@ -77,7 +77,8 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
 
 <?php
 
-	$favicon = $conf->global->EACCESS_FAVICON_URL;
+    if (isset($conf->global->EACCESS_FAVICON_URL)) $favicon = $conf->global->EACCESS_FAVICON_URL;
+
 	if (empty($favicon) && ! empty($conf->global->MAIN_FAVICON_URL)){
 		$favicon=$conf->global->MAIN_FAVICON_URL;
 	}
