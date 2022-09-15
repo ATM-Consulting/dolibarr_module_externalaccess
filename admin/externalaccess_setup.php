@@ -13,15 +13,16 @@
  * GNU General Public License for more details.
  *
  * You should have received a copy of the GNU General Public License
- * along with this program.  If not, see <http://www.gnu.org/licenses/>.
+ * along with this program.  If not, see <https://www.gnu.org/licenses/>.
  */
 
 /**
- * 	\file		admin/externalaccess.php
+ * 	\file		externalaccess/admin/externalaccess_setup.php
  * 	\ingroup	externalaccess
- * 	\brief		This file is an example module setup page
- * 				Put some comments here
+ * 	\brief		setup page for module externalaccess
+ * 
  */
+
 // Dolibarr environment
 $res = @include "../../main.inc.php"; // From htdocs directory
 if (! $res) {
@@ -40,16 +41,20 @@ $langs->load("externalaccess@externalaccess");
 if (! $user->admin) {
     accessforbidden();
 }
+
 $object = '';
+
 // Parameters
 $action = GETPOST('action', 'alpha');
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('externalaccesssetup'));
 
+
 /*
  * Actions
  */
+
 if (preg_match('/set_(.*)/', $action, $reg))
 {
 	$code=$reg[1];
@@ -78,9 +83,11 @@ if (preg_match('/del_(.*)/', $action, $reg))
 	}
 }
 
+
 /*
  * View
  */
+
 $page_name = "externalaccessSetup";
 llxHeader('', $langs->trans($page_name));
 
@@ -100,7 +107,7 @@ dol_fiche_head(
 );
 
 if (!dol_include_once('/abricot/inc.core.php')) {
-    print '<div class="error" >'. $langs->trans('AbricotNotFound'). ' <a href="http://wiki.atm-consulting.fr/index.php/Nos_modules_Dolibarr#Abricot" target="_blank">'. $langs->trans('AbricotWiki'). '</a></div>';
+    print '<div class="error" >'. $langs->trans('AbricotNotFound'). ' <a href="https://wiki.atm-consulting.fr/index.php/Nos_modules_Dolibarr#Abricot" target="_blank">'. $langs->trans('AbricotWiki'). '</a></div>';
 }
 
 // Setup page goes here
@@ -262,7 +269,12 @@ llxFooter();
 
 $db->close();
 
+
+// Functions
+
 /**
+ * Function to print title
+ *
  * @param string $title Title
  *
  * @return void
@@ -278,6 +290,8 @@ function print_title($title = "")
 }
 
 /**
+ * Function to print on_off switch
+ *
  * @param $confkey	string	name of conf in llx_const
  * @param $title	string 	label of conf
  * @param $desc		string 	description written in small text under title
@@ -320,6 +334,8 @@ function print_on_off($confkey, $title = false, $desc = '', $help = '')
 }
 
 /**
+ * Function to print an input form
+ *
  * @param $confkey Conf key
  * @param false $title Title
  * @param string $desc Description
@@ -405,6 +421,7 @@ function print_input_form_part($confkey, $title = false, $desc = '', $metas = ar
 
 /**
  * Function used to print a multiselect
+ *
  * @param $confkey	string	name of conf in llx_const
  * @param $title	string	label of conf
  * @param $Tab		array	available values
@@ -433,3 +450,4 @@ function print_multiselect($confkey, $title, $Tab)
     print '</form>';
     print '</td></tr>';
 }
+
