@@ -2,24 +2,24 @@
 #
 # MISSING TRANSLATION FROM fr_FR
 #
-NewTicket=Nouveau ticket
-NewTicketTitle=Nouveau ticket
+NewTicket = new ticket
+NewTicketTitle = new ticket title
 NewTicketTitleDesc=Ouverture d'un ticket d'assistance
 TicketNotFound=Ticket introuvable ou inexistant
 TicketSubjectHere=Saisissez le sujet du ticket
 TicketSubjectHelp=Ecrivez un résumé claire et concis permettant de retrouver facilement ce ticket
-TicketSubject=Sujet du ticket
-TicketMessage=Description
-TicketBtnSubmitCreate=Ouvrir un ticket
-TicketBtnSubmitSave=Enregister
+TicketSubject = ticket subject
+TicketMessage = description / message
+TicketBtnSubmitCreate= create ticket
+TicketBtnSubmitSave = save
 InitialMessage=Description
 Severity=Niveau
-Unread=Non lu
+Unread = unread
 AnErrorOccurredDuringTicketSave=Une erreur c'est produite lors de la sauvegarde
 MessageIsEmpty=La description est vide
 SubjectIsEmpty=Le sujet est vide
 SocIsEmpty=Société inconue
-SendMessage=Envoyer le message
+SendMessage = send message
 SendMessageHelp=Vous permet d'ajouter un complément d'information
 SendMessageOnClosedStatus=Envoyer message de remerciement
 SendMessageOnClosedStatusHelp=Vous permet d'ajouter un message à l'attention de la personne qui a résolu votre ticket (ex: remerciements) sans renvoyer le ticket pour analyse.
@@ -32,7 +32,7 @@ AddMessage=Ajouter un message / répondre
 YourCommentHere=Saisissez votre commentaire
 TicketMessagesList=Liste des messages
 TicketCommentMissing=Vous devez ajouter un message !
-SendFile=Envoyer le fichier
+SendFile = send file
 AddFileToComment=Ajouter le fichier
 SendCommentOtherActions=choisir une autre action
 SortMessagesDesc=Trier les messages du dernier au premier
