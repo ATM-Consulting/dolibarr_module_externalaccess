@@ -7,6 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.34
 
+- FIX : PHP8 warnings *1.34.4* - **19/08/2022**
 - FIX : Change editor name : ATM-Consulting -> ATM Consulting *1.34.3* - **09/08/2022**
 - FIX : Forgot password form css *1.34.2* - **20/07/2022**
 - FIX : Compatibilité v16 *1.34.1* - **09/06/2022**

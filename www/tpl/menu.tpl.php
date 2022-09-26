@@ -19,7 +19,7 @@ if ($context->userIsLog())
 	// TODO : check if is it possible to use checkAccess() of controller
 
     if (!empty($conf->projet->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_PROJECTS
+		&& isset($conf->global->EACCESS_ACTIVATE_PROJECTS)
 		&& !empty($user->rights->externalaccess->view_projects)
 	)
     {
@@ -33,7 +33,7 @@ if ($context->userIsLog())
     }
 
 	if (!empty($conf->projet->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_TASKS
+		&& isset($conf->global->EACCESS_ACTIVATE_TASKS)
 		&& !empty($user->rights->externalaccess->view_tasks)
 	)
 	{
@@ -47,7 +47,7 @@ if ($context->userIsLog())
 	}
 
     if (!empty($conf->propal->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_PROPALS
+		&& isset($conf->global->EACCESS_ACTIVATE_PROPALS)
 		&& !empty($user->rights->externalaccess->view_propals)
 	)
     {
@@ -61,7 +61,7 @@ if ($context->userIsLog())
     }
 
 	if (!empty($conf->commande->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_ORDERS
+		&& isset($conf->global->EACCESS_ACTIVATE_ORDERS)
 		&& !empty($user->rights->externalaccess->view_orders)
 	)
 	{
@@ -75,7 +75,7 @@ if ($context->userIsLog())
 	}
 
 	if (!empty($conf->expedition->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_EXPEDITIONS
+		&& isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS)
 		&& !empty($user->rights->externalaccess->view_expeditions)
 	)
 	{
@@ -89,7 +89,7 @@ if ($context->userIsLog())
 	}
 
     if (!empty($conf->facture->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_INVOICES
+		&& isset($conf->global->EACCESS_ACTIVATE_INVOICES)
 		&& !empty($user->rights->externalaccess->view_invoices)
 	)
     {
@@ -103,7 +103,7 @@ if ($context->userIsLog())
     }
 
 	if (!empty($conf->supplier_invoice->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES
+		&& isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES)
 		&& !empty($user->rights->externalaccess->view_supplier_invoices)
 	)
 	{
@@ -117,7 +117,7 @@ if ($context->userIsLog())
 	}
 
     if (!empty($conf->ticket->enabled)
-		&& $conf->global->EACCESS_ACTIVATE_TICKETS
+		&& isset($conf->global->EACCESS_ACTIVATE_TICKETS)
 		&& !empty($user->rights->externalaccess->view_tickets)
 	)
     {

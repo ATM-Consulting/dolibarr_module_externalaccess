@@ -7,7 +7,7 @@ if (empty($context) || ! is_object($context))
 global $langs, $user, $conf;
 
 $mode = 'readonly';
-if($user->rights->externalaccess->edit_user_personal_infos  && ($context->action == 'edit' || $context->action == 'saveError')){
+if(!empty($user->rights->externalaccess->edit_user_personal_infos)  && ($context->action == 'edit' || $context->action == 'saveError')){
     $mode = 'edit';
 }
 
@@ -16,7 +16,7 @@ print '<section id="section-personalinformations"  class="type-content"  ><div c
 
 
 
-if($user->rights->externalaccess->edit_user_personal_infos && $mode=='readonly'){
+if(!empty($user->rights->externalaccess->edit_user_personal_infos) && $mode=='readonly'){
     print '<a class="btn btn-primary btn-strong pull-right btn-top-section" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
 }
 

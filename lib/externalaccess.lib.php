@@ -210,7 +210,7 @@ function getNavItem($item, $deep = 0)
 				$menuChildren.= "\n\r".'<!-- print sub menu -->'."\n\r";
 			}
 			else{
-				$menuChildren.='<li class="dropdown-item" data-deep="'.$deep.'" ><a href="'.$child['url'].'" class="'.($child['active']?'active':'').'" ">'. $child['name'].'</a></li>';
+				$menuChildren.='<li class="dropdown-item" data-deep="'.$deep.'" ><a href="'.$child['url'].'" class="'.(!empty($child['active'])?'active':'').'" ">'. $child['name'].'</a></li>';
 			}
 
 		}

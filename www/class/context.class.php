@@ -51,6 +51,8 @@ class Context
 
 	public $tplDir;
 
+	public $rootUrl;
+
 	public $menu_active = array();
 
 	public $eventMessages = array();
@@ -72,8 +74,7 @@ class Context
 	{
 		global $db, $conf, $user;
 
-		// small retrocompatibility fix hack TODO : remove it when external access will be min version of Dolibarr 12
-		if (empty($user->socid)){
+		if (empty($user->socid) && version_compare(DOL_VERSION, '12.0', '<')){
 			$user->socid = $user->societe_id; // For compatibility support
 		}
 
