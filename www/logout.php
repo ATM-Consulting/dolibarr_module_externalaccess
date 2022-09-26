@@ -1,6 +1,5 @@
 <?php require __DIR__ .'/config.php';
 
-
 // This can happen only with a bookmark or forged url call.
 if (!empty($_SESSION["dol_authmode"]) && ($_SESSION["dol_authmode"] == 'forceuser' || $_SESSION["dol_authmode"] == 'http'))
 {
