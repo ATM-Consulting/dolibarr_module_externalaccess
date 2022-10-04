@@ -20,7 +20,7 @@
  * 	\file		externalaccess/admin/externalaccess_setup.php
  * 	\ingroup	externalaccess
  * 	\brief		setup page for module externalaccess
- * 
+ *
  */
 
 // Dolibarr environment
@@ -192,6 +192,8 @@ print_input_form_part('TICKET_EXTERNAL_DESCRIPTION_MESSAGE', false, '', array(),
 print_input_form_part('TICKET_PUBLIC_TEXT_HELP_MESSAGE', false, '', array(), 'textarea');
 
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
+
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS_TICKET_EXTRAFIELDS', false, array('total_spent'=>$langs->trans('total_spent')));
 
 $TAddedColumnShipping = array(
 	'shipping_method_id'=>$langs->trans('shipping_method_id'),
