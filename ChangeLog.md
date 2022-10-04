@@ -2,6 +2,11 @@
 All notable changes to this project will be documented in this file.
 ___
 
+## unreleased
+
+- NEW : ADD conf on module for ticket_extrafields  - *04/10/2022)* - 1.35.0  
+ - add selected ticket_extrafields conf in list tickets 
+
 ## notes for devs
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
