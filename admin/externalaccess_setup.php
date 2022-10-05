@@ -193,7 +193,16 @@ print_input_form_part('TICKET_PUBLIC_TEXT_HELP_MESSAGE', false, '', array(), 'te
 
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
 
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_TICKET_EXTRAFIELDS', false, array('total_spent'=>$langs->trans('total_spent')));
+$e = new ExtraFields($db);
+$e->fetch_name_optionals_label('ticket');
+$TExtrafields_ticket_list=array();
+if (!empty($e->attributes['ticket']['list'])) {
+	$TExtrafields_ticket = array_keys($e->attributes['ticket']['list']);
+	foreach ($TExtrafields_ticket as $ef_name) {
+		$TExtrafields_ticket_list['EXTRAFIELD_' . $ef_name] = $e->attributes['ticket']['label'][$ef_name];
+	}
+}
+print_multiselect('EACCESS_LIST_ADDED_COLUMNS_TICKET_EXTRAFIELDS', false, $TExtrafields_ticket_list);
 
 $TAddedColumnShipping = array(
 	'shipping_method_id'=>$langs->trans('shipping_method_id'),

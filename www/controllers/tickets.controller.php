@@ -89,8 +89,11 @@ class TicketsController extends Controller
 
 			$TOther_fields_ticket = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_TICKET);
 			if(empty($TOther_fields_ticket)) $TOther_fields_ticket = array();
-
 			$TOther_fields = array_merge($TOther_fields, $TOther_fields_ticket);
+
+			$TOther_fields_ticket_extra = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_TICKET_EXTRAFIELDS);
+			if(empty($TOther_fields_ticket_extra)) $TOther_fields_ticket_extra = array();
+			$TOther_fields = array_merge($TOther_fields, $TOther_fields_ticket_extra);
 
 
 			print '<table id="ticket-list" class="table table-striped" >';
@@ -115,51 +118,6 @@ class TicketsController extends Controller
 			print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('TicketSeverity').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
-			/**
-			 * HEADER <TH> Ajout des extrafields de la table ticket stockés dans la conf
-			 */
-
-			//Infos sur la table d'extrafields de ticket
-			$sql = "DESCRIBE ".MAIN_DB_PREFIX."ticket_extrafields";
-			$resql = $db->query($sql);
-
-			if ($resql)
-			{
-				//tableau des colonnes de la table
-				$TColumnsExtrafields = array();
-
-				$i = 0;
-				$num_rows=$db->num_rows($resql);
-				while ($i < $num_rows){
-
-					$object = $db->fetch_object($resql);
-
-					$column = $object->Field;
-					$type = $object->Type;
-
-					//si extrafield, on rajoute la colonne dans le tableau
-					if($column != 'rowid' && $column != 'tms' && $column != 'fk_object' && $column != 'import_key'){
-						$TColumnsExtrafields[$i]['name'] = $column;
-						$TColumnsExtrafields[$i]['type'] = $type;
-					}
-					$i++;
-				}
-			}
-
-			$TExtra_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_TICKET_EXTRAFIELDS);
-			if(empty($TExtra_fields)) $TExtra_fields = array();
-			foreach ($TColumnsExtrafields as $field){
-				foreach ($TExtra_fields as $tef){
-					if ($field['name'] == $tef){
-						print ' <th class="text-center" >'.$langs->trans($tef).'</th>';
-					}
-				}
-			}
-
-
-			/**
-			 *
-			 */
 			print '</tr>';
 			print '</thead>';
 			print '<tbody>';
@@ -189,15 +147,6 @@ class TicketsController extends Controller
 				print ' <td data-search="'.$object->type_label.'" data-order="'.$object->type_label.'" >'.$object->type_label.'</td>';
 				print ' <td data-search="'.$object->severity_label.'" data-order="'.$object->severity_label.'" >'.$object->severity_label.'</td>';
 				print ' <td class="text-center" >'.$object->getLibStatut(1).'</td>';
-
-				$object->fetch_optionals();
-				foreach ($TColumnsExtrafields as $field){
-					foreach ($TExtra_fields as $tef){
-						if ($field['name'] == $tef){
-							print ' <td data-search="'.$tef.'" data-order="'.$tef.'" >'.$object->array_options['options_'.$tef].'</td>';
-						}
-					}
-				}
 				print '</tr>';
 			}
 			print '</tbody>';
