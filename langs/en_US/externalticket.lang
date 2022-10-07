@@ -8,10 +8,11 @@ NewTicketTitleDesc=Ouverture d'un ticket d'assistance
 TicketNotFound=Ticket introuvable ou inexistant
 TicketSubjectHere=Saisissez le sujet du ticket
 TicketSubjectHelp=Ecrivez un résumé claire et concis permettant de retrouver facilement ce ticket
-TicketSubject = ticket subject
-TicketMessage = description / message
-TicketBtnSubmitCreate= create ticket
-TicketBtnSubmitSave = save
+TicketSubject = Ticket subject
+TicketMessage = Description / message
+TicketBtnSubmitCreate= Create ticket
+TicketBtnSubmitSave = Save
+
 InitialMessage=Description
 Severity=Niveau
 Unread = Unread
