@@ -32,7 +32,8 @@ AddMessage=Ajouter un message / répondre
 YourCommentHere=Saisissez votre commentaire
 TicketMessagesList=Liste des messages
 TicketCommentMissing=Vous devez ajouter un message !
-SendFile = send file
+SendFile = Send file
+
 AddFileToComment=Ajouter le fichier
 SendCommentOtherActions=choisir une autre action
 SortMessagesDesc=Trier les messages du dernier au premier
