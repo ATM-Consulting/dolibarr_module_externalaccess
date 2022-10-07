@@ -14,7 +14,8 @@ TicketBtnSubmitCreate= create ticket
 TicketBtnSubmitSave = save
 InitialMessage=Description
 Severity=Niveau
-Unread = unread
+Unread = Unread
+
 AnErrorOccurredDuringTicketSave=Une erreur c'est produite lors de la sauvegarde
 MessageIsEmpty=La description est vide
 SubjectIsEmpty=Le sujet est vide
