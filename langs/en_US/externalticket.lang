@@ -2,8 +2,9 @@
 #
 # MISSING TRANSLATION FROM fr_FR
 #
-NewTicket = new ticket
-NewTicketTitle = new ticket title
+NewTicket = New ticket
+NewTicketTitle = New ticket title
+
 NewTicketTitleDesc=Ouverture d'un ticket d'assistance
 TicketNotFound=Ticket introuvable ou inexistant
 TicketSubjectHere=Saisissez le sujet du ticket
