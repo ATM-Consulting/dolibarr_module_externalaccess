@@ -5,6 +5,10 @@ ___
 ## notes for devs
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
+# UNRELEASED
+
+- NEW : jSignature lib included in externalaccess *1.35.0* - **17/11/2022**
+
 # RELEASE 1.34
 
 - FIX : Wrong dolinclude_once *1.34.5* - **16/11/2022**
