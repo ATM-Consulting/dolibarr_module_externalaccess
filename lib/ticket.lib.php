@@ -99,7 +99,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 {
 	global $langs, $db, $conf, $user;
 
-	require_once __DIR__ . '/../../externalaccess/class/ExternalFormTicket.class.php';
+	require_once __DIR__ . '/../class/ExternalFormTicket.class.php';
 	$externalForm = new ExternalFormTicket($db);
 
 	$langs->loadLangs(array("ticket", "externalticket@externalaccess"));
