@@ -49,6 +49,7 @@ class Context
 
 	public $action;
 
+	public $tplDir;
 	public $tplPath;
 
 	public $rootUrl;
