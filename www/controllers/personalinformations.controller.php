@@ -55,7 +55,7 @@ class PersonalInformationsController extends Controller
 
 				if($user->update($user)>0)
 				{
-					header('Location: '.$context->getRootUrl('personalinformations').'&action=saved');
+					header('Location: '.$context->getControllerUrl('personalinformations').'&action=saved');
 				}
 				else {
 					$context->action == 'saveError';

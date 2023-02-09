@@ -64,13 +64,13 @@ class UserExternalAccess extends User
 			$mesg .= $outputlangs->transnoentitiesnoconv("Password")." = ".$password."\n\n";
 			$mesg .= "\n";
 
-			$mesg .= $outputlangs->transnoentitiesnoconv("ClickHereToGoTo", $context->appliName).': '.$context->getRootUrl()."\n\n";
+			$mesg .= $outputlangs->transnoentitiesnoconv("ClickHereToGoTo", $context->appliName).': '.$context->getControllerUrl()."\n\n";
 			$mesg .= "--\n";
 			$mesg .= $user->getFullName($outputlangs); // Username that send the email (not the user for who we want to reset password)
 
-			dol_syslog(get_class($this)."::send_password changelater is off, url=".$context->getRootUrl());
+			dol_syslog(get_class($this)."::send_password changelater is off, url=".$context->getControllerUrl());
 		} else {
-			$url = $context->getRootUrl('forgottenpassword', '&action=validatenewpassword&username='.urlencode($this->login)."&passwordhash=".dol_hash($password), false);
+			$url = $context->getControllerUrl('forgottenpassword', '&action=validatenewpassword&username='.urlencode($this->login)."&passwordhash=".dol_hash($password), false);
 
 			$mesg .= $outputlangs->transnoentitiesnoconv("RequestToResetPasswordReceived")."\n";
 			$mesg .= $outputlangs->transnoentitiesnoconv("NewKeyWillBe")." :\n\n";

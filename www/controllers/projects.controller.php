@@ -118,7 +118,7 @@ class ProjectsController extends Controller
 			//TODO : ajouter la variable $dataTableConf en paramètre du hook => résoudre le souci de "order"
 			//      $dataTableConf = array(
 			//          'language' => array(
-			//              'url' => $context->getRootUrl() . 'vendor/data-tables/french.json',
+			//              'url' => $context->getControllerUrl() . 'vendor/data-tables/french.json',
 			//          ),
 			//          'order' => array(),
 			//          'responsive' => true,
@@ -257,7 +257,7 @@ class ProjectsController extends Controller
 					//$("#expedition-list").DataTable(<?php //echo json_encode($dataTableConf) ?>//);
 					$("#projet-list").DataTable({
 						"language": {
-							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+							"url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
 						},
 						//"order": [[<?php echo ($total_more_fields + 2); ?>, 'desc']],
 

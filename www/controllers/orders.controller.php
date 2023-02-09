@@ -146,7 +146,7 @@ class OrdersController extends Controller
 				$object = new Commande($db);
 				$object->fetch($item->rowid);
 				load_last_main_doc($object);
-				$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
+				$dowloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
 
 				if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
 					$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
@@ -193,7 +193,7 @@ class OrdersController extends Controller
 				$(document).ready(function(){
 					$("#order-list").DataTable({
 						"language": {
-							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+							"url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
 						},
 						"order": [[<?php echo ($total_more_fields + 1); ?>, 'desc']],
 

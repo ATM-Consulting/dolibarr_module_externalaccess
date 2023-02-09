@@ -138,7 +138,7 @@ class SupplierInvoicesController extends Controller
 				$object = new FactureFournisseur($db);
 				$object->fetch($item->rowid);
 				load_last_main_doc($object);
-				$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
+				$dowloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
 				//var_dump($object); exit;
 				$totalpaye = $object->getSommePaiement();
 				$totalcreditnotes = $object->getSumCreditNotesUsed();
@@ -185,13 +185,13 @@ class SupplierInvoicesController extends Controller
 			print '</tbody>';
 
 			print '</table>';
-			$jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
+			$jsonUrl = $context->getControllerUrl().'script/interface.php?action=getInvoicesList';
 			?>
 			<script type="text/javascript" >
 				$(document).ready(function(){
 					$("#invoice-list").DataTable({
 						"language": {
-							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+							"url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
 						},
 						"order": [[<?php echo ($total_more_fields + 1); ?>, 'desc']],
 

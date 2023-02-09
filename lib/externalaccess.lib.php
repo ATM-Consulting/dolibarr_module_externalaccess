@@ -457,13 +457,13 @@ function print_invoiceList($socId = 0)
         print '</thead>';
         print '</table>';
 
-        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getInvoicesList';
+        $jsonUrl = $context->getControllerUrl().'script/interface.php?action=getInvoicesList';
         ?>
 <script type="text/javascript" >
  $(document).ready(function(){
      $("#ajax-invoice-list").DataTable({
          "language": {
-             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             "url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
          },
          "ajax": '<?php print $jsonUrl; ?>',
 
@@ -529,7 +529,7 @@ function json_invoiceList($socId = 0, $limit=25, $offset=0)
 
             $object = new Facture($db);
             $object->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
+            $dowloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadInvoice&id='.$object->id;
 
 
             $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
@@ -616,13 +616,13 @@ function print_orderList($socId = 0)
         print '</thead>';
         print '</table>';
 
-        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getOrdersList';
+        $jsonUrl = $context->getControllerUrl().'script/interface.php?action=getOrdersList';
         ?>
 <script type="text/javascript" >
  $(document).ready(function(){
      $("#ajax-order-list").DataTable({
          "language": {
-             "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+             "url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
          },
 
          responsive: true,
@@ -691,7 +691,7 @@ function json_orderList($socId = 0, $limit=25, $offset=0)
 
             $object = new Commande($db);
             $object->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
+            $dowloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadCommande&id='.$object->id;
 
 
             $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
@@ -778,13 +778,13 @@ function print_propalList($socId = 0)
         print '</thead>';
         print '</table>';
 
-        $jsonUrl = $context->getRootUrl().'script/interface.php?action=getPropalsList';
+        $jsonUrl = $context->getControllerUrl().'script/interface.php?action=getPropalsList';
         ?>
     <script type="text/javascript" >
      $(document).ready(function(){
          $("#ajax-propal-list").DataTable({
              "language": {
-                 "url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+                 "url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
              },
              "ajax": '<?php print $jsonUrl; ?>',
 
@@ -850,7 +850,7 @@ function json_propalList($socId = 0, $limit=25, $offset=0)
 
             $object = new Propal($db);
             $object->fetch($item->rowid);
-            $dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+            $dowloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
 
             $filename = DOL_DATA_ROOT.'/'.$object->last_main_doc;
             $disabled = false;

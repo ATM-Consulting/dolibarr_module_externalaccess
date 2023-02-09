@@ -7,6 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
+- NEW : Factoring and deprecate Context::getRootUrl() see getControllerUrl()  *1.36.0* - **09/02/2023**
 - NEW : jSignature lib included in externalaccess *1.35.0* - **17/11/2022**
 
 # RELEASE 1.34

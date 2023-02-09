@@ -78,7 +78,7 @@ class TicketsController extends Controller
 		$tableItems = $context->dbTool->executeS($sql);
 
 		if(checkUserTicketRight($user, $ticketStatic, 'create')) {
-			print '<div><a href="' . $context->getRootUrl('ticket_card', '&action=create') . '" class="btn btn-primary btn-strong pull-right" >' . $langs->trans('NewTicket') . '</a></div>';
+			print '<div><a href="' . $context->getControllerUrl('ticket_card', '&action=create') . '" class="btn btn-primary btn-strong pull-right" >' . $langs->trans('NewTicket') . '</a></div>';
 		}
 
 		if(!empty($tableItems))
@@ -124,7 +124,7 @@ class TicketsController extends Controller
 				$object->fetch($item->rowid);
 
 				print '<tr>';
-				print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$context->getRootUrl('ticket_card', '&id='.$item->rowid).'">'.$object->ref.'</a></td>';
+				print ' <td data-search="'.$object->ref.'" data-order="'.$object->ref.'"  ><a href="'.$context->getControllerUrl('ticket_card', '&id='.$item->rowid).'">'.$object->ref.'</a></td>';
 				$total_more_fields=0;
 				if(!empty($TOther_fields)) {
 					foreach ($TOther_fields as $field) {
@@ -153,7 +153,7 @@ class TicketsController extends Controller
 				$(document).ready(function(){
 					$("#ticket-list").DataTable({
 						"language": {
-							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+							"url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
 						},
 						'order': [[1, 'desc']], // 1 = 2e colonne
 
