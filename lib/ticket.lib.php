@@ -113,7 +113,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 		return $out;
 	}
 
-	$out .= '<form role="form" autocomplete="off" class="form" method="post" enctype="multipart/form-data" action="' . $context->getRootUrl('ticket_card') . '&id=' . $ticket->id . '&time=' . time() . '#form-ticket-message-container">';
+	$out .= '<form role="form" autocomplete="off" class="form" method="post" enctype="multipart/form-data" action="' . $context->getControllerUrl('ticket_card') . '&id=' . $ticket->id . '&time=' . time() . '#form-ticket-message-container">';
 	if ($timelineIntegration) {
 		if ($timelineIntegration != 'embed') $out .= '<ul class="timeline">';
 
@@ -265,7 +265,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	} else {
 		$author.= dol_escape_htmltag($object->origin_email);
 	}
-	$outEaNavbar = getEaNavbar($context->getRootUrl('tickets', '&save_lastsearch_values=1'));
+	$outEaNavbar = getEaNavbar($context->getControllerUrl('tickets', '&save_lastsearch_values=1'));
 
 	/*
 					<div class="row clearfix form-group" id="trackId">
@@ -299,7 +299,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 			}
 
 			if(!empty($doc->share)){
-				$doclink = $context->getRootUrl(false, array('action'=> 'get-file', 'share' => $doc->share)).'script/interface.php?action=get-file&amp;share='.$doc->share;
+				$doclink = $context->getControllerUrl(false, array('action'=> 'get-file', 'share' => $doc->share)).'script/interface.php?action=get-file&amp;share='.$doc->share;
 				$ticketFooter.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
 				$ticketFooter.= img_mime($filePath).' '.$doc->filename;
 				$ticketFooter.= '</a>';
@@ -396,9 +396,9 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		}
 
 		if($sortMsg == 'asc'){
-			$sortBtn = '<a class="pull-right btn btn-light" data-toggle="tooltip" title="'.$langs->trans('SortMessagesDesc').'" href="'.$context->getRootUrl('ticket_card', '&id='.$object->id.'&sortmsg=desc').'" ><i class="fa fa-sort-numeric-desc"></i></a>';
+			$sortBtn = '<a class="pull-right btn btn-light" data-toggle="tooltip" title="'.$langs->trans('SortMessagesDesc').'" href="'.$context->getControllerUrl('ticket_card', '&id='.$object->id.'&sortmsg=desc').'" ><i class="fa fa-sort-numeric-desc"></i></a>';
 		}else{
-			$sortBtn = '<a class="pull-right btn btn-light" data-toggle="tooltip" title="'.$langs->trans('SortMessagesAsc').'"  href="'.$context->getRootUrl('ticket_card', '&id='.$object->id.'&sortmsg=asc').'" ><i class="fa fa fa-sort-numeric-asc""></i></a>';
+			$sortBtn = '<a class="pull-right btn btn-light" data-toggle="tooltip" title="'.$langs->trans('SortMessagesAsc').'"  href="'.$context->getControllerUrl('ticket_card', '&id='.$object->id.'&sortmsg=asc').'" ><i class="fa fa fa-sort-numeric-asc""></i></a>';
 		}
 
 		$out.='
@@ -563,7 +563,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						}
 
 						if(!empty($doc->share)){
-							$doclink = $context->getRootUrl(false, array('action'=> 'get-file', 'share' => $doc->share));
+							$doclink = $context->getControllerUrl(false, array('action'=> 'get-file', 'share' => $doc->share));
 							$footer.= '<a href="'.$doclink.'" class="btn-link '.$class.'" target="_blank"  '.$mimeAttr.' >';
 						$footer.= img_mime($filePath).' '.$doc->filename;
 							$footer.= '</a>';

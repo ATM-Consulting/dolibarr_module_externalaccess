@@ -146,7 +146,7 @@ class PropalsController extends Controller
 				$object = new Propal($db);
 				$object->fetch($item->rowid);
 				load_last_main_doc($object);
-				$downloadUrl = $context->getRootUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
+				$downloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadPropal&id='.$object->id;
 
 
 				if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
@@ -198,7 +198,7 @@ class PropalsController extends Controller
 
 
 			$jsonConf = array(
-				'rootUrl' => $context->getRootUrl(),
+				'rootUrl' => $context->getControllerUrl(),
 				'searching' => $searching,
 				'paging' => $paging,
 				'total_more_fields' => $total_more_fields

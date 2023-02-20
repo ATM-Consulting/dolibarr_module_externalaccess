@@ -169,9 +169,9 @@ function showUserPhoto($user, $width = 100, $height = 0, $cssclass = 'photowithm
 	$context = Context::getInstance();
 
 
-	$nophoto = $context->getRootUrl().'/img/avatar.png';
-	if ($user->gender == 'man') $nophoto = $context->getRootUrl().'/img/user_man.png';
-	if ($user->gender == 'woman') $nophoto = $context->getRootUrl().'/img/user_woman.png';
+	$nophoto = $context->getControllerUrl().'/img/avatar.png';
+	if ($user->gender == 'man') $nophoto = $context->getControllerUrl().'/img/user_man.png';
+	if ($user->gender == 'woman') $nophoto = $context->getControllerUrl().'/img/user_woman.png';
 
 	if (!empty($conf->gravatar->enabled) && $email && 0)
 	{
@@ -392,7 +392,7 @@ function outputEcmFile($fk_ecm = '', $hashForShare = '', $byPassSecurity = false
 function getProductImgUrl($searchProductId, $format = 'thumb')
 {
 	$context = Context::getInstance();
-	return $context->getRootUrl().'script/interface.php?action=productimg&p='.intval($searchProductId).'&f='.$format;
+	return $context->getControllerUrl().'script/interface.php?action=productimg&p='.intval($searchProductId).'&f='.$format;
 }
 
 

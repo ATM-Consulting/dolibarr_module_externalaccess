@@ -92,7 +92,7 @@ class ForgottenPasswordController extends Controller
 
 						$newpassword = $edituser->setPassword($user, $edituser->pass_temp, 0);
 						dol_syslog("passwordforgotten.php new password for user->id=".$edituser->id." validated in database");
-						header("Location: ".$context->getRootUrl());
+						header("Location: ".$context->getControllerUrl());
 						exit;
 					} else {
 						$langs->load("errors");

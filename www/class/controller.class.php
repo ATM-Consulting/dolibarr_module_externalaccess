@@ -24,6 +24,12 @@ class Controller {
 
 
 	/**
+	 * @var tpl path will use default context->tplPath if empty
+	 */
+	public $tplPath;
+
+
+	/**
 	 * Constructeur de la classe
 	 *
 	 * @param void
@@ -147,14 +153,26 @@ class Controller {
 		$context = Context::getInstance(); // load for tpl
 
 		if (!preg_match('/^[0-9\.A-ZaZ_\-]*$/ui', $templateName)) {
-			return;
+			return false;
+		}
+
+		if(!empty($this->tplPath)){
+			$tplPath = $this->tplPath . '/' . $templateName.'.tpl.php';
+			if(file_exists($tplPath)){
+				include $tplPath;
+				return true;
+			}
 		}
 
 		$tplPath = $context->tplPath . '/' . $templateName.'.tpl.php';
 
-		if(!file_exists($tplPath)){ print 'ERROR TPL NOT FOUND : '.$templateName; return; }
+		if(!file_exists($tplPath)){
+			print 'ERROR TPL NOT FOUND : '.$templateName;
+			return false;
+		}
 
 		include $tplPath;
+		return true;
 	}
 
 

@@ -20,7 +20,7 @@
  * 	\file		externalaccess/admin/externalaccess_setup.php
  * 	\ingroup	externalaccess
  * 	\brief		setup page for module externalaccess
- * 
+ *
  */
 
 // Dolibarr environment
@@ -122,7 +122,7 @@ print "</tr>";
 
 dol_include_once('externalaccess/www/class/context.class.php');
 $context = Context::getInstance();
-$link = '<a target="_blank" href="'.$context->getRootUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a>';
+$link = '<a target="_blank" href="'.$context->getControllerUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a>';
 print_input_form_part('EACCESS_ROOT_URL', false, $link, array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_ROOT_URL_HELP');
 print_input_form_part('EACCESS_TITLE', false, '', array('size'=> 50), 'input', 'EACCESS_TITLE_HELP');
 print_input_form_part('EACCESS_GOBACK_URL', false, '', array('size'=> 50), 'input', 'EACCESS_GOBACK_URL_HELP');

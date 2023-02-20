@@ -50,6 +50,7 @@ class Context
 	public $action;
 
 	public $tplDir;
+	public $tplPath;
 
 	public $rootUrl;
 
@@ -82,7 +83,7 @@ class Context
 
 		$this->tplDir = __DIR__.'/../';
 
-		$this->getRootUrl();
+		$this->getControllerUrl();
 
 		$this->topMenu = new stdClass();
 
@@ -106,15 +107,10 @@ class Context
 		$this->initController();
 
 		// Init de l'url de base
-		if (!empty($conf->global->EACCESS_ROOT_URL))
-		{
-			$this->rootUrl = $conf->global->EACCESS_ROOT_URL;
-			if (substr($this->rootUrl, -1) !== '/') $this->rootUrl .= '/';
-		}
-		else {
-			$this->rootUrl = dol_buildpath('/externalaccess/www/', 2);
-		}
+
+		$this->rootUrl = self::getRootConfigUrl();
 	}
+
 
 
 	/**
@@ -209,12 +205,44 @@ class Context
 	}
 
 	/**
+	 * return external access root url
+	 * @return string
+	 */
+	static public function getRootConfigUrl(){
+		global $conf;
+
+		// Init de l'url de base
+		if (!empty($conf->global->EACCESS_ROOT_URL)){
+			$rootUrl = $conf->global->EACCESS_ROOT_URL;
+			if (substr($rootUrl, -1) !== '/') $rootUrl .= '/';
+		}
+		else {
+			$rootUrl = dol_buildpath('/externalaccess/www/', 2);
+		}
+
+		return $rootUrl;
+	}
+
+	/**
+	 * @param string       $controller controller
+	 * @param string|array $moreParams  moreParams
+	 * @param bool         $addToken add token hash only if $controller is setted
+	 * @return string
+	 * @deprecated see getControllerUrl()
+	 */
+	public function getRootUrl($controller = false, $moreParams = '', $addToken = true){
+		return self::getControllerUrl($controller, $moreParams, $addToken);
+	}
+
+
+	/**
+	 * get controller url according to context
 	 * @param string       $controller controller
 	 * @param string|array $moreParams  moreParams
 	 * @param bool         $addToken add token hash only if $controller is setted
 	 * @return string
 	 */
-	public function getRootUrl($controller = false, $moreParams = '', $addToken = true)
+	public function getControllerUrl($controller = false, $moreParams = '', $addToken = true)
 	{
 		$url = $this->rootUrl;
 
@@ -225,17 +253,39 @@ class Context
 
 		$Tparams = array();
 
-		if (!empty($controller)){
-			$Tparams['controller'] = $controller;
-			// added to remove somme part on iframe calls
-			if (!empty($this->iframe)){
-				$Tparams['iframe'] = 1;
-			}
+		$Tparams['controller'] = $controller;
 
-			if (!empty($addToken)){
-				$Tparams[$this->tokenKey] = $this->newToken();
-			}
+		// added to remove somme part on iframe calls
+		if (!empty($this->iframe)){
+			$Tparams['iframe'] = 1;
 		}
+
+		if (!empty($addToken)){
+			$Tparams[$this->tokenKey] = $this->newToken();
+		}
+
+		return self::getPublicControllerUrl($controller, $moreParams, $Tparams);
+	}
+
+	/**
+	 * générate public controller URL
+	 * Used for external link (like email or web page) to externe access
+	 * so remove token and contextual behavior associate with curent user
+	 * @param bool $controller controller
+	 * @param string|array $moreParams moreParams
+	 * @param array $Tparams
+	 * @return string
+	 */
+	static public function getPublicControllerUrl($controller = false, $moreParams = '', $Tparams = array())
+	{
+		$url = self::getRootConfigUrl();
+
+		if (empty($controller)){
+			// because can be called without params to get only rootUrl
+			return $url;
+		}
+
+		$Tparams['controller'] = $controller;
 
 		// if $moreParams is an array
 		if (!empty($moreParams) && is_array($moreParams)){
@@ -268,6 +318,7 @@ class Context
 
 		return $url;
 	}
+
 
 	/**
 	 * @param bool $withRequestUri withRequestUri
