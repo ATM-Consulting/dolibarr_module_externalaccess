@@ -233,6 +233,11 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 	$langs->load('ticket');
 
+
+	if(!$conf->global->EACCESS_ACTIVATE_TICKETS || empty($user->rights->externalaccess->view_tickets)){
+		return '';
+	}
+
 	/** @var Ticket $object */
 	if(!empty($context->fetchedTicket)){
 		$object = $context->fetchedTicket;
@@ -250,7 +255,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	}
 
 	// Droits d'accès
-	if($object->fk_soc != $user->socid && (!$user->employee && empty($user->socid))){
+	if($object->fk_soc != $user->socid){
 		$context->controller_found = false;
 		return '';
 	}
