@@ -343,15 +343,21 @@ class Actionsexternalaccess
 
 		dol_include_once('ticket/class/ticket.class.php');
 
+		if(!$conf->global->EACCESS_ACTIVATE_TICKETS || empty($user->rights->externalaccess->view_tickets)){
+			return null;
+		}
+
 		$ticket = new Ticket($context->dbTool->db);
 		$ticketId = GETPOST('id', 'int');
 		if($ticketId > 0) {
 			$res = $ticket->fetch($ticketId);
 			$context->fetchedTicket = $ticket;
 
-			if($ticket->fk_soc != $user->socid && (!$user->employee && empty($user->socid)) ){
+			if($ticket->fk_soc != $user->socid){
 				return null;
 			}
+		}else{
+			return null;
 		}
 
 		// DO ACTIONS
