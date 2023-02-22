@@ -108,7 +108,7 @@ class ExpeditionsController extends Controller
 			//TODO : ajouter la variable $dataTableConf en paramètre du hook => résoudre le souci de "order"
 //		$dataTableConf = array(
 //			'language' => array(
-//				'url' => $context->getRootUrl() . 'vendor/data-tables/french.json',
+//				'url' => $context->getControllerUrl() . 'vendor/data-tables/french.json',
 //			),
 //			'order' => array(),
 //			'responsive' => true,
@@ -219,7 +219,7 @@ class ExpeditionsController extends Controller
 				$object->fetchObjectLinked();
 
 				load_last_main_doc($object);
-				$dowloadUrl = $context->getRootUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
+				$dowloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
 
 				if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
 					$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
@@ -320,7 +320,7 @@ class ExpeditionsController extends Controller
 					//$("#expedition-list").DataTable(<?php //echo json_encode($dataTableConf) ?>//);
 					$("#expedition-list").DataTable({
 						"language": {
-							"url": "<?php print $context->getRootUrl(); ?>vendor/data-tables/french.json"
+							"url": "<?php print $context->getControllerUrl(); ?>vendor/data-tables/french.json"
 						},
 						"order": [[<?php echo ($total_more_fields + 2); ?>, 'desc']],
 

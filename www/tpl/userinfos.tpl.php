@@ -17,7 +17,7 @@ print '<section id="section-personalinformations"  class="type-content"  ><div c
 
 
 if(!empty($user->rights->externalaccess->edit_user_personal_infos) && $mode=='readonly'){
-    print '<a class="btn btn-primary btn-strong pull-right btn-top-section" href="'.$context->getRootUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
+    print '<a class="btn btn-primary btn-strong pull-right btn-top-section" href="'.$context->getControllerUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
 }
 
 /*
@@ -37,7 +37,7 @@ if($context->action=='saveError'){
     print '<div class="alert alert-danger" role="alert">'.$langs->trans('ErrorDetected').'</div>';
 }
 
-print '<form method="post" action="'.$context->getRootUrl('personalinformations').'&amp;action=save">';
+print '<form method="post" action="'.$context->getControllerUrl('personalinformations').'&amp;action=save">';
 //print '<div class="card" >';
 //
 
@@ -109,7 +109,7 @@ if($mode=='edit'){
 
     print '<button class="btn btn-primary btn-strong pull-right" type="submit" name="save" value="1" >'.$langs->trans('Save').'</button>';
 
-    print '<a class="btn btn-secondary btn-strong" href="'.$context->getRootUrl('personalinformations').'"  >'.$langs->trans('Cancel').'</a>';
+    print '<a class="btn btn-secondary btn-strong" href="'.$context->getControllerUrl('personalinformations').'"  >'.$langs->trans('Cancel').'</a>';
 }
 else{
     print '<p>'.$conf->global->EACCESS_RGPD_MSG.'</p>';

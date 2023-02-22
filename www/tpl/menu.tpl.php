@@ -26,7 +26,7 @@ if ($context->userIsLog())
         $Tmenu['projects'] = array(
             'id' => 'projects',
             'rank' => 10,
-            'url' => $context->getRootUrl('projects'),
+            'url' => $context->getControllerUrl('projects'),
             'name' => $langs->trans('EALINKNAME_projects'),
 			'group' => 'technical' // group identifier for the group if necessary
         );
@@ -40,7 +40,7 @@ if ($context->userIsLog())
 		$Tmenu['tasks'] = array(
 			'id' => 'tasks',
 			'rank' => 15,
-			'url' => $context->getRootUrl('tasks'),
+			'url' => $context->getControllerUrl('tasks'),
 			'name' => $langs->trans('EALINKNAME_tasks'),
 			'group' => 'technical' // group identifier for the group if necessary
 		);
@@ -54,7 +54,7 @@ if ($context->userIsLog())
         $Tmenu['propals'] = array(
             'id' => 'propals',
             'rank' => 20,
-            'url' => $context->getRootUrl('propals'),
+            'url' => $context->getControllerUrl('propals'),
             'name' => $langs->trans('EALINKNAME_propals'),
 			'group' => 'administrative' // group identifier for the group if necessary
         );
@@ -68,7 +68,7 @@ if ($context->userIsLog())
 		$Tmenu['orders'] = array(
 			'id' => 'orders',
 			'rank' => 30,
-			'url' => $context->getRootUrl('orders'),
+			'url' => $context->getControllerUrl('orders'),
 			'name' => $langs->trans('EALINKNAME_orders'),
 			'group' => 'administrative' // group identifier for the group if necessary
 		);
@@ -82,7 +82,7 @@ if ($context->userIsLog())
 		$Tmenu['expeditions'] = array(
 			'id' => 'expeditions',
 			'rank' => 40,
-			'url' => $context->getRootUrl('expeditions'),
+			'url' => $context->getControllerUrl('expeditions'),
 			'name' => $langs->trans('EALINKNAME_expeditions'),
 			'group' => 'administrative' // group identifier for the group if necessary
 		);
@@ -96,7 +96,7 @@ if ($context->userIsLog())
         $Tmenu['invoices'] = array(
             'id' => 'invoices',
             'rank' => 50,
-            'url' => $context->getRootUrl('invoices'),
+            'url' => $context->getControllerUrl('invoices'),
             'name' => $langs->trans('EALINKNAME_invoices'),
 			'group' => 'administrative' // group identifier for the group if necessary
         );
@@ -110,7 +110,7 @@ if ($context->userIsLog())
 		$Tmenu['supplier_invoices'] = array(
 			'id' => 'supplier_invoices',
 			'rank' => 60,
-			'url' => $context->getRootUrl('supplier_invoices'),
+			'url' => $context->getControllerUrl('supplier_invoices'),
 			'name' => $langs->trans('EALINKNAME_supplier_invoices'),
 			'group' => 'administrative' // group identifier for the group if necessary
 		);
@@ -124,7 +124,7 @@ if ($context->userIsLog())
         $Tmenu['tickets'] = array(
             'id' => 'tickets',
             'rank' => 70,
-            'url' => $context->getRootUrl('tickets'),
+            'url' => $context->getControllerUrl('tickets'),
             'name' => $langs->trans('EALINKNAME_tickets'),
 			'group' => 'technical' // group identifier for the group if necessary
         );
@@ -141,7 +141,7 @@ if ($context->userIsLog())
     $Tmenu['user']['children']['personalinformations'] = array(
         'id' => 'personalinformations',
         'rank' => 10,
-        'url' => $context->getRootUrl('personalinformations'),
+        'url' => $context->getControllerUrl('personalinformations'),
         'name' => '<i class="fa fa-user"></i> '.$langs->trans('PersonalInformations'),
     );
 
@@ -149,7 +149,7 @@ if ($context->userIsLog())
         'id' => 'logout',
         'separator' => 1,
         'rank' => 100,
-        'url' => $context->getRootUrl().'logout.php',
+        'url' => $context->getControllerUrl().'logout.php',
         'name' => '<i class="fa fa-sign-out"></i> '.$langs->trans('Logout'),
     );
 }
@@ -242,7 +242,7 @@ if (empty($reshook)){
 <!-- Navigation -->
     <nav class="navbar navbar-expand-lg navbar-light fixed-top <?php print !empty($context->topMenu->shrink)?'navbar-shrink':''; ?>" id="mainNav" <?php print !empty($context->topMenu->shrink)?'data-defaultshrink="1"':''; ?> >
       <div class="container">
-        <a class="navbar-brand js-scroll-trigger" href="<?php print $context->getRootUrl();  ?>">
+        <a class="navbar-brand js-scroll-trigger" href="<?php print $context->getControllerUrl();  ?>">
 			<?php
 			$brandTitle = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
 			if (!empty($conf->global->EACCESS_TOP_MENU_IMG)){

@@ -99,7 +99,7 @@ class FormExternal
 		$this->db = $db;
 		$this->form = new Form($this->db);
 		$this->context = Context::getInstance();
-		$this->formAttributes['action'] = $this->context->getRootUrl($page_element);
+		$this->formAttributes['action'] = $this->context->getControllerUrl($page_element);
 
 
 		if ($outputLangs) {

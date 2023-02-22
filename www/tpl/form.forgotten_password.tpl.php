@@ -18,7 +18,7 @@ $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
                   <p><?php echo $langs->trans("YouCanResetYourPasswordHere"); ?>.</p>
                   <div class="panel-body">
 
-                    <form id="register-form" role="form" autocomplete="off" class="form" method="post"  action="<?php echo $context->getRootUrl('forgottenpassword'); ?>">
+                    <form id="register-form" role="form" autocomplete="off" class="form" method="post"  action="<?php echo $context->getControllerUrl('forgottenpassword'); ?>">
 
                         <input type="hidden" name="token" value="<?php echo $newToken; ?>">
                         <input type="hidden" name="action" value="buildnewpassword">
@@ -48,7 +48,7 @@ $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 								<div class="form-check">
 									<i class="fa fa-arrow-left" ></i>
 									<span class="nowrap inline-block">
-										<img class="inline-block valignmiddle" src="<?php print $context->getRootUrl().'/script/script.php?action=antispamimage&time='.microtime(); ?>" border="0" width="80" height="32" id="img_securitycode" />
+										<img class="inline-block valignmiddle" src="<?php print $context->getControllerUrl().'/script/script.php?action=antispamimage&time='.microtime(); ?>" border="0" width="80" height="32" id="img_securitycode" />
 									</span>
 								</div>
 							</div>
@@ -58,7 +58,7 @@ $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 
 						<div class="form-group">
 							<button name="recover-submit" class="btn btn-lg btn-primary btn-strong btn-block" type="submit"><?php echo $langs->trans("Renew"); ?></button>
-							<br/><a href="<?php print $context->getRootUrl('login') ?>" ><i class="fa fa-arrow-left" ></i> <?php echo $langs->trans("GoBackToLoginPage"); ?></a>
+							<br/><a href="<?php print $context->getControllerUrl('login') ?>" ><i class="fa fa-arrow-left" ></i> <?php echo $langs->trans("GoBackToLoginPage"); ?></a>
 						</div>
 
                     </form>

@@ -398,7 +398,7 @@ class Actionsexternalaccess
 
 				if (empty($ticket->message)) {
 					$context->setEventMessages($langs->trans('TicketCommentMissing'), 'warnings');
-					header('Location: '.$context->getRootUrl('ticket_card', '&id='.$ticket->id.'&time='.microtime().'#form-ticket-message-container'));
+					header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$ticket->id.'&time='.microtime().'#form-ticket-message-container'));
 					exit;
 				}
 
@@ -441,7 +441,7 @@ class Actionsexternalaccess
 					// TODO Il ne faudrait pas rendre un fichier de ce ticket public juste parceque l'utilisateur a tenté d'envoyer un fichier avec le même nom...
 					if(! empty($conf->global->EACCESS_SET_UPLOADED_FILES_AS_PUBLIC)) updateFileUploadedToBePublic($ticket, $listofnames, $Terrors);
 
-					header('Location: '.$context->getRootUrl('ticket_card', '&id='.$ticket->id.'#lastcomment'));
+					header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$ticket->id.'#lastcomment'));
 					exit();
 				} else {
 					$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
@@ -520,7 +520,7 @@ class Actionsexternalaccess
 						}
 						$ticket->add_contact($user->contact_id, "SUPPORTCLI", 'external', 0);
 
-						header('Location: '.$context->getRootUrl('ticket_card', '&id='.$res));
+						header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$res));
 						exit();
 					}else{
 						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
