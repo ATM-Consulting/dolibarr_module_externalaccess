@@ -7,6 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
+- FIX : copie de la pièce-jointe dans le ticket => force trackid *1.35.1* - **06/03/2023**
 - NEW : jSignature lib included in externalaccess *1.35.0* - **17/11/2022**
 
 # RELEASE 1.34
