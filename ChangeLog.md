@@ -13,6 +13,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 - FIX : Security issue with ticket *1.36.1* - **22/02/2022**
 - NEW : Factoring and deprecate Context::getRootUrl() see getControllerUrl()  *1.36.0* - **09/02/2023**
+- FIX : copie de la pièce-jointe dans le ticket => force trackid *1.35.1* - **06/03/2023**
 - NEW : jSignature lib included in externalaccess *1.35.0* - **17/11/2022**
 
 # RELEASE 1.34

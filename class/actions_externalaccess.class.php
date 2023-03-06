@@ -403,7 +403,7 @@ class Actionsexternalaccess
 				}
 
 				// Copy attached files (saved into $_SESSION) as linked files to ticket. Return array with final name used.
-				$resarray = $ticket->copyFilesForTicket();
+				$resarray = $ticket->copyFilesForTicket((!empty ($ticket->track_id)) ? $ticket->track_id : '');
 
 				$listofpaths = $resarray['listofpaths'];
 				$listofnames = $resarray['listofnames'];
