@@ -376,6 +376,7 @@ class Actionsexternalaccess
 
 		if($action == "add-comment-file" || $action == "new-comment"){
 			global $conf;
+
 			if ($ticket->id > 0 && checkUserTicketRight($user, $ticket, 'comment')) {
 				include_once DOL_DOCUMENT_ROOT.'/core/lib/files.lib.php';
 
