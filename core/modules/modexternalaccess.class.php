@@ -62,7 +62,7 @@ class modexternalaccess extends DolibarrModules
 		$this->description = "Ajoute un acces externe pour les clients";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.36.1';
+		$this->version = '1.37.0';
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -93,6 +93,7 @@ class modexternalaccess extends DolibarrModules
 		//							'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'! empty($conf->module1->enabled) && ! empty($conf->module2->enabled)', 'picto'=>'yourpicto@externalaccess')) // Set here all workflow context managed by module
 		//                        );
 		$this->module_parts = array(
+			'triggers' => 1,
 		    'hooks' => array('externalaccesspage','externalaccess'),
 
 		);

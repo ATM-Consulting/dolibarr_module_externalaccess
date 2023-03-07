@@ -7,7 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
-
+- NEW : the attachment added in Dolibarr was not visible on the portal - 1.37.0 - **07/03/2023**
 
 # RELEASE 1.36
 
