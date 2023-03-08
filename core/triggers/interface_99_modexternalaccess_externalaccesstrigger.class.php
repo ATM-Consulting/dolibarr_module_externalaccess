@@ -110,14 +110,6 @@ class Interfaceexternalaccesstrigger extends DolibarrTriggers
      */
     public function runTrigger($action, $object, $user, $langs, $conf)
     {
-
-		//Lors de l'ajout d'une pièce-jointe sur un message ticket, celle-ci est partagée sur le portail client
-		if($action === 'ECMFILES_CREATE' && GETPOST('action', 'alphanohtml') === 'add_message' && empty(GETPOST('private_message', 'int'))) {
-			require_once DOL_DOCUMENT_ROOT . '/core/lib/security2.lib.php';
-			$object->share = getRandomPassword(true);
-			$object->update($user);
-		}
-
-        return 0;
+		return 0;
     }
 }
