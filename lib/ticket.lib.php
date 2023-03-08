@@ -129,6 +129,8 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 	}
 
 
+	$out .= '<input type="hidden" name="token" value="' . newToken() . '" />';
+
 	$out .= '<div class="form-group">
 				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment', 'none')) . '</textarea>';
 	$out .= '</div>';
