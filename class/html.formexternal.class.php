@@ -162,6 +162,10 @@ class FormExternal
 			if ($editMode) {
 				$out.= '<form ' . self::generateAttributesStringFromArray($this->formAttributes) . ' >';
 
+				if(empty($this->formHiddenInputs['token'])){
+					$this->formHiddenInputs['token'] = newToken();
+				}
+
 				// generate hidden values from $this->formHiddenInputs
 				if (!empty($this->formHiddenInputs) && is_array($this->formHiddenInputs)) {
 					foreach ($this->formHiddenInputs as $hiddenKey => $hiddenValue) {
