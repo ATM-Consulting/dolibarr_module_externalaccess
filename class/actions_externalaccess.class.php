@@ -356,7 +356,7 @@ class Actionsexternalaccess
 			if($ticket->fk_soc != $user->socid){
 				return null;
 			}
-		}else{
+		}elseif(!in_array($action, ['create', 'savecreate'])){
 			return null;
 		}
 
