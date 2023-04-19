@@ -63,7 +63,7 @@ class TicketsController extends Controller
 
 	static public function print_ticketTable($socId = 0)
 	{
-		global $langs,$db, $user, $conf;
+		global $langs,$db, $user, $conf, $hookmanager;
 		$context = Context::getInstance();
 
 		dol_include_once('ticket/class/ticket.class.php');
@@ -76,6 +76,19 @@ class TicketsController extends Controller
 		$sql.= ' WHERE fk_soc = '. intval($socId);
 		$sql.= ' ORDER BY t.datec DESC';
 		$tableItems = $context->dbTool->executeS($sql);
+
+		$ticketMorePanelHeader = '';
+
+		$parameters=array(
+			'tableItems' => $tableItems,
+			'ticketMorePanelHeader'=>&$ticketMorePanelHeader
+		);
+
+		$reshook=$hookmanager->executeHooks('externalAccessBeforeTicketList',$parameters,$object, $context->action);    // Note that $action and $object may have been modified by hook
+
+		if (!empty($ticketMorePanelHeader)) {
+			print $ticketMorePanelHeader;
+		}
 
 		if(checkUserTicketRight($user, $ticketStatic, 'create')) {
 			print '<div><a href="' . $context->getControllerUrl('ticket_card', '&action=create') . '" class="btn btn-primary btn-strong pull-right" >' . $langs->trans('NewTicket') . '</a></div>';
