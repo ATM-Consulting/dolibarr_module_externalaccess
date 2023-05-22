@@ -10,7 +10,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 
 # RELEASE 1.38
-
+- NEW : run_trigger definition arguments -1.38.1 - **22/05/2023**
 - NEW : Hook before ticket list - 1.38.0 - **13/04/2023**
 - FIX : Security breach : backtrack "NEW : the attachment added in Dolibarr was not visible on the portal" - 1.37.1 - **08/03/2023**
 - NEW : the attachment added in Dolibarr was not visible on the portal - 1.37.0 - **07/03/2023**
