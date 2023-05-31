@@ -53,6 +53,11 @@ $context = Context::getInstance();
                 <input type="password" name="password" id="inputPassword" class="form-control" placeholder="<?php echo $langs->trans("Password"); ?>" required>
                 <input type="hidden" name="urlfrom" value="<?php print Context::urlOrigin(); ?>"/>
 
+
+				<?php if(!empty($conf->global->EACCESS_FORCE_ENTITY_ON_LOGIN)){ ?>
+				<input type="hidden" name="entity" value="<?php print $conf->global->EACCESS_FORCE_ENTITY_ON_LOGIN; ?>">
+				<?php } ?>
+
                 <?php if(!empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE)){ ?>
                 <div id="forgot-password" class="checkbox text-right">
                     <label>
