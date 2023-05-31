@@ -7,10 +7,14 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
+
 - NEW : HIDDEN CONF : EACCESS_FORCE_ENTITY_ON_LOGIN 1.39.0 - **26/04/2023**
   Experimental : Usable to force entity on external access login.  
   Le portail doit être pour l'instant activé sur l'entité 1 et l'entité cible  
   ex: conf diver : EACCESS_FORCE_ENTITY_ON_LOGIN = 4 (entité 4)  et stocké en entité 0
+
+# RELEASE 1.38
+- NEW : run_trigger definition arguments -1.38.1 - **22/05/2023**
 - NEW : Hook before ticket list - 1.38.0 - **13/04/2023**
 - FIX : Security breach : backtrack "NEW : the attachment added in Dolibarr was not visible on the portal" - 1.37.1 - **08/03/2023**
 - NEW : the attachment added in Dolibarr was not visible on the portal - 1.37.0 - **07/03/2023**
