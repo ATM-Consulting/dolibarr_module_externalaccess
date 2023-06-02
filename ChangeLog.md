@@ -7,11 +7,12 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
-
+# RELEASE 1.39
 - NEW : HIDDEN CONF : EACCESS_FORCE_ENTITY_ON_LOGIN 1.39.0 - **26/04/2023**
-  Experimental : Usable to force entity on external access login.  
-  Le portail doit être pour l'instant activé sur l'entité 1 et l'entité cible  
-  ex: conf diver : EACCESS_FORCE_ENTITY_ON_LOGIN = 4 (entité 4)  et stocké en entité 0
+  - Experimental : Usable to force entity on external access login.  
+    Le portail doit être pour l'instant activé sur l'entité 1 et l'entité cible
+    ex: conf diver : EACCESS_FORCE_ENTITY_ON_LOGIN = 4 (entité 4)  et stocké en
+    entité 0
 
 # RELEASE 1.38
 - NEW : run_trigger definition arguments -1.38.1 - **22/05/2023**
