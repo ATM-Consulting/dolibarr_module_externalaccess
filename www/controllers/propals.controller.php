@@ -28,8 +28,8 @@ class PropalsController extends Controller
 		$context = Context::getInstance();
 		if(!$context->controllerInstance->checkAccess()) { return; }
 
-		$context->title = $langs->trans('ViewOrders');
-		$context->desc = $langs->trans('ViewOrdersDesc');
+		$context->title = $langs->trans('ViewPropals');
+		$context->desc = $langs->trans('ViewPropalsDesc');
 		$context->menu_active[] = 'orders';
 
 		$hookRes = $this->hookDoAction();

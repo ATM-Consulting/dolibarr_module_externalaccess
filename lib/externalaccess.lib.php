@@ -56,7 +56,7 @@ function externalaccessAdminPrepareHead()
     //$this->tabs = array(
     //	'entity:-tabname:Title:@externalaccess:/externalaccess/mypage.php?id=__ID__'
     //); // to remove a tab
-    complete_head_from_modules($conf, $langs, $object, $head, $h, 'externalaccess');
+    complete_head_from_modules($conf, $langs, new stdClass(), $head, $h, 'externalaccess');
 
     return $head;
 }

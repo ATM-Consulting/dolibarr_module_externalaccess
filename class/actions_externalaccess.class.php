@@ -225,7 +225,7 @@ class Actionsexternalaccess
 
 	    global $langs, $db, $conf, $user;
 
-		if(empty($user->socid)){
+		if(empty($user->socid) && !empty($user->societe_id)){
 			$user->socid = $user->societe_id; // For compatibility support
 		}
 

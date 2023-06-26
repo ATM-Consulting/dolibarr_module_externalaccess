@@ -231,7 +231,7 @@ $TExtrafields_propal_list=array();
 if (!empty($e->attributes['propal']['list'])) {
 	$TExtrafields_propal = array_keys($e->attributes['propal']['list']);
 	foreach ($TExtrafields_propal as $ef_name) {
-		$TExtrafields_propal_list['EXTRAFIELD_' . $ef_name] = $e->attributes['commande']['label'][$ef_name];
+		$TExtrafields_propal_list['EXTRAFIELD_' . $ef_name] = $e->attributes['propal']['label'][$ef_name];
 	}
 }
 print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROPAL', false, $TExtrafields_propal_list);
@@ -301,7 +301,7 @@ function print_title($title = "")
  */
 function print_on_off($confkey, $title = false, $desc = '', $help = '')
 {
-    global $langs, $conf;
+    global $langs, $conf, $db;
 
 	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 
@@ -360,7 +360,7 @@ function print_input_form_part($confkey, $title = false, $desc = '', $metas = ar
     $colspan = '';
     if ($type!='textarea'){
         $defaultMetas['type']   = 'text';
-        $defaultMetas['value']  = $conf->global->{$confkey};
+        if(!empty($conf->global->{$confkey})) $defaultMetas['value']  = $conf->global->{$confkey};
     } else {
         $colspan = ' colspan="2"';
     }
@@ -402,7 +402,7 @@ function print_input_form_part($confkey, $title = false, $desc = '', $metas = ar
     print '<input type="hidden" name="action" value="set_'.$confkey.'">';
     if ($type=='textarea'){
         include_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
-        $doleditor=new DolEditor($confkey, $conf->global->{$confkey}, '', 80, 'dolibarr_notes');
+        $doleditor=new DolEditor($confkey, !empty($conf->global->{$confkey}) ? $conf->global->{$confkey} : '', '', 80, 'dolibarr_notes');
         print $doleditor->Create();
     }
 	elseif ($type=='input'){
@@ -443,7 +443,7 @@ function print_multiselect($confkey, $title, $Tab)
 	print '<input type="hidden" name="token" value="'.$newToken.'">';
 	print '<input type="hidden" name="action" value="set_'.$confkey.'">';
 
-	print $form->multiselectarray($confkey, $Tab, unserialize($conf->global->{$confkey}), '', 0, '', 0, '100%');
+	print $form->multiselectarray($confkey, $Tab, !empty($conf->global->{$confkey})?unserialize($conf->global->{$confkey}):'', '', 0, '', 0, '100%');
 
     print '</td><td class="right">';
     print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
