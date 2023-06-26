@@ -67,7 +67,7 @@ stdFormHelper('addresszip' , $langs->trans('addresszip'), $user->zip, $mode, 1, 
 $param = array('valid'=>0, 'feedback' => '');
 stdFormHelper('town' , $langs->trans('town'), $user->town, $mode, 1, $param);
 
-
+print '<input type="hidden" name="token" value="'.newToken().'"/>';
 
 print '</div></div></div>';
 
