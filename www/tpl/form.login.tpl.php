@@ -64,7 +64,11 @@ $context = Context::getInstance();
                         <a href="<?php print $context->getControllerUrl('forgottenpassword', '&action=forgot-password') ?>" ><?php print $langs->trans('AskForgotPassword'); ?></a>
                     </label>
                 </div>
-                <?php } ?>
+                <?php }
+                if (!empty($morelogincontent) && !is_array($morelogincontent)) {
+                    print '<!-- Start option by hook getLoginPageOptions -->'.$morelogincontent.'<!-- End option by hook getLoginPageOptions -->';
+                }
+                ?>
 
                 <button class="btn btn-lg btn-primary btn-strong btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
 
