@@ -66,9 +66,7 @@ $context = Context::getInstance();
                 </div>
                 <?php }
                 if (!empty($morelogincontent) && !is_array($morelogincontent)) {
-                    $morelogincontent = "<span class='form-control'>$morelogincontent</span><br>";
-                    echo '<!-- Option by hook -->';
-                    echo $morelogincontent;
+                    print '<!-- Start option by hook getLoginPageOptions -->'.$morelogincontent.'<!-- End option by hook getLoginPageOptions -->';
                 }
                 ?>
 
