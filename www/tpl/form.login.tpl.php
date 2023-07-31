@@ -65,7 +65,7 @@ $context = Context::getInstance();
                     </label>
                 </div>
                 <?php }
-                if (!empty($morelogincontent) && !is_array($morelogincontent)) {
+                if (!empty($morelogincontent)) {
                     print '<!-- Start option by hook getLoginPageOptions -->'.$morelogincontent.'<!-- End option by hook getLoginPageOptions -->';
                 }
                 ?>
