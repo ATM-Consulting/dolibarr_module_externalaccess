@@ -101,7 +101,7 @@ $context = Context::getInstance();
                 	<span class="span-icon-security">
                 	<input id="securitycode" placeholder="<?php echo $langs->trans("SecurityCode"); ?>" class="flat input-icon-security" type="text" size="12" maxlength="5" name="code" tabindex="3" />
                 	</span>
-                	<img src="<?php echo DOL_URL_ROOT ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
+                	<img src="/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
                 	<a href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
 
                 <?php }  ?>
