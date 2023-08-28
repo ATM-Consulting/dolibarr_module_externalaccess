@@ -29,6 +29,11 @@ function externalaccessAdminPrepareHead()
 {
     global $langs, $conf;
 
+
+	 global $db;
+	 $extrafields = new ExtraFields($db);
+	 $extrafields->fetch_name_optionals_label('myobject');
+
     $langs->load("externalaccess@externalaccess");
 
     $h = 0;
@@ -37,7 +42,24 @@ function externalaccessAdminPrepareHead()
     $head[$h][0] = dol_buildpath("/externalaccess/admin/externalaccess_setup.php", 1);
     $head[$h][1] = $langs->trans("Parameters");
     $head[$h][2] = 'settings';
-    $h++;
+	$h++;
+
+
+	$head[$h][0] = dol_buildpath("/externalaccess/eavirtualhost_list.php", 1);
+	$head[$h][1] = $langs->trans("VirtalHostMapping");
+	$head[$h][2] = 'virtualhost';
+	$h++;
+
+	$head[$h][0] = dol_buildpath("/externalaccess/admin/eavirtualhost_extrafields.php", 1);
+	$head[$h][1] = $langs->trans("VirtualHostsExtraFields");
+	$nbExtrafields = is_countable($extrafields->attributes['eavirtualhost']['label']) ? count($extrafields->attributes['eavirtualhost']['label']) : 0;
+	if ($nbExtrafields > 0) {
+		$head[$h][1] .= ' <span class="badge">' . $nbExtrafields . '</span>';
+	}
+	$head[$h][2] = 'eavirtualhost_extrafields';
+	$h++;
+
+
     $head[$h][0] = dol_buildpath("/externalaccess/admin/externalaccess_about.php", 1);
     $head[$h][1] = $langs->trans("About");
     $head[$h][2] = 'about';

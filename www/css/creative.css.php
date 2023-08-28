@@ -34,10 +34,15 @@ define('ISLOADEDBYSTEELSHEET',1);
 
 session_cache_limiter(FALSE);
 
-require_once __DIR__ . '/../../config.default.php';
+
+$moduleRootRelative = '/../../..';
+if(is_file(__DIR__.$moduleRootRelative.'/../main.inc.php'))$dir = __DIR__.$moduleRootRelative.'/../';
+else  if(is_file(__DIR__.$moduleRootRelative.'/../../../main.inc.php'))$dir = __DIR__.$moduleRootRelative.'/../../../';
+else $dir = __DIR__.$moduleRootRelative.'/../../';
+
+require_once __DIR__ . '/../master.inc.php';
 require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 dol_include_once('/externalaccess/class/color_tools.class.php');
-
 
 
 // Load user to have $user->conf loaded (not done into main because of NOLOGIN constant defined)
