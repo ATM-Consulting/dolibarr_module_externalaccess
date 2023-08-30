@@ -23,10 +23,30 @@
  *
  */
 
-// Dolibarr environment
-$res = @include "../../main.inc.php"; // From htdocs directory
+// Load Dolibarr environment
+$res = 0;
+// Try main.inc.php into web root known defined into CONTEXT_DOCUMENT_ROOT (not always defined)
+if (!$res && !empty($_SERVER["CONTEXT_DOCUMENT_ROOT"])) {
+	$res = @include $_SERVER["CONTEXT_DOCUMENT_ROOT"]."/main.inc.php";
+}
+// Try main.inc.php into web root detected using web root calculated from SCRIPT_FILENAME
+$tmp = empty($_SERVER['SCRIPT_FILENAME']) ? '' : $_SERVER['SCRIPT_FILENAME']; $tmp2 = realpath(__FILE__); $i = strlen($tmp) - 1; $j = strlen($tmp2) - 1;
+while ($i > 0 && $j > 0 && isset($tmp[$i]) && isset($tmp2[$j]) && $tmp[$i] == $tmp2[$j]) { $i--; $j--; }
+if (!$res && $i > 0 && file_exists(substr($tmp, 0, ($i + 1))."/main.inc.php")) {
+	$res = @include substr($tmp, 0, ($i + 1))."/main.inc.php";
+}
+if (!$res && $i > 0 && file_exists(dirname(substr($tmp, 0, ($i + 1)))."/main.inc.php")) {
+	$res = @include dirname(substr($tmp, 0, ($i + 1)))."/main.inc.php";
+}
+// Try main.inc.php using relative path
+if (!$res && file_exists("../../main.inc.php")) {
+	$res = @include "../../main.inc.php";
+}
+if (!$res && file_exists("../../../main.inc.php")) {
+	$res = @include "../../../main.inc.php";
+}
 if (! $res) {
-    $res = @include "../../../main.inc.php"; // From "custom" directory
+	die("Include of main fails");
 }
 
 // Libraries
@@ -45,153 +65,191 @@ if (! $user->admin) {
 $object = '';
 
 // Parameters
-$action = GETPOST('action', 'alpha');
+$action = GETPOST('action', 'aZ09');
+$backtopage = GETPOST('backtopage', 'alpha');
 
 // Initialize technical object to manage hooks of page. Note that conf->hooks_modules contains array of hook context
 $hookmanager->initHooks(array('externalaccesssetup'));
 
 
-/*
- * Actions
- */
+$error = 0;
+$setupnotempty = 0;
 
-if (preg_match('/set_(.*)/', $action, $reg))
-{
-	$code=$reg[1];
-	$val = GETPOST($code,  'none');
-	if (is_array($val)) $val = serialize($val);
-	if (dolibarr_set_const($db, $code, $val, 'chaine', 0, '', $conf->entity) > 0)
-	{
-		header("Location: ".$_SERVER["PHP_SELF"]);
-		exit;
-	}
-	else {
-		dol_print_error($db);
+// Set this to 1 to use the factory to manage constants. Warning, the generated module will be compatible with version v15+ only
+$useFormSetup = 1;
+
+if (!class_exists('FormSetup')) {
+	// For retrocompatibility Dolibarr < 16.0
+	if (floatval(DOL_VERSION) < 16.0 && !class_exists('FormSetup')) {
+		require_once __DIR__.'/../backport/v16/core/class/html.formsetup.class.php';
+	} else {
+		require_once DOL_DOCUMENT_ROOT.'/core/class/html.formsetup.class.php';
 	}
 }
 
-if (preg_match('/del_(.*)/', $action, $reg))
-{
-	$code=$reg[1];
-	if (dolibarr_del_const($db, $code, 0) > 0)
-	{
-		Header("Location: ".$_SERVER["PHP_SELF"]);
-		exit;
-	}
-	else {
-		dol_print_error($db);
-	}
-}
-
+$formSetup = new FormSetup($db);
+$form = new Form($db);
 
 /*
- * View
+ * GENERAL PARAM
  */
 
-$page_name = "externalaccessSetup";
-llxHeader('', $langs->trans($page_name));
-
-// Subheader
-$linkback = '<a href="' . DOL_URL_ROOT . '/admin/modules.php">'
-    . $langs->trans("BackToModuleList") . '</a>';
-print load_fiche_titre($langs->trans($page_name), $linkback, "title_externalaccess@externalaccess");
-
-// Configuration header
-$head = externalaccessAdminPrepareHead();
-dol_fiche_head(
-    $head,
-    'settings',
-    $langs->trans("ModuleName"),
-    1,
-    "externalaccess@externalaccess"
-);
-
-if (!dol_include_once('/abricot/inc.core.php')) {
-    print '<div class="error" >'. $langs->trans('AbricotNotFound'). ' <a href="https://wiki.atm-consulting.fr/index.php/Nos_modules_Dolibarr#Abricot" target="_blank">'. $langs->trans('AbricotWiki'). '</a></div>';
-}
-
-// Setup page goes here
-$form=new Form($db);
-$var=false;
-print '<table class="noborder" width="100%">';
-print "<tr class=\"liste_titre\">";
-print "<td>".$langs->trans("Parameter")."</td>\n";
-print '<td width="60" align="center">'.$langs->trans("Value")."</td>\n";
-print "<td>&nbsp;</td>\n";
-print "</tr>";
-
+// Url d'accès public
+$item = $formSetup->newItem('EACCESS_ROOT_URL');
+$item->fieldAttr = array('type'=>'url', 'placeholder'=>'http://');
 dol_include_once('externalaccess/www/class/context.class.php');
 $context = Context::getInstance();
-$link = '<a target="_blank" href="'.$context->getControllerUrl().'" ><i class="fa fa-arrow-right" ></i> '.$langs->trans('AccessToCustomerGate').'</a>';
-print_input_form_part('EACCESS_ROOT_URL', false, $link, array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_ROOT_URL_HELP');
-print_input_form_part('EACCESS_TITLE', false, '', array('size'=> 50), 'input', 'EACCESS_TITLE_HELP');
-print_input_form_part('EACCESS_GOBACK_URL', false, '', array('size'=> 50), 'input', 'EACCESS_GOBACK_URL_HELP');
-print_on_off('EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE');
+$item->fieldOutputOverride = '<a target="_blank" href="'.$context->getControllerUrl().'" ><i class="fa fa-arrow-right" ></i>  '.$context->getControllerUrl().'</a>';
+if(!empty($conf->entity) && $conf->entity > 1 && empty($conf->global->EACCESS_ROOT_URL)){
+	$item->fieldOutputOverride = '<div class="error">'.$langs->trans('MultiEntityConfEAccessRootUrlMissing').'</div>';
+}
 
-print_title('ConfLinkedToContactInfos');
-print_input_form_part('EACCESS_PHONE');
-print_input_form_part('EACCESS_EMAIL', false, '', array('size'=> 20), 'input', 'EACCESS_EMAIL_HELP');
-print_on_off('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE', false, '', 'EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
+$item->helpText = $langs->trans('EACCESS_ROOT_URL_HELP');
+
+// Titre de l'accès extérieur
+$item = $formSetup->newItem('EACCESS_TITLE');
+$item->helpText = $langs->trans('EACCESS_TITLE_HELP');
+
+// Url du lien de retour
+$item = $formSetup->newItem('EACCESS_GOBACK_URL');
+$item->helpText = $langs->trans('EACCESS_GOBACK_URL_HELP');
+$item->fieldAttr = array('type'=>'url', 'placeholder'=>'http://');
+
+// Url du lien de retour
+$formSetup->newItem('EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE')->setAsYesNo();
+
+
+
+/*
+ * Paramètres liés au contact
+ */
+
+$formSetup->newItem('ConfLinkedToContactInfos')->setAsTitle();
+
+// Téléphone de contact
+$item = $formSetup->newItem('EACCESS_PHONE');
+$item->fieldAttr = array('type'=>'phone');
+
+// Email de contact
+$item = $formSetup->newItem('EACCESS_EMAIL');
+$item->helpText = $langs->trans('EACCESS_EMAIL_HELP');
+$item->fieldAttr = array('type'=>'mail');
+
+// Email de contact
+$item = $formSetup->newItem('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE');
+$item->helpText = $langs->trans('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE_HELP');
+$item->setAsYesNo();
+
+
 
 /*
  * DESIGN
  */
-print_title('ConfLinkedToDesign');
-print_input_form_part('EACCESS_MAX_TOP_MENU', false, '', array('type'=>'number', 'min' => 0, 'step' => 1));
-print_input_form_part('EACCESS_PRIMARY_COLOR', false, '', array('type'=>'color'), 'input', 'EACCESS_PRIMARY_COLOR_HELP');
-print_on_off('EACCESS_NO_FULL_HEADBAR_FOR_HOME');
-print_input_form_part('EACCESS_HEADER_IMG', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_HEADER_IMG_HELP');
-print_input_form_part('EACCESS_LOGIN_IMG', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_LOGIN_IMG_HELP');
-print_input_form_part('EACCESS_TOP_MENU_IMG', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_TOP_MENU_IMG_HELP');
-print_input_form_part('EACCESS_TOP_MENU_IMG_SHRINK', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_TOP_MENU_IMG_SHRINK_HELP');
-print_input_form_part('EACCESS_MANIFEST_ICON', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_MANIFEST_ICON_HELP');
-print_input_form_part('EACCESS_FAVICON_URL', false, '', array('size'=> 50, 'placeholder'=>'http://'), 'input', 'EACCESS_FAVICON_URL_HELP');
+$formSetup->newItem('ConfLinkedToDesign')->setAsTitle();
 
-$parameters = array();
-$reshook=$hookmanager->executeHooks('formDesignOptions', $parameters, $object, $action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
-print $hookmanager->resPrint;
+// Regroupement automatique des entrées du menu du haut dans des groupes si le nombre d'éléments affichés dépasse la valeur suivante
+$item = $formSetup->newItem('EACCESS_MAX_TOP_MENU');
+$item->helpText = $langs->transnoentities('EACCESS_MAX_TOP_MENU_HELP');
+$item->fieldAttr = array('type'=>'number', 'min' => 0, 'step' => 1);
+
+// Couleur principale du thème
+$item = $formSetup->newItem('EACCESS_PRIMARY_COLOR');
+$item->setAsColor();
+$item->helpText = $langs->transnoentities('EACCESS_PRIMARY_COLOR_HELP');
+
+// Couleur principale du thème
+$item = $formSetup->newItem('EACCESS_NO_FULL_HEADBAR_FOR_HOME')->setAsYesNo();
+
+
+// Url de l'image de fond
+$item = $formSetup->newItem('EACCESS_HEADER_IMG');
+$item->helpText = $langs->transnoentities('EACCESS_HEADER_IMG_HELP');
+$item->fieldAttr = array('list'=>'img-for-eaccess_header_img');
+$item->fieldInputOverride = $item->generateInputField();
+$item->fieldInputOverride.= '<datalist id="img-for-eaccess_header_img">';
+for ($i = 1; $i <= 4; $i++) {
+	$fileName = 'header_0'. $i.'.jpg';
+	$item->fieldInputOverride.= '<option value="../img/'.$fileName.'"></option>';
+	$item->helpText.= '<hr/>'.'../img/'.$fileName.' <img style="max-height:32px; vertical-align:middle;" src="'.dol_buildpath('externalaccess/www/img/'.$fileName, 1).'" />';
+}
+$item->fieldInputOverride.= '</datalist>';
+
+
+// Url du logo
+$item = $formSetup->newItem('EACCESS_LOGIN_IMG');
+$item->fieldAttr = array('type'=>'url', 'size'=> 50, 'placeholder'=>'http://');
+$item->helpText = $langs->transnoentities('EACCESS_LOGIN_IMG_HELP');
+
+// Url du logo pour le menu
+$item = $formSetup->newItem('EACCESS_TOP_MENU_IMG');
+$item->fieldAttr = array('type'=>'url', 'size'=> 50, 'placeholder'=>'http://');
+$item->helpText = $langs->transnoentities('EACCESS_TOP_MENU_IMG_HELP');
+
+// Url du logo de substitution
+$item = $formSetup->newItem('EACCESS_TOP_MENU_IMG_SHRINK');
+$item->fieldAttr = array('type'=>'url', 'size'=> 50, 'placeholder'=>'http://');
+$item->helpText = $langs->transnoentities('EACCESS_TOP_MENU_IMG_SHRINK_HELP');
+
+// Url de l'icône d'application
+$item = $formSetup->newItem('EACCESS_MANIFEST_ICON');
+$item->fieldAttr = array('type'=>'url', 'size'=> 50, 'placeholder'=>'http://');
+$item->helpText = $langs->transnoentities('EACCESS_MANIFEST_ICON_HELP');
+
+// Url de la favicon
+$item = $formSetup->newItem('EACCESS_FAVICON_URL');
+$item->fieldAttr = array('type'=>'url', 'size'=> 50, 'placeholder'=>'http://');
+$item->helpText = $langs->transnoentities('EACCESS_FAVICON_URL_HELP');
 
 
 /*
  * ACTIVATE MODULES
  */
 
-print_title('EACCESS_ACTIVATE_MODULES');
-print_on_off('EACCESS_ACTIVATE_INVOICES', false, 'EACCESS_need_some_rights');
-print_on_off('EACCESS_ACTIVATE_PROPALS', false, 'EACCESS_need_some_rights');
-print_on_off('EACCESS_ACTIVATE_ORDERS', false, 'EACCESS_need_some_rights');
-print_on_off('EACCESS_ACTIVATE_EXPEDITIONS', false, 'EACCESS_need_some_rights');
-print_on_off('EACCESS_ACTIVATE_TICKETS', false, 'EACCESS_need_some_rights');
-print_on_off('EACCESS_ACTIVATE_PROJECTS', false, 'EACCESS_need_some_rights');
-print_on_off('EACCESS_ACTIVATE_TASKS', false, 'EACCESS_need_some_rights');
-print_on_off('EACCESS_ACTIVATE_SUPPLIER_INVOICES', false, 'EACCESS_need_some_rights');
-//_print_on_off('EACCESS_ACTIVATE_FORMATIONS');
 
-$parameters = array();
-$reshook=$hookmanager->executeHooks('formActivateModuleOptions', $parameters, $object, $action);    // Note that $action and $object may have been modified by hook
-if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->errors, 'errors');
-print $hookmanager->resPrint;
+$formSetup->newItem('EACCESS_ACTIVATE_MODULES')->setAsTitle();
+$formSetup->newItem('EACCESS_ACTIVATE_INVOICES')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+$formSetup->newItem('EACCESS_ACTIVATE_PROPALS')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+$formSetup->newItem('EACCESS_ACTIVATE_ORDERS')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+$formSetup->newItem('EACCESS_ACTIVATE_EXPEDITIONS')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+$formSetup->newItem('EACCESS_ACTIVATE_TICKETS')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+$formSetup->newItem('EACCESS_ACTIVATE_PROJECTS')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+$formSetup->newItem('EACCESS_ACTIVATE_TASKS')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+$formSetup->newItem('EACCESS_ACTIVATE_SUPPLIER_INVOICES')->setAsYesNo()->helpText = $langs->trans('EACCESS_need_some_rights');
+
+/*
+ * Paramètres liés au contenu
+ */
+
+$formSetup->newItem('ConfLinkedToContents')->setAsTitle();
+
+// Forcer l'utilisation du modèle par défaut pour le téléchargement des propositions commerciales
+$formSetup->newItem('EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL')->setAsYesNo();
 
 
-print_title('ConfLinkedToContents');
-print_on_off('EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL', false, '');
+// Texte supplémentaire affiché sur la page de connexion.
+$item = $formSetup->newItem('EACCESS_LOGIN_EXTRA_HTML')->setAsHtml();
 
-print_input_form_part('EACCESS_LOGIN_EXTRA_HTML', false, '', array(), 'textarea');
-if (empty($conf->global->EACCESS_RGPD_MSG)){
-    dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
+// Message RGPD sur le formulaire des informations personnelles
+if (empty($conf->global->EACCESS_RGPD_MSG) && !empty($conf->global->MAIN_INFO_SOCIETE_NOM)){
+	dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
 }
+$item = $formSetup->newItem('EACCESS_RGPD_MSG')->setAsHtml();
 
-//Liaison entre la conf de Ticket et Portail pour avoir un message par défaut si vide
-//if (empty($conf->global->TICKET_PUBLIC_TEXT_HELP_MESSAGE)){
-//	dolibarr_set_const($db, 'TICKET_PUBLIC_TEXT_HELP_MESSAGE', $langs->trans('TicketPublicPleaseBeAccuratelyDescribe'), 'chaine', 0, '', $conf->entity);
-//}
+// Texte par défaut du champ description à la création d'un ticket
+$item = $formSetup->newItem('TICKET_EXTERNAL_DESCRIPTION_MESSAGE')->setAsHtml();
 
-print_input_form_part('EACCESS_RGPD_MSG', false, '', array(), 'textarea');
-print_input_form_part('TICKET_EXTERNAL_DESCRIPTION_MESSAGE', false, '', array(), 'textarea');
-print_input_form_part('TICKET_PUBLIC_TEXT_HELP_MESSAGE', false, '', array(), 'textarea');
 
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS', false, array('ref_client'=>$langs->trans('ref_client')));
+// Texte d'aide pour la saisie du message
+$item = $formSetup->newItem('TICKET_PUBLIC_TEXT_HELP_MESSAGE')->setAsHtml();
+
+// Colonnes supplémentaires à afficher sur les listes
+$item = $formSetup->newItem('EACCESS_LIST_ADDED_COLUMNS')->setAsMultiSelect(
+	array(
+		'ref_client'=>$langs->trans('ref_client')
+	)
+);
+
+// Colonnes supplémentaires à afficher sur les listes d'expeditions
 
 $TAddedColumnShipping = array(
 	'shipping_method_id'=>$langs->trans('shipping_method_id'),
@@ -211,47 +269,99 @@ if (!empty($extrafields->attributes['expedition']['label'])) {
 		$TAddedColumnShipping['extrafields_'.$attribute] = $langs->trans($label).' - '.$langs->trans('Extrafields');
 	}
 }
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_SHIPPING', false, $TAddedColumnShipping);
 
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROJECT', false, array('budget_amount'=>$langs->trans('Budgets')));
-$e = new ExtraFields($db);
-$e->fetch_name_optionals_label('commande');
-$TExtrafields_commande_list=array();
-if (!empty($e->attributes['commande']['list'])) {
-	$TExtrafields_commande = array_keys($e->attributes['commande']['list']);
-	foreach ($TExtrafields_commande as $ef_name) {
-		$TExtrafields_commande_list['EXTRAFIELD_' . $ef_name] = $e->attributes['commande']['label'][$ef_name];
-	}
+$item = $formSetup->newItem('EACCESS_LIST_ADDED_COLUMNS')->setAsMultiSelect($TAddedColumnShipping);
+
+
+// Colonnes supplémentaires à afficher sur les listes des projets
+$item = $formSetup->newItem('EACCESS_LIST_ADDED_COLUMNS_PROJECT')->setAsMultiSelect(
+	array(
+		'budget_amount'=>$langs->trans('Budgets')
+	)
+);
+
+// Colonnes supplémentaires à afficher sur les listes de commandes
+$formSetup->newItem('EACCESS_LIST_ADDED_COLUMNS_ORDER')->setAsMultiSelect(getExtrafieldElementList('commande'));
+
+// Colonnes supplémentaires à afficher sur les listes de commandes
+$formSetup->newItem('EACCESS_LIST_ADDED_COLUMNS_PROPAL')->setAsMultiSelect(getExtrafieldElementList('propal'));
+
+
+//Colonnes supplémentaires à afficher sur les listes de tickets
+$formSetup->newItem('EACCESS_LIST_ADDED_COLUMNS_TICKET')->setAsMultiSelect(getExtrafieldElementList('ticket'));
+
+// Champs supplémentaires à afficher sur les fiches tickets
+$formSetup->newItem('EACCESS_CARD_ADDED_FIELD_TICKET')->setAsMultiSelect(getExtrafieldElementList('ticket'));
+
+
+/*
+ * EXPERIMENTAL
+ */
+
+$formSetup->newItem('ExperimentalParams')->setAsTitle();
+
+// Tickets : Lors de l'ajout de pièces jointes depuis le portail, générer un lien de partage sur ces fichiers
+$item = $formSetup->newItem('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC')->setAsYesNo();
+$item->helpText = $langs->trans('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC_HELP');
+
+
+
+
+
+/*
+ * Actions
+ */
+
+// For retrocompatibility Dolibarr < 15.0
+if ( versioncompare(explode('.', DOL_VERSION), array(15)) < 0 && $action == 'update' && !empty($user->admin)) {
+	$formSetup->saveConfFromPost();
 }
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_ORDER', false, $TExtrafields_commande_list);
+
+include DOL_DOCUMENT_ROOT.'/core/actions_setmoduleoptions.inc.php';
 
 
-$e->fetch_name_optionals_label('propal');
-$TExtrafields_propal_list=array();
-if (!empty($e->attributes['propal']['list'])) {
-	$TExtrafields_propal = array_keys($e->attributes['propal']['list']);
-	foreach ($TExtrafields_propal as $ef_name) {
-		$TExtrafields_propal_list['EXTRAFIELD_' . $ef_name] = $e->attributes['propal']['label'][$ef_name];
-	}
+
+
+/*
+ * View
+ */
+
+$form = new Form($db);
+$help_url = '';
+$page_name = "externalaccessSetup";
+llxHeader('', $langs->trans($page_name), $help_url);
+
+// Subheader
+$linkback = '<a href="'.($backtopage ? $backtopage : DOL_URL_ROOT.'/admin/modules.php?restore_lastsearch_values=1').'">'.$langs->trans("BackToModuleList").'</a>';
+print load_fiche_titre($langs->trans($page_name), $linkback, 'title_externalaccess@externalaccess');
+
+
+// Configuration header
+$head = externalaccessAdminPrepareHead();
+print dol_get_fiche_head(
+    $head,
+    'settings',
+    $langs->trans("ModuleName"),
+    -1,
+    "externalaccess@externalaccess"
+);
+
+// Setup page goes here
+echo '<span class="opacitymedium">'.$langs->trans("ExternalAccessSetupPage").'</span><br><br>';
+
+if ($action == 'edit') {
+	print $formSetup->generateOutput(true);
+	print '<br>';
+} elseif (!empty($formSetup->items)) {
+	print $formSetup->generateOutput();
+	print '<div class="tabsAction">';
+	print '<a class="butAction" href="'.$_SERVER["PHP_SELF"].'?action=edit&token='.newToken().'">'.$langs->trans("Modify").'</a>';
+	print '</div>';
+} else {
+	print '<br>'.$langs->trans("NothingToSetup");
 }
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_PROPAL', false, $TExtrafields_propal_list);
 
-$e->fetch_name_optionals_label('ticket');
-$TExtrafields_ticket_list=array();
-if (!empty($e->attributes['ticket']['list'])) {
-	$TExtrafields_ticket = array_keys($e->attributes['ticket']['list']);
-	foreach ($TExtrafields_ticket as $ef_name) {
-		$TExtrafields_ticket_list['EXTRAFIELD_' . $ef_name] = $e->attributes['ticket']['label'][$ef_name];
-	}
-}
-print_multiselect('EACCESS_LIST_ADDED_COLUMNS_TICKET', false, $TExtrafields_ticket_list);
 
-print_multiselect('EACCESS_CARD_ADDED_FIELD_TICKET', false, $TExtrafields_ticket_list);
-
-print_title('Experimental');
-print_on_off('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC');
-
-print '</table>';
 
 /*
  * Add setup hook
@@ -263,7 +373,7 @@ if ($reshook < 0) $context->setEventMessages($hookmanager->error, $hookmanager->
 print $hookmanager->resPrint;
 
 
-print dol_get_fiche_end(0);
+print dol_get_fiche_end(-1);
 
 llxFooter();
 
@@ -272,182 +382,15 @@ $db->close();
 
 // Functions
 
-/**
- * Function to print title
- *
- * @param string $title Title
- *
- * @return void
- */
-function print_title($title = "")
-{
-    global $langs;
-    print '<tr class="liste_titre">';
-    print '<td>'.$langs->trans($title).'</td>'."\n";
-    print '<td align="center" width="20">&nbsp;</td>';
-    print '<td align="center" ></td>'."\n";
-    print '</tr>';
+function getExtrafieldElementList($element) {
+	global $db;
+	$e = new ExtraFields($db);
+	$e->fetch_name_optionals_label($element);
+	$TExtrafields_list = [];
+	if(! empty($e->attributes[$element]['list'])) {
+		$TExtrafields_commande = array_keys($e->attributes[$element]['list']);
+		foreach($TExtrafields_commande as $ef_name) {
+			$TExtrafields_list['EXTRAFIELD_'.$ef_name] = $e->attributes[$element]['label'][$ef_name];
+		}
+	}
 }
-
-/**
- * Function to print on_off switch
- *
- * @param $confkey	string	name of conf in llx_const
- * @param $title	string 	label of conf
- * @param $desc		string 	description written in small text under title
- * @param $help		string	text for tooltip
- *
- * @return void
- */
-function print_on_off($confkey, $title = false, $desc = '', $help = '')
-{
-    global $langs, $conf, $db;
-
-	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
-
-	print '<tr class="oddeven">';
-    print '<td>'.($title?$title:$langs->trans($confkey));
-
-    $form=new Form($db);
-
-	if (empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
-		$help = $confkey . '_HELP';
-	}
-
-	if (!empty($help)){
-		print $form->textwithtooltip('', $langs->trans($help), 2, 1, img_help(1, ''));
-	}
-
-    if (!empty($desc))
-    {
-        print '<br><small>'.$langs->trans($desc).'</small>';
-    }
-    print '</td>';
-    print '<td align="center" width="20">&nbsp;</td>';
-    print '<td align="center">';
-    print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-    print '<input type="hidden" name="token" value="'.$newToken.'">';
-    print '<input type="hidden" name="action" value="set_'.$confkey.'">';
-    print ajax_constantonoff($confkey);
-    print '</form>';
-    print '</td></tr>';
-}
-
-/**
- * Function to print an input form
- *
- * @param $confkey Conf key
- * @param false $title Title
- * @param string $desc Description
- * @param array $metas metas
- * @param string $type Type
- * @param false $help help
- *
- * @return void
- */
-function print_input_form_part($confkey, $title = false, $desc = '', $metas = array(), $type = 'input', $help = false)
-{
-    global $langs, $conf, $db;
-
-	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
-
-    $form=new Form($db);
-
-    $defaultMetas = array(
-        'name' => $confkey
-    );
-
-    $colspan = '';
-    if ($type!='textarea'){
-        $defaultMetas['type']   = 'text';
-        if(!empty($conf->global->{$confkey})) $defaultMetas['value']  = $conf->global->{$confkey};
-    } else {
-        $colspan = ' colspan="2"';
-    }
-
-
-    $metas = array_merge($defaultMetas, $metas);
-    $metascompil = '';
-    foreach ($metas as $key => $values)
-    {
-        $metascompil .= ' '.$key.'="'.$values.'" ';
-    }
-
-    print '<tr class="oddeven">';
-    print '<td'.$colspan.'>';
-
-	if (empty($help) && !empty($langs->tab_translate[$confkey . '_HELP'])){
-		$help = $confkey . '_HELP';
-	}
-
-    if (!empty($help)){
-        print $form->textwithtooltip(($title?$title:$langs->trans($confkey)), $langs->trans($help), 2, 1, img_help(1, ''));
-    }
-    else {
-        print $title?$title:$langs->trans($confkey);
-    }
-
-    if (!empty($desc))
-    {
-        print '<br><small>'.$langs->trans($desc).'</small>';
-    }
-
-
-    if ($type!='textarea') {
-        print '</td>';
-        print '<td align="right" width="300">';
-    }
-    print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-    print '<input type="hidden" name="token" value="'.$newToken.'">';
-    print '<input type="hidden" name="action" value="set_'.$confkey.'">';
-    if ($type=='textarea'){
-        include_once DOL_DOCUMENT_ROOT.'/core/class/doleditor.class.php';
-        $doleditor=new DolEditor($confkey, !empty($conf->global->{$confkey}) ? $conf->global->{$confkey} : '', '', 80, 'dolibarr_notes');
-        print $doleditor->Create();
-    }
-	elseif ($type=='input'){
-		print '<input '.$metascompil.'  />';
-	}
-	else {
-		// custom
-		print $type;
-	}
-
-    print '</td><td class="right">';
-    print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
-    print '</form>';
-    print '</td></tr>';
-}
-
-/**
- * Function used to print a multiselect
- *
- * @param $confkey	string	name of conf in llx_const
- * @param $title	string	label of conf
- * @param $Tab		array	available values
- *
- * @return void
- */
-function print_multiselect($confkey, $title, $Tab)
-{
-
-	global $langs, $form, $conf;
-
-	$newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
-
-	print '<tr class="oddeven"><td>';
-	print $title?$title:$langs->trans($confkey);
-	print '</td>';
-	print '<td align="right" width="300">';
-	print '<form method="POST" action="'.$_SERVER['PHP_SELF'].'">';
-	print '<input type="hidden" name="token" value="'.$newToken.'">';
-	print '<input type="hidden" name="action" value="set_'.$confkey.'">';
-
-	print $form->multiselectarray($confkey, $Tab, !empty($conf->global->{$confkey})?unserialize($conf->global->{$confkey}):'', '', 0, '', 0, '100%');
-
-    print '</td><td class="right">';
-    print '<input type="submit" class="butAction" value="'.$langs->trans("Modify").'">';
-    print '</form>';
-    print '</td></tr>';
-}
-

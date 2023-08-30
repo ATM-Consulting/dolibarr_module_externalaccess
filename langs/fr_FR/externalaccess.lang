@@ -8,6 +8,7 @@ externalaccessSetup = Configuration du module portail client
 externalaccessAbout = A propos du module portail client
 
 externalaccess=Portail client
+ExperimentalParams=Experimental
 
 # DROITS
 external_access_invoices= Consulter ses factures
@@ -109,7 +110,11 @@ WelcomeDesc=Bienvenue sur votre portail client
 Extrafields = Champ complémentaire
 AbricotNotFound=Module Abricot non trouvé, le portail client ne peut pas fonctionner correctement sans ce module.
 AbricotWiki=Consulter la page d'information du module abricot.
-EACCESS_ROOT_URL=Url d'accès  public
+
+EAccessVirtualHostExplain = Vous pouvez déterminer l'entité à charger en fonction du domaine de connexion. Vous pouvez ainsi faire correspondre différentes entités en fonction du nom de domaine de connexion. Cela nécessite d'avoir configurer différent hôte virtuel sur votre serveur en amont. <strong>Cet configuration est utile seulement s'il est nécessaire pour vous d'utiliser plusieurs entités distinctes, par défaut l'entité chargée est celle portant l'id 1;</strong>
+EAccessDontForgetSetRootUrl = Pensez à saisir l'URL d'access public. Actuellement l'Url est :
+MultiEntityConfEAccessRootUrlMissing = Attention, configuration manquante, il est important de configurer cette option en mode multi entités.
+EACCESS_ROOT_URL=Url d'accès public
 EACCESS_ROOT_URL_HELP=Si vous utilisez un virtual host
 EACCESS_TITLE=Titre de l'accès extérieur
 EACCESS_TITLE_HELP=Le titre qui apparaît sur les moteurs de recherche et sur les onglets du navigateur. Il est aussi visible sur le menu du haut si aucun logo pour le menu n'est défini
@@ -126,7 +131,7 @@ EACCESS_need_some_rights=Note: Des droits utilisateurs sont à paramétrer
 EACCESS_ACTIVATE_PROPALS= Devis
 EACCESS_ACTIVATE_ORDERS= Commandes
 EACCESS_HEADER_IMG=Url de l'image de fond
-EACCESS_HEADER_IMG_HELP=Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes: <ul><li>../img/header_01.jpg</li><li>../img/header_04.jpg</li><li>../img/header_02.jpg</li><li>../img/header_03.jpg</li></ul>Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif
+EACCESS_HEADER_IMG_HELP=Sur les pages du portail client, pensez à appuyer sur la touche CTRL+F5 ou videz le cache de votre navigateur après avoir modifié cette valeur pour que le changement soit effectif.<br/>Vous pouvez utiliser une image personalisée ou utiliser une des images suivantes:
 AccessToCustomerGate=Consulter le portail client
 EACCESS_LOGIN_EXTRA_HTML=Texte supplémentaire affiché sur la page de connexion.
 EACCESS_RGPD_MSG=Message RGPD sur le formulaire des informations personnelles
@@ -209,6 +214,8 @@ Office_phone=Téléphone bureau
 Office_fax=Fax
 Saved=Sauvegardé
 Company=Société
+
+ExternalAccessSetupPage = Configuration des paramètres du portail client
 
 # 404 tpl 
 SorryThereIsNothingHere=Désolé, il n'y a rien ici

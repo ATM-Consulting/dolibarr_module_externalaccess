@@ -494,6 +494,13 @@ if (GETPOST('nomassaction', 'int') || in_array($massaction, array('presend', 'pr
 $massactionbutton = $form->selectMassAction('', $arrayofmassactions);
 
 
+dol_include_once('externalaccess/www/class/context.class.php');
+$context = Context::getInstance();
+print '<div class="info">';
+print $langs->trans('EAccessVirtualHostExplain');
+print '<br/>' . $langs->trans('EAccessDontForgetSetRootUrl').' '.$context->getControllerUrl();
+print '</div>';
+
 
 
 print '<form method="POST" id="searchFormList" action="'.$_SERVER["PHP_SELF"].'">'."\n";
