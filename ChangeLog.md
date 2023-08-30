@@ -7,8 +7,11 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
-- NEW : MultiEntity management for Virtual host 1.40.0 - **30/08/2023**  
+- NEW : Reforge setup options using default Dolibarr setup class 2.1.0 - **30/08/2023**  
+  this break compatibility of Dolibarr under 16.0
+- NEW : MultiEntity management for Virtual host 2.0.0 - **30/08/2023**  
   *CONF : EACCESS_FORCE_ENTITY_ON_LOGIN is now useless* 
+  this break compatibility of Dolibarr under 16.0
 
 # RELEASE 1.39
 - FIX : Compat V18 - 1.39.1 - **15/06/2023**
