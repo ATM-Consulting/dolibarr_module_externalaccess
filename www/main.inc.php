@@ -274,6 +274,16 @@ if ((! empty($conf->global->MAIN_VERSION_LAST_UPGRADE) && ($conf->global->MAIN_V
 	}
 }
 
+// Creation of a token against CSRF vulnerabilities
+if (! defined('NOTOKENRENEWAL'))
+{
+	// roulement des jetons car cree a chaque appel
+	if (isset($_SESSION['newtoken'])) $_SESSION['token'] = $_SESSION['newtoken'];
+
+	// Save in $_SESSION['newtoken'] what will be next token. Into forms, we will add param token = $_SESSION['newtoken']
+	$token = dol_hash(uniqid(mt_rand(),TRUE)); // Generates a hash of a random number
+	$_SESSION['newtoken'] = $token;
+}
 if ((! defined('NOCSRFCHECK') && empty($dolibarr_nocsrfcheck) && ! empty($conf->global->MAIN_SECURITY_CSRF_WITH_TOKEN))
 	|| defined('CSRFCHECK_WITH_TOKEN'))	// Check validity of token, only if option MAIN_SECURITY_CSRF_WITH_TOKEN enabled or if constant CSRFCHECK_WITH_TOKEN is set
 {
@@ -292,17 +302,6 @@ if ((! defined('NOCSRFCHECK') && empty($dolibarr_nocsrfcheck) && ! empty($conf->
 			unset($_POST);
 		}
 	}
-}
-
-// Creation of a token against CSRF vulnerabilities
-if (! defined('NOTOKENRENEWAL'))
-{
-    // roulement des jetons car cree a chaque appel
-    if (isset($_SESSION['newtoken'])) $_SESSION['token'] = $_SESSION['newtoken'];
-
-    // Save in $_SESSION['newtoken'] what will be next token. Into forms, we will add param token = $_SESSION['newtoken']
-    $token = dol_hash(uniqid(mt_rand(),TRUE)); // Generates a hash of a random number
-    $_SESSION['newtoken'] = $token;
 }
 
 // Disable modules (this must be after session_start and after conf has been loaded)
