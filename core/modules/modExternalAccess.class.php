@@ -21,7 +21,7 @@
  * 	\defgroup   externalaccess     Module externalaccess
  *  \brief      Example of a module descriptor.
  *				Such a file must be copied into htdocs/externalaccess/core/modules directory.
- *  \file       htdocs/externalaccess/core/modules/modexternalaccess.class.php
+ *  \file       htdocs/externalaccess/core/modules/modExternalAccess.class.php
  *  \ingroup    externalaccess
  *  \brief      Description and activation file for module externalaccess
  */
@@ -31,7 +31,7 @@ include_once DOL_DOCUMENT_ROOT .'/core/modules/DolibarrModules.class.php';
 /**
  *  Description and activation class for module externalaccess
  */
-class modexternalaccess extends DolibarrModules
+class modExternalAccess extends DolibarrModules
 {
 	/**
 	 *   Constructor. Define names, constants, directories, boxes, permissions
