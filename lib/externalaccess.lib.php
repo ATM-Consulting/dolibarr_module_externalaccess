@@ -32,7 +32,7 @@ function externalaccessAdminPrepareHead()
 
 	 global $db;
 	 $extrafields = new ExtraFields($db);
-	 $extrafields->fetch_name_optionals_label('myobject');
+	 $extrafields->fetch_name_optionals_label('eavirtualhost');
 
     $langs->load("externalaccess@externalaccess");
 
