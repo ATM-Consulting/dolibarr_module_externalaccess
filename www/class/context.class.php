@@ -236,6 +236,18 @@ class Context
 
 
 	/**
+	 *	get entity for a domain
+	 *
+	 *	@return	int | false
+	 */
+	public function getEntityMappingForCurrentDomain(){
+		require_once __DIR__ . '/../../class/eavirtualhost.class.php';
+		return EAVirtualHost::getEntityForDomain($_SERVER['SERVER_NAME']);
+	}
+
+
+
+	/**
 	 * get controller url according to context
 	 * @param string       $controller controller
 	 * @param string|array $moreParams  moreParams

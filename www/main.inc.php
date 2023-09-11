@@ -183,7 +183,7 @@ if (! defined('NOSESSION'))
 }
 
 // Init the 5 global objects, this include will make the new and set properties for: $conf, $db, $langs, $user, $mysoc
-require_once $dir.'/master.inc.php';
+require_once __DIR__.'/master.inc.php';
 
 // Activate end of page function
 register_shutdown_function('dol_shutdown');
@@ -438,7 +438,12 @@ if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLogge
 
 		$usertotest		= (! empty($_COOKIE['login_dolibarr']) ? $_COOKIE['login_dolibarr'] : GETPOST("username","alpha",2));
 		$passwordtotest	= GETPOST('password','none',2);
-		$entitytotest	= (GETPOST('entity','int') ? GETPOST('entity','int') : (!empty($conf->entity) ? $conf->entity : 1));
+
+		$entitytotest = $context->getEntityMappingForCurrentDomain();
+		if(empty($entitytotest)){
+			$entitytotest	= (GETPOST('entity','int') ? GETPOST('entity','int') : (!empty($conf->entity) ? $conf->entity : 1));
+		}
+
 
 		// Define if we received data to test the login.
 		$goontestloop=false;

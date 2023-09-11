@@ -22,7 +22,7 @@
  * 	\brief		Sample trigger
  * 	\remarks	You can create other triggers by copying this one
  * 				- File name should be either:
- * 					interface_99_modExternalaccess_Mytrigger.class.php
+ * 					interface_99_modExternalAccess_Mytrigger.class.php
  * 					interface_99_all_Mytrigger.class.php
  * 				- The file must stay in core/triggers
  * 				- The class name must be InterfaceMytrigger

@@ -21,7 +21,7 @@
  * 	\defgroup   externalaccess     Module externalaccess
  *  \brief      Example of a module descriptor.
  *				Such a file must be copied into htdocs/externalaccess/core/modules directory.
- *  \file       htdocs/externalaccess/core/modules/modexternalaccess.class.php
+ *  \file       htdocs/externalaccess/core/modules/modExternalAccess.class.php
  *  \ingroup    externalaccess
  *  \brief      Description and activation file for module externalaccess
  */
@@ -31,7 +31,7 @@ include_once DOL_DOCUMENT_ROOT .'/core/modules/DolibarrModules.class.php';
 /**
  *  Description and activation class for module externalaccess
  */
-class modexternalaccess extends DolibarrModules
+class modExternalAccess extends DolibarrModules
 {
 	/**
 	 *   Constructor. Define names, constants, directories, boxes, permissions
@@ -62,7 +62,7 @@ class modexternalaccess extends DolibarrModules
 		$this->description = "Ajoute un acces externe pour les clients";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.39.0';
+		$this->version = '2.1';
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -111,7 +111,7 @@ class modexternalaccess extends DolibarrModules
 		$this->requiredby = array();	// List of modules id to disable if this one is disabled
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
 		$this->phpmin = array(7,0);					// Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(9,0);	// Minimum version of Dolibarr required by module
+		$this->need_dolibarr_version = array(16,0);	// Minimum version of Dolibarr required by module
 		$this->langfiles = array("externalaccess@externalaccess");
 
 		// Constants
