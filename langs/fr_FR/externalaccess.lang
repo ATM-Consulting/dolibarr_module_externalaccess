@@ -111,7 +111,7 @@ Extrafields = Champ complémentaire
 AbricotNotFound=Module Abricot non trouvé, le portail client ne peut pas fonctionner correctement sans ce module.
 AbricotWiki=Consulter la page d'information du module abricot.
 
-EAccessVirtualHostExplain = Vous pouvez déterminer l'entité à charger en fonction du domaine de connexion. Vous pouvez ainsi faire correspondre différentes entités en fonction du nom de domaine de connexion. Cela nécessite d'avoir configurer différent hôte virtuel sur votre serveur en amont. <strong>Cet configuration est utile seulement s'il est nécessaire pour vous d'utiliser plusieurs entités distinctes, par défaut l'entité chargée est celle portant l'id 1;</strong>
+EAccessVirtualHostExplain = Vous pouvez déterminer l'entité à charger en fonction du domaine de connexion. Vous pouvez ainsi faire correspondre différentes entités en fonction du nom de domaine de connexion. Cela nécessite d'avoir configuré différents hôtes virtuels sur votre serveur en amont. <strong>Cet configuration est utile seulement s'il est nécessaire pour vous d'utiliser plusieurs entités distinctes, par défaut l'entité chargée est celle portant l'id 1;</strong>
 EAccessDontForgetSetRootUrl = Pensez à saisir l'URL d'access public. Actuellement l'Url est :
 MultiEntityConfEAccessRootUrlMissing = Attention, configuration manquante, il est important de configurer cette option en mode multi entités.
 EACCESS_ROOT_URL=Url d'accès public
