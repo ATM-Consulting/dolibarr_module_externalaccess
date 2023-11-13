@@ -240,7 +240,7 @@ class Context
 	 *
 	 *	@return	int | false
 	 */
-	public function getEntityMappingForCurrentDomain(){
+	public static function getEntityMappingForCurrentDomain(){
 		require_once __DIR__ . '/../../class/eavirtualhost.class.php';
 		return EAVirtualHost::getEntityForDomain($_SERVER['SERVER_NAME']);
 	}
