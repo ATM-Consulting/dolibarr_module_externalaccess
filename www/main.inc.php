@@ -204,41 +204,19 @@ if (isset($_SERVER["HTTP_USER_AGENT"]))
 	if ($conf->browser->layout == 'phone') $conf->global->MAIN_TESTMENUHIDER=1;
 }
 
+
+
+
 // Force HTTPS if required ($conf->file->main_force_https is 0/1 or https dolibarr root url)
 // $_SERVER["HTTPS"] is 'on' when link is https, otherwise $_SERVER["HTTPS"] is empty or 'off'
 if (! empty($conf->file->main_force_https) && (empty($_SERVER["HTTPS"]) || $_SERVER["HTTPS"] != 'on'))
 {
-	$newurl='';
-	if (is_numeric($conf->file->main_force_https))
-	{
-		if ($conf->file->main_force_https == '1' && ! empty($_SERVER["SCRIPT_URI"]))	// If SCRIPT_URI supported by server
-		{
-			if (preg_match('/^http:/i',$_SERVER["SCRIPT_URI"]) && ! preg_match('/^https:/i',$_SERVER["SCRIPT_URI"]))	// If link is http
-			{
-				$newurl=preg_replace('/^http:/i','https:',$_SERVER["SCRIPT_URI"]);
-			}
-		}
-		else	// Check HTTPS environment variable (Apache/mod_ssl only)
-		{
-			$newurl=preg_replace('/^http:/i','https:',DOL_MAIN_URL_ROOT).$_SERVER["REQUEST_URI"];
-		}
-	}
-	else
-	{
-		// Check HTTPS environment variable (Apache/mod_ssl only)
-		$newurl=$conf->file->main_force_https.$_SERVER["REQUEST_URI"];
-	}
+
+	$newurl = 'https://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
 	// Start redirect
-	if ($newurl)
-	{
-		dol_syslog("main.inc: dolibarr_main_force_https is on, we make a redirect to ".$newurl);
-		header("Location: ".$newurl);
-		exit;
-	}
-	else
-	{
-		dol_syslog("main.inc: dolibarr_main_force_https is on but we failed to forge new https url so no redirect is done", LOG_WARNING);
-	}
+	dol_syslog("main.inc: dolibarr_main_force_https is on, we make a redirect to ".$newurl);
+	header("Location: ".$newurl);
+	exit;
 }
 
 /*
