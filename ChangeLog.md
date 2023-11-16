@@ -7,7 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
-
+- FIX : Handle Captcha inside EACCESS_ROOT_URL domain - 1.42.0 - **06/10/2023**
 
 # RELEASE 1.41
 
