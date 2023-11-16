@@ -11,6 +11,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.41
 
+- FIX : Force https redirection 1.41.2 - **13/11/2023**
 - FIX : PHP 8 Fatal error 1.41.1 - **06/10/2023**
 - NEW : Reforge setup options using default Dolibarr setup class 1.41.0 - **30/08/2023**  
   this break compatibility of Dolibarr under 16.0
