@@ -246,6 +246,24 @@ class EAVirtualHost extends CommonObject
 		return $resultcreate;
 	}
 
+
+	/**
+	 * Create object into database
+	 *
+	 * @param  User $user      User that creates
+	 * @param  bool $notrigger false=launch triggers after, true=disable triggers
+	 * @return int             <0 if KO, Id of created object if OK
+	 */
+	public function createCommon(User $user, $notrigger = false)
+	{
+		if(!$this->validateAllFields()){
+			return -1;
+		}
+
+		return parent::createCommon($user, $notrigger);
+	}
+
+
 	/**
 	 * Clone an object into another one
 	 *
@@ -467,6 +485,23 @@ class EAVirtualHost extends CommonObject
 	{
 		return $this->updateCommon($user, $notrigger);
 	}
+
+	/**
+	 * Update object into database
+	 *
+	 * @param  User $user      	User that modifies
+	 * @param  bool $notrigger 	false=launch triggers after, true=disable triggers
+	 * @return int             	<0 if KO, >0 if OK
+	 */
+	public function updateCommon(User $user, $notrigger = false)
+	{
+		if(!$this->validateAllFields()){
+			return -1;
+		}
+
+		return parent::updateCommon($user, $notrigger);
+	}
+
 
 	/**
 	 * Delete object in database
@@ -1100,5 +1135,22 @@ class EAVirtualHost extends CommonObject
 
 
 		return parent::validateField($val, $fieldKey, $fieldValue);
+	}
+
+	/**
+	 * Return validation test result for a field
+	 *
+	 * @return bool return false if fail true on success, see $this->error for error message
+	 */
+	public function validateAllFields()
+	{
+		foreach ($this->fields as $key => $val) {
+			// Validation of fields values
+			if (!empty($val['validate']) && !$this->validateField($this->fields, $key, $this->$key)) {
+				return false;
+			}
+		}
+
+		return true;
 	}
 }
