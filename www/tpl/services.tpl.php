@@ -10,7 +10,7 @@ global $langs, $user, $conf;
 ?>
 
 	<section id="services">
-<?php if(empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){ ?>
+<?php if(!getDolGlobalString('EACCESS_NO_FULL_HEADBAR_FOR_HOME')){ ?>
       <div class="container">
         <div class="row">
           <div class="col-lg-12 text-center">
@@ -32,27 +32,27 @@ if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->e
 
 if(empty($reshook)){
 
-    if(isset($conf->global->EACCESS_ACTIVATE_PROPALS) && !empty($user->rights->externalaccess->view_propals)){
+    if(isset($conf->global->EACCESS_ACTIVATE_PROPALS) && $user->hasRight('externalaccess', 'view_propals')){
         $link = $context->getControllerUrl('propals');
         printService($langs->trans('Quotations'),'fa-pencil',$link); // desc : $langs->trans('QuotationsDesc')
     }
 
-	if(isset($conf->global->EACCESS_ACTIVATE_ORDERS) && !empty($user->rights->externalaccess->view_orders)){
+	if(isset($conf->global->EACCESS_ACTIVATE_ORDERS) && $user->hasRight('externalaccess', 'view_orders')){
 		$link = $context->getControllerUrl('orders');
 		printService($langs->trans('Orders'),'fa-file-text-o',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-	if(isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS) && !empty($user->rights->externalaccess->view_expeditions)){
+	if(isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS) && $user->hasRight('externalaccess', 'view_expeditions')){
 		$link = $context->getControllerUrl('expeditions');
 		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && !empty($conf->facture->enabled) && !empty($user->rights->externalaccess->view_invoices)){
+    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && !empty($conf->facture->enabled) && $user->hasRight('externalaccess', 'view_invoices')){
         $link = $context->getControllerUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
 
-    if(isset($conf->global->EACCESS_ACTIVATE_TICKETS) && !empty($conf->ticket->enabled) && !empty($user->rights->externalaccess->view_tickets)){
+    if(isset($conf->global->EACCESS_ACTIVATE_TICKETS) && !empty($conf->ticket->enabled) && $user->hasRight('externalaccess', 'view_tickets')){
         $link = $context->getControllerUrl('tickets');
         printService($langs->trans('Tickets'),'fa-ticket',$link);
     }

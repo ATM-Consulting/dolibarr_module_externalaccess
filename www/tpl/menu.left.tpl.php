@@ -10,7 +10,7 @@ if (empty($context) || ! is_object($context))
 <ul class="nav flex-column">
 <?php 
 
-if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES))
+if(getDolGlobalString('EACCESS_ACTIVATE_INVOICES'))
 {
     $active = $context->menuIsActive('invoices')?'active':'';
     print ' <li class="nav-item"><a href="'.$context->rootUrl.'" class="nav-link '.$active.'">'. $langs->trans('Invoices').'</a></li>';

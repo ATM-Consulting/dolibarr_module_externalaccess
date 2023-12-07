@@ -11,7 +11,7 @@ class ExpeditionsController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->expedition->enabled) && $conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions);
+		$this->accessRight = !empty($conf->expedition->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_EXPEDITIONS') && !empty($user->rights->externalaccess->view_expeditions);
 		return parent::checkAccess();
 	}
 
@@ -153,10 +153,10 @@ class ExpeditionsController extends Controller
 			}
 
 
-			$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			$TOther_fields_all = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if(empty($TOther_fields_all)) $TOther_fields_all = array();
 
-			$TOther_fields_shipping = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_SHIPPING);
+			$TOther_fields_shipping = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_SHIPPING'));
 			if(empty($TOther_fields_shipping)) $TOther_fields_shipping = array();
 
 			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_shipping);
@@ -337,7 +337,7 @@ class ExpeditionsController extends Controller
 					});
 				});
 			</script>
-			<?php
+<?php
 		}
 		else {
 			print '<div class="info clearboth text-center" >';

@@ -176,7 +176,7 @@ class FormExternal
 			//Conf aide
 			$helpConfName = strtoupper($this->element).'_PUBLIC_TEXT_HELP_MESSAGE';
 			if(! empty($conf->global->{$helpConfName})) {
-				$out .= '<div class="'.$this->element.'-help-msg-wrap">'.$conf->global->{$helpConfName}.'</div>';
+				$out .= '<div class="'.$this->element.'-help-msg-wrap">' . getDolGlobalString($helpConfName).'</div>';
 			}
 
 			// generate output table
@@ -407,7 +407,7 @@ class FormExternal
 				$sql .= " INNER JOIN ".MAIN_DB_PREFIX.$tmparray[1]." as parenttable ON parenttable.rowid = t.".$tmparray[0];
 			}
 			if($objecttmp->ismultientitymanaged === 'fk_soc@societe') {
-				if(! $user->rights->societe->client->voir && ! $user->socid) {
+				if(! $user->hasRight('societe', 'client', 'voir') && ! $user->socid) {
 					$sql .= ", ".MAIN_DB_PREFIX."societe_commerciaux as sc";
 				}
 			}
@@ -437,14 +437,14 @@ class FormExternal
 					}
 				}
 				if($objecttmp->ismultientitymanaged === 'fk_soc@societe') {
-					if(! $user->rights->societe->client->voir && ! $user->socid) {
+					if(! $user->hasRight('societe', 'client', 'voir') && ! $user->socid) {
 						$sql .= " AND t.rowid = sc.fk_soc AND sc.fk_user = ".((int) $user->id);
 					}
 				}
 			}
 
 			if($objecttmp->ismultientitymanaged == 'fk_soc@societe') {
-				if(! $user->rights->societe->client->voir && ! $user->socid) {
+				if(! $user->hasRight('societe', 'client', 'voir') && ! $user->socid) {
 					$sql .= " AND t.rowid = sc.fk_soc AND sc.fk_user = ".((int) $user->id);
 				}
 			}
@@ -1463,7 +1463,7 @@ class FormExternalItem
 		$out = '<textarea '.($this->required ? 'required' : '').' class="form-control" name="'.$this->confKey.'" id="'.$this->element.'-'.$this->confKey.'"  rows="10" >'."\n";
 		$out .= dol_htmlentities($this->fieldValue);
 		$out .= "</textarea>\n";
-		if(! empty($conf->global->FCKEDITOR_ENABLE_TICKET)) {
+		if(getDolGlobalString('FCKEDITOR_ENABLE_TICKET')) {
 			$out .= '<script>CKEDITOR.replace("'.$this->confKey.'");</script>';
 		}
 

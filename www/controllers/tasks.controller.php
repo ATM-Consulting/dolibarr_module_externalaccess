@@ -14,7 +14,7 @@ class TasksController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->projet->enabled) && $conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects);
+		$this->accessRight = !empty($conf->projet->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_PROJECTS') && !empty($user->rights->externalaccess->view_projects);
 		return parent::checkAccess();
 	}
 
@@ -174,7 +174,7 @@ class TasksController extends Controller
 
 			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_project);*/
 
-			$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			$TOther_fields = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 
 			print '<table id="projettask-list" class="table table-striped" >';
 
@@ -320,7 +320,7 @@ class TasksController extends Controller
 					});
 				});
 			</script>
-			<?php
+<?php
 		}
 		else {
 			print '<div class="info clearboth text-center" >';

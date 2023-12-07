@@ -10,7 +10,7 @@ $metaTitle = '';
 if (!empty($context->meta_title)) { $metaTitle = $context->meta_title; }
 elseif (!empty($context->title)){ $metaTitle = $context->title; }
 if (!empty($metaTitle)) { $metaTitle.= ' - '; }
-$metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+$metaTitle.= getDolGlobalString('EACCESS_TITLE',getDolGlobalString('MAIN_INFO_SOCIETE_NOM'));
 
 
 
@@ -23,7 +23,7 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="<?php echo dol_htmlentities($context->meta_desc, ENT_QUOTES); ?>">
-    <meta name="author" content="<?php echo dol_htmlentities($conf->global->MAIN_INFO_SOCIETE_NOM, ENT_QUOTES); ?>">
+    <meta name="author" content="<?php echo dol_htmlentities(getDolGlobalString('MAIN_INFO_SOCIETE_NOM'), ENT_QUOTES); ?>">
 
     <title><?php echo dol_htmlentities($metaTitle); ?></title>
 
@@ -77,10 +77,10 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
 
 <?php
 
-    if (isset($conf->global->EACCESS_FAVICON_URL)) $favicon = $conf->global->EACCESS_FAVICON_URL;
+    if (isset($conf->global->EACCESS_FAVICON_URL)) $favicon = getDolGlobalString('EACCESS_FAVICON_URL');
 
-	if (empty($favicon) && ! empty($conf->global->MAIN_FAVICON_URL)){
-		$favicon=$conf->global->MAIN_FAVICON_URL;
+	if (empty($favicon) && getDolGlobalString('MAIN_FAVICON_URL')){
+		$favicon=getDolGlobalString('MAIN_FAVICON_URL');
 	}
 
     if (! empty($favicon)){
@@ -90,8 +90,8 @@ $metaTitle.= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$
     // Mobile appli like icon
     print '	<link rel="manifest" href="'.$context->getControllerUrl().'manifest.json.php'.'" />' . "\r\n";
 
-	$primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
-	$backgroundColor = !empty($conf->global->EACCESS_APPLI_COLOR)?$conf->global->EACCESS_APPLI_COLOR:$primaryColor;
+	$primaryColor = getDolGlobalString('EACCESS_PRIMARY_COLOR','#F05F40');
+	$backgroundColor = getDolGlobalString('EACCESS_APPLI_COLOR',$primaryColor);
 	print '	<meta name="theme-color" content="'.$backgroundColor.'">' . "\r\n";
 
 

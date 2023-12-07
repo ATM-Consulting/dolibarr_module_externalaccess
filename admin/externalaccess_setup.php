@@ -100,7 +100,7 @@ $item->fieldAttr = array('type'=>'url', 'placeholder'=>'http://');
 dol_include_once('externalaccess/www/class/context.class.php');
 $context = Context::getInstance();
 $item->fieldOutputOverride = '<a target="_blank" href="'.$context->getControllerUrl().'" ><i class="fa fa-arrow-right" ></i>  '.$context->getControllerUrl().'</a>';
-if(!empty($conf->entity) && $conf->entity > 1 && empty($conf->global->EACCESS_ROOT_URL)){
+if(!empty($conf->entity) && $conf->entity > 1 && !getDolGlobalString('EACCESS_ROOT_URL')){
 	$item->fieldOutputOverride = '<div class="error">'.$langs->trans('MultiEntityConfEAccessRootUrlMissing').'</div>';
 }
 
@@ -230,8 +230,8 @@ $formSetup->newItem('EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL')->setAsYe
 $item = $formSetup->newItem('EACCESS_LOGIN_EXTRA_HTML')->setAsHtml();
 
 // Message RGPD sur le formulaire des informations personnelles
-if (empty($conf->global->EACCESS_RGPD_MSG) && !empty($conf->global->MAIN_INFO_SOCIETE_NOM)){
-	dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', $conf->global->MAIN_INFO_SOCIETE_NOM), 'chaine', 0, '', $conf->entity);
+if (!getDolGlobalString('EACCESS_RGPD_MSG') && getDolGlobalString('MAIN_INFO_SOCIETE_NOM')){
+	dolibarr_set_const($db, 'EACCESS_RGPD_MSG', $langs->trans('EACCESS_RGPD_MSG_default', getDolGlobalString('MAIN_INFO_SOCIETE_NOM')), 'chaine', 0, '', $conf->entity);
 }
 $item = $formSetup->newItem('EACCESS_RGPD_MSG')->setAsHtml();
 

@@ -65,7 +65,7 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 	$item->fieldAttr['maxlength'] = 200;
 
 	if(empty($object->message)){
-		$object->message = $conf->global->TICKET_EXTERNAL_DESCRIPTION_MESSAGE;
+		$object->message = getDolGlobalString('TICKET_EXTERNAL_DESCRIPTION_MESSAGE');
 	}
 	$item = $formExternal->newItem('message');
 	$item->setAsHtml();
@@ -135,7 +135,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 				<textarea name="ticket-comment" class="form-control" id="ticket-comment" placeholder="' . $langs->transnoentities('YourCommentHere') . '" rows="10">' . dol_htmlentities(GETPOST('ticket-comment', 'none')) . '</textarea>';
 	$out .= '</div>';
 
-	if (!empty($conf->global->FCKEDITOR_ENABLE_TICKET)){
+	if (getDolGlobalString('FCKEDITOR_ENABLE_TICKET')){
 		$out .= '<script>CKEDITOR.replace( "ticket-comment" );</script>';
 	}
 
@@ -236,7 +236,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	$langs->load('ticket');
 
 
-	if(!$conf->global->EACCESS_ACTIVATE_TICKETS || empty($user->rights->externalaccess->view_tickets)){
+	if(!getDolGlobalInt('EACCESS_ACTIVATE_TICKETS') || !$user->hasRight('externalaccess', 'view_tickets')){
 		return '';
 	}
 
@@ -487,7 +487,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 				elseif ($actionstatic->code == 'TICKET_MSG_PRIVATE') {
 					$iconClass = 'fa fa-mask';
 				}
-				elseif (!empty($conf->global->AGENDA_USE_EVENT_TYPE))
+				elseif (getDolGlobalString('AGENDA_USE_EVENT_TYPE'))
 				{
 					if ($actionstatic->type_picto) $img_picto = img_picto('', $actionstatic->type_picto);
 					else {
@@ -633,7 +633,7 @@ function print_ticketCard_extrafields($ticket) {
 	$out = '';
 	$e = new ExtraFields($db);
 	$e->fetch_name_optionals_label('ticket');
-	$TTicketAddedField = unserialize($conf->global->EACCESS_CARD_ADDED_FIELD_TICKET);
+	$TTicketAddedField = unserialize(getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
 	if(! empty($TTicketAddedField)) {
 		foreach($TTicketAddedField as $ticket_field) {
 			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
@@ -700,7 +700,7 @@ function print_ticketCard_extrafields($ticket) {
 				else if($type == 'price') {
 					//$value = price($value, 0, $langs, 0, 0, -1, $conf->currency);
 					if($value || $value == '0') {
-						$value = price($value, 0, $langs, 0, $conf->global->MAIN_MAX_DECIMALS_TOT, -1).' '.$langs->getCurrencySymbol($conf->currency);
+						$value = price($value, 0, $langs, 0, getDolGlobalInt('MAIN_MAX_DECIMALS_TOT'), -1).' '.$langs->getCurrencySymbol($conf->currency);
 					}
 				}
 				else if($type == 'select') {
@@ -982,7 +982,7 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 	 * current right used in program
 	 * create, comment, close, open
 	 */
-	if($user->socid && $rightToTest == 'create' || $employee && $user->rights->ticket->create){
+	if($user->socid && $rightToTest == 'create' || $employee && $user->hasRight('ticket', 'create')){
         return true;
 	}
 

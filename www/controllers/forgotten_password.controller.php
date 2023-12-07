@@ -23,7 +23,7 @@ class ForgottenPasswordController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf;
-		$this->accessRight = !empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE);
+		$this->accessRight = getDolGlobalString('EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE');
 		return parent::checkAccess();
 	}
 

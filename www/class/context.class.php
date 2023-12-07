@@ -100,7 +100,7 @@ class Context
 		}
 
 
-		$this->appliName = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+		$this->appliName = getDolGlobalString('EACCESS_TITLE', getDolGlobalString('MAIN_INFO_SOCIETE_NOM'));
 
 		$this->generateNewToken();
 
@@ -212,8 +212,8 @@ class Context
 		global $conf;
 
 		// Init de l'url de base
-		if (!empty($conf->global->EACCESS_ROOT_URL)){
-			$rootUrl = $conf->global->EACCESS_ROOT_URL;
+		if (getDolGlobalString('EACCESS_ROOT_URL')){
+			$rootUrl = getDolGlobalString('EACCESS_ROOT_URL');
 			if (substr($rootUrl, -1) !== '/') $rootUrl .= '/';
 		}
 		else {

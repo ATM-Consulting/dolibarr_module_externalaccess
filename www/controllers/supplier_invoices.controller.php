@@ -11,7 +11,7 @@ class SupplierInvoicesController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->supplier_invoice->enabled) && $conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES && !empty($user->rights->externalaccess->view_supplier_invoices);
+		$this->accessRight = !empty($conf->supplier_invoice->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_SUPPLIER_INVOICES') && !empty($user->rights->externalaccess->view_supplier_invoices);
 		return parent::checkAccess();
 	}
 
@@ -102,7 +102,7 @@ class SupplierInvoicesController extends Controller
 
 			//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
-			$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			$TOther_fields = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if(empty($TOther_fields)) $TOther_fields = array();
 
 			print '<table id="invoice-list" class="table table-striped" >';
@@ -122,7 +122,7 @@ class SupplierInvoicesController extends Controller
 			print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('DatePayLimit').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
-			if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+			if(getDolGlobalString('EACCESS_ACTIVATE_INVOICES_HT_COL')){
 				print ' <th class="text-center" >'.$langs->trans('Amount_HT').'</th>';
 			}
 			print ' <th class="text-center" >'.$langs->trans('Amount_TTC').'</th>';
@@ -173,7 +173,7 @@ class SupplierInvoicesController extends Controller
 				print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
 				print ' <td  >'.$object->getLibStatut(0).'</td>';
 
-				if(!empty($conf->global->EACCESS_ACTIVATE_INVOICES_HT_COL)){
+				if(getDolGlobalString('EACCESS_ACTIVATE_INVOICES_HT_COL')){
 					print ' <td data-order="'.$object->multicurrency_total_ht.'" class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
 				}
 				print ' <td data-order="'.$object->multicurrency_total_ttc.'" class="text-right" >'.price($object->multicurrency_total_ttc)  .' '.$object->multicurrency_code.'</td>';

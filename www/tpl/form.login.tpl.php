@@ -11,7 +11,7 @@ $context = Context::getInstance();
         <div class="card card-container col-lg-6  ">
 <?php
         // Default center logo is defined on admin panel, then if empty we use company default logo
-        $urllogo = !empty($conf->global->EACCESS_LOGIN_IMG)?$conf->global->EACCESS_LOGIN_IMG:'';
+        $urllogo = getDolGlobalString('EACCESS_LOGIN_IMG');
         if($urllogo == '') {
             if ( (! empty($mysoc->logo_small) && is_readable($conf->mycompany->dir_output.'/logos/thumbs/'.$mysoc->logo_small))
                 || (! empty($mysoc->logo) && is_readable($conf->mycompany->dir_output.'/logos/'.$mysoc->logo))
@@ -27,7 +27,7 @@ $context = Context::getInstance();
 		else
 		{
 		    //print '<img id="profile-img" class="profile-img-card" src="'.$context->rootUrl.'img/avatar.png" />';
-		    $name = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+		    $name = getDolGlobalString('EACCESS_TITLE',getDolGlobalString('MAIN_INFO_SOCIETE_NOM'));
 		    print '<h4>'.$name.'</h4>';
 		}
 
@@ -54,7 +54,7 @@ $context = Context::getInstance();
                 <input type="hidden" name="urlfrom" value="<?php print Context::urlOrigin(); ?>"/>
 				<input type="hidden" name="entity" value="<?php print $conf->entity; ?>">
 
-                <?php if(!empty($conf->global->EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE)){ ?>
+                <?php if(getDolGlobalString('EACCESS_ACTIVATE_FORGOT_PASSWORD_FEATURE')){ ?>
                 <div id="forgot-password" class="checkbox text-right">
                     <label>
                         <a href="<?php print $context->getControllerUrl('forgottenpassword', '&action=forgot-password') ?>" ><?php print $langs->trans('AskForgotPassword'); ?></a>
@@ -89,7 +89,7 @@ $context = Context::getInstance();
                  <input type="hidden" name="dol_use_jmobile" id="dol_use_jmobile" value="<?php echo $dol_use_jmobile; ?>" />*/
 
 
-                if (! empty($conf->global->MAIN_SECURITY_ENABLECAPTCHA)) {
+                if (getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA')) {
                 	// Add a variable param to force not using cache (jmobile)
                 	$php_self = preg_replace('/[&\?]time=(\d+)/','',$php_self);	// Remove param time
                 	if (preg_match('/\?/',$php_self)) $php_self.='&time='.dol_print_date(dol_now(),'dayhourlog');
@@ -104,7 +104,7 @@ $context = Context::getInstance();
                 	<img src="<?php print $context->getRootConfigUrl(); ?>/core/antispamimage.php" border="0" width="80" height="32" id="img_securitycode" />
                 	<a href="<?php echo $php_self; ?>" tabindex="4" data-role="button"><?php echo $captcha_refresh; ?></a>
 
-                <?php }  ?>
+<?php }  ?>
 
             </form><!-- /form -->
             <?php /*if(!$conf->global->MAIN_SECURITY_DISABLEFORGETPASSLINK){ ?>
@@ -116,9 +116,9 @@ $context = Context::getInstance();
    </div>
 
 <?php
-if(!empty($conf->global->EACCESS_LOGIN_EXTRA_HTML)){
+if(getDolGlobalString('EACCESS_LOGIN_EXTRA_HTML')){
     print '<div class="row  "><div class="card card-container col-lg-6 ">';
-    print $conf->global->EACCESS_LOGIN_EXTRA_HTML;
+    print getDolGlobalString('EACCESS_LOGIN_EXTRA_HTML');
     print '</div></div>';
 
 }

@@ -190,7 +190,7 @@ class EAVirtualHost extends CommonObject
 
 		$this->db = $db;
 
-		if (empty($conf->global->MAIN_SHOW_TECHNICAL_ID) && isset($this->fields['rowid']) && !empty($this->fields['ref'])) {
+		if (!getDolGlobalString('MAIN_SHOW_TECHNICAL_ID') && isset($this->fields['rowid']) && !empty($this->fields['ref'])) {
 			$this->fields['rowid']['visible'] = 0;
 		}
 		if (!isModEnabled('multicompany') && isset($this->fields['entity'])) {
@@ -791,7 +791,7 @@ class EAVirtualHost extends CommonObject
 
 		$linkclose = '';
 		if (empty($notooltip)) {
-			if (!empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER)) {
+			if (getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) {
 				$label = $langs->trans("ShowEAVirtualHost");
 				$linkclose .= ' alt="'.dol_escape_htmltag($label, 1).'"';
 			}
@@ -1034,7 +1034,7 @@ class EAVirtualHost extends CommonObject
 
 		require_once DOL_DOCUMENT_ROOT.'/core/lib/functions2.lib.php';
 
-		$mask = !empty($conf->global->EA_VIRTUAL_HOST_REF_MASK) ? $conf->global->EA_VIRTUAL_HOST_REF_MASK : 'DOM{yy}{mm}-{0000}';
+		$mask = getDolGlobalString('EA_VIRTUAL_HOST_REF_MASK', 'DOM{yy}{mm}-{0000}');
 		$ref = get_next_value($db, $mask, 'externalaccess_eavirtualhost', 'ref');
 
 		return $ref;
@@ -1066,8 +1066,8 @@ class EAVirtualHost extends CommonObject
 
 			if (!empty($this->model_pdf)) {
 				$modele = $this->model_pdf;
-			} elseif (!empty($conf->global->EAVIRTUALHOST_ADDON_PDF)) {
-				$modele = $conf->global->EAVIRTUALHOST_ADDON_PDF;
+			} elseif (getDolGlobalString('EAVIRTUALHOST_ADDON_PDF')) {
+				$modele = getDolGlobalString('EAVIRTUALHOST_ADDON_PDF');
 			}
 		}
 
