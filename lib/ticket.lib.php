@@ -284,6 +284,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 
 	$documents = externalAccessGetTicketEcmList($object, true);
 	$ticketFooter = '';
+
 	if(!empty($documents))
 	{
 		$ticketFooter.= '<div class="panel-footer">';

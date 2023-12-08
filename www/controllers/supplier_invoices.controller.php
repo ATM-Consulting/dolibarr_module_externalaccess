@@ -11,7 +11,7 @@ class SupplierInvoicesController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->supplier_invoice->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_SUPPLIER_INVOICES') && !empty($user->rights->externalaccess->view_supplier_invoices);
+		$this->accessRight = !empty($conf->supplier_invoice->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_SUPPLIER_INVOICES') && $user->hasRight('externalaccess','view_supplier_invoices');
 		return parent::checkAccess();
 	}
 
@@ -168,9 +168,11 @@ class SupplierInvoicesController extends Controller
 						}
 					}
 				}
-
+                $date_lim_reglement = '';
+                if(!empty($object->date_lim_reglement)) $date_lim_reglement = $object->date_lim_reglement;
+                if(!empty($object->date_echeance)) $date_lim_reglement = $object->date_echeance;
 				print ' <td data-order="'.$object->date.'" data-search="'.dol_print_date($object->date).'"  >'.dol_print_date($object->date).'</td>';
-				print ' <td data-order="'.$object->date_lim_reglement.'"  >'.dol_print_date($object->date_lim_reglement).'</td>';
+				print ' <td data-order="'.$date_lim_reglement.'"  >'.dol_print_date($date_lim_reglement).'</td>';
 				print ' <td  >'.$object->getLibStatut(0).'</td>';
 
 				if(getDolGlobalString('EACCESS_ACTIVATE_INVOICES_HT_COL')){

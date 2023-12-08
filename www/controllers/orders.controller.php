@@ -12,7 +12,7 @@ class OrdersController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->commande->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_ORDERS') && !empty($user->rights->externalaccess->view_orders);
+		$this->accessRight = !empty($conf->commande->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_ORDERS') && $user->hasRight('externalaccess','view_orders');
 		return parent::checkAccess();
 	}
 
@@ -174,7 +174,10 @@ class OrdersController extends Controller
 					}
 				}
 				print ' <td data-search="'.dol_print_date($object->date).'" data-order="'.$object->date.'" >'.dol_print_date($object->date).'</td>';
-				print ' <td data-search="'.dol_print_date($object->date_livraison).'" data-order="'.$object->date_livraison.'" >'.dol_print_date($object->date_livraison).'</td>';
+                $delivDate = '';
+                if(property_exists($object, 'date_livraison')) $delivDate = $object->date_livraison;
+                elseif (property_exists($object, 'delivery_date')) $delivDate = $object->delivery_date;
+				print ' <td data-search="'.dol_print_date($delivDate).'" data-order="'.$delivDate.'" >'.dol_print_date($delivDate).'</td>';
 				print ' <td class="text-center" >'.$object->getLibStatut(0).'</td>';
 				print ' <td data-order="'.$object->multicurrency_total_ht.'"  class="text-right" >'.price($object->multicurrency_total_ht)  .' '.$object->multicurrency_code.'</td>';
 

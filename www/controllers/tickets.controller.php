@@ -11,7 +11,7 @@ class TicketsController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->ticket->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_TICKETS') && !empty($user->rights->externalaccess->view_tickets);
+		$this->accessRight = !empty($conf->ticket->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_TICKETS') && $user->hasRight('externalaccess','view_tickets');
 		return parent::checkAccess();
 	}
 

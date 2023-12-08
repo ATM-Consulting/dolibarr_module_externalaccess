@@ -69,7 +69,7 @@ $context = Context::getInstance();
                 <button class="btn btn-lg btn-primary btn-strong btn-block btn-signin" type="submit"><?php print $langs->trans('SignIn'); ?></button>
 
 
-                <input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']; ?>" />
+                <input type="hidden" name="token" value="<?php echo $_SESSION['newtoken']?? ''; ?>" />
                 <input type="hidden" name="loginfunction" value="loginfunction" />
                 <!-- Add fields to send local user information -->
                 <input type="hidden" name="tz" id="tz" value="" />

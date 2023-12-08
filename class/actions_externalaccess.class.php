@@ -190,7 +190,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 
 	    global $langs, $db, $conf, $user;
 
-		if(empty($user->socid)){
+		if(empty($user->socid) && !empty($user->societe_id)){
 			$user->socid = $user->societe_id; // For compatibility support
 		}
 
@@ -267,7 +267,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 
 	    global $langs, $db, $conf, $user;
 
-		if(empty($user->socid)){
+		if(empty($user->socid) && !empty($user->societe_id)){
 			$user->socid = $user->societe_id; // For compatibility support
 		}
 
@@ -308,7 +308,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 		$id = GETPOST('id','int');
 		$forceDownload = GETPOST('forcedownload','int');
 
-		if(empty($user->socid)){
+		if(empty($user->socid) && !empty($user->societe_id)){
 			$user->socid = $user->societe_id;
 		}
 
