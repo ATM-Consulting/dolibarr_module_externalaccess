@@ -32,10 +32,10 @@ if (! defined('NOREQUIREAJAX'))   define('NOREQUIREAJAX', '1');
 
 require_once __DIR__.'/config.php';
 
-$appli= !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
+$appli= getDolGlobalString('EACCESS_TITLE',getDolGlobalString('MAIN_INFO_SOCIETE_NOM'));
 
-$primaryColor = !empty($conf->global->EACCESS_PRIMARY_COLOR)?$conf->global->EACCESS_PRIMARY_COLOR:'#F05F40';
-$backgroundColor = !empty($conf->global->EACCESS_APPLI_COLOR)?$conf->global->EACCESS_APPLI_COLOR:$primaryColor;
+$primaryColor = getDolGlobalString('EACCESS_PRIMARY_COLOR','#F05F40');
+$backgroundColor = getDolGlobalString('EACCESS_APPLI_COLOR',$primaryColor);
 
 
 $manifest = new stdClass();
@@ -45,9 +45,9 @@ $manifest->background_color = "#ffffff";
 $manifest->display = "standalone";
 $manifest->splash_pages = null;
 
-if(!empty($conf->global->EACCESS_MANIFEST_ICON)){
+if(getDolGlobalString('EACCESS_MANIFEST_ICON')){
 	$icon = new stdClass();
-	$icon->src = $conf->global->EACCESS_MANIFEST_ICON;
+	$icon->src = getDolGlobalString('EACCESS_MANIFEST_ICON');
 	$icon->sizes = "256x256";
 	$icon->type = "image/png";
 	$manifest->icons = array($icon);

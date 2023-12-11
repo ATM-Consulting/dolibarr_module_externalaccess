@@ -26,7 +26,7 @@ function dol_loginfunction($langs,$conf,$mysoc)
     // Set cookie for timeout management
     $prefix=dol_getprefix('');
     $sessiontimeout='DOLSESSTIMEOUT_'.$prefix;
-    if (! empty($conf->global->MAIN_SESSION_TIMEOUT)) setcookie($sessiontimeout, $conf->global->MAIN_SESSION_TIMEOUT, 0, "/", null, false, true);
+    if (getDolGlobalString('MAIN_SESSION_TIMEOUT')) setcookie($sessiontimeout, getDolGlobalString('MAIN_SESSION_TIMEOUT'), 0, "/", null, false, true);
 
     if (GETPOST('urlfrom', 'none')) $_SESSION["urlfrom"]=GETPOST('urlfrom', 'none');
     else $_SESSION["urlfrom"] = Context::urlOrigin();
@@ -63,7 +63,7 @@ function dol_loginfunction($langs,$conf,$mysoc)
     // Security graphical code
     $captcha=0;
     $captcha_refresh='';
-    if (function_exists("imagecreatefrompng") && ! empty($conf->global->MAIN_SECURITY_ENABLECAPTCHA))
+    if (function_exists("imagecreatefrompng") && getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA'))
     {
         $captcha=1;
         $captcha_refresh=img_picto($langs->trans("Refresh"),'refresh','id="captcha_refresh_img"');
@@ -93,13 +93,13 @@ function top_httphead($contenttype='text/html', $forcenocache=0)
     // Security options
     header("X-Content-Type-Options: nosniff");  // With the nosniff option, if the server says the content is text/html, the browser will render it as text/html (note that most browsers now force this option to on)
     header("X-Frame-Options: SAMEORIGIN");      // Frames allowed only if on same domain (stop some XSS attacks)
-    if (! empty($conf->global->MAIN_HTTP_CONTENT_SECURITY_POLICY))
+    if (getDolGlobalString('MAIN_HTTP_CONTENT_SECURITY_POLICY'))
     {
         // For example, to restrict script, object, frames or img to some domains
         // script-src https://api.google.com https://anotherhost.com; object-src https://youtube.com; child-src https://youtube.com; img-src: https://static.example.com
         // For example, to restrict everything to one domain, except object, ...
         // default-src https://cdn.example.net; object-src 'none'
-        header("Content-Security-Policy: ".$conf->global->MAIN_HTTP_CONTENT_SECURITY_POLICY);
+        header("Content-Security-Policy: " . getDolGlobalString('MAIN_HTTP_CONTENT_SECURITY_POLICY'));
     }
     if ($forcenocache)
     {

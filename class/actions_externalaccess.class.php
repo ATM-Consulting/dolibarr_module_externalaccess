@@ -26,7 +26,9 @@
 /**
  * Class Actionsexternalaccess
  */
-class Actionsexternalaccess
+require_once __DIR__.'/../backport/v19/core/class/commonhookactions.class.php';
+
+class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 {
 	/**
 	 * @var array Hook results. Propagated to $hookmanager->resArray for later reuse
@@ -165,7 +167,7 @@ class Actionsexternalaccess
             {
                 $context->setControllerFound();
 				$ticketId = GETPOST('id', 'int');
-                if($conf->global->EACCESS_ACTIVATE_TICKETS && !empty($user->rights->externalaccess->view_tickets))
+                if(getDolGlobalInt('EACCESS_ACTIVATE_TICKETS') && $user->hasRight('externalaccess', 'view_tickets'))
                 {
                     $this->print_ticketCard($ticketId, $user->socid);
                 }
@@ -188,7 +190,7 @@ class Actionsexternalaccess
 
 	    global $langs, $db, $conf, $user;
 
-		if(empty($user->socid)){
+		if(empty($user->socid) && !empty($user->societe_id)){
 			$user->socid = $user->societe_id; // For compatibility support
 		}
 
@@ -197,7 +199,7 @@ class Actionsexternalaccess
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
          if($user->employee && empty($user->socid)) $employee = true;
-		if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices) || $employee)
+		if(!empty($user->socid) && getDolGlobalInt('EACCESS_ACTIVATE_INVOICES') && $user->hasRight('externalaccess', 'view_invoices') || $employee)
 	    {
 	        dol_include_once('compta/facture/class/facture.class.php');
 	        $object = new Facture($db);
@@ -233,7 +235,7 @@ class Actionsexternalaccess
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
         if($user->employee && empty($user->socid)) $employee = true;
-	    if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals) || $employee)
+	    if(!empty($user->socid) && getDolGlobalInt('EACCESS_ACTIVATE_PROPALS') && $user->hasRight('externalaccess', 'view_propals') || $employee)
 	    {
 	        dol_include_once('comm/propal/class/propal.class.php');
 	        $object = new Propal($db);
@@ -241,7 +243,7 @@ class Actionsexternalaccess
 	        {
 	            if($object->statut>=Propal::STATUS_VALIDATED && ($object->socid==$user->socid || $employee))
 	            {
-                    if (!empty($conf->global->EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL)){
+                    if (getDolGlobalString('EACCESS_RESET_LASTMAINDOC_BEFORE_DOWNLOAD_PROPAL')){
                         $object->last_main_doc = '';
                     }
                     load_last_main_doc($object);
@@ -265,14 +267,14 @@ class Actionsexternalaccess
 
 	    global $langs, $db, $conf, $user;
 
-		if(empty($user->socid)){
+		if(empty($user->socid) && !empty($user->societe_id)){
 			$user->socid = $user->societe_id; // For compatibility support
 		}
 
 	    $context = Context::getInstance();
 	    $id = GETPOST('id','int');
 	    $forceDownload = GETPOST('forcedownload','int');
-	    if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	    if(!empty($user->socid) && getDolGlobalInt('EACCESS_ACTIVATE_ORDERS') && $user->hasRight('externalaccess', 'view_orders'))
 	    {
 	        dol_include_once('commande/class/commande.class.php');
 	        $object = new Commande($db);
@@ -306,11 +308,11 @@ class Actionsexternalaccess
 		$id = GETPOST('id','int');
 		$forceDownload = GETPOST('forcedownload','int');
 
-		if(empty($user->socid)){
+		if(empty($user->socid) && !empty($user->societe_id)){
 			$user->socid = $user->societe_id;
 		}
 
-		if(!empty($user->socid) && $conf->global->EACCESS_ACTIVATE_EXPEDITIONS && !empty($user->rights->externalaccess->view_expeditions))
+		if(!empty($user->socid) && getDolGlobalInt('EACCESS_ACTIVATE_EXPEDITIONS') && $user->hasRight('externalaccess', 'view_expeditions'))
 		{
 			require_once DOL_DOCUMENT_ROOT . '/expedition/class/expedition.class.php';
 			$object = new Expedition($db);
@@ -343,7 +345,7 @@ class Actionsexternalaccess
 
 		dol_include_once('ticket/class/ticket.class.php');
 
-		if(!$conf->global->EACCESS_ACTIVATE_TICKETS || empty($user->rights->externalaccess->view_tickets)){
+		if(!getDolGlobalInt('EACCESS_ACTIVATE_TICKETS') || !$user->hasRight('externalaccess', 'view_tickets')){
 			return null;
 		}
 
@@ -440,7 +442,7 @@ class Actionsexternalaccess
 					$Terrors = array();
 					// TODO remove not uploaded file from $listofnames.
 					// TODO Il ne faudrait pas rendre un fichier de ce ticket public juste parceque l'utilisateur a tenté d'envoyer un fichier avec le même nom...
-					if(! empty($conf->global->EACCESS_SET_UPLOADED_FILES_AS_PUBLIC)) updateFileUploadedToBePublic($ticket, $listofnames, $Terrors);
+					if(getDolGlobalString('EACCESS_SET_UPLOADED_FILES_AS_PUBLIC')) updateFileUploadedToBePublic($ticket, $listofnames, $Terrors);
 
 					header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$ticket->id.'#lastcomment'));
 					exit();
@@ -482,7 +484,7 @@ class Actionsexternalaccess
 
 				$e = new ExtraFields($ticket->db);
 				$e->fetch_name_optionals_label('ticket');
-				$TTicketAddedField = unserialize($conf->global->EACCESS_CARD_ADDED_FIELD_TICKET);
+				$TTicketAddedField = unserialize(getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
 				if(! empty($TTicketAddedField)) {
 					foreach($TTicketAddedField as $ticket_field) {
 						$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));

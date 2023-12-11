@@ -50,7 +50,7 @@ class DefaultController extends Controller
 		$hookRes = $this->hookPrintPageView();
 
 		if(empty($hookRes)){
-			if(!empty($conf->global->EACCESS_NO_FULL_HEADBAR_FOR_HOME)){
+			if(getDolGlobalString('EACCESS_NO_FULL_HEADBAR_FOR_HOME')){
 				$this->loadTemplate('headbar');
 			} else {
 				$this->loadTemplate('headbar_full');

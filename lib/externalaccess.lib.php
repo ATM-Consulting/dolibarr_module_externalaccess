@@ -52,7 +52,7 @@ function externalaccessAdminPrepareHead()
 
 	$head[$h][0] = dol_buildpath("/externalaccess/admin/eavirtualhost_extrafields.php", 1);
 	$head[$h][1] = $langs->trans("VirtualHostsExtraFields");
-	$nbExtrafields = is_countable($extrafields->attributes['eavirtualhost']['label']) ? count($extrafields->attributes['eavirtualhost']['label']) : 0;
+	$nbExtrafields = (!empty($extrafields->attributes['eavirtualhost']['label']) && is_countable($extrafields->attributes['eavirtualhost']['label'])) ? count($extrafields->attributes['eavirtualhost']['label']) : 0;
 	if ($nbExtrafields > 0) {
 		$head[$h][1] .= ' <span class="badge">' . $nbExtrafields . '</span>';
 	}
@@ -929,14 +929,16 @@ function load_last_main_doc(&$object) {
 		// compatible version >= 12
 		else {
 
-			$last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
-
 			if($object->element == 'propal'){
 				$last_main_doc = $conf->propal->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 			}
 			elseif($object->element == 'shipping'){
 				$last_main_doc = $conf->expedition->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 			}
+            elseif($object->element == 'invoice_supplier'){
+                $last_main_doc = $conf->supplier_invoice->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+            }
+            else $last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 
 			if(is_readable($last_main_doc) && is_file ($last_main_doc)) $object->last_main_doc = str_replace(DOL_DATA_ROOT,'',$last_main_doc);
 		}

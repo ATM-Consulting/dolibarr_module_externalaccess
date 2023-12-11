@@ -229,17 +229,17 @@ if (! defined('NOREQUIREHTML')) require_once DOL_DOCUMENT_ROOT .'/core/class/htm
 if (! defined('NOREQUIREAJAX') && $conf->use_javascript_ajax) require_once DOL_DOCUMENT_ROOT.'/core/lib/ajax.lib.php';	// Need 22ko memory
 
 // If install or upgrade process not done or not completely finished, we call the install page.
-if (! empty($conf->global->MAIN_NOT_INSTALLED) || ! empty($conf->global->MAIN_NOT_UPGRADED))
+if (getDolGlobalString('MAIN_NOT_INSTALLED') || getDolGlobalString('MAIN_NOT_UPGRADED'))
 {
 	dol_syslog("main.inc: A previous install or upgrade was not complete. Redirect to install page.", LOG_WARNING);
 	header("Location: ".$context->rootUrl."/install/index.php");
 	exit;
 }
 // If an upgrade process is required, we call the install page.
-if ((! empty($conf->global->MAIN_VERSION_LAST_UPGRADE) && ($conf->global->MAIN_VERSION_LAST_UPGRADE != DOL_VERSION))
-|| (empty($conf->global->MAIN_VERSION_LAST_UPGRADE) && ! empty($conf->global->MAIN_VERSION_LAST_INSTALL) && ($conf->global->MAIN_VERSION_LAST_INSTALL != DOL_VERSION)))
+if ((getDolGlobalString('MAIN_VERSION_LAST_UPGRADE') && (getDolGlobalString('MAIN_VERSION_LAST_UPGRADE') != DOL_VERSION))
+|| (!getDolGlobalString('MAIN_VERSION_LAST_UPGRADE') && getDolGlobalString('MAIN_VERSION_LAST_INSTALL') && (getDolGlobalString('MAIN_VERSION_LAST_INSTALL') != DOL_VERSION)))
 {
-	$versiontocompare=empty($conf->global->MAIN_VERSION_LAST_UPGRADE)?$conf->global->MAIN_VERSION_LAST_INSTALL:$conf->global->MAIN_VERSION_LAST_UPGRADE;
+	$versiontocompare=getDolGlobalString('MAIN_VERSION_LAST_UPGRADE',getDolGlobalString('MAIN_VERSION_LAST_INSTALL'));
 	require_once DOL_DOCUMENT_ROOT .'/core/lib/admin.lib.php';
 	$dolibarrversionlastupgrade=preg_split('/[.-]/',$versiontocompare);
 	$dolibarrversionprogram=preg_split('/[.-]/',DOL_VERSION);
@@ -262,7 +262,7 @@ if (! defined('NOTOKENRENEWAL'))
 	$token = dol_hash(uniqid(mt_rand(),TRUE)); // Generates a hash of a random number
 	$_SESSION['newtoken'] = $token;
 }
-if ((! defined('NOCSRFCHECK') && empty($dolibarr_nocsrfcheck) && ! empty($conf->global->MAIN_SECURITY_CSRF_WITH_TOKEN))
+if ((! defined('NOCSRFCHECK') && empty($dolibarr_nocsrfcheck) && getDolGlobalString('MAIN_SECURITY_CSRF_WITH_TOKEN'))
 	|| defined('CSRFCHECK_WITH_TOKEN'))	// Check validity of token, only if option MAIN_SECURITY_CSRF_WITH_TOKEN enabled or if constant CSRFCHECK_WITH_TOKEN is set
 {
 	if ($_SERVER['REQUEST_METHOD'] == 'POST' && ! GETPOST('token','alpha')) // Note, offender can still send request by GET
@@ -377,7 +377,7 @@ if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLogge
 		}
 
 		// Verification security graphic code
-		if (GETPOST("username","alpha",2) && ! empty($conf->global->MAIN_SECURITY_ENABLECAPTCHA))
+		if (GETPOST("username","alpha",2) && getDolGlobalString('MAIN_SECURITY_ENABLECAPTCHA'))
 		{
 			$sessionkey = 'dol_antispam_value';
 			$ok=(array_key_exists($sessionkey, $_SESSION) === TRUE && (strtolower($_SESSION[$sessionkey]) == strtolower($_POST['code'])));
@@ -433,7 +433,7 @@ if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLogge
 		{
 			include_once DOL_DOCUMENT_ROOT.'/core/class/translate.class.php';
 			$langs=new Translate("",$conf);
-			$langcode=(GETPOST('lang','aZ09',1)?GETPOST('lang','aZ09',1):(empty($conf->global->MAIN_LANG_DEFAULT)?'auto':$conf->global->MAIN_LANG_DEFAULT));
+			$langcode=(GETPOST('lang','aZ09',1)?GETPOST('lang','aZ09',1):(getDolGlobalString('MAIN_LANG_DEFAULT','auto')));
 			if (defined('MAIN_LANG_DEFAULT')) $langcode=constant('MAIN_LANG_DEFAULT');
 			$langs->setDefaultLang($langcode);
 		}
@@ -666,7 +666,7 @@ if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLogge
 		$_SESSION["dol_dst_second"]=isset($dol_dst_second)?$dol_dst_second:'';
 		$_SESSION["dol_screenwidth"]=isset($dol_screenwidth)?$dol_screenwidth:'';
 		$_SESSION["dol_screenheight"]=isset($dol_screenheight)?$dol_screenheight:'';
-		$_SESSION["dol_company"]=$conf->global->MAIN_INFO_SOCIETE_NOM;
+		$_SESSION["dol_company"]=getDolGlobalString('MAIN_INFO_SOCIETE_NOM');
 		$_SESSION["dol_entity"]=$conf->entity;
 		// Store value into session (values stored only if defined)
 		if (! empty($dol_hide_topmenu))         $_SESSION['dol_hide_topmenu']=$dol_hide_topmenu;

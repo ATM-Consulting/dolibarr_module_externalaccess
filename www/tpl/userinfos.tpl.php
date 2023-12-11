@@ -7,7 +7,7 @@ if (empty($context) || ! is_object($context))
 global $langs, $user, $conf;
 
 $mode = 'readonly';
-if(!empty($user->rights->externalaccess->edit_user_personal_infos)  && ($context->action == 'edit' || $context->action == 'saveError')){
+if($user->hasRight('externalaccess', 'edit_user_personal_infos')  && ($context->action == 'edit' || $context->action == 'saveError')){
     $mode = 'edit';
 }
 
@@ -16,7 +16,7 @@ print '<section id="section-personalinformations"  class="type-content"  ><div c
 
 
 
-if(!empty($user->rights->externalaccess->edit_user_personal_infos) && $mode=='readonly'){
+if($user->hasRight('externalaccess', 'edit_user_personal_infos') && $mode=='readonly'){
     print '<a class="btn btn-primary btn-strong pull-right btn-top-section" href="'.$context->getControllerUrl('personalinformations').'&amp;action=edit"  ><i class="fa fa-pencil"></i> '.$langs->trans('exa_Edit').'</a>';
 }
 
@@ -112,7 +112,7 @@ if($mode=='edit'){
     print '<a class="btn btn-secondary btn-strong" href="'.$context->getControllerUrl('personalinformations').'"  >'.$langs->trans('Cancel').'</a>';
 }
 else{
-    print '<p>'.$conf->global->EACCESS_RGPD_MSG.'</p>';
+    print '<p>' . getDolGlobalString('EACCESS_RGPD_MSG').'</p>';
 }
 
 //print '<!-- /card-body --></div>';

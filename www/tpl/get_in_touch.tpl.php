@@ -9,7 +9,7 @@ if (empty($context) || ! is_object($context))
 global $langs, $user;
 
 $signature = '';
-if(!empty($user->socid) && !empty($conf->global->EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE)) {
+if(!empty($user->socid) && getDolGlobalString('EACCESS_ADD_INFOS_COMMERCIAL_BAS_DE_PAGE')) {
 
 	require_once DOL_DOCUMENT_ROOT . '/societe/class/societe.class.php';
 	$soc = new Societe($db);
@@ -17,8 +17,8 @@ if(!empty($user->socid) && !empty($conf->global->EACCESS_ADD_INFOS_COMMERCIAL_BA
 	$TSalesRep = $soc->getSalesRepresentatives($user);
 	if(!empty($TSalesRep)) {
 
-		$signature = $langs->trans('YourSalesRep', $conf->global->MAIN_INFO_SOCIETE_NOM).'<br />';
-		if(count($TSalesRep) > 1) $signature = $langs->trans('YourSalesRepMultiple', $conf->global->MAIN_INFO_SOCIETE_NOM).'<br />';
+		$signature = $langs->trans('YourSalesRep', getDolGlobalString('MAIN_INFO_SOCIETE_NOM')).'<br />';
+		if(count($TSalesRep) > 1) $signature = $langs->trans('YourSalesRepMultiple', getDolGlobalString('MAIN_INFO_SOCIETE_NOM')).'<br />';
 
 		foreach ($TSalesRep as $TData) {
 			$u = new User($db);
@@ -47,19 +47,19 @@ if(!empty($user->socid) && !empty($conf->global->EACCESS_ADD_INFOS_COMMERCIAL_BA
           </div>
         </div>
         <div class="row">
-<?php if(!empty($conf->global->EACCESS_PHONE)): ?>
+<?php if(getDolGlobalString('EACCESS_PHONE')): ?>
           <div class="col-lg-4 ml-auto text-center">
             <i class="fa fa-phone fa-3x mb-3 sr-contact"></i>
-            <p><a href="tel:<?php print preg_replace("/[^0-9\+]/", "", $conf->global->EACCESS_PHONE); ?>"><?php print $conf->global->EACCESS_PHONE; ?></a></p>
+            <p><a href="tel:<?php print preg_replace("/[^0-9\+]/", "", getDolGlobalString('EACCESS_PHONE')); ?>"><?php print getDolGlobalString('EACCESS_PHONE'); ?></a></p>
           </div>
 <?php endif; ?>
 
-<?php if(!empty($conf->global->EACCESS_EMAIL)):
-	$link = $conf->global->EACCESS_EMAIL;
+<?php if(getDolGlobalString('EACCESS_EMAIL')):
+	$link = getDolGlobalString('EACCESS_EMAIL');
 	$linkName = $langs->trans("ContactUs");
-	if(filter_var($conf->global->EACCESS_EMAIL, FILTER_VALIDATE_EMAIL)){
-		$link = "mailto:".$conf->global->EACCESS_EMAIL;
-		$linkName = $conf->global->EACCESS_EMAIL;
+	if(filter_var(getDolGlobalString('EACCESS_EMAIL'), FILTER_VALIDATE_EMAIL)){
+		$link = "mailto:" . getDolGlobalString('EACCESS_EMAIL');
+		$linkName = getDolGlobalString('EACCESS_EMAIL');
 	}
 ?>
           <div class="col-lg-4 mr-auto text-center">

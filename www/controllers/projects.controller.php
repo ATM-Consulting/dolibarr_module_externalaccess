@@ -15,7 +15,7 @@ class ProjectsController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->projet->enabled) && $conf->global->EACCESS_ACTIVATE_PROJECTS && !empty($user->rights->externalaccess->view_projects);
+		$this->accessRight = !empty($conf->projet->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_PROJECTS') && $user->hasRight('externalaccess','view_projects');
 		return parent::checkAccess();
 	}
 
@@ -159,11 +159,11 @@ class ProjectsController extends Controller
 			}
 
 
-			$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			$TOther_fields_all = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if (empty($TOther_fields_all))
 				$TOther_fields_all = array();
 
-			$TOther_fields_project = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_PROJECT);
+			$TOther_fields_project = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_PROJECT'));
 			if (empty($TOther_fields_project))
 				$TOther_fields_project = array();
 
@@ -274,7 +274,7 @@ class ProjectsController extends Controller
 					});
 				});
 			</script>
-			<?php
+<?php
 		}
 		else {
 			print '<div class="info clearboth text-center" >';

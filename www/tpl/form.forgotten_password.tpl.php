@@ -52,7 +52,7 @@ $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 									</span>
 								</div>
 							</div>
-						<?php endif; ?>
+<?php endif; ?>
 
 
 

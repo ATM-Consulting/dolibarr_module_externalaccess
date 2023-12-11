@@ -11,7 +11,7 @@ global $conf,$user,$langs, $hookmanager;
 
 $Tmenu=$TGroupMenu=array();
 
-$maxTopMenu = !empty($conf->global->EACCESS_MAX_TOP_MENU)?$conf->global->EACCESS_MAX_TOP_MENU:0;
+$maxTopMenu = getDolGlobalString('EACCESS_MAX_TOP_MENU',0);
 
 if ($context->userIsLog())
 {
@@ -20,7 +20,7 @@ if ($context->userIsLog())
 
     if (!empty($conf->projet->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_PROJECTS)
-		&& !empty($user->rights->externalaccess->view_projects)
+		&& $user->hasRight('externalaccess', 'view_projects')
 	)
     {
         $Tmenu['projects'] = array(
@@ -34,7 +34,7 @@ if ($context->userIsLog())
 
 	if (!empty($conf->projet->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_TASKS)
-		&& !empty($user->rights->externalaccess->view_tasks)
+		&& $user->hasRight('externalaccess', 'view_tasks')
 	)
 	{
 		$Tmenu['tasks'] = array(
@@ -48,7 +48,7 @@ if ($context->userIsLog())
 
     if (!empty($conf->propal->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_PROPALS)
-		&& !empty($user->rights->externalaccess->view_propals)
+		&& $user->hasRight('externalaccess', 'view_propals')
 	)
     {
         $Tmenu['propals'] = array(
@@ -62,7 +62,7 @@ if ($context->userIsLog())
 
 	if (!empty($conf->commande->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_ORDERS)
-		&& !empty($user->rights->externalaccess->view_orders)
+		&& $user->hasRight('externalaccess', 'view_orders')
 	)
 	{
 		$Tmenu['orders'] = array(
@@ -76,7 +76,7 @@ if ($context->userIsLog())
 
 	if (!empty($conf->expedition->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS)
-		&& !empty($user->rights->externalaccess->view_expeditions)
+		&& $user->hasRight('externalaccess', 'view_expeditions')
 	)
 	{
 		$Tmenu['expeditions'] = array(
@@ -90,7 +90,7 @@ if ($context->userIsLog())
 
     if (!empty($conf->facture->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_INVOICES)
-		&& !empty($user->rights->externalaccess->view_invoices)
+		&& $user->hasRight('externalaccess', 'view_invoices')
 	)
     {
         $Tmenu['invoices'] = array(
@@ -104,7 +104,7 @@ if ($context->userIsLog())
 
 	if (!empty($conf->supplier_invoice->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES)
-		&& !empty($user->rights->externalaccess->view_supplier_invoices)
+		&& $user->hasRight('externalaccess', 'view_supplier_invoices')
 	)
 	{
 		$Tmenu['supplier_invoices'] = array(
@@ -118,7 +118,7 @@ if ($context->userIsLog())
 
     if (!empty($conf->ticket->enabled)
 		&& isset($conf->global->EACCESS_ACTIVATE_TICKETS)
-		&& !empty($user->rights->externalaccess->view_tickets)
+		&& $user->hasRight('externalaccess', 'view_tickets')
 	)
     {
         $Tmenu['tickets'] = array(
@@ -155,11 +155,11 @@ if ($context->userIsLog())
 }
 
 
-if (!empty($conf->global->EACCESS_GOBACK_URL)){
+if (getDolGlobalString('EACCESS_GOBACK_URL')){
     $Tmenu['gobackurl'] = array(
         'id' => 'gobackurl',
         'rank' => 90,
-        'url' => $conf->global->EACCESS_GOBACK_URL,
+        'url' => getDolGlobalString('EACCESS_GOBACK_URL'),
         'name' => '<i class="fa fa-external-link"></i> '.$langs->trans('EALINKNAME_gobackurl'),
     );
 }
@@ -244,10 +244,10 @@ if (empty($reshook)){
       <div class="container">
         <a class="navbar-brand js-scroll-trigger" href="<?php print $context->getControllerUrl();  ?>">
 			<?php
-			$brandTitle = !empty($conf->global->EACCESS_TITLE)?$conf->global->EACCESS_TITLE:$conf->global->MAIN_INFO_SOCIETE_NOM;
-			if (!empty($conf->global->EACCESS_TOP_MENU_IMG)){
-				print '<img class="logo" id="logo" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . $conf->global->EACCESS_TOP_MENU_IMG . '" />';
-				print '<img class="logo" id="logoshrink" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . (!empty($conf->global->EACCESS_TOP_MENU_IMG_SHRINK)?$conf->global->EACCESS_TOP_MENU_IMG_SHRINK:$conf->global->EACCESS_TOP_MENU_IMG) . '" />';
+			$brandTitle = getDolGlobalString('EACCESS_TITLE',getDolGlobalString('MAIN_INFO_SOCIETE_NOM'));
+			if (getDolGlobalString('EACCESS_TOP_MENU_IMG')){
+				print '<img class="logo" id="logo" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . getDolGlobalString('EACCESS_TOP_MENU_IMG') . '" />';
+				print '<img class="logo" id="logoshrink" title="'.htmlentities($brandTitle, ENT_QUOTES).'" src="' . (getDolGlobalString('EACCESS_TOP_MENU_IMG_SHRINK',getDolGlobalString('EACCESS_TOP_MENU_IMG'))) . '" />';
 			}
 			else {
 				print $brandTitle;

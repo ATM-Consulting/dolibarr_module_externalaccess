@@ -140,10 +140,10 @@ function getUserName($user, $withpictoimg = 0,  $notooltip = 0, $maxlen = 24, $m
 	}
 
 	if ($withpictoimg > -2 && $withpictoimg != 2) {
-		if (empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER)) $result .= '<span class=" nopadding usertext' . ((!isset($user->statut) || $user->statut) ? '' : ' strikefordisabled') . ($morecss ? ' ' . $morecss : '') . '">';
+		if (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) $result .= '<span class=" nopadding usertext' . ((!isset($user->statut) || $user->statut) ? '' : ' strikefordisabled') . ($morecss ? ' ' . $morecss : '') . '">';
 		if ($mode == 'login') $result .= dol_trunc($user->login, $maxlen);
 		else $result .= $user->getFullName($langs, '', ($mode == 'firstelselast' ? 3 : ($mode == 'firstname' ? 2 : -1)), $maxlen);
-		if (empty($conf->global->MAIN_OPTIMIZEFORTEXTBROWSER)) $result .= '</span>';
+		if (!getDolGlobalString('MAIN_OPTIMIZEFORTEXTBROWSER')) $result .= '</span>';
 	}
 
 	return $result;
@@ -212,7 +212,7 @@ function getProductImgFileInfos($searchProductId)
 	$res = $searchProduct->fetch($searchProductId);
 	if ($res > 0) {
 
-		if (! empty($conf->global->PRODUCT_USE_OLD_PATH_FOR_PHOTO))
+		if (getDolGlobalString('PRODUCT_USE_OLD_PATH_FOR_PHOTO'))
 		{
 			$pdir[0] = get_exdir($searchProduct->id,2,0,0,$searchProduct,'product') . $searchProduct->id ."/photos/";
 			$pdir[1] = get_exdir(0,0,0,0,$searchProduct,'product') . dol_sanitizeFileName($searchProduct->ref).'/';

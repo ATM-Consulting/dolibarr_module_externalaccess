@@ -89,7 +89,7 @@ class UserExternalAccess extends User
 		$mailfile = new CMailFile(
 			$subject,
 			$this->email,
-			$conf->global->MAIN_MAIL_EMAIL_FROM,
+			getDolGlobalString('MAIN_MAIL_EMAIL_FROM'),
 			$mesg,
 			array(),
 			array(),
