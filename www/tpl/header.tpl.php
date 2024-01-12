@@ -35,7 +35,7 @@ if (isset($curentUrlParsed['query'])) {
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="<?php echo dol_htmlentities($context->meta_desc, ENT_QUOTES); ?>">
     <meta name="author" content="<?php echo dol_htmlentities(getDolGlobalString('MAIN_INFO_SOCIETE_NOM'), ENT_QUOTES); ?>">
-    <?php if(!empty($canonicalUrl)) print '<link rel="canonocal" href="'.dol_escape_htmltag($canonicalUrl).'" />';  ?>
+    <?php if(!empty($canonicalUrl)) print '<link rel="canonical" href="'.dol_escape_htmltag($canonicalUrl).'" />';  ?>
 	<title><?php echo dol_htmlentities($metaTitle); ?></title>
 
     <!-- Bootstrap core CSS -->
