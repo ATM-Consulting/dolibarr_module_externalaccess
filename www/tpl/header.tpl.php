@@ -12,6 +12,17 @@ elseif (!empty($context->title)){ $metaTitle = $context->title; }
 if (!empty($metaTitle)) { $metaTitle.= ' - '; }
 $metaTitle.= getDolGlobalString('EACCESS_TITLE',getDolGlobalString('MAIN_INFO_SOCIETE_NOM'));
 
+$canonicalUrl = '';
+$curentUrl = (empty($_SERVER['HTTPS']) ? 'http' : 'https') . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+$curentUrlParsed = parse_url($curentUrl);
+if (isset($curentUrlParsed['query'])) {
+	parse_str($curentUrlParsed['query'], $curentUrlParams);
+	if (isset($context->tokenKey) && isset($curentUrlParams[$context->tokenKey])) {
+		unset($curentUrlParams[$context->tokenKey]);
+		$newUrlQuery = http_build_query($curentUrlParams);
+		$canonicalUrl = $curentUrlParsed['scheme'] . '://' . $curentUrlParsed['host'] . $curentUrlParsed['path'] . (!empty($newUrlQuery)?'?'.$newUrlQuery:'');
+	}
+}
 
 
 ?>
@@ -24,8 +35,8 @@ $metaTitle.= getDolGlobalString('EACCESS_TITLE',getDolGlobalString('MAIN_INFO_SO
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="<?php echo dol_htmlentities($context->meta_desc, ENT_QUOTES); ?>">
     <meta name="author" content="<?php echo dol_htmlentities(getDolGlobalString('MAIN_INFO_SOCIETE_NOM'), ENT_QUOTES); ?>">
-
-    <title><?php echo dol_htmlentities($metaTitle); ?></title>
+    <?php if(!empty($canonicalUrl)) print '<link rel="canonical" href="'.dol_escape_htmltag($canonicalUrl).'" />';  ?>
+	<title><?php echo dol_htmlentities($metaTitle); ?></title>
 
     <!-- Bootstrap core CSS -->
     <link href="<?php print $context->getControllerUrl(); ?>vendor/bootstrap/css/bootstrap.css" rel="stylesheet">
