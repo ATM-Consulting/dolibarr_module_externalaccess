@@ -220,7 +220,6 @@ class ExpeditionsController extends Controller
 
 				load_last_main_doc($object);
 				$dowloadUrl = $context->getControllerUrl().'script/interface.php?action=downloadExpedition&id='.$object->id;
-
 				if(!empty($object->last_main_doc) && is_readable(DOL_DATA_ROOT.'/'.$object->last_main_doc) && is_file ( DOL_DATA_ROOT.'/'.$object->last_main_doc )){
 					$viewLink = '<a href="'.$dowloadUrl.'" target="_blank" >'.$object->ref.'</a>';
 					$downloadLink = '<a class="btn btn-xs btn-primary btn-strong" href="'.$dowloadUrl.'&amp;forcedownload=1" target="_blank" ><i class="fa fa-download"></i> '.$langs->trans('Download').'</a>';
