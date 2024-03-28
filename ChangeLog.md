@@ -12,6 +12,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.43
 
+- FIX : DA024733 Can't download sending document - 1.43.2 - **28/03/2024**
 - FIX : Missing canonical url - 1.43.1 - **12/01/2024**
 - FIX : COMPAT V19 - 1.43.0 - **08/12/2023**
 - FIX : Handle Captcha inside EACCESS_ROOT_URL domain - 1.42.0 - **06/10/2023**

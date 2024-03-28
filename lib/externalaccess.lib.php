@@ -933,7 +933,8 @@ function load_last_main_doc(&$object) {
 				$last_main_doc = $conf->propal->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 			}
 			elseif($object->element == 'shipping'){
-				$last_main_doc = $conf->expedition->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+
+				$last_main_doc = $conf->expedition->multidir_output[$object->entity].'/sending/'.$ref.'/'.$ref.'.pdf';
 			}
             elseif($object->element == 'invoice_supplier'){
                 $last_main_doc = $conf->supplier_invoice->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
