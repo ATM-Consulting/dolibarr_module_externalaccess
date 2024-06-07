@@ -463,8 +463,12 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				// Check
 				$errors = 0;
 
+				$followUpEmail = GETPOST('options_followupemail', 'none');
+				$severity = GETPOST('severity', 'none');
+
 				$ticket->message = GETPOST('message', 'none');
 				$ticket->subject = GETPOST('subject', 'none');
+				$ticket->array_options['options_followupemail'] = $followUpEmail;
 				$ticket->fk_soc = $user->socid;
 
 				if(empty($ticket->message)){
@@ -480,6 +484,16 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				if(empty($ticket->fk_soc)){
 					$errors ++;
 					$context->setEventMessages($langs->trans('SocIsEmpty'), 'errors');
+				}
+
+				if (getDolGlobalInt('EACCESS_SEVERITY') && empty($severity)) {
+					$errors ++;
+					$context->setEventMessages($langs->trans('SeverityIsEmpty'), 'errors');
+				}
+
+				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && empty($followUpEmail)){
+					$errors ++;
+					$context->setEventMessages($langs->trans('FollowUpEmailIsEmpty'), 'errors');
 				}
 
 				$e = new ExtraFields($ticket->db);
@@ -513,6 +527,10 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 					$ticket->datec = time();
 					$ticket->fk_statut = Ticket::STATUS_NOT_READ;
 
+					if(!empty($severity)) $ticket->severity_code = $severity;
+
+					$context->dbTool->db->begin();
+
 					$res = $ticket->create($user);
 
 					if($res>0)
@@ -522,6 +540,31 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 							$user->contact_id = $user->contactid; // Dolibarr < 13 retrocompatibility
 						}
 						$ticket->add_contact($user->contact_id, "SUPPORTCLI", 'external', 0);
+
+						$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
+						$sql .= " WHERE fk_soc = ".$user->socid;
+						$sql .= " AND email = '" . $followUpEmail. "'";
+
+						$fk_socpeople = $context->dbTool->getvalue($sql);
+						$fk_socpeople = intval($fk_socpeople);
+
+						if ($fk_socpeople) {
+							$ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
+						} else {
+							$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+							$ticket->fk_user_create = $user->id;
+
+							$resUpdate = $ticket->update($user);
+							if ($resUpdate > 0) {
+								$context->dbTool->db->commit();
+							} else {
+								$context->dbTool->db->rollback();
+								$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+								dol_syslog(get_class($this).'::actionTicketCard resUpdate: ' . $resUpdate, LOG_ERR);
+								header('Location: '.$context->getControllerUrl('tickets'));
+								exit();
+							}
+						}
 
 						header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$res));
 						exit();

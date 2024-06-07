@@ -70,6 +70,7 @@ class TicketsController extends Controller
 		$ticketStatic = new Ticket($context->dbTool->db);
 
 		$langs->load('ticket');
+		$langs->load('externalticket@externalaccess');
 
 		$sql = 'SELECT rowid ';
 		$sql.= ' FROM `'.MAIN_DB_PREFIX.'ticket` t';
@@ -125,6 +126,7 @@ class TicketsController extends Controller
 
 			print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Subject').'</th>';
+			print ' <th class="text-center" >'.$langs->trans('FollowUpEmail').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('TicketSeverity').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
@@ -152,8 +154,10 @@ class TicketsController extends Controller
 						}
 					}
 				}
+				$followUpEmail = $object->array_options['options_followupemail'];
 				print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
 				print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
+				print ' <td data-search="'.$followUpEmail.'" data-order="'.$followUpEmail.'" >'.$followUpEmail.'</td>';
 				print ' <td data-search="'.$object->type_label.'" data-order="'.$object->type_label.'" >'.$object->type_label.'</td>';
 				print ' <td data-search="'.$object->severity_label.'" data-order="'.$object->severity_label.'" >'.$object->severity_label.'</td>';
 				print ' <td class="text-center" >'.$object->getLibStatut(1).'</td>';

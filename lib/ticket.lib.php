@@ -67,6 +67,40 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 	if(empty($object->message)){
 		$object->message = getDolGlobalString('TICKET_EXTERNAL_DESCRIPTION_MESSAGE');
 	}
+
+	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
+
+		$item = $formExternal->newItem('options_followupemail');
+		$item->setAsEmail();
+		$item->setAsRequired();
+		$item->nameText = $langs->transnoentities('TicketFollowUpEmailHere');
+		$item->helpText = $langs->transnoentities('TicketFollowUpEmailHelp');
+		$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketFollowUpEmailHere');
+		$item->fieldAttr['type'] = 'email';
+		$item->fieldAttr['maxlength'] = 200;
+
+	}
+
+	if (getDolGlobalInt('EACCESS_SEVERITY')) {
+		$item = $formExternal->newItem('severity');
+
+		$object->loadCacheSeveritiesTickets();
+		$TSeverities = $object->cache_severity_tickets;
+
+		$TOptions = [];
+
+		foreach($TSeverities as $t){
+			$TOptions[$t['code']] = $t['label'];
+		}
+
+		$item->setAsSelect($TOptions);
+
+		$item->nameText = $langs->transnoentities('TicketSeverityHere');
+		$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketSeverityHere');
+		$item->fieldAttr['maxlength'] = 200;
+
+	}
+
 	$item = $formExternal->newItem('message');
 	$item->setAsHtml();
 	$item->setAsRequired();
@@ -234,6 +268,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	dol_include_once('user/class/user.class.php');
 
 	$langs->load('ticket');
+	$langs->load('externalaccess@externalaccess');
 
 
 	if(!getDolGlobalInt('EACCESS_ACTIVATE_TICKETS') || !$user->hasRight('externalaccess', 'view_tickets')){
@@ -340,6 +375,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		$context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
 	}
 	else{
+
+		$object->fetch_optionals();
+		$followUpEmail = $object->array_options['options_followupemail'];
+
 		$out.= $outEaNavbar;
 		$out.= '
 		<div class="container px-0">
@@ -354,6 +393,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					<div class="row clearfix form-group" id="status">
 						<div class="col-md-2">'.$langs->transnoentities('Status').'</div>
 						<div class="col-md-10">'.ticketLibStatut($object).'</div>
+					</div>
+					<div class="row clearfix form-group" id="followupemail">
+						<div class="col-md-2">'.$langs->trans('FollowUpEmail').'</div>
+						<div class="col-md-10">'.$followUpEmail.'</div>
 					</div>
 					<div class="row clearfix form-group" id="Type">
 						<div class="col-md-2">'.$langs->transnoentities('Type').'</div>
@@ -634,7 +677,7 @@ function print_ticketCard_extrafields($ticket) {
 	$out = '';
 	$e = new ExtraFields($db);
 	$e->fetch_name_optionals_label('ticket');
-	$TTicketAddedField = unserialize(getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
+	$TTicketAddedField = explode(',', getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
 	if(! empty($TTicketAddedField)) {
 		foreach($TTicketAddedField as $ticket_field) {
 			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
