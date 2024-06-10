@@ -293,6 +293,11 @@ $formSetup->newItem('EACCESS_LIST_ADDED_COLUMNS_TICKET')->setAsMultiSelect(getEx
 // Champs supplémentaires à afficher sur les fiches tickets
 $formSetup->newItem('EACCESS_CARD_ADDED_FIELD_TICKET')->setAsMultiSelect(getExtrafieldElementList('ticket'));
 
+// Activer ou non l'email pour le suivi
+$formSetup->newItem('EACCESS_FOLLOW_UP_EMAIL')->setAsYesNo();
+
+// Activer ou non la sévérité
+$formSetup->newItem('EACCESS_SEVERITY')->setAsYesNo();
 
 /*
  * EXPERIMENTAL
@@ -393,4 +398,5 @@ function getExtrafieldElementList($element) {
 			$TExtrafields_list['EXTRAFIELD_'.$ef_name] = $e->attributes[$element]['label'][$ef_name];
 		}
 	}
+	return $TExtrafields_list;
 }

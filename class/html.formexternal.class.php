@@ -1835,4 +1835,15 @@ class FormExternalItem
 		$this->type = 'title';
 		return $this;
 	}
+
+	/**
+	 * Set type of input as an email
+	 * no data to store
+	 * @return $this
+	 */
+	public function setAsEmail()
+	{
+		$this->type = 'email';
+		return $this;
+	}
 }

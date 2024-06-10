@@ -67,6 +67,36 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 	if(empty($object->message)){
 		$object->message = getDolGlobalString('TICKET_EXTERNAL_DESCRIPTION_MESSAGE');
 	}
+
+	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
+
+		$item = $formExternal->newItem('options_externalaccess_followupemail');
+		$item->setAsEmail();
+		$item->nameText = $langs->transnoentities('TicketFollowUpEmailHere');
+		$item->helpText = $langs->transnoentities('TicketFollowUpEmailHelp');
+		$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketFollowUpEmailHere');
+		$item->fieldAttr['maxlength'] = 200;
+
+	}
+
+	if (getDolGlobalInt('EACCESS_SEVERITY')) {
+		$item = $formExternal->newItem('severity');
+
+		$object->loadCacheSeveritiesTickets();
+		$TSeverities = $object->cache_severity_tickets;
+
+		$TOptions = [];
+
+		foreach($TSeverities as $t){
+			$TOptions[$t['code']] = $t['label'];
+		}
+
+		$item->setAsSelect($TOptions);
+
+		$item->nameText = $langs->transnoentities('TicketSeverityHere');
+		$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketSeverityHere');
+	}
+
 	$item = $formExternal->newItem('message');
 	$item->setAsHtml();
 	$item->setAsRequired();
@@ -234,6 +264,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	dol_include_once('user/class/user.class.php');
 
 	$langs->load('ticket');
+	$langs->load('externalaccess@externalaccess');
 
 
 	if(!getDolGlobalInt('EACCESS_ACTIVATE_TICKETS') || !$user->hasRight('externalaccess', 'view_tickets')){
@@ -340,6 +371,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 		$context->setEventMessages($hookmanager->error,$hookmanager->errors,'errors');
 	}
 	else{
+
+		$object->fetch_optionals();
+		$followUpEmail = $object->array_options['options_externalaccess_followupemail'];
+
 		$out.= $outEaNavbar;
 		$out.= '
 		<div class="container px-0">
@@ -1280,4 +1315,45 @@ function externalAccessGetTicketEcmList($object, $pulicOnly = true)
 	}
 
 	return $documents;
+}
+
+/**
+ * @param Ticket $ticket
+ * @param string $followUpEmail
+ * @param Context $context
+ * @return int
+ */
+function addTicketContact(Ticket $ticket, array $TResults, Context $context): int
+{
+	global $langs;
+	
+	foreach($TResults as $obj){
+		$fk_socpeople = intval($obj->rowid);
+		$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
+		if($resAddContact < 0) {
+			$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+			dol_syslog('ticket.lib.php::handleFollowUpEmail resAddContact: ' . $resAddContact, LOG_ERR);
+			return -1;
+		}
+	}
+	
+	return 1;
+}
+
+/**
+ * @param int $fk_soc
+ * @param string $followUpEmail
+ * @param Context $context
+ * @return array|null
+ */
+function getContactIds(int $fk_soc, string $followUpEmail, Context $context): ?array
+{
+
+	$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
+	$sql .= " WHERE fk_soc = ".$fk_soc;
+	$sql .= " AND email = '" . $followUpEmail. "'";
+	$TResults = $context->dbTool->executeS($sql);
+
+	return $TResults;
+
 }
