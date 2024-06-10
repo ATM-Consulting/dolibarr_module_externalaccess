@@ -548,12 +548,17 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 						if(empty($user->contact_id)){
 							$user->contact_id = $user->contactid; // Dolibarr < 13 retrocompatibility
 						}
+						
 						$ticket->add_contact($user->contact_id, "SUPPORTCLI", 'external', 0);
-
-						$resHandle = handleFollowUpEmail($ticket, $followUpEmail, $context);
-
-						if($resHandle < 0) $ticketErrors++;
-
+						if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
+							if(!empty($TResults)){
+								$resAddContact = addTicketContact($ticket, $TResults, $context);
+								if ($resAddContact < 0) {
+									$ticketErrors++;
+								}
+							}
+						}
+						
 					}else{
 						$ticketErrors++;
 						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');

@@ -1323,24 +1323,20 @@ function externalAccessGetTicketEcmList($object, $pulicOnly = true)
  * @param Context $context
  * @return int
  */
-function handleFollowUpEmail(Ticket $ticket, array $TResults, Context $context): int
+function addTicketContact(Ticket $ticket, array $TResults, Context $context): int
 {
 	global $langs;
-
-	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
-		if(!empty($TResults)){
-			foreach($TResults as $obj){
-				$fk_socpeople = intval($obj->rowid);
-				$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
-				if($resAddContact < 0) {
-					$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
-					dol_syslog('ticket.lib.php::handleFollowUpEmail resAddContact: ' . $resAddContact, LOG_ERR);
-					return -1;
-				}
-			}
+	
+	foreach($TResults as $obj){
+		$fk_socpeople = intval($obj->rowid);
+		$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
+		if($resAddContact < 0) {
+			$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+			dol_syslog('ticket.lib.php::handleFollowUpEmail resAddContact: ' . $resAddContact, LOG_ERR);
+			return -1;
 		}
 	}
-
+	
 	return 1;
 }
 
