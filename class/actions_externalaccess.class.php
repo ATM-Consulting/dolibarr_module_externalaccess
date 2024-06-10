@@ -529,7 +529,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 					$ticket->datec = time();
 					$ticket->fk_statut = Ticket::STATUS_NOT_READ;
 
-					$TResults = getConcatenatedMessage($user->socid, $followUpEmail, $context);
+					$TResults = getContactIds($user->socid, $followUpEmail, $context);
 
 					if(empty($TResults)) {
 						$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
@@ -541,7 +541,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 
 					$res = $ticket->create($user);
 
-					if($res>0)
+					if($res > 0)
 					{
 						// Add contact to the ticket
 						if(empty($user->contact_id)){

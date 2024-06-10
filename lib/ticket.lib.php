@@ -1328,7 +1328,7 @@ function handleFollowUpEmail(Ticket $ticket, string $followUpEmail, Context $con
 	global $langs, $user;
 
 	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail)) {
-		$TResults = getConcatenatedMessage($user->socid, $followUpEmail, $context);
+		$TResults = getContactIds($user->socid, $followUpEmail, $context);
 
 		if(!empty($TResults)){
 			foreach($TResults as $obj){
@@ -1352,7 +1352,7 @@ function handleFollowUpEmail(Ticket $ticket, string $followUpEmail, Context $con
  * @param Context $context
  * @return array|null
  */
-function getConcatenatedMessage(int $fk_soc, string $followUpEmail, Context $context): ?array
+function getContactIds(int $fk_soc, string $followUpEmail, Context $context): ?array
 {
 
 	$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
