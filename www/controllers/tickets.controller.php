@@ -152,7 +152,6 @@ class TicketsController extends Controller
 						}
 					}
 				}
-				$followUpEmail = $object->array_options['options_followupemail'];
 				print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
 				print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
 				print ' <td data-search="'.$followUpEmail.'" data-order="'.$followUpEmail.'" >'.$followUpEmail.'</td>';
