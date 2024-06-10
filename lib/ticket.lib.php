@@ -1323,13 +1323,11 @@ function externalAccessGetTicketEcmList($object, $pulicOnly = true)
  * @param Context $context
  * @return int
  */
-function handleFollowUpEmail(Ticket $ticket, string $followUpEmail, Context $context): int
+function handleFollowUpEmail(Ticket $ticket, array $TResults, Context $context): int
 {
-	global $langs, $user;
+	global $langs;
 
-	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail)) {
-		$TResults = getContactIds($user->socid, $followUpEmail, $context);
-
+	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
 		if(!empty($TResults)){
 			foreach($TResults as $obj){
 				$fk_socpeople = intval($obj->rowid);
@@ -1358,7 +1356,6 @@ function getContactIds(int $fk_soc, string $followUpEmail, Context $context): ?a
 	$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
 	$sql .= " WHERE fk_soc = ".$fk_soc;
 	$sql .= " AND email = '" . $followUpEmail. "'";
-
 	$TResults = $context->dbTool->executeS($sql);
 
 	return $TResults;

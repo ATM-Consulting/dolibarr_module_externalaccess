@@ -528,11 +528,12 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 					$ticket->ref = $ticket->getDefaultRef();
 					$ticket->datec = time();
 					$ticket->fk_statut = Ticket::STATUS_NOT_READ;
-
-					$TResults = getContactIds($user->socid, $followUpEmail, $context);
-
-					if(empty($TResults)) {
-						$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+					
+					if(!empty($followUpEmail)) {
+						$TResults = getContactIds($user->socid, $followUpEmail, $context);
+						if(empty($TResults)) {
+							$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+						}
 					}
 
 					if(!empty($severity)) $ticket->severity_code = $severity;
