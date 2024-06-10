@@ -469,8 +469,8 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				}
 
 				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
-					$followUpEmail = GETPOST('options_followupemail', 'none');
-					$ticket->array_options['options_followupemail'] = $followUpEmail;
+					$followUpEmail = GETPOST('options_externalaccess_followupemail', 'none');
+					$ticket->array_options['options_externalaccess_followupemail'] = $followUpEmail;
 				}
 
 				$ticket->message = GETPOST('message', 'none');

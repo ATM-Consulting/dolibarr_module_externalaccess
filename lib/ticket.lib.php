@@ -70,7 +70,7 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
 
-		$item = $formExternal->newItem('options_followupemail');
+		$item = $formExternal->newItem('options_externalaccess_followupemail');
 		$item->setAsEmail();
 		$item->nameText = $langs->transnoentities('TicketFollowUpEmailHere');
 		$item->helpText = $langs->transnoentities('TicketFollowUpEmailHelp');
@@ -373,7 +373,7 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 	else{
 
 		$object->fetch_optionals();
-		$followUpEmail = $object->array_options['options_followupemail'];
+		$followUpEmail = $object->array_options['options_externalaccess_followupemail'];
 
 		$out.= $outEaNavbar;
 		$out.= '
