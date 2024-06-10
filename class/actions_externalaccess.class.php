@@ -463,7 +463,6 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				$errors = 0;
 
 
-
 				if (getDolGlobalInt('EACCESS_SEVERITY')) {
 					$severity = GETPOST('severity', 'none');
 				}
@@ -524,9 +523,17 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				}
 
 				if(empty($errors)){
+					$ticketErrors = 0;
+
 					$ticket->ref = $ticket->getDefaultRef();
 					$ticket->datec = time();
 					$ticket->fk_statut = Ticket::STATUS_NOT_READ;
+
+					$TResults = getConcatenatedMessage($user->socid, $followUpEmail, $context);
+
+					if(empty($TResults)) {
+						$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+					}
 
 					if(!empty($severity)) $ticket->severity_code = $severity;
 
@@ -544,18 +551,21 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 
 						$resHandle = handleFollowUpEmail($ticket, $followUpEmail, $context);
 
-						if($resHandle > 0) {
-							$context->dbTool->db->commit();
-							header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$res));
-							exit();
-						} else {
-							$context->dbTool->db->rollback();
-							header('Location: '.$context->getControllerUrl('tickets'));
-							exit();
-						}
+						if($resHandle < 0) $ticketErrors++;
 
 					}else{
+						$ticketErrors++;
 						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+					}
+
+					if(empty($ticketErrors)) {
+						$context->dbTool->db->commit();
+						header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$res));
+						exit();
+					} else {
+						$context->dbTool->db->rollback();
+						header('Location: '.$context->getControllerUrl('tickets'));
+						exit();
 					}
 				}
 			}

@@ -1327,12 +1327,8 @@ function handleFollowUpEmail(Ticket $ticket, string $followUpEmail, Context $con
 {
 	global $langs, $user;
 
-	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
-		$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
-		$sql .= " WHERE fk_soc = ".$user->socid;
-		$sql .= " AND email = '" . $followUpEmail. "'";
-
-		$TResults = $context->dbTool->executeS($sql);
+	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail)) {
+		$TResults = getConcatenatedMessage($user->socid, $followUpEmail, $context);
 
 		if(!empty($TResults)){
 			foreach($TResults as $obj){
@@ -1347,22 +1343,21 @@ function handleFollowUpEmail(Ticket $ticket, string $followUpEmail, Context $con
 				}
 			}
 			return 1;
-		} else {
-			if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail)) {
-				$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
-			}
-			$ticket->fk_user_create = $user->id;
-
-			$resUpdate = $ticket->update($user);
-			if ($resUpdate < 0) {
-				$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
-				dol_syslog('ticket.lib.php::handleFollowUpEmail resAddContact: ' . $resUpdate, LOG_ERR);
-				return -1;
-			} else {
-				return 1;
-			}
 		}
 	}
 
 	return 1;
+}
+
+function getConcatenatedMessage($fk_soc, $followUpEmail, $context)
+{
+
+	$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
+	$sql .= " WHERE fk_soc = ".$fk_soc;
+	$sql .= " AND email = '" . $followUpEmail. "'";
+
+	$TResults = $context->dbTool->executeS($sql);
+
+	return $TResults;
+
 }
