@@ -1338,18 +1338,21 @@ function handleFollowUpEmail(Ticket $ticket, string $followUpEmail, Context $con
 					$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
 					dol_syslog('ticket.lib.php::handleFollowUpEmail resAddContact: ' . $resAddContact, LOG_ERR);
 					return -1;
-					header('Location: '.$context->getControllerUrl('tickets'));
-					exit();
 				}
 			}
-			return 1;
 		}
 	}
 
 	return 1;
 }
 
-function getConcatenatedMessage($fk_soc, $followUpEmail, $context)
+/**
+ * @param int $fk_soc
+ * @param string $followUpEmail
+ * @param Context $context
+ * @return array|null
+ */
+function getConcatenatedMessage(int $fk_soc, string $followUpEmail, Context $context): ?array
 {
 
 	$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
