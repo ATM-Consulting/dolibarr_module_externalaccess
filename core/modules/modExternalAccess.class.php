@@ -383,7 +383,7 @@ class modExternalAccess extends DolibarrModules
 
 		$extrafields = new ExtraFields($this->db);
 		$extrafields->addExtraField(
-			'followupemail',
+			'externalaccess_followupemail',
 			'FollowUpEmail',
 			'mail',
 			100,

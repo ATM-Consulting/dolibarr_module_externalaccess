@@ -492,11 +492,6 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 					$context->setEventMessages($langs->trans('SocIsEmpty'), 'errors');
 				}
 
-//				if (getDolGlobalInt('EACCESS_SEVERITY') && empty($severity)) {
-//					$errors ++;
-//					$context->setEventMessages($langs->trans('SeverityIsEmpty'), 'errors');
-//				}
-//
 				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail) && !filter_var($followUpEmail, FILTER_VALIDATE_EMAIL)){
 					$errors ++;
 					$context->setEventMessages($langs->trans('ErrorFollowUpEmail'), 'errors');
@@ -547,45 +542,18 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 						}
 						$ticket->add_contact($user->contact_id, "SUPPORTCLI", 'external', 0);
 
-						$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
-						$sql .= " WHERE fk_soc = ".$user->socid;
-						$sql .= " AND email = '" . $followUpEmail. "'";
+						$resHandle = handleFollowUpEmail($ticket, $followUpEmail, $context);
 
-						$TResults = $context->dbTool->executeS($sql);
-
-						if(!empty($TResults)){
-							foreach($TResults as $obj){
-								$fk_socpeople = intval($obj->rowid);
-								$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
-								if($resAddContact < 0) {
-									$context->dbTool->db->rollback();
-									$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
-									dol_syslog(get_class($this).'::actionTicketCard resAddContact: ' . $resAddContact, LOG_ERR);
-									header('Location: '.$context->getControllerUrl('tickets'));
-									exit();
-								}
-							}
+						if($resHandle > 0) {
 							$context->dbTool->db->commit();
+							header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$res));
+							exit();
 						} else {
-							if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail)) {
-								$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
-							}
-							$ticket->fk_user_create = $user->id;
-
-							$resUpdate = $ticket->update($user);
-							if ($resUpdate > 0) {
-								$context->dbTool->db->commit();
-							} else {
-								$context->dbTool->db->rollback();
-								$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
-								dol_syslog(get_class($this).'::actionTicketCard resUpdate: ' . $resUpdate, LOG_ERR);
-								header('Location: '.$context->getControllerUrl('tickets'));
-								exit();
-							}
+							$context->dbTool->db->rollback();
+							header('Location: '.$context->getControllerUrl('tickets'));
+							exit();
 						}
 
-						header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$res));
-						exit();
 					}else{
 						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
 					}

@@ -154,7 +154,6 @@ class TicketsController extends Controller
 				}
 				print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
 				print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
-				print ' <td data-search="'.$followUpEmail.'" data-order="'.$followUpEmail.'" >'.$followUpEmail.'</td>';
 				print ' <td data-search="'.$object->type_label.'" data-order="'.$object->type_label.'" >'.$object->type_label.'</td>';
 				print ' <td data-search="'.$object->severity_label.'" data-order="'.$object->severity_label.'" >'.$object->severity_label.'</td>';
 				print ' <td class="text-center" >'.$object->getLibStatut(1).'</td>';

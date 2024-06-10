@@ -95,8 +95,6 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 		$item->nameText = $langs->transnoentities('TicketSeverityHere');
 		$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketSeverityHere');
-		$item->fieldAttr['maxlength'] = 200;
-
 	}
 
 	$item = $formExternal->newItem('message');
@@ -671,7 +669,7 @@ function print_ticketCard_extrafields($ticket) {
 	$out = '';
 	$e = new ExtraFields($db);
 	$e->fetch_name_optionals_label('ticket');
-	$TTicketAddedField = explode(',', getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
+	$TTicketAddedField = unserialize(getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
 	if(! empty($TTicketAddedField)) {
 		foreach($TTicketAddedField as $ticket_field) {
 			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
@@ -1317,4 +1315,54 @@ function externalAccessGetTicketEcmList($object, $pulicOnly = true)
 	}
 
 	return $documents;
+}
+
+/**
+ * @param Ticket $ticket
+ * @param string $followUpEmail
+ * @param Context $context
+ * @return int
+ */
+function handleFollowUpEmail(Ticket $ticket, string $followUpEmail, Context $context): int
+{
+	global $langs, $user;
+
+	if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
+		$sql = "SELECT rowid FROM ".MAIN_DB_PREFIX."socpeople";
+		$sql .= " WHERE fk_soc = ".$user->socid;
+		$sql .= " AND email = '" . $followUpEmail. "'";
+
+		$TResults = $context->dbTool->executeS($sql);
+
+		if(!empty($TResults)){
+			foreach($TResults as $obj){
+				$fk_socpeople = intval($obj->rowid);
+				$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
+				if($resAddContact < 0) {
+					$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+					dol_syslog('ticket.lib.php::handleFollowUpEmail resAddContact: ' . $resAddContact, LOG_ERR);
+					return -1;
+					header('Location: '.$context->getControllerUrl('tickets'));
+					exit();
+				}
+			}
+			return 1;
+		} else {
+			if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail)) {
+				$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+			}
+			$ticket->fk_user_create = $user->id;
+
+			$resUpdate = $ticket->update($user);
+			if ($resUpdate < 0) {
+				$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+				dol_syslog('ticket.lib.php::handleFollowUpEmail resAddContact: ' . $resUpdate, LOG_ERR);
+				return -1;
+			} else {
+				return 1;
+			}
+		}
+	}
+
+	return 1;
 }
