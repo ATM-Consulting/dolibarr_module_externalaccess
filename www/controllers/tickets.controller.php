@@ -125,7 +125,6 @@ class TicketsController extends Controller
 
 			print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Subject').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('FollowUpEmail').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('TicketSeverity').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
