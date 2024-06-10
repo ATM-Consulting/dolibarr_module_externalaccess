@@ -70,7 +70,6 @@ class TicketsController extends Controller
 		$ticketStatic = new Ticket($context->dbTool->db);
 
 		$langs->load('ticket');
-		$langs->load('externalticket@externalaccess');
 
 		$sql = 'SELECT rowid ';
 		$sql.= ' FROM `'.MAIN_DB_PREFIX.'ticket` t';
