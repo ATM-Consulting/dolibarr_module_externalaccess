@@ -437,7 +437,6 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				}
 
 				$ret = $ticket->createTicketMessage($user, 0, $listofpaths, $listofmimes, $listofnames);
-
 				if ($ret > 0) {
 					$Terrors = array();
 					// TODO remove not uploaded file from $listofnames.
@@ -463,12 +462,19 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				// Check
 				$errors = 0;
 
-				$followUpEmail = GETPOST('options_followupemail', 'none');
-				$severity = GETPOST('severity', 'none');
+
+
+				if (getDolGlobalInt('EACCESS_SEVERITY')) {
+					$severity = GETPOST('severity', 'none');
+				}
+
+				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
+					$followUpEmail = GETPOST('options_followupemail', 'none');
+					$ticket->array_options['options_followupemail'] = $followUpEmail;
+				}
 
 				$ticket->message = GETPOST('message', 'none');
 				$ticket->subject = GETPOST('subject', 'none');
-				$ticket->array_options['options_followupemail'] = $followUpEmail;
 				$ticket->fk_soc = $user->socid;
 
 				if(empty($ticket->message)){
@@ -486,14 +492,14 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 					$context->setEventMessages($langs->trans('SocIsEmpty'), 'errors');
 				}
 
-				if (getDolGlobalInt('EACCESS_SEVERITY') && empty($severity)) {
+//				if (getDolGlobalInt('EACCESS_SEVERITY') && empty($severity)) {
+//					$errors ++;
+//					$context->setEventMessages($langs->trans('SeverityIsEmpty'), 'errors');
+//				}
+//
+				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail) && !filter_var($followUpEmail, FILTER_VALIDATE_EMAIL)){
 					$errors ++;
-					$context->setEventMessages($langs->trans('SeverityIsEmpty'), 'errors');
-				}
-
-				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && empty($followUpEmail)){
-					$errors ++;
-					$context->setEventMessages($langs->trans('FollowUpEmailIsEmpty'), 'errors');
+					$context->setEventMessages($langs->trans('ErrorFollowUpEmail'), 'errors');
 				}
 
 				$e = new ExtraFields($ticket->db);
@@ -545,13 +551,25 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 						$sql .= " WHERE fk_soc = ".$user->socid;
 						$sql .= " AND email = '" . $followUpEmail. "'";
 
-						$fk_socpeople = $context->dbTool->getvalue($sql);
-						$fk_socpeople = intval($fk_socpeople);
+						$TResults = $context->dbTool->executeS($sql);
 
-						if ($fk_socpeople) {
-							$ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
+						if(!empty($TResults)){
+							foreach($TResults as $obj){
+								$fk_socpeople = intval($obj->rowid);
+								$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
+								if($resAddContact < 0) {
+									$context->dbTool->db->rollback();
+									$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+									dol_syslog(get_class($this).'::actionTicketCard resAddContact: ' . $resAddContact, LOG_ERR);
+									header('Location: '.$context->getControllerUrl('tickets'));
+									exit();
+								}
+							}
+							$context->dbTool->db->commit();
 						} else {
-							$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+							if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail)) {
+								$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+							}
 							$ticket->fk_user_create = $user->id;
 
 							$resUpdate = $ticket->update($user);

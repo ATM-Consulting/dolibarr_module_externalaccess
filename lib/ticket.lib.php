@@ -72,11 +72,9 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 		$item = $formExternal->newItem('options_followupemail');
 		$item->setAsEmail();
-		$item->setAsRequired();
 		$item->nameText = $langs->transnoentities('TicketFollowUpEmailHere');
 		$item->helpText = $langs->transnoentities('TicketFollowUpEmailHelp');
 		$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketFollowUpEmailHere');
-		$item->fieldAttr['type'] = 'email';
 		$item->fieldAttr['maxlength'] = 200;
 
 	}
@@ -393,10 +391,6 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					<div class="row clearfix form-group" id="status">
 						<div class="col-md-2">'.$langs->transnoentities('Status').'</div>
 						<div class="col-md-10">'.ticketLibStatut($object).'</div>
-					</div>
-					<div class="row clearfix form-group" id="followupemail">
-						<div class="col-md-2">'.$langs->trans('FollowUpEmail').'</div>
-						<div class="col-md-10">'.$followUpEmail.'</div>
 					</div>
 					<div class="row clearfix form-group" id="Type">
 						<div class="col-md-2">'.$langs->transnoentities('Type').'</div>
