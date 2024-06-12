@@ -61,7 +61,8 @@ class modExternalAccess extends DolibarrModules
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
 		$this->description = "Ajoute un acces externe pour les clients";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
-		$this->version = '1.43.3';
+
+		$this->version = '1.44.0';
 
 		// Key used in llx_const table to save module status enabled/disabled (where MYMODULE is value of property name of module in uppercase)
 		$this->const_name = 'MAIN_MODULE_'.strtoupper($this->name);
@@ -375,9 +376,24 @@ class modExternalAccess extends DolibarrModules
 	 */
 	public function init($options = '')
 	{
+		global $conf;
+
 		$sql = array();
 
 		define('INC_FROM_DOLIBARR', true);
+
+		$extrafields = new ExtraFields($this->db);
+		$extrafields->addExtraField(
+			'externalaccess_followupemail',
+			'FollowUpEmail',
+			'mail',
+			100,
+			255,
+			'ticket',
+			0,0,'','',0,'',
+			0,'','',$conf->entity,'externalaccess@externalaccess',
+			"isModEnabled('externalaccess')"
+		);
 
 		//dol_include_once('/externalaccess/config.php'); // Why ?
 		//include dol_buildpath('/externalaccess/script/create-maj-base.php');

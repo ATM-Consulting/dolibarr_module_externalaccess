@@ -7,7 +7,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
-
+- NEW : Ajout d'un champ "Email pour suivi ticket" + sévérité selon conf - 1.44.0 - **10/06/2024**
 
 
 # RELEASE 1.43

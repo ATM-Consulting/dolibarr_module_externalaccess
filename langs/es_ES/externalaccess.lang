@@ -194,3 +194,5 @@ ref_customer=Réf. client
 tracking_url=Numéro de suivi
 YourSalesRep=Votre contact chez %s :
 YourSalesRepMultiple=Vos contacts chez %s :
+EACCESS_FOLLOW_UP_EMAIL = Activar o desactivar el campo de correo electrónico para el seguimiento de tickets
+EACCESS_SEVERITY = Activar o desactivar el campo de gravedad en el formulario de ticket

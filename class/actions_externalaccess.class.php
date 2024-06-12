@@ -437,7 +437,6 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				}
 
 				$ret = $ticket->createTicketMessage($user, 0, $listofpaths, $listofmimes, $listofnames);
-
 				if ($ret > 0) {
 					$Terrors = array();
 					// TODO remove not uploaded file from $listofnames.
@@ -463,6 +462,16 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				// Check
 				$errors = 0;
 
+
+				if (getDolGlobalInt('EACCESS_SEVERITY')) {
+					$severity = GETPOST('severity', 'none');
+				}
+
+				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
+					$followUpEmail = GETPOST('options_externalaccess_followupemail', 'none');
+					$ticket->array_options['options_externalaccess_followupemail'] = $followUpEmail;
+				}
+
 				$ticket->message = GETPOST('message', 'none');
 				$ticket->subject = GETPOST('subject', 'none');
 				$ticket->fk_soc = $user->socid;
@@ -480,6 +489,11 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				if(empty($ticket->fk_soc)){
 					$errors ++;
 					$context->setEventMessages($langs->trans('SocIsEmpty'), 'errors');
+				}
+
+				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL') && !empty($followUpEmail) && !filter_var($followUpEmail, FILTER_VALIDATE_EMAIL)){
+					$errors ++;
+					$context->setEventMessages($langs->trans('ErrorFollowUpEmail'), 'errors');
 				}
 
 				$e = new ExtraFields($ticket->db);
@@ -509,24 +523,55 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				}
 
 				if(empty($errors)){
+					$ticketErrors = 0;
+
 					$ticket->ref = $ticket->getDefaultRef();
 					$ticket->datec = time();
 					$ticket->fk_statut = Ticket::STATUS_NOT_READ;
+					
+					if(!empty($followUpEmail)) {
+						$TResults = getContactIds($user->socid, $followUpEmail, $context);
+						if(empty($TResults)) {
+							$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
+						}
+					}
+
+					if(!empty($severity)) $ticket->severity_code = $severity;
+
+					$context->dbTool->db->begin();
 
 					$res = $ticket->create($user);
 
-					if($res>0)
+					if($res > 0)
 					{
 						// Add contact to the ticket
 						if(empty($user->contact_id)){
 							$user->contact_id = $user->contactid; // Dolibarr < 13 retrocompatibility
 						}
+						
 						$ticket->add_contact($user->contact_id, "SUPPORTCLI", 'external', 0);
+						if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
+							if(!empty($TResults)){
+								$resAddContact = addTicketContact($ticket, $TResults, $context);
+								if ($resAddContact < 0) {
+									$ticketErrors++;
+								}
+							}
+						}
+						
+					}else{
+						$ticketErrors++;
+						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+					}
 
+					if(empty($ticketErrors)) {
+						$context->dbTool->db->commit();
 						header('Location: '.$context->getControllerUrl('ticket_card', '&id='.$res));
 						exit();
-					}else{
-						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
+					} else {
+						$context->dbTool->db->rollback();
+						header('Location: '.$context->getControllerUrl('tickets'));
+						exit();
 					}
 				}
 			}
