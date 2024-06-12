@@ -970,6 +970,7 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
 	$context = Context::getInstance();
 	global $hookmanager, $db, $conf;
 
+	$employee = false;
     if($user->employee && empty($user->socid)) $employee = true;
 
     // Add fields from hooks
