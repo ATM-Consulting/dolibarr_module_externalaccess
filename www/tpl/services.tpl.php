@@ -47,12 +47,12 @@ if(empty($reshook)){
 		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && !empty($conf->facture->enabled) && $user->hasRight('externalaccess', 'view_invoices')){
+    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && isModEnabled('facture') && $user->hasRight('externalaccess', 'view_invoices')){
         $link = $context->getControllerUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
 
-    if(isset($conf->global->EACCESS_ACTIVATE_TICKETS) && !empty($conf->ticket->enabled) && $user->hasRight('externalaccess', 'view_tickets')){
+    if(isset($conf->global->EACCESS_ACTIVATE_TICKETS) && isModEnabled('ticket') && $user->hasRight('externalaccess', 'view_tickets')){
         $link = $context->getControllerUrl('tickets');
         printService($langs->trans('Tickets'),'fa-ticket',$link);
     }

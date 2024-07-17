@@ -11,7 +11,7 @@ class SupplierInvoicesController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->supplier_invoice->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_SUPPLIER_INVOICES') && $user->hasRight('externalaccess','view_supplier_invoices');
+		$this->accessRight = isModEnabled('supplier_invoice') && getDolGlobalInt('EACCESS_ACTIVATE_SUPPLIER_INVOICES') && $user->hasRight('externalaccess','view_supplier_invoices');
 		return parent::checkAccess();
 	}
 
