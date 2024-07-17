@@ -740,12 +740,12 @@ if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLogge
 	// If user admin, we force the rights-based modules
 	if ($user->admin)
 	{
-		$user->hasRight('user', 'user', 'lire')=1;
-		$user->hasRight('user', 'user', 'creer')=1;
-		$user->hasRight('user', 'user', 'password')=1;
-		$user->hasRight('user', 'user', 'supprimer')=1;
-		$user->hasRight('user', 'self', 'creer')=1;
-		$user->hasRight('user', 'self', 'password')=1;
+		$user->rights->user->user->lire=1;
+		$user->rights->user->user->creer=1;
+		$user->rights->user->user->password=1;
+		$user->rights->user->user->supprimer=1;
+		$user->rights->user->self->creer=1;
+		$user->rights->user->self->password=1;
 	}
 
 
