@@ -25,7 +25,7 @@ else {
 }
 
 
-if (empty($conf->externalaccess->enabled))
+if (!isModEnabled('externalaccess'))
 {
 	header("HTTP/1.0 404 Not Found");
 	echo '<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML 2.0//EN"><html><head><title>Not Found</title></head><body><h1>Not Found</h1></body></html>';

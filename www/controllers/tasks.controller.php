@@ -14,7 +14,7 @@ class TasksController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->projet->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_PROJECTS') && $user->hasRight('externalaccess','view_projects');
+		$this->accessRight = isModEnabled('projet') && getDolGlobalInt('EACCESS_ACTIVATE_PROJECTS') && $user->hasRight('externalaccess','view_projects');
 		return parent::checkAccess();
 	}
 

@@ -186,7 +186,7 @@ $morehtmlref = '<div class="refidno">';
  // Thirdparty
  $morehtmlref.='<br>'.$langs->trans('ThirdParty') . ' : ' . (is_object($object->thirdparty) ? $object->thirdparty->getNomUrl(1) : '');
  // Project
- if (!empty($conf->project->enabled))
+ if (isModEnabled('project'))
  {
  $langs->load("projects");
  $morehtmlref.='<br>'.$langs->trans('Project') . ' ';
@@ -238,9 +238,9 @@ print '</div>';
 print dol_get_fiche_end();
 
 $modulepart = 'externalaccess';
-//$permissiontoadd = $user->rights->externalaccess->eavirtualhost->write;
+//$permissiontoadd = $user->hasRight('externalaccess', 'eavirtualhost', 'write');
 $permissiontoadd = 1;
-//$permtoedit = $user->rights->externalaccess->eavirtualhost->write;
+//$permtoedit = $user->hasRight('externalaccess', 'eavirtualhost', 'write');
 $permtoedit = 1;
 $param = '&id='.$object->id;
 

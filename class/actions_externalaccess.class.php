@@ -70,7 +70,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 		{
 		    $context = Context::getInstance();
 
-		    if($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
+		    if($context->controller == 'ticket_card' && isModEnabled('ticket'))
             {
 				$this->actionTicketCard($parameters, $object, $action, $hookmanager);
             }
@@ -112,7 +112,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 			}
 	        /*elseif ($action === 'getOrdersList')
 	        {
-	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->rights->externalaccess->view_orders))
+	            if($conf->global->EACCESS_ACTIVATE_ORDERS && !empty($user->hasRight('externalaccess', 'view_orders')))
 	            {
 	                print json_orderList($user->societe_id,99999, GETPOST('offset','int'));
 	                exit();
@@ -120,7 +120,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 	        }
 	        elseif ($action === 'getPropalsList')
 	        {
-	            if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->rights->externalaccess->view_propals))
+	            if($conf->global->EACCESS_ACTIVATE_PROPALS && !empty($user->hasRight('externalaccess', 'view_propals')))
 	            {
 	                print json_propalList($user->societe_id,99999, GETPOST('offset','int'));
 	                exit();
@@ -128,7 +128,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 	        }
 	        elseif ($action === 'getInvoicesList')
 	        {
-	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->rights->externalaccess->view_invoices))
+	            if($conf->global->EACCESS_ACTIVATE_INVOICES && !empty($user->hasRight('externalaccess', 'view_invoices')))
 	            {
 	                print json_invoiceList($user->societe_id,99999, GETPOST('offset','int'));
 	                exit();
@@ -163,7 +163,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();
-	        if($context->controller == 'ticket_card' && !empty($conf->ticket->enabled))
+	        if($context->controller == 'ticket_card' && isModEnabled('ticket'))
             {
                 $context->setControllerFound();
 				$ticketId = GETPOST('id', 'int');

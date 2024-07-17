@@ -11,7 +11,7 @@ class ExpeditionsController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->expedition->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_EXPEDITIONS') && $user->hasRight('externalaccess','view_expeditions');
+		$this->accessRight = isModEnabled('expedition') && getDolGlobalInt('EACCESS_ACTIVATE_EXPEDITIONS') && $user->hasRight('externalaccess','view_expeditions');
 		return parent::checkAccess();
 	}
 

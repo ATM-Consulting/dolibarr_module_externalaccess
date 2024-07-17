@@ -173,7 +173,7 @@ function showUserPhoto($user, $width = 100, $height = 0, $cssclass = 'photowithm
 	if ($user->gender == 'man') $nophoto = $context->getControllerUrl().'/img/user_man.png';
 	if ($user->gender == 'woman') $nophoto = $context->getControllerUrl().'/img/user_woman.png';
 
-	if (!empty($conf->gravatar->enabled) && $email && 0)
+	if (isModEnabled('gravatar') && $email && 0)
 	{
 		/**
 		 * @see https://gravatar.com/site/implement/images/php/
@@ -260,7 +260,7 @@ function outputProductImg($searchProductId, $size = false)
 	$photo = getProductImgFileInfos($searchProductId);
 
 	// TODO : ajouter un droit permettant de voir les photos pour l'instant pour limiter l'access seul les utilisateurs identifiés peuvent voir les photos
-	//$user->rights->externalaccess->see_product_img
+	//$user->hasRight('externalaccess', 'see_product_img')
 //	if(empty($user->id)){ // bon l'interface n'a pas d'utilisateur...
 //		$photo = false;
 //	}

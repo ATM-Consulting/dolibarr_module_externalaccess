@@ -203,7 +203,7 @@ class EAVirtualHost extends CommonObject
 
 
 		// Example to show how to set values of fields definition dynamically
-		/*if ($user->rights->externalaccess->eavirtualhost->read) {
+		/*if ($user->hasRight('externalaccess', 'eavirtualhost', 'read')) {
 			$this->fields['myfield']['visible'] = 1;
 			$this->fields['myfield']['noteditable'] = 0;
 		}*/
@@ -556,8 +556,8 @@ class EAVirtualHost extends CommonObject
 			return 0;
 		}
 
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->eavirtualhost->write))
-		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->eavirtualhost->eavirtualhost_advance->validate))))
+		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'eavirtualhost', 'write')))
+		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'eavirtualhost', 'eavirtualhost_advance')->validate))))
 		 {
 		 $this->error='NotEnoughPermissions';
 		 dol_syslog(get_class($this)."::valid ".$this->error, LOG_ERR);
@@ -674,8 +674,8 @@ class EAVirtualHost extends CommonObject
 			return 0;
 		}
 
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->write))
-		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->externalaccess_advance->validate))))
+		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'write')))
+		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'externalaccess_advance', 'validate')))))
 		 {
 		 $this->error='Permission denied';
 		 return -1;
@@ -715,8 +715,8 @@ class EAVirtualHost extends CommonObject
 			return 0;
 		}
 
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->write))
-		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->externalaccess_advance->validate))))
+		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'write')))
+		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'externalaccess_advance', 'validate')))))
 		 {
 		 $this->error='Permission denied';
 		 return -1;
@@ -739,8 +739,8 @@ class EAVirtualHost extends CommonObject
 			return 0;
 		}
 
-		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->write))
-		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->rights->externalaccess->externalaccess_advance->validate))))
+		/*if (! ((empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'write')))
+		 || (!empty($conf->global->MAIN_USE_ADVANCED_PERMS) && !empty($user->hasRight('externalaccess', 'externalaccess_advance', 'validate')))))
 		 {
 		 $this->error='Permission denied';
 		 return -1;

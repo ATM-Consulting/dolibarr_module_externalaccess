@@ -12,7 +12,7 @@ class InvoicesController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->facture->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_INVOICES') && $user->hasRight('externalaccess','view_invoices');
+		$this->accessRight = isModEnabled('facture') && getDolGlobalInt('EACCESS_ACTIVATE_INVOICES') && $user->hasRight('externalaccess','view_invoices');
 		return parent::checkAccess();
 	}
 

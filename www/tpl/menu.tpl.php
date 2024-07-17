@@ -18,7 +18,7 @@ if ($context->userIsLog())
 
 	// TODO : check if is it possible to use checkAccess() of controller
 
-    if (!empty($conf->projet->enabled)
+    if (isModEnabled('projet')
 		&& isset($conf->global->EACCESS_ACTIVATE_PROJECTS)
 		&& $user->hasRight('externalaccess', 'view_projects')
 	)
@@ -32,7 +32,7 @@ if ($context->userIsLog())
         );
     }
 
-	if (!empty($conf->projet->enabled)
+	if (isModEnabled('projet')
 		&& isset($conf->global->EACCESS_ACTIVATE_TASKS)
 		&& $user->hasRight('externalaccess', 'view_tasks')
 	)
@@ -46,7 +46,7 @@ if ($context->userIsLog())
 		);
 	}
 
-    if (!empty($conf->propal->enabled)
+    if (isModEnabled('propal')
 		&& isset($conf->global->EACCESS_ACTIVATE_PROPALS)
 		&& $user->hasRight('externalaccess', 'view_propals')
 	)
@@ -60,7 +60,7 @@ if ($context->userIsLog())
         );
     }
 
-	if (!empty($conf->commande->enabled)
+	if (isModEnabled('commande')
 		&& isset($conf->global->EACCESS_ACTIVATE_ORDERS)
 		&& $user->hasRight('externalaccess', 'view_orders')
 	)
@@ -74,7 +74,7 @@ if ($context->userIsLog())
 		);
 	}
 
-	if (!empty($conf->expedition->enabled)
+	if (isModEnabled('expedition')
 		&& isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS)
 		&& $user->hasRight('externalaccess', 'view_expeditions')
 	)
@@ -88,7 +88,7 @@ if ($context->userIsLog())
 		);
 	}
 
-    if (!empty($conf->facture->enabled)
+    if (isModEnabled('facture')
 		&& isset($conf->global->EACCESS_ACTIVATE_INVOICES)
 		&& $user->hasRight('externalaccess', 'view_invoices')
 	)
@@ -102,7 +102,7 @@ if ($context->userIsLog())
         );
     }
 
-	if (!empty($conf->supplier_invoice->enabled)
+	if (isModEnabled('supplier_invoice')
 		&& isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES)
 		&& $user->hasRight('externalaccess', 'view_supplier_invoices')
 	)
@@ -116,7 +116,7 @@ if ($context->userIsLog())
 		);
 	}
 
-    if (!empty($conf->ticket->enabled)
+    if (isModEnabled('ticket')
 		&& isset($conf->global->EACCESS_ACTIVATE_TICKETS)
 		&& $user->hasRight('externalaccess', 'view_tickets')
 	)
