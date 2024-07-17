@@ -19,7 +19,7 @@ if ($context->userIsLog())
 	// TODO : check if is it possible to use checkAccess() of controller
 
     if (isModEnabled('projet')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_PROJECTS'))
+		&& isset($conf->global->EACCESS_ACTIVATE_PROJECTS)
 		&& $user->hasRight('externalaccess', 'view_projects')
 	)
     {
@@ -33,7 +33,7 @@ if ($context->userIsLog())
     }
 
 	if (isModEnabled('projet')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_TASKS'))
+		&& isset($conf->global->EACCESS_ACTIVATE_TASKS)
 		&& $user->hasRight('externalaccess', 'view_tasks')
 	)
 	{
@@ -47,7 +47,7 @@ if ($context->userIsLog())
 	}
 
     if (isModEnabled('propal')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_PROPALS'))
+		&& isset($conf->global->EACCESS_ACTIVATE_PROPALS)
 		&& $user->hasRight('externalaccess', 'view_propals')
 	)
     {
@@ -61,7 +61,7 @@ if ($context->userIsLog())
     }
 
 	if (isModEnabled('commande')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_ORDERS'))
+		&& isset($conf->global->EACCESS_ACTIVATE_ORDERS)
 		&& $user->hasRight('externalaccess', 'view_orders')
 	)
 	{
@@ -75,7 +75,7 @@ if ($context->userIsLog())
 	}
 
 	if (isModEnabled('expedition')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_EXPEDITIONS'))
+		&& isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS)
 		&& $user->hasRight('externalaccess', 'view_expeditions')
 	)
 	{
@@ -89,7 +89,7 @@ if ($context->userIsLog())
 	}
 
     if (isModEnabled('facture')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_INVOICES'))
+		&& isset($conf->global->EACCESS_ACTIVATE_INVOICES)
 		&& $user->hasRight('externalaccess', 'view_invoices')
 	)
     {
@@ -103,7 +103,7 @@ if ($context->userIsLog())
     }
 
 	if (isModEnabled('supplier_invoice')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_SUPPLIER_INVOICES'))
+		&& isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES)
 		&& $user->hasRight('externalaccess', 'view_supplier_invoices')
 	)
 	{
@@ -117,7 +117,7 @@ if ($context->userIsLog())
 	}
 
     if (isModEnabled('ticket')
-		&& isset(getDolGlobalString('EACCESS_ACTIVATE_TICKETS'))
+		&& isset($conf->global->EACCESS_ACTIVATE_TICKETS)
 		&& $user->hasRight('externalaccess', 'view_tickets')
 	)
     {
