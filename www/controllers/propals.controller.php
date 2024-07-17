@@ -12,7 +12,7 @@ class PropalsController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->propal->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_PROPALS') && $user->hasRight('externalaccess','view_propals');
+		$this->accessRight = isModEnabled('propal') && getDolGlobalInt('EACCESS_ACTIVATE_PROPALS') && $user->hasRight('externalaccess','view_propals');
 		return parent::checkAccess();
 	}
 

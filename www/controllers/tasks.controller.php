@@ -14,7 +14,7 @@ class TasksController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = !empty($conf->projet->enabled) && getDolGlobalInt('EACCESS_ACTIVATE_PROJECTS') && $user->hasRight('externalaccess','view_projects');
+		$this->accessRight = isModEnabled('projet') && getDolGlobalInt('EACCESS_ACTIVATE_PROJECTS') && $user->hasRight('externalaccess','view_projects');
 		return parent::checkAccess();
 	}
 
@@ -164,11 +164,11 @@ class TasksController extends Controller
 				$TFieldsCols = $hookmanager->resArray;
 			}
 
-			/*$TOther_fields_all = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			/*$TOther_fields_all = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if (empty($TOther_fields_all))
 				$TOther_fields_all = array();
 
-			$TOther_fields_project = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_PROJECT);
+			$TOther_fields_project = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_PROJECT'));
 			if (empty($TOther_fields_project))
 				$TOther_fields_project = array();
 

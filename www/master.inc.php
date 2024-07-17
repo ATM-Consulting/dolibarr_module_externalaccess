@@ -225,7 +225,7 @@ if (!defined('NOREQUIREDB') && !defined('NOREQUIRESOC')) {
 		// For DE, we need to invert our address with customer address
 		$conf->global->MAIN_INVERT_SENDER_RECIPIENT = 1;
 	}
-	if ($mysoc->country_code == 'FR' && !isset($conf->global->MAIN_PROFID1_IN_ADDRESS)) {
+	if ($mysoc->country_code == 'FR' && !isset(getDolGlobalString('MAIN_PROFID1_IN_ADDRESS'))) {
 		// For FR, default value of option to show profid SIRET is on by default
 		$conf->global->MAIN_PROFID1_IN_ADDRESS = 1;
 	}
@@ -238,7 +238,7 @@ if (!defined('NOREQUIREDB') && !defined('NOREQUIRESOC')) {
 }
 
 
-// Set default language (must be after the setValues setting global $conf->global->MAIN_LANG_DEFAULT. Page main.inc.php will overwrite langs->defaultlang with user value later)
+// Set default language (must be after the setValues setting global getDolGlobalString('MAIN_LANG_DEFAULT'). Page main.inc.php will overwrite langs->defaultlang with user value later)
 if (!defined('NOREQUIRETRAN')) {
 	$langcode = (GETPOST('lang', 'aZ09') ? GETPOST('lang', 'aZ09', 1) : (getDolGlobalString('MAIN_LANG_DEFAULT','auto' )));
 	if (defined('MAIN_LANG_DEFAULT')) {	// So a page can force the language whatever is setup and parameters in URL
