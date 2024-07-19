@@ -47,7 +47,7 @@ if(empty($reshook)){
 		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && isModEnabled('facture') && $user->hasRight('externalaccess', 'view_invoices')){
+    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && isModEnabled('invoice') && $user->hasRight('externalaccess', 'view_invoices')){
         $link = $context->getControllerUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
