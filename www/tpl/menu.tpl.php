@@ -88,7 +88,7 @@ if ($context->userIsLog())
 		);
 	}
 
-    if (isModEnabled('facture')
+    if (isModEnabled('invoice')
 		&& isset($conf->global->EACCESS_ACTIVATE_INVOICES)
 		&& $user->hasRight('externalaccess', 'view_invoices')
 	)
