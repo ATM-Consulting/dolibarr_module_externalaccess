@@ -32,7 +32,7 @@ if ($context->userIsLog())
         );
     }
 
-	if (isModEnabled('projet')
+	if (isModEnabled('project')
 		&& isset($conf->global->EACCESS_ACTIVATE_TASKS)
 		&& $user->hasRight('externalaccess', 'view_tasks')
 	)
