@@ -12,7 +12,7 @@ class OrdersController extends Controller
 	 */
 	public function checkAccess() {
 		global $conf, $user;
-		$this->accessRight = isModEnabled('commande') && getDolGlobalInt('EACCESS_ACTIVATE_ORDERS') && $user->hasRight('externalaccess','view_orders');
+		$this->accessRight = isModEnabled('order') && getDolGlobalInt('EACCESS_ACTIVATE_ORDERS') && $user->hasRight('externalaccess','view_orders');
 		return parent::checkAccess();
 	}
 
