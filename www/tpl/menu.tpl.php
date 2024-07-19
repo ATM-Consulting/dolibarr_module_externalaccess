@@ -60,7 +60,7 @@ if ($context->userIsLog())
         );
     }
 
-	if (isModEnabled('commande')
+	if (isModEnabled('order')
 		&& isset($conf->global->EACCESS_ACTIVATE_ORDERS)
 		&& $user->hasRight('externalaccess', 'view_orders')
 	)
