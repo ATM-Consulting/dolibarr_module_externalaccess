@@ -18,7 +18,7 @@ if ($context->userIsLog())
 
 	// TODO : check if is it possible to use checkAccess() of controller
 
-    if (isModEnabled('projet')
+    if (isModEnabled('project')
 		&& isset($conf->global->EACCESS_ACTIVATE_PROJECTS)
 		&& $user->hasRight('externalaccess', 'view_projects')
 	)
