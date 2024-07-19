@@ -11,7 +11,7 @@ if(empty($context->iframe)) {
 }
 
 // Google Analytics (need Google module)
-if (! empty($conf->google->enabled) && getDolGlobalString('MAIN_GOOGLE_AN_ID'))
+if (isModEnabled('google') && getDolGlobalString('MAIN_GOOGLE_AN_ID'))
 {
 	if (empty($conf->dol_use_jmobile))
 	{

@@ -62,7 +62,7 @@ class modExternalAccess extends DolibarrModules
 		$this->description = "Ajoute un acces externe pour les clients";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.44.0';
+		$this->version = '1.44.1';
 
 		require_once __DIR__ . '/../../class/techatm.class.php';
 		$this->url_last_version = \externalaccess\TechATM::getLastModuleVersionUrl($this);
@@ -93,7 +93,7 @@ class modExternalAccess extends DolibarrModules
 	 	//							'js' => array('/externalaccess/js/externalaccess.js'),          // Set this to relative path of js file if module must load a js on all pages
 		//							'hooks' => array('hookcontext1','hookcontext2')  	// Set here all hooks context managed by module
 		//							'dir' => array('output' => 'othermodulename'),      // To force the default directories names
-		//							'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'! empty($conf->module1->enabled) && ! empty($conf->module2->enabled)', 'picto'=>'yourpicto@externalaccess')) // Set here all workflow context managed by module
+		//							'workflow' => array('WORKFLOW_MODULE1_YOURACTIONTYPE_MODULE2'=>array('enabled'=>'isModEnabled('module1') && isModEnabled('module2')', 'picto'=>'yourpicto@externalaccess')) // Set here all workflow context managed by module
 		//                        );
 		$this->module_parts = array(
 			'triggers' => 1,
@@ -125,8 +125,8 @@ class modExternalAccess extends DolibarrModules
 		$this->const = array();
 
 		// Array to add new pages in new tabs
-		// Example: $this->tabs = array('objecttype:+tabname1:Title1:externalaccess@externalaccess:$user->rights->externalaccess->read:/externalaccess/mynewtab1.php?id=__ID__',  	// To add a new tab identified by code tabname1
-        //                              'objecttype:+tabname2:Title2:externalaccess@externalaccess:$user->rights->othermodule->read:/externalaccess/mynewtab2.php?id=__ID__',  	// To add another new tab identified by code tabname2
+		// Example: $this->tabs = array('objecttype:+tabname1:Title1:externalaccess@externalaccess:$user->hasRight('externalaccess', 'read'):/externalaccess/mynewtab1.php?id=__ID__',  	// To add a new tab identified by code tabname1
+        //                              'objecttype:+tabname2:Title2:externalaccess@externalaccess:$user->hasRight('othermodule', 'read'):/externalaccess/mynewtab2.php?id=__ID__',  	// To add another new tab identified by code tabname2
         //                              'objecttype:-tabname:NU:conditiontoremove');                                                     						// To remove an existing tab identified by code tabname
 		// where objecttype can be
 		// 'categories_x'	  to add a tab in category view (replace 'x' by type of category (0=product, 1=supplier, 2=customer, 3=member)
@@ -151,14 +151,14 @@ class modExternalAccess extends DolibarrModules
         $this->tabs = array();
 
         // Dictionaries
-	    if (! isset($conf->externalaccess->enabled))
+	    if (! isModEnabled('externalaccess'))
         {
         	$conf->externalaccess=new stdClass();
         	$conf->externalaccess->enabled=0;
         }
 		$this->dictionaries=array();
         /* Example:
-        if (! isset($conf->externalaccess->enabled)) $conf->externalaccess->enabled=0;	// This is to avoid warnings
+        if (! isModEnabled('externalaccess')) $conf->externalaccess->enabled=0;	// This is to avoid warnings
         $this->dictionaries=array(
             'langs'=>'externalaccess@externalaccess',
             'tabname'=>array(MAIN_DB_PREFIX."table1",MAIN_DB_PREFIX."table2",MAIN_DB_PREFIX."table3"),		// List of tables we want to see into dictonnary editor
@@ -169,7 +169,7 @@ class modExternalAccess extends DolibarrModules
             'tabfieldvalue'=>array("code,label","code,label","code,label"),																				// List of fields (list of fields to edit a record)
             'tabfieldinsert'=>array("code,label","code,label","code,label"),																			// List of fields (list of fields for insert)
             'tabrowid'=>array("rowid","rowid","rowid"),																									// Name of columns with primary key (try to always name it 'rowid')
-            'tabcond'=>array($conf->externalaccess->enabled,$conf->externalaccess->enabled,$conf->externalaccess->enabled)												// Condition to show each dictionary
+            'tabcond'=>array(isModEnabled('externalaccess'),isModEnabled('externalaccess'),isModEnabled('externalaccess'))												// Condition to show each dictionary
         );
         */
 
@@ -188,64 +188,64 @@ class modExternalAccess extends DolibarrModules
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_invoices';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'view_invoices';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'view_invoices';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_propals';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'view_propals';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'view_propals';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_orders';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'view_orders';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'view_orders';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_userinfos_edit';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'edit_user_personal_infos';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'edit_user_personal_infos';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_expeditions';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'view_expeditions';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'view_expeditions';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
         $this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
         $this->rights[$r][1] = 'external_access_tickets';	// Permission label
         $this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-        $this->rights[$r][4] = 'view_tickets';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-        $this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+        $this->rights[$r][4] = 'view_tickets';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+        $this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
         $r++;
 
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_projets';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'view_projects';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'view_projects';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_supplier_invoices';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'view_supplier_invoices';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'view_supplier_invoices';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
 		$this->rights[$r][0] = $this->numero . $r;	// Permission id (must not be already used)
 		$this->rights[$r][1] = 'external_access_tasks';	// Permission label
 		$this->rights[$r][3] = 0; 					// Permission by default for new user (0/1)
-		$this->rights[$r][4] = 'view_tasks';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
-		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->rights->permkey->level1->level2)
+		$this->rights[$r][4] = 'view_tasks';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
+		$this->rights[$r][5] = '';				// In php code, permission will be checked by test if ($user->hasRight('permkey', 'level1', 'level2'))
 		$r++;
 
 		// Main menu entries
@@ -263,8 +263,8 @@ class modExternalAccess extends DolibarrModules
 		//							'url'=>'/externalaccess/pagetop.php',
 		//							'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 		//							'position'=>100,
-		//							'enabled'=>'$conf->externalaccess->enabled',	// Define condition to show or hide menu entry. Use '$conf->externalaccess->enabled' if entry must be visible if module is enabled.
-		//							'perms'=>'1',			                // Use 'perms'=>'$user->rights->externalaccess->level1->level2' if you want your menu with a permission rules
+		//							'enabled'=>'isModEnabled('externalaccess')',	// Define condition to show or hide menu entry. Use 'isModEnabled('externalaccess')' if entry must be visible if module is enabled.
+		//							'perms'=>'1',			                // Use 'perms'=>'$user->hasRight('externalaccess', 'level1', 'level2')' if you want your menu with a permission rules
 		//							'target'=>'',
 		//							'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
 		// $r++;
@@ -278,8 +278,8 @@ class modExternalAccess extends DolibarrModules
 		//							'url'=>'/externalaccess/pagelevel2.php',
 		//							'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 		//							'position'=>100,
-		//							'enabled'=>'$conf->externalaccess->enabled',  // Define condition to show or hide menu entry. Use '$conf->externalaccess->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-		//							'perms'=>'1',			                // Use 'perms'=>'$user->rights->externalaccess->level1->level2' if you want your menu with a permission rules
+		//							'enabled'=>'isModEnabled('externalaccess')',  // Define condition to show or hide menu entry. Use 'isModEnabled('externalaccess')' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+		//							'perms'=>'1',			                // Use 'perms'=>'$user->hasRight('externalaccess', 'level1', 'level2')' if you want your menu with a permission rules
 		//							'target'=>'',
 		//							'user'=>2);				                // 0=Menu for internal users, 1=external users, 2=both
 		// $r++;
@@ -294,8 +294,8 @@ class modExternalAccess extends DolibarrModules
 			'url'=>'/externalaccess/list.php',
 			'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>100+$r,
-			'enabled'=>'$conf->externalaccess->enabled',	// Define condition to show or hide menu entry. Use '$conf->missionorder->enabled' if entry must be visible if module is enabled.
-			'perms'=>'$user->rights->externalaccess->read',			                // Use 'perms'=>'$user->rights->missionorder->level1->level2' if you want your menu with a permission rules
+			'enabled'=>'isModEnabled('externalaccess')',	// Define condition to show or hide menu entry. Use 'isModEnabled('missionorder')' if entry must be visible if module is enabled.
+			'perms'=>'$user->hasRight('externalaccess', 'read')',			                // Use 'perms'=>'$user->hasRight('missionorder', 'level1', 'level2')' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2
 		);
@@ -310,8 +310,8 @@ class modExternalAccess extends DolibarrModules
 			'url'=>'/externalaccess/list.php',
 			'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>100+$r,
-			'enabled'=>'$conf->externalaccess->enabled',	// Define condition to show or hide menu entry. Use '$conf->missionorder->enabled' if entry must be visible if module is enabled.
-			'perms'=>'$user->rights->externalaccess->read',			                // Use 'perms'=>'$user->rights->missionorder->level1->level2' if you want your menu with a permission rules
+			'enabled'=>'isModEnabled('externalaccess')',	// Define condition to show or hide menu entry. Use 'isModEnabled('missionorder')' if entry must be visible if module is enabled.
+			'perms'=>'$user->hasRight('externalaccess', 'read')',			                // Use 'perms'=>'$user->hasRight('missionorder', 'level1', 'level2')' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2
 		);
@@ -326,8 +326,8 @@ class modExternalAccess extends DolibarrModules
 			'url'=>'/externalaccess/card.php?action=create',
 			'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>100+$r,
-			'enabled'=> '$conf->externalaccess->enabled',  // Define condition to show or hide menu entry. Use '$conf->missionorder->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-			'perms'=> '$user->rights->externalaccess->write',			                // Use 'perms'=>'$user->rights->missionorder->level1->level2' if you want your menu with a permission rules
+			'enabled'=> 'isModEnabled('externalaccess')',  // Define condition to show or hide menu entry. Use 'isModEnabled('missionorder')' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+			'perms'=> '$user->hasRight('externalaccess', 'write')',			                // Use 'perms'=>'$user->hasRight('missionorder', 'level1', 'level2')' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2
 		);				                // 0=Menu for internal users, 1=external users, 2=both
@@ -343,8 +343,8 @@ class modExternalAccess extends DolibarrModules
 			'url'=>'/externalaccess/list.php',
 			'langs'=>'externalaccess@externalaccess',	        // Lang file to use (without .lang) by module. File must be in langs/code_CODE/ directory.
 			'position'=>100+$r,
-			'enabled'=> '$conf->externalaccess->enabled',  // Define condition to show or hide menu entry. Use '$conf->missionorder->enabled' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
-			'perms'=> '$user->rights->externalaccess->write',			                // Use 'perms'=>'$user->rights->missionorder->level1->level2' if you want your menu with a permission rules
+			'enabled'=> 'isModEnabled('externalaccess')',  // Define condition to show or hide menu entry. Use 'isModEnabled('missionorder')' if entry must be visible if module is enabled. Use '$leftmenu==\'system\'' to show if leftmenu system is selected.
+			'perms'=> '$user->hasRight('externalaccess', 'write')',			                // Use 'perms'=>'$user->hasRight('missionorder', 'level1', 'level2')' if you want your menu with a permission rules
 			'target'=>'',
 			'user'=>2
 		);				                // 0=Menu for internal users, 1=external users, 2=both
