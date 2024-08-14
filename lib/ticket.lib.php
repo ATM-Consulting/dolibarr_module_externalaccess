@@ -669,7 +669,7 @@ function print_ticketCard_extrafields($ticket) {
 	$out = '';
 	$e = new ExtraFields($db);
 	$e->fetch_name_optionals_label('ticket');
-	$TTicketAddedField = unserialize(getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
+	$TTicketAddedField = explode(',', getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
 	if(! empty($TTicketAddedField)) {
 		foreach($TTicketAddedField as $ticket_field) {
 			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
@@ -1327,7 +1327,7 @@ function externalAccessGetTicketEcmList($object, $pulicOnly = true)
 function addTicketContact(Ticket $ticket, array $TResults, Context $context): int
 {
 	global $langs;
-	
+
 	foreach($TResults as $obj){
 		$fk_socpeople = intval($obj->rowid);
 		$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
@@ -1337,7 +1337,7 @@ function addTicketContact(Ticket $ticket, array $TResults, Context $context): in
 			return -1;
 		}
 	}
-	
+
 	return 1;
 }
 
