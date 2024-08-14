@@ -11,6 +11,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.44
 
+- FIX : Extrafields non-affichait pour la partie tickets - 1.44.2 - **14/08/2024**
 - FIX : Compat V20 - 1.44.1 - **17/07/2024**
 - FIX : Missing tech atm class - 1.44.0 - **26/06/2024**
 - NEW : Ajout d'un champ "Email pour suivi ticket" + sévérité selon conf - 1.44.0 - **10/06/2024**
