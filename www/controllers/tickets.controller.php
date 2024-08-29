@@ -97,10 +97,10 @@ class TicketsController extends Controller
 		if(!empty($tableItems))
 		{
 
-			$TOther_fields = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS);
+			$TOther_fields = explode(',', $conf->global->EACCESS_LIST_ADDED_COLUMNS);
 			if(empty($TOther_fields)) $TOther_fields = array();
 
-			$TOther_fields_ticket = unserialize($conf->global->EACCESS_LIST_ADDED_COLUMNS_TICKET);
+			$TOther_fields_ticket = explode(',', $conf->global->EACCESS_LIST_ADDED_COLUMNS_TICKET);
 			if(empty($TOther_fields_ticket)) $TOther_fields_ticket = array();
 
 			$TOther_fields = array_merge($TOther_fields, $TOther_fields_ticket);
