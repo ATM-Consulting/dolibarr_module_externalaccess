@@ -12,6 +12,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.34
 
+- FIX : Extrafields non-affichés pour la partie tickets - *1.34.6* - **14/08/2024**
 - FIX : Wrong dolinclude_once *1.34.5* - **16/11/2022**
 - FIX : PHP8 warnings *1.34.4* - **19/08/2022**
 - FIX : Change editor name : ATM-Consulting -> ATM Consulting *1.34.3* - **09/08/2022**
