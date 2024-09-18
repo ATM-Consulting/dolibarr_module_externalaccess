@@ -68,6 +68,9 @@ $headerImg = getDolGlobalString('EACCESS_HEADER_IMG','../img/header_02.jpg');
 	--theme-primary-color-hover : <?php print $primaryColorHover; ?>;
 }
 
+* {
+	scroll-behavior: smooth;
+}
 
 body,
 html {
