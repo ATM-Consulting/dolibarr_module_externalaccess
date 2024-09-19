@@ -62,7 +62,7 @@ class modExternalAccess extends DolibarrModules
 		$this->description = "Ajoute un acces externe pour les clients";
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.44.2';
+		$this->version = '1.45.0';
 
 		require_once __DIR__ . '/../../class/techatm.class.php';
 		$this->url_last_version = \externalaccess\TechATM::getLastModuleVersionUrl($this);
