@@ -22,7 +22,7 @@ if ($context->userIsLog())
 	$Tmenu['services'] = array(
 		'id' => 'services',
 		'rank' => 70,
-		'url' => '#services',
+		'url' => dol_buildpath('/externalaccess/www/', 1) . '#services',
 		'name' => $langs->trans('Services'),
 		'group' => 'technical' // group identifier for the group if necessary
 	);
