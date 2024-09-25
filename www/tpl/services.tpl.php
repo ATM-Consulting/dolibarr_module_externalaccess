@@ -59,17 +59,17 @@ if(empty($reshook)){
 
 	if(isset($conf->global->EACCESS_ACTIVATE_PROJECTS) && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_projects')){
 		$link = $context->getControllerUrl('projects');
-		printService($langs->trans('Projects'),'fa-folder-open',$link);
+		printService($langs->trans('ViewProjects'),'fa-folder-open',$link);
 	}
 
 	if(isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES) && isModEnabled('supplier_invoice') && $user->hasRight('externalaccess', 'view_supplier_invoices')){
 		$link = $context->getControllerUrl('supplier_invoices');
-		printService($langs->trans('SupplierInvoices'),'fa-file-text',$link);
+		printService($langs->trans('ViewSupplierInvoices'),'fa-file-text',$link);
 	}
 
 	if(isset($conf->global->EACCESS_ACTIVATE_TASKS) && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_tasks')){
 		$link = $context->getControllerUrl('tasks');
-		printService($langs->trans('Tasks'),'fa-tasks',$link);
+		printService($langs->trans('ViewTasks'),'fa-tasks',$link);
 	}
 
     $link = $context->getControllerUrl('personalinformations');
