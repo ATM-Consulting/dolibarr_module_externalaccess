@@ -6,6 +6,7 @@ ATMAbout = Dieses Modul wurde von entwickelt <a href="http://www.atm-consulting.
 
 externalaccessSetup = Konfiguration des Kundenportalmoduls
 externalaccessAbout = Über das Kundenportalmodul
+externalaccessDesc = Fügen Sie externen Zugriff für Kunden hinzu
 
 externalaccess=Kundenportalmodul
 
@@ -20,6 +21,8 @@ external_access_userinfos_edit = kann persönliche Informationen ändern
 
 # MENU
 TopMenuexternalaccess=Kundenportalmodul
+MyServices = Meine Dienste
+
 
 # STATUS
 externalaccessStatusDraft=Entwurf (zu validieren)
