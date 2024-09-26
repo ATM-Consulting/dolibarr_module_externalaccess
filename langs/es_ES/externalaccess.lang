@@ -6,6 +6,7 @@ ATMAbout = Este módulo fue desarrollado por <a href="http://www.atm-consulting.
 
 externalaccessSetup = Configuración del módulo del portal del cliente.
 externalaccessAbout = Sobre el módulo del portal del cliente
+externalaccessDesc = Agregar acceso externo para los clientes
 
 externalaccess=Portal del cliente
 
@@ -17,6 +18,8 @@ external_access_userinfos_edit=Puede cambiar esta información personal
 
 # MENU
 TopMenuexternalaccess=Portal del cliente
+MyServices = Mis servicios
+
 
 # STATUS
 externalaccessStatusDraft=Borrador (para ser validado)

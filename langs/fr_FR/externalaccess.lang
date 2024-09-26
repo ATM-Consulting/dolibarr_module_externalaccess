@@ -6,6 +6,7 @@ ATMAbout = Ce module a été développé par <a href="http://www.atm-consulting.
 
 externalaccessSetup = Configuration du module portail client
 externalaccessAbout = A propos du module portail client
+externalaccessDesc = Ajoute un acces externe pour les clients
 
 externalaccess=Portail client
 ExperimentalParams=Experimental
@@ -25,6 +26,7 @@ external_access_supplier_invoices= Consulter ses factures fournisseurs
 TopMenuexternalaccess=Portail client
 GroupMenuAdministrative = Administratif
 GroupMenuTechnical = Technique
+MyServices = Mes services
 
 # STATUS
 externalaccessStatusDraft=Brouillon (à valider)

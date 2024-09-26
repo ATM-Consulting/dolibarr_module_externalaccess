@@ -5,6 +5,8 @@ ATMAbout = This module has been developed by <a href="http://www.atm-consulting.
 
 externalaccessSetup = externalaccess module setup
 externalaccessAbout = About externalaccess
+externalaccessDesc = Add external access for clients
+
 
 ForgotThePassword = Forgot the password?
 Rememberme = Remember me
@@ -32,6 +34,8 @@ external_access_userinfos_edit = can modify personal information
 
 # MENU 
 TopMenuexternalaccess = External Access
+MyServices = My services
+
 
 # STATUS 
 externalaccessStatusDraft = Draft (to be validated)

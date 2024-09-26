@@ -47,7 +47,7 @@ if(empty($reshook)){
 		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && isModEnabled('invoice') && $user->hasRight('externalaccess', 'view_invoices')){
+    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && isModEnabled('facture') && $user->hasRight('externalaccess', 'view_invoices')){
         $link = $context->getControllerUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
@@ -57,6 +57,20 @@ if(empty($reshook)){
         printService($langs->trans('Tickets'),'fa-ticket',$link);
     }
 
+	if(isset($conf->global->EACCESS_ACTIVATE_PROJECTS) && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_projects')){
+		$link = $context->getControllerUrl('projects');
+		printService($langs->trans('ViewProjects'),'fa-folder-open',$link);
+	}
+
+	if(isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES) && isModEnabled('supplier_invoice') && $user->hasRight('externalaccess', 'view_supplier_invoices')){
+		$link = $context->getControllerUrl('supplier_invoices');
+		printService($langs->trans('ViewSupplierInvoices'),'fa-file-text',$link);
+	}
+
+	if(isset($conf->global->EACCESS_ACTIVATE_TASKS) && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_tasks')){
+		$link = $context->getControllerUrl('tasks');
+		printService($langs->trans('ViewTasks'),'fa-tasks',$link);
+	}
 
     $link = $context->getControllerUrl('personalinformations');
     printService($langs->trans('MyPersonalInfos'),'fa-user',$link);
