@@ -59,10 +59,10 @@ class modExternalAccess extends DolibarrModules
 		// Module label (no space allowed), used if translation string 'ModuleXXXName' not found (where XXX is value of numeric property 'numero' of module)
 		$this->name = preg_replace('/^mod/i', '', get_class($this));
 		// Module description, used if translation string 'ModuleXXXDesc' not found (where XXX is value of numeric property 'numero' of module)
-		$this->description = "Ajoute un acces externe pour les clients";
+		$this->description = 'externalaccessDesc';
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.44.1';
+		$this->version = '1.45.0';
 
 		require_once __DIR__ . '/../../class/techatm.class.php';
 		$this->url_last_version = \externalaccess\TechATM::getLastModuleVersionUrl($this);

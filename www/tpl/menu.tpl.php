@@ -18,118 +18,13 @@ if ($context->userIsLog())
 
 	// TODO : check if is it possible to use checkAccess() of controller
 
-    if (isModEnabled('project')
-		&& isset($conf->global->EACCESS_ACTIVATE_PROJECTS)
-		&& $user->hasRight('externalaccess', 'view_projects')
-	)
-    {
-        $Tmenu['projects'] = array(
-            'id' => 'projects',
-            'rank' => 10,
-            'url' => $context->getControllerUrl('projects'),
-            'name' => $langs->trans('EALINKNAME_projects'),
-			'group' => 'technical' // group identifier for the group if necessary
-        );
-    }
-
-	if (isModEnabled('project')
-		&& isset($conf->global->EACCESS_ACTIVATE_TASKS)
-		&& $user->hasRight('externalaccess', 'view_tasks')
-	)
-	{
-		$Tmenu['tasks'] = array(
-			'id' => 'tasks',
-			'rank' => 15,
-			'url' => $context->getControllerUrl('tasks'),
-			'name' => $langs->trans('EALINKNAME_tasks'),
-			'group' => 'technical' // group identifier for the group if necessary
-		);
-	}
-
-    if (isModEnabled('propal')
-		&& isset($conf->global->EACCESS_ACTIVATE_PROPALS)
-		&& $user->hasRight('externalaccess', 'view_propals')
-	)
-    {
-        $Tmenu['propals'] = array(
-            'id' => 'propals',
-            'rank' => 20,
-            'url' => $context->getControllerUrl('propals'),
-            'name' => $langs->trans('EALINKNAME_propals'),
-			'group' => 'administrative' // group identifier for the group if necessary
-        );
-    }
-
-	if (isModEnabled('order')
-		&& isset($conf->global->EACCESS_ACTIVATE_ORDERS)
-		&& $user->hasRight('externalaccess', 'view_orders')
-	)
-	{
-		$Tmenu['orders'] = array(
-			'id' => 'orders',
-			'rank' => 30,
-			'url' => $context->getControllerUrl('orders'),
-			'name' => $langs->trans('EALINKNAME_orders'),
-			'group' => 'administrative' // group identifier for the group if necessary
-		);
-	}
-
-	if (isModEnabled('expedition')
-		&& isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS)
-		&& $user->hasRight('externalaccess', 'view_expeditions')
-	)
-	{
-		$Tmenu['expeditions'] = array(
-			'id' => 'expeditions',
-			'rank' => 40,
-			'url' => $context->getControllerUrl('expeditions'),
-			'name' => $langs->trans('EALINKNAME_expeditions'),
-			'group' => 'administrative' // group identifier for the group if necessary
-		);
-	}
-
-    if (isModEnabled('invoice')
-		&& isset($conf->global->EACCESS_ACTIVATE_INVOICES)
-		&& $user->hasRight('externalaccess', 'view_invoices')
-	)
-    {
-        $Tmenu['invoices'] = array(
-            'id' => 'invoices',
-            'rank' => 50,
-            'url' => $context->getControllerUrl('invoices'),
-            'name' => $langs->trans('EALINKNAME_invoices'),
-			'group' => 'administrative' // group identifier for the group if necessary
-        );
-    }
-
-	if (isModEnabled('supplier_invoice')
-		&& isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES)
-		&& $user->hasRight('externalaccess', 'view_supplier_invoices')
-	)
-	{
-		$Tmenu['supplier_invoices'] = array(
-			'id' => 'supplier_invoices',
-			'rank' => 60,
-			'url' => $context->getControllerUrl('supplier_invoices'),
-			'name' => $langs->trans('EALINKNAME_supplier_invoices'),
-			'group' => 'administrative' // group identifier for the group if necessary
-		);
-	}
-
-    if (isModEnabled('ticket')
-		&& isset($conf->global->EACCESS_ACTIVATE_TICKETS)
-		&& $user->hasRight('externalaccess', 'view_tickets')
-	)
-    {
-        $Tmenu['tickets'] = array(
-            'id' => 'tickets',
-            'rank' => 70,
-            'url' => $context->getControllerUrl('tickets'),
-            'name' => $langs->trans('EALINKNAME_tickets'),
-			'group' => 'technical' // group identifier for the group if necessary
-        );
-    }
-
+	$Tmenu['services'] = array(
+		'id' => 'services',
+		'rank' => 70,
+		'url' => dol_buildpath('/externalaccess/www/', 1) . '#services',
+		'name' => $langs->trans('MyServices'),
+		'group' => 'technical' // group identifier for the group if necessary
+	);
 
     $Tmenu['user'] = array(
         'id' => 'user',
