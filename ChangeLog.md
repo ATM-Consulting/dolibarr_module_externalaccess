@@ -12,6 +12,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # RELEASE 1.45
 
+FIX : DA025746 - Fix fatal mes services - *1.45.1 - **26/11/2024**
 NEW : DA025480 - Ajout d'un menu 'mes services", et des objets:  projets, factures fourn et tâches - 1.45.0 - **25/09/2024**
 
 # RELEASE 1.44

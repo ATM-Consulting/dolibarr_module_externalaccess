@@ -17,11 +17,10 @@ if ($context->userIsLog())
 {
 
 	// TODO : check if is it possible to use checkAccess() of controller
-
 	$Tmenu['services'] = array(
 		'id' => 'services',
 		'rank' => 70,
-		'url' => dol_buildpath('/externalaccess/www/', 1) . '#services',
+		'url' => $_SERVER['PHP_SELF'] . '#services',
 		'name' => $langs->trans('MyServices'),
 		'group' => 'technical' // group identifier for the group if necessary
 	);
