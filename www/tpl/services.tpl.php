@@ -32,42 +32,42 @@ if ($reshook < 0) $context->setEventMessages($hookmanager->error,$hookmanager->e
 
 if(empty($reshook)){
 
-    if(isset($conf->global->EACCESS_ACTIVATE_PROPALS) && $user->hasRight('externalaccess', 'view_propals')){
+    if(getDolGlobalInt("EACCESS_ACTIVATE_PROPALS") && $user->hasRight('externalaccess', 'view_propals')){
         $link = $context->getControllerUrl('propals');
         printService($langs->trans('Quotations'),'fa-pencil',$link); // desc : $langs->trans('QuotationsDesc')
     }
 
-	if(isset($conf->global->EACCESS_ACTIVATE_ORDERS) && $user->hasRight('externalaccess', 'view_orders')){
+	if(getDolGlobalInt("EACCESS_ACTIVATE_ORDERS") && $user->hasRight('externalaccess', 'view_orders')){
 		$link = $context->getControllerUrl('orders');
 		printService($langs->trans('Orders'),'fa-file-text-o',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-	if(isset($conf->global->EACCESS_ACTIVATE_EXPEDITIONS) && $user->hasRight('externalaccess', 'view_expeditions')){
+	if(getDolGlobalInt("EACCESS_ACTIVATE_EXPEDITIONS") && $user->hasRight('externalaccess', 'view_expeditions')){
 		$link = $context->getControllerUrl('expeditions');
 		printService($langs->trans('Expeditions'),'fa-truck',$link); // desc : $langs->trans('OrdersDesc')
 	}
 
-    if(isset($conf->global->EACCESS_ACTIVATE_INVOICES) && isModEnabled('facture') && $user->hasRight('externalaccess', 'view_invoices')){
+    if(getDolGlobalInt("EACCESS_ACTIVATE_INVOICES") && isModEnabled('facture') && $user->hasRight('externalaccess', 'view_invoices')){
         $link = $context->getControllerUrl('invoices');
         printService($langs->trans('Invoices'),'fa-file-text',$link); // desc : $langs->trans('InvoicesDesc')
     }
 
-    if(isset($conf->global->EACCESS_ACTIVATE_TICKETS) && isModEnabled('ticket') && $user->hasRight('externalaccess', 'view_tickets')){
+    if(getDolGlobalInt("EACCESS_ACTIVATE_TICKETS") && isModEnabled('ticket') && $user->hasRight('externalaccess', 'view_tickets')){
         $link = $context->getControllerUrl('tickets');
         printService($langs->trans('Tickets'),'fa-ticket',$link);
     }
 
-	if(isset($conf->global->EACCESS_ACTIVATE_PROJECTS) && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_projects')){
+	if(getDolGlobalInt("EACCESS_ACTIVATE_PROJECTS") && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_projects')){
 		$link = $context->getControllerUrl('projects');
 		printService($langs->trans('ViewProjects'),'fa-folder-open',$link);
 	}
 
-	if(isset($conf->global->EACCESS_ACTIVATE_SUPPLIER_INVOICES) && isModEnabled('supplier_invoice') && $user->hasRight('externalaccess', 'view_supplier_invoices')){
+	if(getDolGlobalInt("EACCESS_ACTIVATE_SUPPLIER_INVOICES") && isModEnabled('supplier_invoice') && $user->hasRight('externalaccess', 'view_supplier_invoices')){
 		$link = $context->getControllerUrl('supplier_invoices');
 		printService($langs->trans('ViewSupplierInvoices'),'fa-file-text',$link);
 	}
 
-	if(isset($conf->global->EACCESS_ACTIVATE_TASKS) && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_tasks')){
+	if(getDolGlobalInt("EACCESS_ACTIVATE_TASKS") && isModEnabled('projet') && $user->hasRight('externalaccess', 'view_tasks')){
 		$link = $context->getControllerUrl('tasks');
 		printService($langs->trans('ViewTasks'),'fa-tasks',$link);
 	}
