@@ -101,8 +101,8 @@ if (isset($curentUrlParsed['query'])) {
     // Mobile appli like icon
     print '	<link rel="manifest" href="'.$context->getControllerUrl().'manifest.json.php'.'" />' . "\r\n";
 
-	$primaryColor = getDolGlobalString('EACCESS_PRIMARY_COLOR','#F05F40');
-	$backgroundColor = getDolGlobalString('EACCESS_APPLI_COLOR',$primaryColor);
+	$primaryColor = '#' . getDolGlobalString('EACCESS_PRIMARY_COLOR','F05F40');
+    $backgroundColor = (!empty(getDolGlobalString('EACCESS_APPLI_COLOR'))) ? '#' . getDolGlobalString('EACCESS_APPLI_COLOR') : $primaryColor;
 	print '	<meta name="theme-color" content="'.$backgroundColor.'">' . "\r\n";
 
 
