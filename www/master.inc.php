@@ -221,19 +221,20 @@ if (!defined('NOREQUIREDB') && !defined('NOREQUIRESOC')) {
 
 	// We set some specific default values according to country
 
-	if ($mysoc->country_code == 'DE' && !getDolGlobalInt("MAIN_INVERT_SENDER_RECIPIENT")) {
+	if ($mysoc->country_code == 'DE' && !isset($conf->global->MAIN_INVERT_SENDER_RECIPIENT)) {
 		// For DE, we need to invert our address with customer address
-		dolibarr_set_const($db, "MAIN_INVERT_SENDER_RECIPIENT", 1);
+		$conf->global->MAIN_INVERT_SENDER_RECIPIENT = 1;
+
 	}
-	if ($mysoc->country_code == 'FR' && !getDolGlobalInt("MAIN_PROFID1_IN_ADDRESS")) {
+	if ($mysoc->country_code == 'FR' && !isset($conf->global->MAIN_PROFID1_IN_ADDRESS)) {
 		// For FR, default value of option to show profid SIRET is on by default
-		dolibarr_set_const($db, "MAIN_PROFID1_IN_ADDRESS", 1);
+		$conf->global->MAIN_PROFID1_IN_ADDRESS = 1;
 	}
 
-	if (($mysoc->localtax1_assuj || $mysoc->localtax2_assuj) && !getDolGlobalInt("MAIN_NO_INPUT_PRICE_WITH_TAX")) {
+	if (($mysoc->localtax1_assuj || $mysoc->localtax2_assuj) && !isset($conf->global->MAIN_NO_INPUT_PRICE_WITH_TAX)) {
 		// For countries using the 2nd or 3rd tax, we disable input/edit of lines using the price including tax (because 2nb and 3rd tax not yet taken into account).
 		// Work In Progress to support all taxes into unit price entry when MAIN_UNIT_PRICE_WITH_TAX_IS_FOR_ALL_TAXES is set.
-		dolibarr_set_const($db, "MAIN_NO_INPUT_PRICE_WITH_TAX", 1);
+		$conf->global->MAIN_NO_INPUT_PRICE_WITH_TAX = 1;
 	}
 }
 
