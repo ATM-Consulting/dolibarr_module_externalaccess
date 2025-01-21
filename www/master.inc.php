@@ -224,6 +224,7 @@ if (!defined('NOREQUIREDB') && !defined('NOREQUIRESOC')) {
 	if ($mysoc->country_code == 'DE' && !isset($conf->global->MAIN_INVERT_SENDER_RECIPIENT)) {
 		// For DE, we need to invert our address with customer address
 		$conf->global->MAIN_INVERT_SENDER_RECIPIENT = 1;
+
 	}
 	if ($mysoc->country_code == 'FR' && !isset($conf->global->MAIN_PROFID1_IN_ADDRESS)) {
 		// For FR, default value of option to show profid SIRET is on by default
