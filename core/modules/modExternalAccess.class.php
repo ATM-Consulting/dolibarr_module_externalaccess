@@ -385,6 +385,7 @@ class modExternalAccess extends DolibarrModules
 
 		define('INC_FROM_DOLIBARR', true);
 
+		require_once DOL_DOCUMENT_ROOT . '/core/class/extrafields.class.php';
 		$extrafields = new ExtraFields($this->db);
 		$extrafields->addExtraField(
 			'externalaccess_followupemail',
