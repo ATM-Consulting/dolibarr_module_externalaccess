@@ -528,7 +528,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 					$ticket->ref = $ticket->getDefaultRef();
 					$ticket->datec = time();
 					$ticket->fk_statut = Ticket::STATUS_NOT_READ;
-					
+
 					if(!empty($followUpEmail)) {
 						$TResults = getContactIds($user->socid, $followUpEmail, $context);
 						if(empty($TResults)) {
@@ -548,7 +548,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 						if(empty($user->contact_id)){
 							$user->contact_id = $user->contactid; // Dolibarr < 13 retrocompatibility
 						}
-						
+
 						$ticket->add_contact($user->contact_id, "SUPPORTCLI", 'external', 0);
 						if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
 							if(!empty($TResults)){
@@ -558,7 +558,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 								}
 							}
 						}
-						
+
 					}else{
 						$ticketErrors++;
 						$context->setEventMessages($langs->trans('AnErrorOccurredDuringTicketSave'), 'errors');
@@ -596,4 +596,23 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 			$context->desc = $langs->trans('ViewTicketsDesc');
 		}
 	}
+
+	/**
+	 * addMoreContactEmails Method Hook Call
+	 *
+	 * @param array $parameters
+	 * @param object &$object
+	 * @param string &$action
+	 * @param Object $hookmanager
+	 * @return int
+	 */
+	public function addMoreContactEmails(array $parameters, object &$object, string &$action, object $hookmanager): int
+	{
+		if (getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')){
+			$followUpMail = $object->array_options['options_externalaccess_followupemail'];
+			if (!empty($followUpMail)) $this->results = [$followUpMail];
+		}
+		return 0;
+	}
+
 }
