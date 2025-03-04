@@ -8,7 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 # UNRELEASED
 
 # RELEASE 1.45
-
+FIX : Suppression des unserialize qui retournai false sur les strings des conf d'affichage des champs dans les listes - 1.45.1 - **04/03/2025**
 NEW : DA025480 Ajout d'un menu 'mes services", et des objets:  projets, factures fourn et tâches - 1.45.0 - **25/09/2024**
 
 # RELEASE 1.44
