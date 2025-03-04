@@ -11,7 +11,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 
 # RELEASE 1.45
-
+FIX : Suppression des unserialize qui retournai false sur les strings des conf d'affichage des champs dans les listes - 1.45.4 - **04/03/2025**
 FIX : DA025948 - Fix error primary color - missing "#" en mieux :p - 1.45.3 - **10/01/2025**
 FIX : Compat v21 - 1.45.3 - **9/12/2024** 
 FIX : DA025746 - Fix error primary color - missing "#" - 1.45.2 - **09/12/2024**
