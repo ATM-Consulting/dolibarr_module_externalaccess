@@ -62,7 +62,7 @@ class modExternalAccess extends DolibarrModules
 		$this->description = 'externalaccessDesc';
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.45.4';
+		$this->version = '1.46.1';
 
 		require_once __DIR__ . '/../../class/techatm.class.php';
 		$this->url_last_version = \externalaccess\TechATM::getLastModuleVersionUrl($this);
@@ -97,8 +97,7 @@ class modExternalAccess extends DolibarrModules
 		//                        );
 		$this->module_parts = array(
 			'triggers' => 1,
-		    'hooks' => array('externalaccesspage','externalaccess'),
-
+		    'hooks' => array('externalaccesspage','externalaccess', 'smartcustomersupport'),
 		);
 
 		// Data directories to create when module is enabled.
