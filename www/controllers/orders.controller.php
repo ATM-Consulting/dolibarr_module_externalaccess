@@ -104,10 +104,10 @@ class OrdersController extends Controller
 
 			//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
-			$TOther_fields_all = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
+			$TOther_fields_all = explode(',', getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if(empty($TOther_fields_all) || !is_array($TOther_fields_all)) $TOther_fields_all = array();
 
-			$TOther_fields_order = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_ORDER'));
+			$TOther_fields_order = explode(',', getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_ORDER'));
 			if(empty($TOther_fields_order) || !is_array($TOther_fields_order)) $TOther_fields_order = array();
 
 			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_order);

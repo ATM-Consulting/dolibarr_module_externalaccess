@@ -159,11 +159,11 @@ class ProjectsController extends Controller
 			}
 
 
-			$TOther_fields_all = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
+			$TOther_fields_all = explode(',', getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if (empty($TOther_fields_all))
 				$TOther_fields_all = array();
 
-			$TOther_fields_project = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_PROJECT'));
+			$TOther_fields_project = explode(',', getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_PROJECT'));
 			if (empty($TOther_fields_project))
 				$TOther_fields_project = array();
 

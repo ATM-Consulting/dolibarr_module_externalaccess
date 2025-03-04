@@ -102,7 +102,7 @@ class InvoicesController extends Controller
 
 			//TODO : ajouter tableau $TFieldsCols et hook listColumnField comme dans print_expeditionlistTable
 
-			$TOther_fields = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
+			$TOther_fields = explode(',', getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if(empty($TOther_fields)) $TOther_fields = array();
 
 			print '<table id="invoice-list" class="table table-striped" >';
