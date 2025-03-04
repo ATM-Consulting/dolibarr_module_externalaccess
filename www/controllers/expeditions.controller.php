@@ -153,10 +153,10 @@ class ExpeditionsController extends Controller
 			}
 
 
-			$TOther_fields_all = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
+			$TOther_fields_all = explode(',', getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS'));
 			if(empty($TOther_fields_all)) $TOther_fields_all = array();
 
-			$TOther_fields_shipping = unserialize(getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_SHIPPING'));
+			$TOther_fields_shipping = explode(',', getDolGlobalString('EACCESS_LIST_ADDED_COLUMNS_SHIPPING'));
 			if(empty($TOther_fields_shipping)) $TOther_fields_shipping = array();
 
 			$TOther_fields = array_merge($TOther_fields_all, $TOther_fields_shipping);
