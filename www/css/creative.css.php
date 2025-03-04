@@ -55,7 +55,8 @@ header("Content-Type: text/css");
 if (empty($dolibarr_nocache)) header('Cache-Control: max-age=3600, public, must-revalidate');
 else header('Cache-Control: no-cache');
 
-$primaryColor = getDolGlobalString('EACCESS_PRIMARY_COLOR','#F05F40');
+$color = getDolGlobalString('EACCESS_PRIMARY_COLOR', 'F05F40');
+$primaryColor = '#' . ltrim($color, '#');
 $primaryColorHover = ColorTools::adjustBrightness($primaryColor,-30);
 $headerImg = getDolGlobalString('EACCESS_HEADER_IMG','../img/header_02.jpg');
 
@@ -73,6 +74,7 @@ body,
 html {
   width: 100%;
   height: 100%;
+  scroll-behavior: smooth;
 }
 
 body {
