@@ -463,7 +463,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				$errors = 0;
 
 
-				if (getDolGlobalInt('EACCESS_SEVERITY')) {
+				if (getDolGlobalInt('EACCESS_SEVERITY') && !getDolGlobalInt('EACCESS_DISABLE_SEVERITY_ON_TICKET')) {
 					$severity = GETPOST('severity', 'none');
 				}
 

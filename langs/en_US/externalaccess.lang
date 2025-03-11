@@ -240,3 +240,4 @@ EAVirtualHosts = Virtual hosts
 invalidDomain = Invalid domain name
 EACCESS_FOLLOW_UP_EMAIL = Activate or deactivate the email field for ticket follow-up
 EACCESS_SEVERITY = Enable or disable the severity field on the ticket form
+EACCESS_DISABLE_SEVERITY_ON_TICKET = Disable severity display for tickets

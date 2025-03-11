@@ -253,16 +253,16 @@ class FormExternal
 	 * @return void
 	 */
 	public function addExtrafieldsItems() {
-		global $conf;
+		global $langs;
 		dol_include_once('core/class/extrafields.class.php');
 		$e = new ExtraFields($this->db);
 		$e->fetch_name_optionals_label($this->element);
 		$confVal = 'EACCESS_CARD_ADDED_FIELD_'.strtoupper($this->element);
-		$TExtraAddedField = unserialize($conf->global->{$confVal});
+		$TExtraAddedField = explode(',', getDolGlobalString($confVal));
 		if(!empty($TExtraAddedField)) {
 			foreach($TExtraAddedField as $extra_field) {
 				$extra_field = strtr($extra_field, array('EXTRAFIELD_' => ''));
-				$label = $e->attributes[$this->element]['label'][$extra_field];
+				$label = $langs->transnoentities($e->attributes[$this->element]['label'][$extra_field]);
 				$type = $e->attributes[$this->element]['type'][$extra_field];
 				$size = $e->attributes[$this->element]['size'][$extra_field];
 				$default = $e->attributes[$this->element]['default'][$extra_field];

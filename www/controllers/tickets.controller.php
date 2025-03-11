@@ -126,7 +126,9 @@ class TicketsController extends Controller
 			print ' <th class="text-center" >'.$langs->trans('Date').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Subject').'</th>';
 			print ' <th class="text-center" >'.$langs->trans('Type').'</th>';
-			print ' <th class="text-center" >'.$langs->trans('TicketSeverity').'</th>';
+			if (!getDolGlobalInt('EACCESS_DISABLE_SEVERITY_ON_TICKET')) {
+				print ' <th class="text-center" >'.$langs->trans('TicketSeverity').'</th>';
+			}
 			print ' <th class="text-center" >'.$langs->trans('Status').'</th>';
 			print '</tr>';
 			print '</thead>';
@@ -155,7 +157,9 @@ class TicketsController extends Controller
 				print ' <td data-search="'.dol_print_date($object->datec).'" data-order="'.$object->datec.'" >'.dol_print_date($object->datec).'</td>';
 				print ' <td data-search="'.$object->subject.'" data-order="'.$object->subject.'" >'.$object->subject.'</td>';
 				print ' <td data-search="'.$object->type_label.'" data-order="'.$object->type_label.'" >'.$object->type_label.'</td>';
-				print ' <td data-search="'.$object->severity_label.'" data-order="'.$object->severity_label.'" >'.$object->severity_label.'</td>';
+				if (!getDolGlobalInt('EACCESS_DISABLE_SEVERITY_ON_TICKET')) {
+					print ' <td data-search="'.$object->severity_label.'" data-order="'.$object->severity_label.'" >'.$object->severity_label.'</td>';
+				}
 				print ' <td class="text-center" >'.$object->getLibStatut(1).'</td>';
 				print '</tr>';
 			}
