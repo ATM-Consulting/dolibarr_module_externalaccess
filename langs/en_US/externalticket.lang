@@ -15,7 +15,6 @@ TicketBtnSubmitCreate= Create ticket
 TicketBtnSubmitSave = Save
 
 InitialMessage=Description
-Severity=Niveau
 Unread = Unread
 
 AnErrorOccurredDuringTicketSave=Une erreur c'est produite lors de la sauvegarde
@@ -47,5 +46,4 @@ ErrorNoRightToDoThisAction=Désolé, votre compte utilisateur ne dispose pas du 
 TicketFollowUpEmailHere = Enter the ticket follow-up email
 TicketFollowUpEmailHelp = The person will be added to the ticket follow-up
 FollowUpEmail = Follow-up email
-TicketSeverityHere = Select ticket severity
 ErrorFollowUpEmail = Follow-up email is invalid

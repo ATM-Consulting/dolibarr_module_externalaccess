@@ -200,4 +200,3 @@ tracking_url=Numéro de suivi
 YourSalesRep=Votre contact chez %s :
 YourSalesRepMultiple=Vos contacts chez %s :
 EACCESS_FOLLOW_UP_EMAIL = Aktivieren oder deaktivieren Sie das E-Mail-Feld für die Ticketverfolgung.
-EACCESS_SEVERITY = Das Feld Schweregrad auf dem Ticketformular aktivieren oder nicht aktivieren

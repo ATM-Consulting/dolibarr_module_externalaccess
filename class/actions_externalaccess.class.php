@@ -462,11 +462,6 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				// Check
 				$errors = 0;
 
-
-				if (getDolGlobalInt('EACCESS_SEVERITY')) {
-					$severity = GETPOST('severity', 'none');
-				}
-
 				if(getDolGlobalInt('EACCESS_FOLLOW_UP_EMAIL')) {
 					$followUpEmail = GETPOST('options_externalaccess_followupemail', 'none');
 					$ticket->array_options['options_externalaccess_followupemail'] = $followUpEmail;
@@ -535,8 +530,6 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 							$ticket->message .= "<br>" . $langs->trans('FollowUpEmail') . " : " . $followUpEmail;
 						}
 					}
-
-					if(!empty($severity)) $ticket->severity_code = $severity;
 
 					$context->dbTool->db->begin();
 

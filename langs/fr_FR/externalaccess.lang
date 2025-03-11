@@ -153,7 +153,6 @@ EACCESS_LIST_ADDED_COLUMNS_PROPAL=Colonnes supplémentaires à afficher sur les 
 EACCESS_LIST_ADDED_COLUMNS_TICKET=Colonnes supplémentaires à afficher sur les listes de tickets
 EACCESS_CARD_ADDED_FIELD_TICKET=Champs supplémentaires à afficher sur les fiches tickets
 EACCESS_FOLLOW_UP_EMAIL=Activer ou non le champ email pour suivi ticket
-EACCESS_SEVERITY=Activer ou non le champ sévérité sur le formulaire ticket
 ConfLinkedToContents = Paramètres liés au contenu
 ConfLinkedToContactInfos = Paramètres liés au contact
 ConfLinkedToDesign = Paramètres liés à l'apparence

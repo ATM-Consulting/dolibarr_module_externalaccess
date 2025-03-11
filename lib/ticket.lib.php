@@ -79,24 +79,6 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 	}
 
-	if (getDolGlobalInt('EACCESS_SEVERITY')) {
-		$item = $formExternal->newItem('severity');
-
-		$object->loadCacheSeveritiesTickets();
-		$TSeverities = $object->cache_severity_tickets;
-
-		$TOptions = [];
-
-		foreach($TSeverities as $t){
-			$TOptions[$t['code']] = $t['label'];
-		}
-
-		$item->setAsSelect($TOptions);
-
-		$item->nameText = $langs->transnoentities('TicketSeverityHere');
-		$item->fieldAttr['placeholder'] = $langs->transnoentities('TicketSeverityHere');
-	}
-
 	$item = $formExternal->newItem('message');
 	$item->setAsHtml();
 	$item->setAsRequired();
@@ -393,10 +375,6 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					<div class="row clearfix form-group" id="Type">
 						<div class="col-md-2">'.$langs->transnoentities('Type').'</div>
 						<div class="col-md-10">'.$object->type_label.'</div>
-					</div>
-					<div class="row clearfix form-group" id="Severity">
-						<div class="col-md-2">'.$langs->transnoentities('Severity').'</div>
-						<div class="col-md-8">'.$object->severity_label.'</div>
 					</div>
 					<div class="row clearfix form-group" id="DateCreation">
 						<div class="col-md-2">'.$langs->transnoentities('DateCreation').'</div>
@@ -1327,7 +1305,7 @@ function externalAccessGetTicketEcmList($object, $pulicOnly = true)
 function addTicketContact(Ticket $ticket, array $TResults, Context $context): int
 {
 	global $langs;
-	
+
 	foreach($TResults as $obj){
 		$fk_socpeople = intval($obj->rowid);
 		$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
@@ -1337,7 +1315,7 @@ function addTicketContact(Ticket $ticket, array $TResults, Context $context): in
 			return -1;
 		}
 	}
-	
+
 	return 1;
 }
 

@@ -296,9 +296,6 @@ $formSetup->newItem('EACCESS_CARD_ADDED_FIELD_TICKET')->setAsMultiSelect(getExtr
 // Activer ou non l'email pour le suivi
 $formSetup->newItem('EACCESS_FOLLOW_UP_EMAIL')->setAsYesNo();
 
-// Activer ou non la sévérité
-$formSetup->newItem('EACCESS_SEVERITY')->setAsYesNo();
-
 /*
  * EXPERIMENTAL
  */
