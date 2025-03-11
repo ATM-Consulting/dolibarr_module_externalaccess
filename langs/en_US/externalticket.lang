@@ -47,3 +47,6 @@ TicketFollowUpEmailHere = Enter the ticket follow-up email
 TicketFollowUpEmailHelp = The person will be added to the ticket follow-up
 FollowUpEmail = Follow-up email
 ErrorFollowUpEmail = Follow-up email is invalid
+ErrorMessageHere = Enter the error message
+ErrorMessageHelp = Copy the error message you encounter
+TicketRequiredFieldHelp = (*) Required fields

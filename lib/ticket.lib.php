@@ -79,6 +79,14 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 	}
 
+	$item = $formExternal->newItem('error_message');
+	$item->setAsString();
+	$item->nameText = $langs->transnoentities('ErrorMessageHere');
+	$item->helpText = $langs->transnoentities('ErrorMessageHelp');
+	$item->fieldValue = dol_htmlentities($object->errorMessage);
+	$item->fieldAttr['placeholder'] = $langs->transnoentities('ErrorMessageHere');
+	$item->fieldAttr['maxlength'] = 200;
+
 	$item = $formExternal->newItem('message');
 	$item->setAsHtml();
 	$item->setAsRequired();
@@ -94,8 +102,8 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 		$formExternal->btAttributes['text'] = $langs->transnoentities('TicketBtnSubmitCreate');
 	}
 
-
 	$out .= $formExternal->generateOutput(true, 'ticket');
+	$out .= $langs->transnoentities("TicketRequiredFieldHelp");
 
 	print $out;
 }

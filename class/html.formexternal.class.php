@@ -890,9 +890,11 @@ class FormExternal
 			if(empty($item->element)) $item->element = $this->element;
 			$this->externalNotEmpty++;
 			$out .= '<div class="form-group">';
+
+			$requiredChar = $item->required ? '(*)' : '';
 			if($item->getType() == 'separator') $out .= '<hr style="max-width : 100%;">';
 			else {
-				$out .= '<label for="'.$this->element.'-'.$item->confKey.'">'.$item->getNameText().'</label>';
+				$out .= '<label for="'.$this->element.'-'.$item->confKey.'">'.$item->getNameText().' '.$requiredChar.'</label>';
 				$helpText = $item->getHelpText();
 				if(! empty($helpText)) $item->fieldAttr['aria-describedby'] = $this->element.'-'.$item->confKey.'-help';
 
