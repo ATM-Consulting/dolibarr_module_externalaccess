@@ -85,7 +85,6 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 	$item->helpText = $langs->transnoentities('ErrorMessageHelp');
 	$item->fieldValue = dol_htmlentities($object->errorMessage);
 	$item->fieldAttr['placeholder'] = $langs->transnoentities('ErrorMessageHere');
-	$item->fieldAttr['maxlength'] = 200;
 
 	$item = $formExternal->newItem('message');
 	$item->setAsHtml();
