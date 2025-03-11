@@ -6,6 +6,7 @@ ___
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
 # UNRELEASED
+NEW : Remove severity field and add new error_message - 1.47 - **11/03/2025**
 
 # RELEASE 1.46
 NEW : Ajout d'un hook 'addMoreContactEmails' pour ajouter des emails lors d'une prise en charge de ticket par le module smartcustomersupport - 1.46.0 - **10/03/2025**
