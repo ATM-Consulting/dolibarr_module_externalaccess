@@ -49,4 +49,5 @@ FollowUpEmail = Follow-up email
 ErrorFollowUpEmail = Follow-up email is invalid
 ErrorMessageHere = Enter the error message
 ErrorMessageHelp = Copy the error message you encounter
+ErrorMessage = Error message
 TicketRequiredFieldHelp = (*) Required fields

@@ -11,6 +11,7 @@ TicketFollowUpEmailHelp = La personne sera ajoutée au suivi du ticket
 FollowUpEmail=Email pour le suivi
 ErrorMessageHere = Saisissez le message d'erreur
 ErrorMessageHelp = Copier le message d'erreur que vous rencontrez
+ErrorMessage = Message d'erreur
 TicketRequiredFieldHelp = (*) Champs requis
 TicketBtnSubmitCreate = Ouvrir un ticket
 TicketBtnSubmitSave = Enregister

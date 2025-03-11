@@ -44,4 +44,5 @@ FollowUpEmail = Correo electrónico de seguimiento
 ErrorFollowUpEmail = El correo electrónico de seguimiento no es válido
 ErrorMessageHere = Introduzca el mensaje de error
 ErrorMessageHelp = Copie el mensaje de error que encuentre
+ErrorMessage = Mensaje de error
 TicketRequiredFieldHelp = (*) Campos obligatorios

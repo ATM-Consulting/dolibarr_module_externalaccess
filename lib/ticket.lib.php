@@ -392,6 +392,10 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 						<div class="col-md-2">'.$langs->transnoentities('Author').'</div>
 						<div class="col-md-10">'.$author.'</div>
 					</div>
+					<div class="row clearfix form-group" id="errorMessage">
+						<div class="col-md-2">'.$langs->transnoentities('ErrorMessage').'</div>
+						<div class="col-md-10">'.$object->array_options['options_error_message'].'</div>
+					</div>
 					<div class="row clearfix form-group" id="InitialMessage">
 						<div class="col-md-2">'.$langs->transnoentities('InitialMessage').'</div>
 						<div class="col-md-10">'.$object->message.'</div>

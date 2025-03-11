@@ -44,4 +44,5 @@ FollowUpEmail = E-Mail zur Nachverfolgung
 ErrorFollowUpEmail = Die E-Mail für die Nachverfolgung ist ungültig
 ErrorMessageHere = Geben Sie die Fehlermeldung ein
 ErrorMessageHelp = Kopieren Sie die Fehlermeldung, die bei Ihnen auftritt
+ErrorMessage = Fehlermeldung
 TicketRequiredFieldHelp = (*) Erforderliche Felder
