@@ -676,7 +676,7 @@ function print_ticketCard_extrafields($ticket) {
 	if(! empty($TTicketAddedField)) {
 		foreach($TTicketAddedField as $ticket_field) {
 			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
-			$label = $e->attributes['ticket']['label'][$ticket_field];
+			$label = $langs->transnoentities($e->attributes['ticket']['label'][$ticket_field]);
 			$type = $e->attributes['ticket']['type'][$ticket_field];
 			$size = $e->attributes['ticket']['size'][$ticket_field];            // Can be '255', '24,8'...
 			$default = $e->attributes['ticket']['default'][$ticket_field];
