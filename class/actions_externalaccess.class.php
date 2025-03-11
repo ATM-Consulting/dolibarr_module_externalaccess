@@ -468,6 +468,7 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 				}
 
 				$ticket->message = GETPOST('message', 'none');
+				$ticket->array_options['options_error_message'] = GETPOST('error_message', 'none');
 				$ticket->subject = GETPOST('subject', 'none');
 				$ticket->fk_soc = $user->socid;
 
