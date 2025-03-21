@@ -79,7 +79,7 @@ function print_ticketCard_form($ticketId = 0, $socId = 0, $action = '')
 
 	}
 
-	if (getDolGlobalInt('EACCESS_SEVERITY')) {
+	if (getDolGlobalInt('EACCESS_SEVERITY') && !getDolGlobalInt('EACCESS_DISABLE_SEVERITY_ON_TICKET')) {
 		$item = $formExternal->newItem('severity');
 
 		$object->loadCacheSeveritiesTickets();
@@ -393,12 +393,15 @@ function print_ticketCard_view($ticketId = 0, $socId = 0, $action = '')
 					<div class="row clearfix form-group" id="Type">
 						<div class="col-md-2">'.$langs->transnoentities('Type').'</div>
 						<div class="col-md-10">'.$object->type_label.'</div>
-					</div>
-					<div class="row clearfix form-group" id="Severity">
+					</div>';
+
+		if (empty(getDolGlobalInt('EACCESS_DISABLE_SEVERITY_ON_TICKET'))) {
+			$out .= '<div class="row clearfix form-group" id="Severity">
 						<div class="col-md-2">'.$langs->transnoentities('Severity').'</div>
 						<div class="col-md-8">'.$object->severity_label.'</div>
-					</div>
-					<div class="row clearfix form-group" id="DateCreation">
+					</div>';
+		}
+		$out .= 	'<div class="row clearfix form-group" id="DateCreation">
 						<div class="col-md-2">'.$langs->transnoentities('DateCreation').'</div>
 						<div class="col-md-10">'.dol_print_date($object->datec, 'dayhour').'</div>
 					</div>
@@ -673,7 +676,7 @@ function print_ticketCard_extrafields($ticket) {
 	if(! empty($TTicketAddedField)) {
 		foreach($TTicketAddedField as $ticket_field) {
 			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
-			$label = $e->attributes['ticket']['label'][$ticket_field];
+			$label = $langs->transnoentities($e->attributes['ticket']['label'][$ticket_field]);
 			$type = $e->attributes['ticket']['type'][$ticket_field];
 			$size = $e->attributes['ticket']['size'][$ticket_field];            // Can be '255', '24,8'...
 			$default = $e->attributes['ticket']['default'][$ticket_field];
@@ -1327,7 +1330,7 @@ function externalAccessGetTicketEcmList($object, $pulicOnly = true)
 function addTicketContact(Ticket $ticket, array $TResults, Context $context): int
 {
 	global $langs;
-	
+
 	foreach($TResults as $obj){
 		$fk_socpeople = intval($obj->rowid);
 		$resAddContact = $ticket->add_contact($fk_socpeople, 'SUPPORTCLI');
@@ -1337,7 +1340,7 @@ function addTicketContact(Ticket $ticket, array $TResults, Context $context): in
 			return -1;
 		}
 	}
-	
+
 	return 1;
 }
 
