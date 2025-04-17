@@ -62,8 +62,11 @@ class modExternalAccess extends DolibarrModules
 		$this->description = 'externalaccessDesc';
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
+<<<<<<< HEAD
+		$this->version = '1.46.1';
+=======
 		$this->version = '1.47.1';
-
+>>>>>>> 68ad9d89e594f9c0f240f45478eda7b75a1a192c
 
 		require_once __DIR__ . '/../../class/techatm.class.php';
 		$this->url_last_version = \externalaccess\TechATM::getLastModuleVersionUrl($this);
