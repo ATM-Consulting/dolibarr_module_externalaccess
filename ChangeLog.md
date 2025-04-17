@@ -8,6 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 # UNRELEASED
 
 # RELEASE 1.46
+NEW : Typage $conf->db->port  - 1.46.0 - **17/04/2025**
 NEW : Ajout d'un hook 'addMoreContactEmails' pour ajouter des emails lors d'une prise en charge de ticket par le module smartcustomersupport - 1.46.0 - **10/03/2025**
 
 # RELEASE 1.45
