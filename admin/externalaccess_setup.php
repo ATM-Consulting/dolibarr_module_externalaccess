@@ -296,8 +296,11 @@ $formSetup->newItem('EACCESS_CARD_ADDED_FIELD_TICKET')->setAsMultiSelect(getExtr
 // Activer ou non l'email pour le suivi
 $formSetup->newItem('EACCESS_FOLLOW_UP_EMAIL')->setAsYesNo();
 
-// Activer ou non la sévérité
+// Activer ou non la sévérité sur les champs de formulaire
 $formSetup->newItem('EACCESS_SEVERITY')->setAsYesNo();
+
+// Utiliser ou non la sévérité pour les tickets
+$formSetup->newItem('EACCESS_DISABLE_SEVERITY_ON_TICKET')->setAsYesNo();
 
 /*
  * EXPERIMENTAL
