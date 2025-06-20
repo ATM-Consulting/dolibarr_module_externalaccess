@@ -28,7 +28,9 @@ $prefix=dol_getprefix('');
 $sessionname='DOLSESSID_'.$prefix;
 $sessiontimeout='DOLSESSTIMEOUT_'.$prefix;
 session_destroy();
+//On essaie de déplacer ici, si ça foire on deletera directement, on comprend pas trop pourquoi c'est là
 session_name($sessionname);
+
 if (!empty($_COOKIE[$sessiontimeout])) ini_set('session.gc_maxlifetime',$_COOKIE[$sessiontimeout]);
 dol_syslog("End of session ".$sessionname);
 
