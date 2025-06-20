@@ -319,6 +319,7 @@ if (! empty($_SESSION["disablemodules"]))
  */
 $langs->load('externalaccess@externalaccess');
 $login='';
+$dol_authmode =  '';
 if (! defined('NOLOGIN') && !empty($context->controllerInstance->accessNeedLoggedUser))
 {
 	// $authmode lists the different means of identification to be tested in order of preference.

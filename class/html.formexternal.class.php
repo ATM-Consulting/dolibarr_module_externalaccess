@@ -1235,7 +1235,8 @@ class FormExternalItem
 		$this->entity = $conf->entity;
 
 		$this->confKey = $confKey;
-		$this->fieldValue = $conf->global->{$this->confKey};
+		$this->fieldValue = isset($conf->global->{$this->confKey}) ? $conf->global->{$this->confKey} : null;
+
 	}
 
 	/**

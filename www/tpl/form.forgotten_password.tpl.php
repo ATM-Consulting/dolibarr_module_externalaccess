@@ -31,8 +31,14 @@ $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 
 						</div>
 
-						<?php if ($this->tpl->captcha) :
+						<?php if (
+							isset($this->tpl) &&
+							is_object($this->tpl) &&
+							property_exists($this->tpl, 'captcha') &&
+							$this->tpl->captcha
+						) {
 
+							$php_self = $_SERVER['REQUEST_URI'] ?? '';
 							// Add a variable param to force not using cache (jmobile)
 							$php_self = preg_replace('/[&\?]time=(\d+)/', '', $php_self); // Remove param time
 							if (preg_match('/\?/', $php_self)) $php_self .= '&time='.dol_print_date(dol_now(), 'dayhourlog');
@@ -52,7 +58,7 @@ $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 									</span>
 								</div>
 							</div>
-<?php endif; ?>
+						<?php } ?>
 
 
 
