@@ -166,7 +166,7 @@ function print_ticketCard_comment_form($ticket, $action = '', $timelineIntegrati
 	$out .= '</div>';
 
 	if (getDolGlobalString('FCKEDITOR_ENABLE_TICKET')){
-		$out .= '<script>CKEDITOR.replace( "ticket-comment" );</script>';
+		$out .= '<script>CKEDITOR.replace("ticket-comment", { enterMode: CKEDITOR.ENTER_BR });</script>';
 	}
 
 
