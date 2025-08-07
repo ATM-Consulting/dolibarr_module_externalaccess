@@ -672,7 +672,7 @@ function print_ticketCard_extrafields($ticket) {
 	$out = '';
 	$e = new ExtraFields($db);
 	$e->fetch_name_optionals_label('ticket');
-	$TTicketAddedField = explode(',', getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET'));
+	$TTicketAddedField = getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET') ? explode(',', getDolGlobalString('EACCESS_CARD_ADDED_FIELD_TICKET')) : [];
 	if(! empty($TTicketAddedField)) {
 		foreach($TTicketAddedField as $ticket_field) {
 			$ticket_field = strtr($ticket_field, array('EXTRAFIELD_' => ''));
