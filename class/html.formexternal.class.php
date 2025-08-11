@@ -258,7 +258,7 @@ class FormExternal
 		$e = new ExtraFields($this->db);
 		$e->fetch_name_optionals_label($this->element);
 		$confVal = 'EACCESS_CARD_ADDED_FIELD_'.strtoupper($this->element);
-		$TExtraAddedField = explode(',', getDolGlobalString($confVal));
+		$TExtraAddedField = getDolGlobalString($confVal) ? explode(',', getDolGlobalString($confVal)) : [];
 		if(!empty($TExtraAddedField)) {
 			foreach($TExtraAddedField as $extra_field) {
 				$extra_field = strtr($extra_field, array('EXTRAFIELD_' => ''));
@@ -1235,7 +1235,7 @@ class FormExternalItem
 		$this->entity = $conf->entity;
 
 		$this->confKey = $confKey;
-		$this->fieldValue = $conf->global->{$this->confKey};
+		$this->fieldValue = $conf->global->{$this->confKey} ?? '';
 	}
 
 	/**
@@ -1464,7 +1464,7 @@ class FormExternalItem
 		$out .= dol_htmlentities($this->fieldValue);
 		$out .= "</textarea>\n";
 		if(getDolGlobalString('FCKEDITOR_ENABLE_TICKET')) {
-			$out .= '<script>CKEDITOR.replace("'.$this->confKey.'");</script>';
+			$out .= '<script>CKEDITOR.replace("'.$this->confKey.'", { enterMode: CKEDITOR.ENTER_BR });</script>';
 		}
 
 		return $out;
