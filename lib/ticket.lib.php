@@ -1056,10 +1056,10 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
  *    Return status label of object
  *
  * @param Ticket $ticket
- * @param int $mode
+ * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
  * @return     string                 Label
  */
-function ticketLibStatut(Ticket $ticket, $mode = 2)
+function ticketLibStatut(Ticket $ticket, int $mode = 2): string
 {
 	// phpcs:enable
 	return $ticket->getLibStatut($mode);
