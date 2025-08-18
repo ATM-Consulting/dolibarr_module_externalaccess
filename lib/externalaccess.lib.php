@@ -923,7 +923,9 @@ function load_last_main_doc(&$object) {
         elseif($object->element == 'invoice_supplier'){
             $last_main_doc = $conf->supplier_invoice->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
         }
-        else $last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+        else {
+            $last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+        }
 
         if(is_readable($last_main_doc) && is_file ($last_main_doc)) $object->last_main_doc = str_replace(DOL_DATA_ROOT,'',$last_main_doc);
 
