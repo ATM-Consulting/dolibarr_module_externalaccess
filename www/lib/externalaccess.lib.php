@@ -484,14 +484,9 @@ function externalAccessObjectAutoLoad($objecttype, &$db)
 		$module = 'expedition_bon';
 	}
 	elseif ($objecttype == 'delivery') {
-	    $classpath = 'livraison/class';
-        $myobject = 'livraison';
-        $module = 'livraison_bon';
-	    if (floatval(DOL_VERSION) >= 13.0) {
-            $classpath = 'delivery/class';
-            $myobject = 'delivery';
-            $module = 'delivery_bon';
-        }
+		$classpath = 'delivery/class';
+		$myobject = 'delivery';
+		$module = 'delivery_bon';
 	}
 	elseif ($objecttype == 'contract') {
 		$classpath = 'contrat/class';

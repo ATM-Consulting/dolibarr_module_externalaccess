@@ -913,36 +913,20 @@ function load_last_main_doc(&$object) {
 	if(empty($object->last_main_doc)) {
 		$ref = dol_sanitizeFileName($object->ref);
 
-		// compatible version < 12
-		if(version_compare(DOL_VERSION, '12.0', '<')) {
+        if($object->element == 'propal'){
+            $last_main_doc = $conf->propal->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+        }
+        elseif($object->element == 'shipping'){
 
-			$last_main_doc = $object->element . '/' . $ref . '/' . $ref . '.pdf';
+            $last_main_doc = $conf->expedition->multidir_output[$object->entity].'/sending/'.$ref.'/'.$ref.'.pdf';
+        }
+        elseif($object->element == 'invoice_supplier'){
+            $last_main_doc = $conf->supplier_invoice->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
+        }
+        else $last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
 
-			if ($object->element == 'propal') {
-				$last_main_doc = 'propale/' . $ref . '/' . $ref . '.pdf';
-			} elseif ($object->element == 'shipping') {
-				$last_main_doc = 'expedition/sending/' . $ref . '/' . $ref . '.pdf';
-			}
+        if(is_readable($last_main_doc) && is_file ($last_main_doc)) $object->last_main_doc = str_replace(DOL_DATA_ROOT,'',$last_main_doc);
 
-			if (is_readable(DOL_DATA_ROOT . '/' . $last_main_doc) && is_file(DOL_DATA_ROOT . '/' . $last_main_doc)) $object->last_main_doc = $last_main_doc;
-		}
-		// compatible version >= 12
-		else {
-
-			if($object->element == 'propal'){
-				$last_main_doc = $conf->propal->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
-			}
-			elseif($object->element == 'shipping'){
-
-				$last_main_doc = $conf->expedition->multidir_output[$object->entity].'/sending/'.$ref.'/'.$ref.'.pdf';
-			}
-            elseif($object->element == 'invoice_supplier'){
-                $last_main_doc = $conf->supplier_invoice->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
-            }
-            else $last_main_doc = $conf->{$object->element}->multidir_output[$object->entity].'/'.$ref.'/'.$ref.'.pdf';
-
-			if(is_readable($last_main_doc) && is_file ($last_main_doc)) $object->last_main_doc = str_replace(DOL_DATA_ROOT,'',$last_main_doc);
-		}
 	}
 
 }

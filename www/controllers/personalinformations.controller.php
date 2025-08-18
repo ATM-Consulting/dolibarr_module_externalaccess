@@ -47,11 +47,8 @@ class PersonalInformationsController extends Controller
 				$user->user_mobile = GETPOST('user_mobile', 'none');
 				$user->office_phone = GETPOST('office_phone', 'none');
 				$user->office_fax = GETPOST('office_fax', 'none');
-				if(floatval(DOL_VERSION) > 4){
-					$user->email = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
-				} else {
-					$user->email = GETPOST('email', 'none');
-				}
+				$user->email = GETPOST('email', 'custom', 0, FILTER_SANITIZE_EMAIL);
+
 
 				if($user->update($user)>0)
 				{
