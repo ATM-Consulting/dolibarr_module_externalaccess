@@ -6,6 +6,7 @@ ___
 TODO : pour les options commencer à voir si possible de crééer des tab par element dans les options du module
 
 # UNRELEASED
+- FIX: Compat V22 - *1.48.0* - **18/08/2025**
 
 # RELEASE 1.47
 - FIX: Remove warning detected by Sentry (DOLIBOARD-PROD-4) - 1.47.1 - **03/04/2025**

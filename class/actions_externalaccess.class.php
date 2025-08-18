@@ -156,10 +156,6 @@ class Actionsexternalaccess extends externalaccess\RetroCompatCommonHookActions
 	    global $conf, $user, $langs;
 	    $error = 0; // Error counter
 
-		if(empty($user->socid) && version_compare(DOL_VERSION, '12.0', '<')){
-			$user->socid = $user->societe_id; // For compatibility support
-		}
-
 	    if (in_array('externalaccesspage', explode(':', $parameters['context'])))
 	    {
 	        $context = Context::getInstance();

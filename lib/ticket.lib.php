@@ -1056,57 +1056,13 @@ function checkUserTicketRight($user, $ticket, $rightToTest = ''){
  *    Return status label of object
  *
  * @param Ticket $ticket
- * @param int $mode
+ * @param int $mode 0=long label, 1=short label, 2=Picto + short label, 3=Picto, 4=Picto + long label, 5=Short label + Picto, 6=Long label + Picto
  * @return     string                 Label
  */
-function ticketLibStatut(Ticket $ticket, $mode = 2)
+function ticketLibStatut(Ticket $ticket, int $mode = 2): string
 {
 	// phpcs:enable
-	global $langs;
-
-	if(intval(DOL_VERSION) > 11){
-		return $ticket->getLibStatut($mode);
-	}
-
-	$status = $ticket->fk_statut;
-
-	$ticket_statuts_short = $ticket_statuts = array($ticket::STATUS_NOT_READ => 'Unread', $ticket::STATUS_READ => 'Read', $ticket::STATUS_ASSIGNED => 'Assigned', $ticket::STATUS_IN_PROGRESS => 'InProgress', $ticket::STATUS_NEED_MORE_INFO => 'NeedMoreInformation', $ticket::STATUS_WAITING => 'Suspended', $ticket::STATUS_CLOSED => 'Closed', $ticket::STATUS_CANCELED => 'Canceled');
-
-	$labelStatus = $ticket_statuts[$status];
-	$labelStatusShort = $ticket_statuts_short[$status];
-
-	if ($status == $ticket::STATUS_NOT_READ) {
-		$statusType = 'status0';
-	}
-	elseif ($status == $ticket::STATUS_READ) {
-		$statusType = 'status1';
-	}
-	elseif ($status == $ticket::STATUS_ASSIGNED) {
-		$statusType = 'status3';
-	}
-	elseif ($status == $ticket::STATUS_IN_PROGRESS) {
-		$statusType = 'status4';
-	}
-	elseif ($status == $ticket::STATUS_WAITING) {
-		$statusType = 'status3';
-	}
-	elseif ($status == $ticket::STATUS_NEED_MORE_INFO) {
-		$statusType = 'status9';
-	}
-	elseif ($status == $ticket::STATUS_CANCELED) {
-		$statusType = 'status9';
-	}
-	elseif ($status == $ticket::STATUS_CLOSED) {
-		$statusType = 'status6';
-	}
-	else {
-		$labelStatus = $langs->trans('Unknown');
-		$labelStatusShort = $langs->trans('Unknown');
-		$statusType = 'status0';
-		$mode = 0;
-	}
-
-	return dolGetStatus($langs->trans($labelStatus), $langs->trans($labelStatusShort), '', $statusType, $mode);
+	return $ticket->getLibStatut($mode);
 }
 
 
