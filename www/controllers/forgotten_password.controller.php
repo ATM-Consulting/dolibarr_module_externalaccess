@@ -61,7 +61,7 @@ class ForgottenPasswordController extends Controller
 		if (!$this->tpl->mode) $this->tpl->mode = 'http';
 
 		// Security graphical code
-		$this->tpl->captcha;
+		$this->tpl->captcha = 0; // Initialize with a default value
 		if (function_exists("imagecreatefrompng")){
 			$this->tpl->captcha = 1;
 		}
