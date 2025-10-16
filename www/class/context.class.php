@@ -75,10 +75,6 @@ class Context
 	{
 		global $db, $conf, $user;
 
-		if (empty($user->socid) && version_compare(DOL_VERSION, '12.0', '<')){
-			$user->socid = $user->societe_id; // For compatibility support
-		}
-
 		$this->dbTool = new ExternalDbTool($db);
 
 		$this->tplDir = __DIR__.'/../';

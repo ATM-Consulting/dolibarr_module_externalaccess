@@ -7,6 +7,9 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 
 # UNRELEASED
 
+# RELEASE 1.48
+- FIX: Compat V22 - *1.48.0* - **18/08/2025**
+
 # RELEASE 1.47
 - FIX : WARNING CAPTCHA    Sentry                           - 1.47.2 - - **15/10/2025** 
 - FIX: Remove warning detected by Sentry (DOLIBOARD-PROD-4) - 1.47.1 - **03/04/2025**

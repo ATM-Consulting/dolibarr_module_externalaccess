@@ -62,7 +62,9 @@ class modExternalAccess extends DolibarrModules
 		$this->description = 'externalaccessDesc';
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
-		$this->version = '1.47.2';
+
+		$this->version = '1.48.0';
+
 
 		require_once __DIR__ . '/../../class/techatm.class.php';
 		$this->url_last_version = \externalaccess\TechATM::getLastModuleVersionUrl($this);
@@ -113,7 +115,7 @@ class modExternalAccess extends DolibarrModules
 		$this->requiredby = array();	// List of modules id to disable if this one is disabled
 		$this->conflictwith = array();	// List of modules id this module is in conflict with
 		$this->phpmin = array(7,0);					// Minimum version of PHP required by module
-		$this->need_dolibarr_version = array(16,0);	// Minimum version of Dolibarr required by module
+		$this->need_dolibarr_version = array(17,0);	// Minimum version of Dolibarr required by module
 		$this->langfiles = array("externalaccess@externalaccess");
 
 		// Constants
