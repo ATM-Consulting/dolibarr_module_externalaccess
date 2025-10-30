@@ -12,6 +12,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 - FIX: Compat V22 - *1.48.0* - **18/08/2025**
 
 # RELEASE 1.47
+- FIX : WARNING CAPTCHA    Sentry                           - 1.47.2 - - **15/10/2025** 
 - FIX: Remove warning detected by Sentry (DOLIBOARD-PROD-4) - 1.47.1 - **03/04/2025**
 - FIX: Display extra fields from conf on object cards and forms - 1.47.0 - **11/03/2025**
 - NEW: Add new conf to disable severity field - 1.47.0 - **11/03/2025**
