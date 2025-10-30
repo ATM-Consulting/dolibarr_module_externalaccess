@@ -1,4 +1,5 @@
 <?php // Protection to avoid direct call of template
+global $langs, $context;
 if (empty($conf) || ! is_object($conf))
 {
 	print "Error, template page can't be called as URL";
@@ -6,6 +7,9 @@ if (empty($conf) || ! is_object($conf))
 }
 
 $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
+$php_self = $_SERVER['PHP_SELF'];
+$php_self .= dol_escape_htmltag($_SERVER["QUERY_STRING"]) ? '?'.dol_escape_htmltag($_SERVER["QUERY_STRING"]) : '';
+$php_self = str_replace('action=validatenewpassword', '', $php_self);
 
 ?>
 <div class="container ">
@@ -25,7 +29,7 @@ $newToken = function_exists('newToken') ? newToken() : $_SESSION['newtoken'];
 
 						<div class="form-group">
 							<div class="input-group">
-								<input type="text" placeholder="<?php echo $langs->trans("Login"); ?>" id="username" name="username" class="flat input-icon-user form-control" size="20" value="<?php echo dol_escape_htmltag($username); ?>" tabindex="1" />
+								<input type="text" placeholder="<?php echo $langs->trans("Login"); ?>" id="username" name="username" class="flat input-icon-user form-control" size="20" value="<?php echo dol_escape_htmltag($username??''); ?>" tabindex="1" />
 								<div ><?php print $this->tpl->message; ?></div>
 							</div>
 
