@@ -8,6 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 # UNRELEASED
 
 # RELEASE 1.48
+- FIX : SENTRY - Undefined variable $username, $context, $langs, $php_self - 1.48.1 - **13/10/2025** 
 - FIX: Compat V22 - *1.48.0* - **18/08/2025**
 
 # RELEASE 1.47
