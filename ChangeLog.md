@@ -8,6 +8,7 @@ TODO : pour les options commencer à voir si possible de crééer des tab par el
 # UNRELEASED
 
 # RELEASE 1.48
+- FIX: Hide multicompany entity selector from the External Access login page so the portal no longer shows that block after a failed login - 1.48.2 -**05/12/2025** 
 - FIX : SENTRY - Undefined variable $username, $context, $langs, $php_self - 1.48.1 - **30/10/2025**
 - FIX: Compat V22 - *1.48.0* - **18/08/2025**
 
