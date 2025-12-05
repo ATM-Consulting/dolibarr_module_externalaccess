@@ -45,15 +45,20 @@ function dol_loginfunction($langs,$conf,$mysoc)
     }
 
     // Execute hook getLoginPageOptions (for table)
-    $hookmanager->initHooks(array('externalaccessloginpage'));
-    $parameters=array('entity' => GETPOST('entity','int'));
-    $reshook = $hookmanager->executeHooks('getLoginPageOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
+	$hookmanager->initHooks(array('externalaccessloginpage'));
+	$parameters=array('entity' => GETPOST('entity','int'));
+	$reshook = $hookmanager->executeHooks('getLoginPageOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
 	$morelogincontent = $hookmanager->resPrint;
 
-    // Execute hook getLoginPageExtraOptions (eg for js)
-    $parameters=array('entity' => GETPOST('entity','int'));
-    $reshook = $hookmanager->executeHooks('getLoginPageExtraOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
-    $moreloginextracontent = $hookmanager->resPrint;
+	// Strip entity selector injected by multicompany (not relevant on external portal)
+	if (!empty($morelogincontent) && (strpos($morelogincontent, 'multicompany') !== false || strpos($morelogincontent, 'login-entity') !== false)) {
+		$morelogincontent = '';
+	}
+
+	// Execute hook getLoginPageExtraOptions (eg for js)
+	$parameters=array('entity' => GETPOST('entity','int'));
+	$reshook = $hookmanager->executeHooks('getLoginPageExtraOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
+	$moreloginextracontent = $hookmanager->resPrint;
 
     // Login
     $login = (! empty($hookmanager->resArray['username']) ? $hookmanager->resArray['username'] : (GETPOST("username","alpha") ? GETPOST("username","alpha") : $demologin));
