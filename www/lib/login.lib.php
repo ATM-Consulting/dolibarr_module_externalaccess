@@ -53,8 +53,11 @@ function dol_loginfunction($langs,$conf,$mysoc)
 	// Strip only the multicompany entity selector (keep other hook outputs intact)
 	if (!empty($morelogincontent)) {
 		$patterns = array(
-			'~<div[^>]*class="[^"]*\\bmulticompany-trinputlogin\\b[^"]*"[^>]*>.*?</div>~is',
+			// Remove the full multicompany login block including its wrapper
+			'~<div[^>]*class="[^"]*\\bmulticompany-trinputlogin\\b[^"]*"[^>]*>.*?</div>\\s*</div>~is',
+			// Remove the specific JS added for the login entity switcher
 			'~<script[^>]*>.*?/multicompany/core/ajax/functions\\.php.*?</script>~is',
+			// Remove table row variant if output is tabular
 			'~<tr[^>]*>.*?login-entity.*?</tr>~is'
 		);
 
