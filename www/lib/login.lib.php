@@ -44,33 +44,46 @@ function dol_loginfunction($langs,$conf,$mysoc)
         $demopassword=$tab[1];
     }
 
-    // Execute hook getLoginPageOptions (for table)
-	$hookmanager->initHooks(array('externalaccessloginpage'));
-	$parameters=array('entity' => GETPOST('entity','int'));
+	$hideEntitySelector = getDolGlobalInt('EACCESS_HIDE_MULTICOMPANY_SELECTOR', 1);
+	$hookContexts = array('externalaccessloginpage');
+	if ($hideEntitySelector) {
+		// Add standard login contexts so multicompany will short-circuit on its own hide flag
+		$hookContexts[] = 'login';
+		$hookContexts[] = 'mainloginpage';
+	}
+
+	// Execute hook getLoginPageOptions (for table)
+	$hookmanager->initHooks($hookContexts);
+
+	// Temporarily force hide combo for this request so multicompany returns early
+	$originalHideCombo = isset($conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX) ? $conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX : null;
+	if ($hideEntitySelector) {
+		$conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX = 1;
+	}
+
+	$parameters=array(
+		'entity' => GETPOST('entity','int'),
+		'context' => implode(':', (array) $hookmanager->context)
+	);
 	$reshook = $hookmanager->executeHooks('getLoginPageOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
 	$morelogincontent = $hookmanager->resPrint;
 
-	// Strip only the multicompany entity selector (keep other hook outputs intact)
-	if (!empty($morelogincontent)) {
-		$patterns = array(
-			// Remove the full multicompany login block including its wrapper
-			'~<div[^>]*class="[^"]*\\bmulticompany-trinputlogin\\b[^"]*"[^>]*>.*?</div>\\s*</div>~is',
-			// Remove the specific JS added for the login entity switcher
-			'~<script[^>]*>.*?/multicompany/core/ajax/functions\\.php.*?</script>~is',
-			// Remove table row variant if output is tabular
-			'~<tr[^>]*>.*?login-entity.*?</tr>~is'
-		);
-
-		$cleanedLoginContent = preg_replace($patterns, '', $morelogincontent);
-		if ($cleanedLoginContent !== null) {
-			$morelogincontent = trim($cleanedLoginContent);
-		}
-	}
-
 	// Execute hook getLoginPageExtraOptions (eg for js)
-	$parameters=array('entity' => GETPOST('entity','int'));
+	$parameters=array(
+		'entity' => GETPOST('entity','int'),
+		'context' => implode(':', (array) $hookmanager->context)
+	);
 	$reshook = $hookmanager->executeHooks('getLoginPageExtraOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
 	$moreloginextracontent = $hookmanager->resPrint;
+
+	// Restore original hide combo setting
+	if ($hideEntitySelector) {
+		if ($originalHideCombo !== null) {
+			$conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX = $originalHideCombo;
+		} else {
+			unset($conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX);
+		}
+	}
 
     // Login
     $login = (! empty($hookmanager->resArray['username']) ? $hookmanager->resArray['username'] : (GETPOST("username","alpha") ? GETPOST("username","alpha") : $demologin));
