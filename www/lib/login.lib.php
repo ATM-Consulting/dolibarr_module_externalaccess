@@ -46,11 +46,6 @@ function dol_loginfunction($langs,$conf,$mysoc)
 
 	$hideEntitySelector = getDolGlobalInt('EACCESS_HIDE_MULTICOMPANY_SELECTOR', 1);
 	$hookContexts = array('externalaccessloginpage');
-	if ($hideEntitySelector) {
-		// Add standard login contexts so multicompany will short-circuit on its own hide flag
-		$hookContexts[] = 'login';
-		$hookContexts[] = 'mainloginpage';
-	}
 
 	// Execute hook getLoginPageOptions (for table)
 	$hookmanager->initHooks($hookContexts);
