@@ -50,9 +50,18 @@ function dol_loginfunction($langs,$conf,$mysoc)
 	$reshook = $hookmanager->executeHooks('getLoginPageOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
 	$morelogincontent = $hookmanager->resPrint;
 
-	// Strip entity selector injected by multicompany (not relevant on external portal)
-	if (!empty($morelogincontent) && (strpos($morelogincontent, 'multicompany') !== false || strpos($morelogincontent, 'login-entity') !== false)) {
-		$morelogincontent = '';
+	// Strip only the multicompany entity selector (keep other hook outputs intact)
+	if (!empty($morelogincontent)) {
+		$patterns = array(
+			'~<div[^>]*class="[^"]*\\bmulticompany-trinputlogin\\b[^"]*"[^>]*>.*?</div>~is',
+			'~<script[^>]*>.*?/multicompany/core/ajax/functions\\.php.*?</script>~is',
+			'~<tr[^>]*>.*?login-entity.*?</tr>~is'
+		);
+
+		$cleanedLoginContent = preg_replace($patterns, '', $morelogincontent);
+		if ($cleanedLoginContent !== null) {
+			$morelogincontent = trim($cleanedLoginContent);
+		}
 	}
 
 	// Execute hook getLoginPageExtraOptions (eg for js)
