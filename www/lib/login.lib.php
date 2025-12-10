@@ -56,7 +56,7 @@ function dol_loginfunction($langs,$conf,$mysoc)
 		$conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX = 1;
 	}
 
-	$parameters=array(
+	$parameters = array(
 		'entity' => GETPOST('entity','int'),
 		'context' => implode(':', (array) $hookmanager->context)
 	);
