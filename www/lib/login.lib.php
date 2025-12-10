@@ -44,16 +44,37 @@ function dol_loginfunction($langs,$conf,$mysoc)
         $demopassword=$tab[1];
     }
 
-    // Execute hook getLoginPageOptions (for table)
-    $hookmanager->initHooks(array('externalaccessloginpage'));
-    $parameters=array('entity' => GETPOST('entity','int'));
-    $reshook = $hookmanager->executeHooks('getLoginPageOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
+	$hideEntitySelector = getDolGlobalInt('EACCESS_HIDE_MULTICOMPANY_SELECTOR', 1);
+	$hookContexts = array('externalaccessloginpage');
+
+	// Execute hook getLoginPageOptions (for table)
+	$hookmanager->initHooks($hookContexts);
+
+	// Temporarily force hide combo for this request so multicompany returns early
+	$originalHideCombo = isset($conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX) ? $conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX : null;
+	if ($hideEntitySelector) {
+		$conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX = 1;
+	}
+
+	$parameters = array(
+		'entity' => GETPOST('entity','int'),
+		'context' => implode(':', (array) $hookmanager->context)
+	);
+	$reshook = $hookmanager->executeHooks('getLoginPageOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
 	$morelogincontent = $hookmanager->resPrint;
 
-    // Execute hook getLoginPageExtraOptions (eg for js)
-    $parameters=array('entity' => GETPOST('entity','int'));
-    $reshook = $hookmanager->executeHooks('getLoginPageExtraOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
-    $moreloginextracontent = $hookmanager->resPrint;
+	// Execute hook getLoginPageExtraOptions (eg for js)
+	$reshook = $hookmanager->executeHooks('getLoginPageExtraOptions',$parameters);    // Note that $action and $object may have been modified by some hooks.
+	$moreloginextracontent = $hookmanager->resPrint;
+
+	// Restore original hide combo setting
+	if ($hideEntitySelector) {
+		if ($originalHideCombo !== null) {
+			$conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX = $originalHideCombo;
+		} else {
+			unset($conf->global->MULTICOMPANY_HIDE_LOGIN_COMBOBOX);
+		}
+	}
 
     // Login
     $login = (! empty($hookmanager->resArray['username']) ? $hookmanager->resArray['username'] : (GETPOST("username","alpha") ? GETPOST("username","alpha") : $demologin));
