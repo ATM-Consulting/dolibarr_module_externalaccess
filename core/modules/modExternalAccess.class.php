@@ -63,7 +63,7 @@ class modExternalAccess extends DolibarrModules
 		// Possible values for version are: 'development', 'experimental', 'dolibarr' or version
 
 
-		$this->version = '1.48.1';
+		$this->version = '1.48.2';
 
 
 		require_once __DIR__ . '/../../class/techatm.class.php';
